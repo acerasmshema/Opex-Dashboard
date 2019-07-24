@@ -32,7 +32,7 @@ export const frequencies = [
     { name: 'Monthly', code: '1' },
     { name: 'Quarterly', code: '2' },
     { name: 'Yearly', code: '3' }
-  ];;
+  ];
 
         export const maintanenceDaysColumn = [
         { field: 'id', header: 'Id' },

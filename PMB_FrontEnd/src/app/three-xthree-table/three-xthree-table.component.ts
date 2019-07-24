@@ -38,7 +38,7 @@ export class ThreeXThreeTableComponent implements OnInit {
   public parseAndGetColor(sro) {
     let ar = sro.target.split(",");
     let prev = 0;
-    if(sro.value == NaN){
+    if(sro.value == "NaN"){
       return "black"
     }
     for(let vl of ar) {

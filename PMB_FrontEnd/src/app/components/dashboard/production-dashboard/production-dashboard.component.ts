@@ -20,14 +20,21 @@ import { maintanenceDaysColumn, processLineColumns, annotationsCols, frequencies
   providers: [MessageService, DatePipe, DecimalPipe, LocalStorageService]
 })
 export class ProductionDashboardComponent implements OnInit {
-
+  pl1Data: any[];   
+  pl2Data: any[];
+  pl3Data: any[];
+  pl4Data: any[];
+  pl5Data: any[];
+  pl6Data: any[];
+  pl7Data: any[];
+  pl8Data: any[];
   maintanenceDaysColumn: any[];
   maintanenceDayModel: any[];
   selectedMaintenanceDay: any[];
   createMaintanencePanelMainCollapsed: boolean = false;
   createMaintanencePanelNextCollapsed: boolean = true;
   dateValue: Date;
-  textAreaValue: String;
+  textAreaValue: string;
   tarGetAreaValue: number;
   productonLines: ProductonLine[] = [];
   annotationsLines: any[];
@@ -36,7 +43,7 @@ export class ProductionDashboardComponent implements OnInit {
   selectedValue: CommonModel[] = [];
   createAnnotationCollapsed: boolean = true;
   findAnnotationCollapsed: boolean = false;
-  cols: any[];
+  cols: any[]=[];
   annotationsCols: any[];
   productionLinesTargetData: any[];
   showStackChart: boolean = true;
@@ -54,20 +61,15 @@ export class ProductionDashboardComponent implements OnInit {
   data: any = {};
   multi: any[];
   multiStack: any[];
-  multiLineData: any[];
+  multiLineData: any[]=[];
   multiLineDataForLine: any[] = [];
   highlights: any[];
   highlights_copy: any[];
-  pl1Data: any[];
-  pl2Data: any[];
-  pl3Data: any[];
-  pl4Data: any[];
-  pl5Data: any[];
-  pl6Data: any[];
-  pl7Data: any[];
-  pl8Data: any[];
+  
   startDate: string = '';
   endDate: string = '';
+  startD: string = '';
+  endD: string = '';
   ytdProductionValue: string = "";
   ytdAnnulaTargetValue: string = "";
   lineChartLineInterpolation = shape.curveMonotoneX;
@@ -127,15 +129,15 @@ export class ProductionDashboardComponent implements OnInit {
   public productonYDaySpinner = true;
   public productonYDayChart = false;
   public productonYDayRefresh = false;
-  public options = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: [], arcDelimiters: [], rangeLabel: [], needleStartValue: 0 }
-  public options1 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options2 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options3 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options4 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options5 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options6 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options7 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
-  public options8 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [], rangeLabel: [], needleStartValue: 0, }
+  public options = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['red','yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0 }
+  public options1 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options2 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options3 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options4 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options5 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options6 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options7 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
+  public options8 = { hasNeedle: true, needleColor: 'gray', needleUpdateSpeed: 1000, arcColors: ['yellow', 'GREEN'], arcDelimiters: [1,2], rangeLabel: [0,100], needleStartValue: 0, }
   nameFont = 15;
   public bottomLabelFont = 10;
   public name = "KERINCI PRODUCTION - Y'day (ADt/d)";
@@ -153,6 +155,8 @@ export class ProductionDashboardComponent implements OnInit {
     this.enquiryForm = this.fb.group({ lineChartDate: "", lineChartFrequency: "", lineChartPLines: "" });
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
     this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.startD=this.endDate;
+    this.endD=this.endDate;
     this.getAnnotationDates();
     this.getProductionYTDData();
     this.getProjectedTarget();
@@ -174,7 +178,7 @@ export class ProductionDashboardComponent implements OnInit {
     this.getStackBarChartData(this.startDate, this.endDate);
     this.getStackAreaChartData(this.startDate, this.endDate);
     this.getAllProductionLinesYDayData();
-    setTimeout(() => { this.getAllProductionLinesDateRangeData(this.startDate, this.endDate); }, 5000)
+    setTimeout(() => { this.getAllProductionLinesDateRangeData(this.startDate, this.endDate); }, 3000)
   }
 
   ngOnInit() {
@@ -197,18 +201,18 @@ export class ProductionDashboardComponent implements OnInit {
   threeMonthData: any[];
   sixMonthData: any[];
   public storeLineChartData() {
-    this.productionRequest.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);;
-    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');;
+    this.productionRequest.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
+    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.productionService.getAllProductionLinesDateRangeDataTarget(this.productionRequest).subscribe((data: any) => {
       this.oneMonthData = data;
     });
     this.productionRequest.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() - 2).toString() + '-' + (new Date().getDate() - 1);
-    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');;
+    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.productionService.getAllProductionLinesDateRangeDataTarget(this.productionRequest).subscribe((data: any) => {
       this.threeMonthData = data;
     });
     this.productionRequest.startDate = (new Date().getFullYear() - 1).toString() + '-' + (new Date().getMonth() + 7).toString() + '-' + (new Date().getDate() - 1);
-    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');;
+    this.productionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.productionService.getAllProductionLinesDateRangeDataTarget(this.productionRequest).subscribe((data: any) => {
       this.sixMonthData = data;
     });
@@ -219,21 +223,20 @@ export class ProductionDashboardComponent implements OnInit {
     this.showStackChart = !this.showStackChart;
   }
 
-  valueArr: number[];
-  colorArr: string[];
+  
   public getProductionYDayData() {
     const data = { millId: '1', buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProductionYDayData(data).subscribe((data: any) => {
-      this.valueArr = data['range'].split(',');
-      this.colorArr = data['colorRange'].split(',');
       var totalAverageValue = (data['totalAverageValue']);
       this.productionYDayActualValue = parseFloat(totalAverageValue).toString();
       this.productionYDayNeedleValue = (totalAverageValue * 100) / Number(data['maxValue']);
+      this.options.rangeLabel=[];
       this.options.rangeLabel.push(data['minValue'].toString());
       this.options.rangeLabel.push(data['maxValue'].toString());
-      this.valueArr.filter(item => this.options.arcDelimiters.push(Number(item)));
+      this.options.arcDelimiters=[];
+      data['range'].split(',').filter(item => this.options.arcDelimiters.push(Number(item)));
       this.options.arcColors.splice(0, this.options.arcColors.length);
-      this.colorArr.filter(item => this.options.arcColors.push((item)));
+      data['colorRange'].split(',').filter(item => this.options.arcColors.push((item)));
     });
     this.productonYDaySpinner = !this.productonYDaySpinner;
     this.productonYDayChart = !this.productonYDayChart;
@@ -295,90 +298,90 @@ export class ProductionDashboardComponent implements OnInit {
       var totalAverageValuePL1 = data['dailyKpiPulp'][0]['value'];
       this.productionYDayActualValuePL1 = parseFloat(totalAverageValuePL1).toString();
       this.productionYDayNeedleValuePL1 = (totalAverageValuePL1 * 100) / Number(data['dailyKpiPulp'][0]['max']);
+      this.options1.rangeLabel=[];
       this.options1.rangeLabel.push(data['dailyKpiPulp'][0]['min'].toString());
       this.options1.rangeLabel.push(data['dailyKpiPulp'][0]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][0]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][0]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options1.arcDelimiters.push(Number(item)));
+      this.options1.arcDelimiters=[];
+      data['dailyKpiPulp'][0]['range'].split(',').filter(item => this.options1.arcDelimiters.push(Number(item)));
       this.options1.arcColors.splice(0, this.options1.arcColors.length);
-      this.colorArr1.filter(item => this.options1.arcColors.push((item)));
+      data['dailyKpiPulp'][0]['colorRange'].split(',').filter(item => this.options1.arcColors.push((item)));
 
       var totalAverageValuePL2 = (data['dailyKpiPulp'][1]['value']);
       this.productionYDayActualValuePL2 = parseFloat(totalAverageValuePL2).toString();
       this.productionYDayNeedleValuePL2 = (totalAverageValuePL2 * 100) / Number(data['dailyKpiPulp'][1]['max']);
+      this.options2.rangeLabel=[];
       this.options2.rangeLabel.push(data['dailyKpiPulp'][1]['min'].toString());
       this.options2.rangeLabel.push(data['dailyKpiPulp'][1]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][1]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][1]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options2.arcDelimiters.push(Number(item)));
+      this.options2.arcDelimiters=[];
+      data['dailyKpiPulp'][1]['range'].split(',').filter(item => this.options2.arcDelimiters.push(Number(item)));
       this.options2.arcColors.splice(0, this.options2.arcColors.length);
-      this.colorArr1.filter(item => this.options2.arcColors.push((item)));
+      data['dailyKpiPulp'][1]['colorRange'].split(',').filter(item => this.options2.arcColors.push((item)));
 
       var totalAverageValuePL3 = (data['dailyKpiPulp'][2]['value']);
       this.productionYDayActualValuePL3 = parseFloat(totalAverageValuePL3).toString();
       this.productionYDayNeedleValuePL3 = (totalAverageValuePL3 * 100) / Number(data['dailyKpiPulp'][2]['max']);
+      this.options3.rangeLabel=[];
       this.options3.rangeLabel.push(data['dailyKpiPulp'][2]['min'].toString());
       this.options3.rangeLabel.push(data['dailyKpiPulp'][2]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][2]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][2]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options3.arcDelimiters.push(Number(item)));
+      this.options3.arcDelimiters=[];
+      data['dailyKpiPulp'][2]['range'].split(',').filter(item => this.options3.arcDelimiters.push(Number(item)));
       this.options3.arcColors.splice(0, this.options3.arcColors.length);
-      this.colorArr1.filter(item => this.options3.arcColors.push((item)));
+      data['dailyKpiPulp'][2]['colorRange'].split(',').filter(item => this.options3.arcColors.push((item)));
 
       var totalAverageValuePL4 = (data['dailyKpiPulp'][3]['value']);
       this.productionYDayActualValuePL4 = parseFloat(totalAverageValuePL4).toString();
       this.productionYDayNeedleValuePL4 = (totalAverageValuePL4 * 100) / Number(data['dailyKpiPulp'][3]['max']);
+      this.options4.rangeLabel=[];
       this.options4.rangeLabel.push(data['dailyKpiPulp'][3]['min'].toString());
       this.options4.rangeLabel.push(data['dailyKpiPulp'][3]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][3]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][3]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options4.arcDelimiters.push(Number(item)));
+      this.options4.arcDelimiters=[];
+      data['dailyKpiPulp'][3]['range'].split(',').filter(item => this.options4.arcDelimiters.push(Number(item)));
       this.options4.arcColors.splice(0, this.options4.arcColors.length);
-      this.colorArr1.filter(item => this.options4.arcColors.push((item)));
+      data['dailyKpiPulp'][3]['colorRange'].split(',').filter(item => this.options4.arcColors.push((item)));
 
       var totalAverageValuePL5 = (data['dailyKpiPulp'][4]['value']);
       this.productionYDayActualValuePL5 = parseFloat(totalAverageValuePL5).toString();
       this.productionYDayNeedleValuePL5 = (totalAverageValuePL5 * 100) / Number(data['dailyKpiPulp'][4]['max']);
+      this.options5.rangeLabel=[];
       this.options5.rangeLabel.push(data['dailyKpiPulp'][4]['min'].toString());
       this.options5.rangeLabel.push(data['dailyKpiPulp'][4]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][4]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][4]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options5.arcDelimiters.push(Number(item)));
+      this.options5.arcDelimiters=[];
+      data['dailyKpiPulp'][4]['range'].split(',').filter(item => this.options5.arcDelimiters.push(Number(item)));
       this.options5.arcColors.splice(0, this.options5.arcColors.length);
-      this.colorArr1.filter(item => this.options5.arcColors.push((item)));
+      data['dailyKpiPulp'][4]['colorRange'].split(',').filter(item => this.options5.arcColors.push((item)));
 
       var totalAverageValuePL6 = (data['dailyKpiPulp'][5]['value']);
       this.productionYDayActualValuePL6 = parseFloat(totalAverageValuePL6).toString();
       this.productionYDayNeedleValuePL6 = (totalAverageValuePL6 * 100) / Number(data['dailyKpiPulp'][5]['max']);
+      this.options6.rangeLabel=[];
       this.options6.rangeLabel.push(data['dailyKpiPulp'][5]['min'].toString());
       this.options6.rangeLabel.push(data['dailyKpiPulp'][5]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][5]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][5]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options6.arcDelimiters.push(Number(item)));
+      this.options6.arcDelimiters=[];
+      data['dailyKpiPulp'][5]['range'].split(',').filter(item => this.options6.arcDelimiters.push(Number(item)));
       this.options6.arcColors.splice(0, this.options6.arcColors.length);
-      this.colorArr1.filter(item => this.options6.arcColors.push((item)));
+      data['dailyKpiPulp'][5]['colorRange'].split(',').filter(item => this.options6.arcColors.push((item)));
 
       var totalAverageValuePL7 = (data['dailyKpiPulp'][6]['value']);
       this.productionYDayActualValuePL7 = parseFloat(totalAverageValuePL7).toString();
       this.productionYDayNeedleValuePL7 = (totalAverageValuePL7 * 100) / Number(data['dailyKpiPulp'][6]['max']);
+      this.options7.rangeLabel=[];
       this.options7.rangeLabel.push(data['dailyKpiPulp'][6]['min'].toString());
       this.options7.rangeLabel.push(data['dailyKpiPulp'][6]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][6]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][6]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options7.arcDelimiters.push(Number(item)));
+      this.options7.arcDelimiters=[];
+      data['dailyKpiPulp'][6]['range'].split(',').filter(item => this.options7.arcDelimiters.push(Number(item)));
       this.options7.arcColors.splice(0, this.options7.arcColors.length);
-      this.colorArr1.filter(item => this.options7.arcColors.push((item)));
+      data['dailyKpiPulp'][6]['colorRange'].split(',').filter(item => this.options7.arcColors.push((item)));
 
       var totalAverageValuePL8 = (data['dailyKpiPulp'][7]['value']);
       this.productionYDayActualValuePL8 = parseFloat(totalAverageValuePL8).toString();
       this.productionYDayNeedleValuePL8 = (totalAverageValuePL8 * 100) / Number(data['dailyKpiPulp'][7]['max']);
+      this.options8.rangeLabel=[];
       this.options8.rangeLabel.push(data['dailyKpiPulp'][7]['min'].toString());
       this.options8.rangeLabel.push(data['dailyKpiPulp'][7]['max'].toString());
-      this.valueArr1 = data['dailyKpiPulp'][7]['range'].split(',');
-      this.colorArr1 = data['dailyKpiPulp'][7]['colorRange'].split(',');
-      this.valueArr1.filter(item => this.options8.arcDelimiters.push(Number(item)));
+      this.options8.arcDelimiters=[];
+      data['dailyKpiPulp'][7]['range'].split(',').filter(item => this.options8.arcDelimiters.push(Number(item)));
       this.options8.arcColors.splice(0, this.options8.arcColors.length);
-      this.colorArr1.filter(item => this.options8.arcColors.push((item)));
+      data['dailyKpiPulp'][7]['colorRange'].split(',').filter(item => this.options8.arcColors.push((item)));
     });
   }
 
@@ -394,34 +397,47 @@ export class ProductionDashboardComponent implements OnInit {
 
 
   public getAllProductionLinesDateRangeData(startDate: string, endDate: string) {
-    if (this.productionLinesTargetData == []) {
-      this.getAllProductionLinesDateRangeDataTarget(startDate, endDate);
-    }
     this.productionRequest.startDate = startDate;
     this.productionRequest.endDate = endDate;
     this.productionRequest.frequency = "0";
     this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequest).subscribe((data: any) => {
+      console.log(data);
+      this.pl1Data=[];
       var pl1ChartData = [data[0]];
       this.pl1Data = (pl1ChartData);
       this.pl1Data.push(this.productionLinesTargetData[0]);
+
+      this.pl2Data=[];
       var pl2ChartData = [data[1]];
       this.pl2Data = (pl2ChartData);
       this.pl2Data.push(this.productionLinesTargetData[1]);
+      
+      this.pl3Data=[];
       var pl3ChartData = [data[2]];
       this.pl3Data = (pl3ChartData);
       this.pl3Data.push(this.productionLinesTargetData[2]);
+      
+      this.pl4Data=[];
       var pl4ChartData = [data[3]];
       this.pl4Data = (pl4ChartData);
       this.pl4Data.push(this.productionLinesTargetData[3]);
+      
+      this.pl5Data=[];
       var pl5ChartData = [data[4]];
       this.pl5Data = (pl5ChartData);
       this.pl5Data.push(this.productionLinesTargetData[4]);
+      
+      this.pl6Data=[];
       var pl6ChartData = [data[5]];
       this.pl6Data = (pl6ChartData);
       this.pl6Data.push(this.productionLinesTargetData[5]);
+      
+      this.pl7Data=[];
       var pl7ChartData = [data[6]];
       this.pl7Data = (pl7ChartData);
       this.pl7Data.push(this.productionLinesTargetData[6]);
+      
+      this.pl8Data=[];
       var pl8ChartData = [data[7]];
       this.pl8Data = (pl8ChartData);
       this.pl8Data.push(this.productionLinesTargetData[7]);
@@ -431,7 +447,6 @@ export class ProductionDashboardComponent implements OnInit {
 
   public getSelectedProductionLinesDateRangeData(productionRequest: ProductionRequest) {
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).subscribe((data: any) => {
-      console.log(data);
       this.multiLineData = data;
     });
   }
@@ -439,7 +454,7 @@ export class ProductionDashboardComponent implements OnInit {
   public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest) {
     this.productionService.getAllProductionLinesDateForGrid(productionRequest).subscribe((data: any) => {
       this.productonLines = data[0];
-
+console.log(this.productonLines);
     });
   }
 
@@ -492,23 +507,25 @@ export class ProductionDashboardComponent implements OnInit {
 
   processLinesData: any[] = [];
   public searchData() {
-    if (this.productionEnquiryData.lineChartDate == null) {
+    if (this.productionEnquiryData.lineChartDate.length < 2) {
       alert("Please select date range");
       return null;
     }
+
     var startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
     var endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
     this.productionRequest.startDate = startDate;
     this.productionRequest.endDate = endDate;
     this.productionRequest.frequency = this.productionEnquiryData.selectedValue['code'];
     if (this.productionEnquiryData.lineChartPLines.length > 0) {
-      this.processLinesData = [];
       this.cols = [];
+    this.processLinesData = [];
       this.cols.push({ field: 'date', header: 'Date' });
       this.productionEnquiryData.lineChartPLines.forEach(processLine => {
         this.processLinesData.push(processLine['header']);
         this.cols.push(processLine);
       });
+    
     } else {
       this.processLinesData = [];
       this.cols = [
@@ -526,6 +543,7 @@ export class ProductionDashboardComponent implements OnInit {
     this.productionRequest.processLines = this.processLinesData;
     this.getSelectedProductionLinesDateRangeData(this.productionRequest);
     this.getAllProductionLinesDateForGrid(this.productionRequest);
+    this.productionRequest.processLines=[];
   }
 
   public openAnnotations() {
@@ -570,8 +588,7 @@ export class ProductionDashboardComponent implements OnInit {
     const data = { millId: '1', buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };
     this.productionService.getAnnotationDates(data).subscribe((data: any) => {
       this.annotationDates = data['annotationDates'];
-
-    });
+  });
   }
 
   annotationLines: string = "";
@@ -654,7 +671,7 @@ export class ProductionDashboardComponent implements OnInit {
 
   maintanenceDayFullList: any[];
   public viewMaintenanceDays() {
-    const data = { millId: "1", buId: "1" }; // later would need to change this to autoreceive ID
+    const data = { millId: "1", buId: "1" }; 
     this.productionService.getMaintenanceData(data).subscribe(
       (data: any) => {
         this.maintanenceDayModel = data;
@@ -679,7 +696,7 @@ export class ProductionDashboardComponent implements OnInit {
       });
   }
 
-  finalNoOfDays: Number;
+  finalNoOfDays: number;
   public addTargetDays() {
     if (this.tarGetAreaValue == undefined || this.tarGetAreaValue == null) {
       this.showError("error", "Error Message", "Please enter target days.");
@@ -704,5 +721,7 @@ export class ProductionDashboardComponent implements OnInit {
   public openSettingIcon() {
     this.displaySettingIcon = !this.displaySettingIcon;
   }
+
+  
 
 }

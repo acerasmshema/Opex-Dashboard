@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.DeleteRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysResponse;
+import com.rgei.kpi.dashboard.response.model.UpdateRemarksRequest;
 import com.rgei.kpi.dashboard.service.MaintenanceDaysService;
 
 
@@ -75,6 +77,13 @@ public class MaintenanceDaysController {
 	public ResponseEntity<HttpStatus> deleteMaintainanceDetails(@RequestBody DeleteRequest request) {
 		logger.info("Inside MaintenanceDaysController to delete maintenance days");
 		maintenanceDaysService.deleteMaintainanceDayDetails(request);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/maintenance_days/update_maintenance_days_remarks")
+	public ResponseEntity<HttpStatus> updateMaintainanceRemarksRequest(@RequestBody UpdateRemarksRequest request) {
+		logger.info("Inside MaintenanceDaysController to update maintenance days remarks");
+		maintenanceDaysService.updateMaintainanceDayRemarks(request);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

@@ -1,5 +1,5 @@
 export class Model {
-    year: String;
-    maxTarget : String;
-    minTarget : String;
+    year: string;
+    maxTarget : string;
+    minTarget : string;
 }

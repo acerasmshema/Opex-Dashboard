@@ -27,7 +27,9 @@
   </div>
 
   <p-tabPanel header="Production" [selected]="true">
+      <ng-template pTemplate="app-production-dashboard">
     <app-production-dashboard></app-production-dashboard>
+  </ng-template>
   </p-tabPanel>
   <p-tabPanel header="Chemical Consumption">
     <ng-template pTemplate="app-chemical-consumption-dashboard">
@@ -44,11 +46,7 @@
       <app-wood-consumption-dashboard></app-wood-consumption-dashboard>
     </ng-template>
   </p-tabPanel>
-  <!--  <p-tabPanel header="Conditional Monitoring">
-    <ng-template pTemplate="app-conditional-monitoring">
-      <app-conditional-monitoring></app-conditional-monitoring>
-    </ng-template>
-  </p-tabPanel> -->
+ 
   <p-tabPanel header="Kappa Number Prediction ">
     <ng-template pTemplate="app-conditional-monitoring">
       <app-kappa-number-prediction></app-kappa-number-prediction>

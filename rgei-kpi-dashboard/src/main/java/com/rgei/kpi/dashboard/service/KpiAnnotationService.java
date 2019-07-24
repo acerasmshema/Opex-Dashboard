@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateSerachRes;
+import com.rgei.kpi.dashboard.response.model.KpiAnnotationDeleteRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationResponse;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationSearchRequest;
@@ -31,5 +32,6 @@ public interface KpiAnnotationService {
 	public List<KpiAnnotationResponse> getAnnotationDetails(KpiAnnotationSearchRequest kpiAnnotationSearchRequest); 
 	
 	public KpiAnnotationDateSerachRes kpiAnnotationDateRangeSerach(KpiAnnotationDateRangeSerach kpiAnnotationDateRangeSerach);
-
+	
+	public void deleteAnnotation(List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest);
 }

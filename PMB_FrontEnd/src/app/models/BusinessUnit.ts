@@ -1,4 +1,4 @@
 export class BusinessUnit {
     businessUnitId : string;
-    businessUnitName: String;
+    businessUnitName: string;
 }

@@ -19,7 +19,7 @@ import { maintanenceDaysColumn,processLineColumns,annotationsCols,frequencies,pr
   selector: 'app-utilities-consumption-dashboard',
   templateUrl: './utilities-consumption-dashboard.component.html',
   styleUrls: ['./utilities-consumption-dashboard.component.scss'],
-  providers: [DatePipe,MessageService,LocalStorageService]
+  providers: [DatePipe,MessageService,LocalStorageService,ChemicalConsumptionService]
 })
 export class UtilitiesConsumptionDashboardComponent implements OnInit {
 
@@ -122,12 +122,12 @@ ngOnInit() {
     this.chemicalConsumptionEnquiry.PLines=[];
     this.chemicalConsumptionEnquiry.date=[];
     this.chemicalConsumptionEnquiry.date.push(this.startDate,this.endDate)
-    
+    var frequency
    if(this.localStorageService.fetchUserRole()=="Mills Operation"){
-      var frequency={name: "Daily", code: "0"};
+      frequency={name: "Daily", code: "0"};
       this.chemicalConsumptionEnquiry.selectedValue=frequency; 
     }else{
-      var frequency={name: "Monthly", code: "1"};
+      frequency={name: "Monthly", code: "1"};
       this.chemicalConsumptionEnquiry.selectedValue=frequency;
     }
 
@@ -161,29 +161,7 @@ ngOnInit() {
     this.AnnotationDialog = !this.AnnotationDialog;
   }
 
-  public showGridDialog1(title: string) {
-    this.title = title;
-    //this.productonLines=ProductonLineData1;
-    this.GridDialog = !this.GridDialog;
-  }
-
-  public showGridDialog2(title: string) {
-    this.title = title;
-    // this.productonLines=ProductonLineData2;
-    this.GridDialog = !this.GridDialog;
-  }
-
-  public showGridDialog3(title: string) {
-    this.title = title;
-    // this.productonLines=ProductonLineData3;
-    this.GridDialog = !this.GridDialog;
-  }
-
-  public showGridDialog4(title: string) {
-    this.title = title;
-    //this.productonLines=ProductonLineData4;
-    this.GridDialog = !this.GridDialog;
-  }
+ 
 
   public showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
@@ -194,7 +172,8 @@ ngOnInit() {
     if (data['AnnotationDate'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Date Cannot be blank');
       return null;
-    } if (data['AnnotationText'] == "") {
+    } 
+    if (data['AnnotationText'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Text Cannot be blank');
       return null;
     }
@@ -291,12 +270,12 @@ if(event.collapsed=="null"){
     this.productonLines=[];
     this.title = title;
     this.utilitiesConsumptionRequest.kpiId=kpiId;
-    console.log(this.utilitiesConsumptionRequest);
+    
     this.chemicalConsumptionService.getKpiGridData(this.utilitiesConsumptionRequest).subscribe((data: any) => {
-      console.log(data);
+      
       this.cols=[];
       for(var k in data[0][0]) {
-        console.log(k);
+        
         this.cols.push(this.virtualCols[k]);  
       }
       this.cols.sort(function(a, b) {
@@ -316,7 +295,7 @@ if(event.collapsed=="null"){
   }
 
   showKpiCharts(filterData) {
-    console.log(filterData);
+    
      this.kpiType2show = false;
     this.kpiType3show = false;
     this.kpiType4show = false;
@@ -336,12 +315,6 @@ if(event.collapsed=="null"){
     this.utilitiesConsumptionRequest.startDate = this.datePipe.transform(filterData.date[0], 'yyyy-MM-dd');
     this.utilitiesConsumptionRequest.endDate = this.datePipe.transform(filterData.date[1], 'yyyy-MM-dd');
     this.utilitiesConsumptionRequest.processLines = this.processLines;
-   /*  console.log(filterData.KPITypes);
-    if (filterData.KPITypes == null || filterData.KPITypes==[]) {
-      console.log("asd");
-      filterData.KPITypes=this.kpiTypes;
-    }
-console.log(filterData); */
     filterData.KPITypes.forEach(element => {
 
       if (element.kpiTypeId == 9) {
@@ -362,10 +335,10 @@ console.log(filterData); */
         this.chemicalConsumptionService.getDataforKpi(this.utilitiesConsumptionRequest).subscribe((data: any) => {
           this.kpiId4Data = data;
         });
-        this.utilitiesConsumptionRequest.kpiId = "16";
+       /*  this.utilitiesConsumptionRequest.kpiId = "16";
         this.chemicalConsumptionService.getDataforKpi(this.utilitiesConsumptionRequest).subscribe((data: any) => {
           this.kpiId5Data = data;
-        });
+        }); */
       }
 
       if (element.kpiTypeId == 11) {

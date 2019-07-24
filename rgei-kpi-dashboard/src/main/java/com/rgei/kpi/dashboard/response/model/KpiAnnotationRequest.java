@@ -18,6 +18,7 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class KpiAnnotationRequest {
 
+	private Integer annotationId;
 	private String millId;
 	private String kpiId;
 	private String buTypeId;
@@ -67,5 +68,11 @@ public class KpiAnnotationRequest {
 	}
 	public void setProcessLines(String processLines) {
 		this.processLines = processLines;
+	}
+	public Integer getAnnotationId() {
+		return annotationId;
+	}
+	public void setAnnotationId(Integer annotationId) {
+		this.annotationId = annotationId;
 	}
 }

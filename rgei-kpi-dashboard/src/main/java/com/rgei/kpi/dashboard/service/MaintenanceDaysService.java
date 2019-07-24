@@ -21,6 +21,7 @@ import java.util.List;
 import com.rgei.kpi.dashboard.response.model.DeleteRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysResponse;
+import com.rgei.kpi.dashboard.response.model.UpdateRemarksRequest;
 
 public interface MaintenanceDaysService {
 	
@@ -30,5 +31,7 @@ public interface MaintenanceDaysService {
 
 
 	public void deleteMaintainanceDayDetails(DeleteRequest request);
+	
+	public void updateMaintainanceDayRemarks(UpdateRemarksRequest request);
 
 }

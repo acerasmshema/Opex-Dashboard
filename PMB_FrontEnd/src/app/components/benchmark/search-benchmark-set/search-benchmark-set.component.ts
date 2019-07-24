@@ -50,7 +50,8 @@ export class SearchBenchmarkSetComponent implements OnInit {
      if (data['setLocation'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Location');
       return null;
-    } if (data['setBusinessUnit'] == "") {
+    } 
+    if (data['setBusinessUnit'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Business Unit');
       return null;
     }

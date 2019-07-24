@@ -33,13 +33,16 @@ public class KpiAnnotationUtil {
 	private KpiAnnotationUtil() {
 	}
 
-	public static List<KpiAnnotationEntity> convertToEntity(KpiAnnotationRequest kpiAnnotationRequest) {
+	public static List<KpiAnnotationEntity> convertToEntity(KpiAnnotationRequest kpiAnnotationRequest,boolean status) {
 
 		KpiAnnotationEntity kpiAnnotationEntity = null;
 		List<KpiAnnotationEntity> annotations = new ArrayList<>();
 		if(kpiAnnotationRequest != null ) {
 				kpiAnnotationEntity = new KpiAnnotationEntity();
-				kpiAnnotationEntity.setActive(Boolean.TRUE);
+				if(status==Boolean.FALSE) {
+					kpiAnnotationEntity.setKpiAnnotationId(kpiAnnotationRequest.getAnnotationId());
+				}
+				kpiAnnotationEntity.setActive(status);
 				kpiAnnotationEntity.setAnnotationDate(Utility.stringToDateConvertor(kpiAnnotationRequest.getAnnotationDate(), DashboardConstant.FORMAT));
 				kpiAnnotationEntity.setCreatedDate(new Date());
 				kpiAnnotationEntity.setDescription(kpiAnnotationRequest.getDescription());
@@ -60,6 +63,7 @@ public class KpiAnnotationUtil {
 				kpiAnnotationEntity.setCreatedBy(kpiAnnotationRequest.getUserLoginId());
 				kpiAnnotationEntity.setUpdatedBy(kpiAnnotationRequest.getUserLoginId());
 				kpiAnnotationEntity.setProcessLines(kpiAnnotationRequest.getProcessLines());
+				
 				annotations.add(kpiAnnotationEntity);
 		}
 		return annotations;

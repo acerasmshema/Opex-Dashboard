@@ -243,7 +243,7 @@ console.log(lineChartSeries);
     this.yAxisLabel = "Produced Qty";
     this.xAxisLabel = "Year";
 
-    this.width;
+    this.width=250;
     this.height = 250;
 
 

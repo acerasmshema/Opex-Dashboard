@@ -3,8 +3,6 @@ import { SidebarComponent } from '../../sidebar/sidebar.component';
 import { hideSpinner } from '@syncfusion/ej2-popups';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ProductonLine } from '../../../models/ProductionLine';
-import { multi1, multi2, multi3, multi4, ProductonLineData1, ProductonLineData2, ProductonLineData3, ProductonLineData4 } from '../../../../assets/data/data1';
 import { ChemicalConsumption } from '../../../models/ChemicalConsumption';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChemicalConsumptionService } from '../../../services/ChemicalConsumption/chemical-consumption.service';
@@ -12,13 +10,13 @@ import { KpiType } from 'src/app/models/KpiType';
 import { MasterDataService } from 'src/app/services/masterData/master-data.service';
 import { ChemicalConsumptionEnquiry } from '../../../models/ChemicalConsumptionEnquiry';
 import { LocalStorageService } from '../../../services/localStorage/local-storage.service';
-import { maintanenceDaysColumn,processLineColumns,annotationsCols,frequencies,processLines } from '../../../../assets/data/MasterData';
+import { frequencies,processLines } from '../../../../assets/data/MasterData';
 
 @Component({
   selector: 'app-chemical-consumption-dashboard',
   templateUrl: './chemical-consumption-dashboard.component.html',
   styleUrls: ['./chemical-consumption-dashboard.component.scss'],
-  providers: [MessageService, DatePipe,LocalStorageService]
+  providers: [MessageService, DatePipe,LocalStorageService,ChemicalConsumptionService]
 })
 export class ChemicalConsumptionDashboardComponent implements OnInit {
 
@@ -129,12 +127,12 @@ ngOnInit() {
     this.chemicalConsumptionEnquiry.PLines=[];
     this.chemicalConsumptionEnquiry.date=[];
     this.chemicalConsumptionEnquiry.date.push(this.startDate,this.endDate)
-    
+    var frequency;
     if(this.localStorageService.fetchUserRole()=="Mills Operation"){
-      var frequency={name: "Daily", code: "0"};
+       frequency={name: "Daily", code: "0"};
       this.chemicalConsumptionEnquiry.selectedValue=frequency; 
     }else{
-      var frequency={name: "Monthly", code: "1"};
+       frequency={name: "Monthly", code: "1"};
       this.chemicalConsumptionEnquiry.selectedValue=frequency;
     }
     this.showKpiCharts(this.chemicalConsumptionEnquiry);
@@ -172,12 +170,10 @@ ngOnInit() {
     this.productonLines=[];
     this.title = title;
     this.chemicalConsumptionRequest.kpiId=kpiId;
-    console.log(this.chemicalConsumptionRequest);
     this.chemicalConsumptionService.getKpiGridData(this.chemicalConsumptionRequest).subscribe((data: any) => {
-      console.log(data);
+      
       this.cols=[];
       for(var k in data[0][0]) {
-        console.log(k);
         this.cols.push(this.virtualCols[k]);  
       }
       this.cols.sort(function(a, b) {
@@ -192,7 +188,7 @@ ngOnInit() {
       return 0;
       });
 
-      console.log(this.cols);
+      
       this.productonLines=data[0];
       });
     this.GridDialog = !this.GridDialog;
@@ -207,7 +203,8 @@ ngOnInit() {
     if (data['AnnotationDate'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Date Cannot be blank');
       return null;
-    } if (data['AnnotationText'] == "") {
+    } 
+    if (data['AnnotationText'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Text Cannot be blank');
       return null;
     }
@@ -217,57 +214,57 @@ ngOnInit() {
   }
 
 
-  public chaneChartTypeDiv1(event) {
+  public changeChartTypeDiv1(event) {
     this.div1StackChart = !this.div1StackChart;
     this.div1BarChart = !this.div1BarChart;
   }
 
-  public chaneChartTypeDiv2(event) {
+  public changeChartTypeDiv2(event) {
     this.div2StackChart = !this.div2StackChart;
     this.div2BarChart = !this.div2BarChart;
   }
 
-  public chaneChartTypeDiv3(event) {
+  public changeChartTypeDiv3(event) {
     this.div3StackChart = !this.div3StackChart;
     this.div3BarChart = !this.div3BarChart;
   }
 
-  public chaneChartTypeDiv4(event) {
+  public changeChartTypeDiv4(event) {
     this.div4StackChart = !this.div4StackChart;
     this.div4BarChart = !this.div4BarChart;
   }
 
-  public chaneChartTypeDiv5(event) {
+  public changeChartTypeDiv5(event) {
     this.div5StackChart = !this.div5StackChart;
     this.div5BarChart = !this.div5BarChart;
   }
 
-  public chaneChartTypeDiv6(event) {
+  public changeChartTypeDiv6(event) {
     this.div6StackChart = !this.div6StackChart;
     this.div6BarChart = !this.div6BarChart;
   }
 
-  public chaneChartTypeDiv7(event) {
+  public changeChartTypeDiv7(event) {
     this.div7StackChart = !this.div7StackChart;
     this.div7BarChart = !this.div7BarChart;
   }
 
-  public chaneChartTypeDiv8(event) {
+  public changeChartTypeDiv8(event) {
     this.div8StackChart = !this.div8StackChart;
     this.div8BarChart = !this.div8BarChart;
   }
 
-public chaneChartTypeDiv9(event) {
+public changeChartTypeDiv9(event) {
     this.div9StackChart = !this.div9StackChart;
     this.div9BarChart = !this.div9BarChart;
   }
 
-  public chaneChartTypeDiv10(event) {
+  public changeChartTypeDiv10(event) {
     this.div10StackChart = !this.div10StackChart;
     this.div10BarChart = !this.div10BarChart;
   }
 
-  public chaneChartTypeDiv11(event) {
+  public changeChartTypeDiv11(event) {
     this.div11StackChart = !this.div11StackChart;
     this.div11BarChart = !this.div11BarChart;
   }
@@ -302,7 +299,7 @@ if(event.collapsed=="null"){
 
  
   showKpiCharts(filterData) {
-    console.log(filterData);
+    
      this.kpiType2show = false;
     this.kpiType3show = false;
     this.kpiType4show = false;
@@ -330,10 +327,10 @@ if(event.collapsed=="null"){
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11Data = data;
         });
-        this.chemicalConsumptionRequest.kpiId = "12";
+       /*  this.chemicalConsumptionRequest.kpiId = "12";
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId12Data = data;
-        });
+        }); */
       }
 
       if (element.kpiTypeId == 2) {
@@ -342,10 +339,10 @@ if(event.collapsed=="null"){
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId2Data = data;
         });
-        this.chemicalConsumptionRequest.kpiId = "3";
+      /*   this.chemicalConsumptionRequest.kpiId = "3";
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId3Data = data;
-        });
+        }); */
       }
 
       if (element.kpiTypeId == 3) {
@@ -374,10 +371,10 @@ if(event.collapsed=="null"){
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId7Data = data;
         });
-        this.chemicalConsumptionRequest.kpiId = "8";
+       /*  this.chemicalConsumptionRequest.kpiId = "8";
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId8Data = data;
-        });
+        }); */
       }
 
       if (element.kpiTypeId == 6) {
@@ -395,12 +392,7 @@ if(event.collapsed=="null"){
           this.kpiId10Data = data;
         });
       }
-
-    
     });
-
-
-
   }
 
 }
