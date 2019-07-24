@@ -1,0 +1,467 @@
+<div class="container-fluid mainContainer">
+
+  <div class="row firstRow">
+
+    <div class="row" style="width: 96%;margin-left:30px;margin-top:10px;height:200px">
+      <div class="col-md-3" style="text-align: center;padding:0px;border:1px solid lightgrey;border-radius: 10px;">
+        <label style="text-align: center">
+          <h5 style="font-weight: bold;margin-top: 5px">KERINCI PRODUCTION - Y'day (ADt/d)</h5>
+        </label>
+        <div style="margin: auto;text-align: center;margin-top: 17%" *ngIf="productonYDaySpinner">
+          <p-progressSpinner [style]="{width: '70px', height: '70px'}" strokeWidth="4" fill="#EEEEEE"
+            animationDuration=".5s"></p-progressSpinner>
+        </div>
+        <div style="display: flex;justify-content: center;align-items: center;" *ngIf="productonYDayChart">
+          <rg-gauge-chart [canvasWidth]="275" [needleValue]="productionYDayNeedleValue" [options]="options"
+            [nameFont]="nameFont" [bottomLabel]="productionYDayActualValue"></rg-gauge-chart>
+        </div>
+        <div style="margin: auto;text-align: center;margin-top: 20%" *ngIf="productonYDayRefresh">
+          <span> <i class="fa fa-refresh fa-4x" (click)="productonYDayRefresh()" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <div class="col-md-9" style="padding:0px;">
+        <div class="card" style="height:100%;border:1px solid lightgrey;border-radius: 10px;margin-left: 10px">
+          <div class="row" style="width:100%">
+            
+              <div class="col-md-2" style="padding-left: 30px"><h6 style="font-weight: bold"> Annual Target :{{annualTarget}}</h6></div>
+              <div class="col-md-5" style="padding-right: 0px;text-align: center"><h5 style="font-weight: bold">PRODUCTION (<span style="color:#BA4A00;font-size: .83em">Actual</span> vs. <span style="color:#2E8B57;font-size: .83em">Target</span>) (ADt)</h5></div>
+              <div class="col-md-5" style="padding: 0px"><h6 style="font-weight: bold">Projected Daily Target in next {{targetDays}} Days Till {{targetEndDate}} : {{targetValue}} (ADt)  &nbsp;<i (click)="openSettingIcon()" class="fa fa-cog fa-lg"aria-hidden="true"></i></h6>
+              </div>
+              
+          
+          </div>
+
+          <div style="height:90%">
+            <ngx-charts-line-chart [scheme]="lineChartColorSchemeProduction" [results]="multiLineDataForLine"
+              [gradient]="gradient" [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false"
+              [showXAxisLabel]="false" [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="false"
+              yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
+                 <ng-template #seriesTooltipTemplate let-model="model">
+                {{model[0].name}}
+                <div *ngFor="let mod of model.slice().reverse(); let i = index">
+                  {{mod.series}} : {{ mod.value | number }}
+                </div>
+              Diff. : {{(model[1].value - model[0].value)  | number }}
+                
+              </ng-template>
+              </ngx-charts-line-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="width: 96%;margin-left:30px;margin-top:10px;height:300px;padding:0px">
+
+      <div class="col-md-12" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="width:100%">
+
+          <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4">
+            <div class="radio">
+              <label class="radio-inline"><input type="radio" name="optradio1" (change)="changeChartDuration('radio1')"
+                  checked>Last Month</label>&nbsp;&nbsp;
+              <label class="radio-inline"><input type="radio" name="optradio1"
+                  (change)="changeChartDuration('radio2')">Last 3 Months</label>&nbsp;&nbsp;
+              <label class="radio-inline"><input type="radio" name="optradio1"
+                  (change)="changeChartDuration('radio3')">Last 6 Months</label>
+            </div>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4" style="text-align: center;">
+            <div style="font-size: 25px;margin-top: 5px;">
+              <h5 style="font-weight: bold">{{ 'PRODUCTION' | translate }}</h5>
+            </div>
+          </div>
+
+          <div class="col-xs-2 col-sm-2 col-md-2 col-xl-2">
+
+          </div>
+
+
+          <div class="col-xs-2 col-sm-2 col-md-2 col-xl-2">
+            <div class="row" style="height:40px;float:right;width:100%;margin-top: 3px;">
+              <H6 style="margin-top:3px">Stack Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
+                (onChange)="changeChartTyped1()" [(ngModel)]="checked1">
+              </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack Area</H6>
+            </div>
+          </div>
+        </div>
+        <div class="row" style=" height: 250px;width: 100%;">
+          <div class="col-md-12" *ngIf="showStackChart">
+            <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+              [xAxis]="true" [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false"
+              [barPadding]="2" [xAxisLabel]="" [yAxisLabel]="" [showDataLabel]="false">
+            </ngx-charts-bar-vertical-stacked>
+          </div>
+          <div class="col-md-12" *ngIf="showStackAreaChart">
+            <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="multiStack" [gradient]="gradient"
+              [xAxis]="true" [yAxis]="true" [legend]="false" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="false"
+              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+            </ngx-charts-area-chart-stacked>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+  <div class="row secondRow">
+    <div class="row" style="width: 96%;margin-left:30px;margin-top:0px;height:40px">
+      <div class="radio">
+        <label class="radio-inline"><input type="radio" name="optradio"
+            (change)="changeChartDurationLineChart('radio1')" checked>Last Month</label>&nbsp;&nbsp;
+        <label class="radio-inline"><input type="radio" name="optradio"
+            (change)="changeChartDurationLineChart('radio2')">Last 3 Months</label>&nbsp;&nbsp;
+        <label class="radio-inline"><input type="radio" name="optradio"
+            (change)="changeChartDurationLineChart('radio3')">Last 6 Months</label>
+      </div>
+    </div>
+    <div class="row" style="width: 96%;margin-left:30px;margin-top:0px;height:320px">
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL1"
+            [centralLabel]="centralLabel1" [options]="options1" [name]="name1" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL1">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl1Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL2"
+            [centralLabel]="centralLabel1" [options]="options2" [name]="name2" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL2">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl2Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL3"
+            [centralLabel]="centralLabel1" [options]="options3" [name]="name3" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL3">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl3Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL4"
+            [centralLabel]="centralLabel1" [options]="options4" [name]="name4" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL4">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl4Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="width: 96%;margin-left:30px;margin-top:0px;height:320px">
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL5"
+            [centralLabel]="centralLabel1" [options]="options5" [name]="name5" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL5">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl5Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL6"
+            [centralLabel]="centralLabel1" [options]="options6" [name]="name6" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL6">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl6Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL7"
+            [centralLabel]="centralLabel1" [options]="options7" [name]="name7" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL7">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl7Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+      <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
+        <div class="row" style="padding-left: 20%;padding-right: 25%">
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL8"
+            [centralLabel]="centralLabel1" [options]="options8" [name]="name8" [nameFont]="nameFont"
+            [bottomLabel]="productionYDayActualValuePL8">
+          </rg-gauge-chart>
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl8Data" [gradient]="gradient"
+            [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+            [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row thirdRow">
+    <!-- Filter Row -->
+    <form [formGroup]="enquiryForm">
+      <div class="row"
+        style="width: 96%;margin-left:30px;margin-top: 5px;border:1px solid lightgrey;border-radius: 10px;padding: 5px;height: 40px">
+        <div class="col-md-2">
+          <ejs-daterangepicker class="daterangepicker" id='daterangepicker' [startDate]='startDate' [endDate]='endDate'
+            [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
+            placeholder="{{'Date Range'| translate }}">
+          </ejs-daterangepicker>
+        </div>
+        <div class="col-md-2">
+          <p-dropdown [options]="frequencies" [(ngModel)]="productionEnquiryData.selectedValue"
+            [ngModelOptions]="{standalone: true}" optionLabel="name">
+          </p-dropdown>
+        </div>
+        <div class="col-md-3">
+          <p-multiSelect [options]="processLines" scrollHeight="250px"
+            [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
+            [style]="{'width':'60%'}" defaultLabel="Process Lines" optionLabel="header">
+          </p-multiSelect>
+
+
+        </div>
+        <div class="col-md-2">
+          <button pButton type="button" label="Search" (click)="searchData()" class="ui-button-primary"
+            style="background-color: #007ad9;height:30px;margin-top: -2px"></button>
+        </div>
+      </div>
+
+      <!-- Line Chart Row -->
+      <div class="row" style="width: 96%;margin-left:30px;height:250px">
+        <div class="col-md-12" style="padding:0px">
+          <div class="row" style="width:100%">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4">
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4" style="text-align: center;">
+              <div style="font-size: 25px;margin-top: 5px;">
+                <h5 style="font-weight: bold">{{ 'PRODUCTION' | translate }}</h5>
+              </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4">
+            </div>
+          </div>
+          <div class="row chartRow">
+
+            <div class="col-xs-11 col-sm-11 col-md-11 col-xl-11" style="padding-bottom: 0px;" #divElements>
+              <ngx-charts-line-chart [scheme]="lineChartColorScheme" [results]="multiLineData" [gradient]="gradient"
+                [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
+                [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]="" (select)="onSelect($event)"
+                [xAxisTickFormatting]="xAxisTickFormattingFn" [curve]="lineChartLineInterpolation" [animations]="true"
+                [showRefLines]="false">
+              </ngx-charts-line-chart>
+            </div>
+
+            <!-- <div class="col-xs-1 col-sm-1 col-md-1 col-xl-1" style="padding-bottom: 0px;">
+                      <div><i class="fa fa-circle text-danger Blink"></i>&nbsp; <span (click)="openAnnotations()" class="fake-link" >Annotations</span> </div>
+                      </div> -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Grid Row -->
+      <div class="row" style="width: 96%;margin-left:30px;height: 250;margin-top: 2%">
+        <div class="col-md-12" style="padding:0px">
+          <p-table #dt [columns]="cols" [value]="productonLines" [paginator]="true" [rows]="10" [scrollable]="true"
+            scrollHeight="150px">
+            <ng-template pTemplate="caption">
+              <div class="ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
+                  (click)="dt.exportCSV()" style="float:right"></button>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" class="text-center">
+                  {{col.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr>
+                <td  *ngFor="let col of columns" [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'">
+                  {{rowData[col.field]}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p-dialog header="Annotations for Production on {{annotationDate}}" [responsive]="true"
+  [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
+  [(visible)]="displayAnnotations">
+  <p-panel header="Create Annotation" [collapsed]="createAnnotationCollapsed"
+    (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+          <div class="container-fluid" style="height:135px">
+
+            <div class="row" style="height: 90px;">
+              <div class="col-md-4">
+                <p-multiSelect [options]="processLines" scrollHeight="80px" [(ngModel)]="annotationProcessLines"
+                  [ngModelOptions]="{standalone: true}" [style]="{'width':'60%'}" defaultLabel="Process Lines"
+                  optionLabel="header">
+                </p-multiSelect>
+              </div>
+
+              <div class="col-md-4">
+                <textarea placeholder="Description" rows="2" [(ngModel)]="annotationDescription" cols="25"
+                  pInputTextarea></textarea>
+              </div>
+            </div>
+
+            <div class="row" style="height: 40px;padding-top: 10px;">
+
+              <div class="col-md-3">
+              </div>
+
+              <div class="col-md-6" style="padding-right: 25px">
+
+              </div>
+              <div class="col-md-3">
+                <span class="pull-right"> <button pButton type="button" (click)="createAnnotation()"
+                    label="Save"></button></span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+
+  <p-panel header="View Annotations" [collapsed]="findAnnotationCollapsed"
+    (onBeforeToggle)="findAnnotationBeforeToggle()" [toggleable]="true">
+
+
+    <div class="container">
+      <div class="row" style="height: 320px">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+          <p-table [columns]="annotationsCols" [value]="annotationsLines" [paginator]="true" [rows]="10"
+            [scrollable]="true" scrollHeight="300px">
+
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" class="text-center">
+                  {{col.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr>
+                <td class="text-right" *ngFor="let col of columns" class="text-center">
+                  {{rowData[col.field]}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</p-dialog>
+
+<p-dialog header=" {{ 'Maintenance Days' }}" [responsive]="true"
+  [style]="{width: '800px', minWidth: '300px',height: '500px'}" [minY]="70" [baseZIndex]="10000"
+  [(visible)]="displaySettingIcon">
+  <p-panel header="Maintenance Days Configurations" [collapsed]="createMaintanencePanelMainCollapsed"
+    [toggleable]="true">
+    <div class="container">
+      <div class="row" style="height: 150px;border:1px solid lightgrey;border-radius: 10px;">
+        <div class="col-md-4" style="padding: 10px">
+          <p-calendar [(ngModel)]="dateValue" placeholder="Maintenance Date" [showIcon]="true"></p-calendar>
+        </div>
+        <div class="col-md-4" style="padding: 10px">
+          <textarea [(ngModel)]="textAreaValue" placeholder="Remark" rows="2" cols="28" pInputTextarea></textarea>
+        </div>
+        <div class="col-md-4" style="padding: 10px">
+          <button pButton type="button" label="Add" (click)="add()" class="ui-button-primary"
+            style="background-color: #007ad9;height:30px;margin-top: -2px"></button>
+        </div>
+      </div>
+      <div class="row" style="height: 100px;border:1px solid lightgrey;border-radius: 10px;margin-top: 10px">
+        <div class="col-md-4" style="padding: 10px">
+          <input type="number" style="padding-left: 5px;" pInputText placeholder="Target Days"
+            [(ngModel)]="tarGetAreaValue" />
+        </div>
+        <div class="col-md-4" style="padding: 10px">
+          <button pButton type="button" label="Save" (click)="addTargetDays()" class="ui-button-primary"
+            style="background-color: #007ad9;height:30px;margin-top: -2px"></button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+  <p-panel header="List of Maintenance Days " [collapsed]="createMaintanencePanelNextCollapsed" [toggleable]="true"
+    (click)="viewMaintenanceDays()">
+    <div class="container">
+      <div class="row" style="height: 320px;">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+          <p-table [columns]="maintanenceDaysColumn" [value]="maintanenceDayModel" selectionMode="multiple"
+            scrollHeight="200px" [rows]="5" [paginator]="true" [(selection)]="selectedMaintenanceDay" dataKey="id">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns">
+                  {{col.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button [hidden]="selectedMaintenanceDay == undefined || !selectedMaintenanceDay.length" pButton type="button"
+            class="ui-button-primary" (click)="delMaintanenceDays()" icon="fa fa-trash" label="Delete" iconPos="left"
+            style="height: 28px; margin-top: 8px;"></button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</p-dialog>
+
+<p-toast [style]="{marginTop: '80px'}"></p-toast>

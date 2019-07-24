@@ -1,0 +1,36 @@
+.row{
+    background-color: whitesmoke;
+    margin-left: 0px;
+    margin-right: 0px;
+    height: 100%;
+}
+
+.container-fluid{
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
+}
+
+.mainDiv{
+    height: 100%;
+    padding-left:10px;
+    padding-right: 10px;
+    padding-top:5px;
+    padding-bottom: 5px;
+    width: 80%;
+}
+
+.panelDiv{
+    height: 100%;
+    padding-left:10px;
+    padding-right: 10px;
+    padding-top:10px;
+    padding-bottom: 10px;
+    width: 20%;
+}
+
+.content-fluid{
+    background-color: lightgrey;
+    padding: 5px;
+    height: 100%;
+}

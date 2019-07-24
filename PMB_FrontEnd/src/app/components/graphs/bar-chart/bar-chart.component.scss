@@ -1,0 +1,68 @@
+#main { 
+    margin: 0 auto;
+    clear: none; 
+    display: flex;
+}
+#sidePanel    {
+    background: #D3D3D3;
+    float: left;
+    margin-left: 0px;
+    padding-left: 5px;
+    padding-right: 0px;
+    margin-top: 5px;
+    padding-top: 5px;
+    width:182px;
+    
+    
+}
+
+
+
+#dataGrid{
+    background: #ffffff;
+    height: 200px;
+    
+    bottom: 0;
+    margin-left: 10px;
+    margin-right: 50px;
+}
+
+.ui-datatable .ui-datatable-thead > tr > th {
+    background: red;
+}
+
+
+:host ::ng-deep .ui-multiselected-item-token,
+        :host ::ng-deep .ui-multiselected-empty-token {
+            padding: 2px 4px;
+            margin: 0 0.286em 0 0;
+            display: inline-block;
+            vertical-align:middle;
+            height: 1.857em;
+        }
+
+        :host ::ng-deep .ui-multiselected-item-token {
+            background: #007ad9;
+            color: #ffffff;
+        }
+
+        :host ::ng-deep .ui-multiselected-empty-token {
+            background: #d95f00;
+            color: #ffffff;
+        }
+        .chart-container {
+            width: 90%;
+            height: 50%;
+          }
+
+          .chartRow{
+            height: 400px;
+          }
+          
+          .btn-info{
+            background-color: gray;
+            border-color: white;
+            height: 30px;
+          }
+
+     

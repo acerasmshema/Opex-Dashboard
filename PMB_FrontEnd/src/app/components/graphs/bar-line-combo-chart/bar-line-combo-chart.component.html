@@ -1,0 +1,91 @@
+<form [formGroup]="enquiryForm" (ngSubmit)="onClickMe(enquiryForm.value)">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-xs-8 col-sm-8 col-md-8 col-xl-8">
+        <div style="font-size: 25px;float:right; "><b>{{ 'Kraft Wood Pre O2 Kappa By Year' | translate }} </b></div>
+      </div>
+      <div class="col-xs-2 col-sm-2 col-md-2 col-xl-2">
+
+      </div>
+      <div class="col-xs-2 col-sm-2 col-md-2 col-xl-2">
+        <button class="btn btn-default" type="button" (click)="showDialog()" style="float:right"><i
+            class="fa fa-bars fa-lg" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+
+    <div class="row chartRow">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-xl-6">
+        <ngx-charts-bar-vertical [scheme]="colorScheme" [results]="single" [gradient]="gradient" [xAxis]="showXAxis"
+          [yAxis]="showYAxis" [legend]="false" [showXAxisLabel]="true" [showYAxisLabel]="showYAxisLabel" [xAxis]="true"
+          [xAxisLabel]="" [yAxisLabel]=" yAxisLabel | translate " (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-xl-6">
+        <ngx-charts-line-chart [scheme]="lineChartColorScheme" [results]="multi" [gradient]="gradient" [xAxis]="true"
+          [yAxis]="true" [legend]="false" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="false" [xAxisLabel]=""
+          [yAxisLabel]="" [curve]="lineChartLineInterpolation" (select)="onSelect($event)" showGridLines="true">
+        </ngx-charts-line-chart>
+      </div>
+    </div>
+  </div>
+
+  <p-dialog header=" {{ 'Chart Parameters' | translate }}" [responsive]="true"
+    [style]="{width: '250px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000" [(visible)]="display">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <label>
+            FL1: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="color" (colorPickerSelect)='colorPickerSelect()'
+              formControlName="bar1Color" id="bar1Color" />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <label>
+            FL2: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="color" style="align-self: right"
+              formControlName="bar2Color" id="bar2Color" />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <label>
+            FL3: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="color" formControlName="bar3Color" id="bar3Color" />
+          </label></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <label>
+            RZ : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="color" formControlName="bar4Color" id="bar4Color" />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <br>
+          <label>
+            X-Axis Label: <input type="test" style="width:80px" formControlName="xAxisLabel"
+              (keyup)="onClickMe(enquiryForm.value)" id="xAxisLabel" />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <label>
+            Y-Axis Label: <input type="test" style="width:80px" formControlName="yAxisLabel"
+              (keyup)="onClickMe(enquiryForm.value)" id="yAxisLabel" />
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-lg-10 col-md-10">
+          <button type="submit" class="btn btn-info" style="float: right">Apply</button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</form>
