@@ -345,26 +345,10 @@ public class KpiDashboardCategoryUtility {
 	
 	public static List<KpiType> convertToKpiTypeDTO(List<KpiTypeEntity> entities) {
 		List<KpiType> kpiType = new ArrayList<>();
-		KpiType kpiTypeObject = null;
 		for (KpiTypeEntity value : entities) {
 			if (Boolean.TRUE.equals(value.getActive())) {
 				for (KpiEntity kpi : value.getKpis()) {
-					if (Boolean.TRUE.equals(kpi.getActive())) {
-						kpiTypeObject = new KpiType();
-						List<String> processLines = new ArrayList<>();
-						if (Boolean.TRUE.equals(value.getActive())) {
-							kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
-							kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
-							kpiTypeObject.setKpiName(kpi.getKpiName() + " (" + kpi.getKpiUnit() + ")");
-							kpiTypeObject.setKpiId(kpi.getKpiId());
-							for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
-								kpiTypeObject.setTarget(line.getTarget());
-								processLines.add(line.getProcessLine().getProcessLineCode());
-							}
-						}
-						kpiTypeObject.setProcessLines(processLines);
-						kpiType.add(kpiTypeObject);
-					}
+					populateKPITypeDTO(kpiType, value, kpi);
 				}
 				sortResponse(kpiType);
 			}
@@ -372,6 +356,26 @@ public class KpiDashboardCategoryUtility {
 		return kpiType;
 	}
 
+	private static void populateKPITypeDTO(List<KpiType> kpiType, KpiTypeEntity value, KpiEntity kpi) {
+		KpiType kpiTypeObject;
+		if (Boolean.TRUE.equals(kpi.getActive())) {
+			kpiTypeObject = new KpiType();
+			List<String> processLines = new ArrayList<>();
+			if (Boolean.TRUE.equals(value.getActive())) {
+				kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
+				kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
+				kpiTypeObject.setKpiName(kpi.getKpiName() + " (" + kpi.getKpiUnit() + ")");
+				kpiTypeObject.setKpiId(kpi.getKpiId());
+				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
+					kpiTypeObject.setTarget(line.getTarget());
+					processLines.add(line.getProcessLine().getProcessLineCode());
+				}
+			}
+			kpiTypeObject.setProcessLines(processLines);
+			kpiType.add(kpiTypeObject);
+		}
+	}
+	
 	private static void sortResponse(List<KpiType> kpiType) {
 		Collections.sort(kpiType, (o1, o2) -> {
 			int value1 = o1.getKpiId().compareTo(o2.getKpiId());

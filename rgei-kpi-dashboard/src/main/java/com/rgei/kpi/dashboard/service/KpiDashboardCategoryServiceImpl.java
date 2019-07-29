@@ -29,9 +29,9 @@ import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.KpiDashboardCategoryRequest;
 import com.rgei.kpi.dashboard.response.model.KpiType;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
+import com.rgei.kpi.dashboard.util.KpiConsumptionLineChartUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryDataGridUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtility;
-import com.rgei.kpi.dashboard.util.ProcessLineFrequencyUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
 /**
@@ -323,7 +323,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		for (String processLine : finalKpiProcessLines) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
-			val.setSeries(ProcessLineFrequencyUtility.getYearlySeriesResponse(processLine, responseEntity));
+			val.setSeries(KpiConsumptionLineChartUtility.getYearlySeriesResponse(processLine, responseEntity));
 			resultList.add(val);
 		}
 	}
@@ -340,7 +340,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		for (String processLine : finalKpiProcessLines) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
-			val.setSeries(ProcessLineFrequencyUtility.getQuarterlySeriesResponse(processLine, responseEntity));
+			val.setSeries(KpiConsumptionLineChartUtility.getQuarterlySeriesResponse(processLine, responseEntity));
 			resultList.add(val);
 		}
 	}
@@ -357,7 +357,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		for (String processLine : finalKpiProcessLines) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
-			val.setSeries(ProcessLineFrequencyUtility.getMonthlySeriesResponse(processLine, responseEntity));
+			val.setSeries(KpiConsumptionLineChartUtility.getMonthlySeriesResponse(processLine, responseEntity));
 			resultList.add(val);
 		}
 	}
@@ -373,7 +373,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		for (String processLine : finalKpiProcessLines) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
-			val.setSeries(ProcessLineFrequencyUtility.getDailySeriesResponse(processLine, responseEntity));
+			val.setSeries(KpiConsumptionLineChartUtility.getDailySeriesResponse(processLine, responseEntity));
 			resultList.add(val);
 		}
 	}
