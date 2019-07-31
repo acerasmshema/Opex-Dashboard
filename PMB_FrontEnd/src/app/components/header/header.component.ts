@@ -29,7 +29,6 @@ loginId:any;
       loginId:this.loginId
     }
     this.loginService.logOut(data).subscribe((data: any) => {
-      console.log("Log Out");
       });
       this.router.navigateByUrl('login');
       

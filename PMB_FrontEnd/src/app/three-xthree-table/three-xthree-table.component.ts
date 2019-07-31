@@ -30,7 +30,6 @@ export class ThreeXThreeTableComponent implements OnInit {
           sro['color'] = this.parseAndGetColor(sro);
         })
       });
-      console.log(data)
       this.gridData = data;
     });
   }

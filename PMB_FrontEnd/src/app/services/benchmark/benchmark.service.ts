@@ -13,7 +13,6 @@ export class BenchmarkService {
   } 
 
   public searchSet(data:any){
-    console.log(data);
     return this.apiCallService.callAPIwithData("http://localhost:8081/benchmark/PLSet/searchSet",data);
   }
 }

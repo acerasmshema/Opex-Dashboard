@@ -8,13 +8,11 @@ import { TranslateService } from './services/translate/translate.service';
 })
 export class AppComponent {
   title = 'app';
- 
-  
-  constructor(private translate: TranslateService) {
-    
-  }
+
+  constructor(private translate: TranslateService) { }
 
   setLang(lang: string) {
     this.translate.use(lang);
   }
+
 }

@@ -434,69 +434,22 @@
     <div class="container">
       <div class="row" style="height: 320px;">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                 <!-- @HEma Edit 
-               -->
-          <p-table [columns]="maintanenceDaysColumn" [value]="maintanenceDayModel" selectionMode="multiple" editMode="row"
-            scrollHeight="200px" [rows]="5" [paginator]="true" [(selection)]="selectedMaintenanceDay" dataKey="id"
-            [tableStyle]="{'table-layout':'auto'}" >
+          <p-table [columns]="maintanenceDaysColumn" [value]="maintanenceDayModel" selectionMode="multiple"
+            scrollHeight="200px" [rows]="5" [paginator]="true" [(selection)]="selectedMaintenanceDay" dataKey="id">
             <ng-template pTemplate="header" let-columns>
               <tr>
-                  <th style="width: 3em">
-                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                  </th>
-                <th *ngFor="let col of columns" style="text-align: center">
+                <th *ngFor="let col of columns">
                   {{col.header}}
                 </th>
-                <th style="text-align: center"> 
-                    User Actions
-                  </th>
               </tr>
-       
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns" let-ri="rowIndex" let-editing="editing">
-                <tr [pEditableRow]="rowData" >
-                    <td>
-                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-                    </td>
-
-                    <td class="" >
-                        {{rowData.id}}
-                    </td>
-                    <td class=".ng-invalid.ng-dirty"style="min-width: 100px">
-                        {{rowData.maintainceDates}}
-                    </td>
-                    <td   >
-                      <p-cellEditor>
-                          <ng-template pTemplate="input" >
-                              <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%"
-                               class="ng-pristine ng-valid ng-star-inserted ng-touched">
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                              {{rowData.remarks}}
-                          </ng-template>
-                      </p-cellEditor>
-                          </td>
-                  <td style="text-align:center; min-width: 180px; " >
-                      <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="fa fa-pencil-square-o"  label="Edit" 
-                      class="ui-button-info" (click)="onRowEditInit(rowData)"></button>
-                      <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="fa fa-check-square-o" label="Save" 
-                      class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
-                      <button *ngIf="editing" pButton type="button" pCancelEditableRow icon=" fa fa-times" label="Cancel" 
-                       class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)"></button>
-                  </td>
-                </tr>
-                
-              </ng-template> 
-
-     <!--        
-       <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns">
                   {{rowData[col.field]}}
                 </td>
               </tr>
-            </ng-template> 
-          -->
+            </ng-template>
           </p-table>
           <button [hidden]="selectedMaintenanceDay == undefined || !selectedMaintenanceDay.length" pButton type="button"
             class="ui-button-primary" (click)="delMaintanenceDays()" icon="fa fa-trash" label="Delete" iconPos="left"

@@ -123,7 +123,6 @@ export class CreateBenchmarkSetComponent implements OnInit {
 
   public onChangePLSet(event) {
     this.plSetId = event.value['code'];
-    console.log(event.value['code']);
   }
 
   public showMessage(severity: string, summary: string, detail: string) {

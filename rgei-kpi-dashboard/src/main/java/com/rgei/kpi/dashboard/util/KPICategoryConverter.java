@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
+import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
+import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 
 public class KPICategoryConverter {
 	
@@ -41,6 +43,21 @@ public class KPICategoryConverter {
 			}
 		}
 		return kpiTypeResponseList;
+	}
+	
+	public static List<ProcessLinesResponse> covertToProcessLineResponse(List<ProcessLineEntity> processLinesEntities) {
+		List<ProcessLinesResponse> processLines = null;
+		ProcessLinesResponse processLinesResponse = null;
+		if(!processLinesEntities.isEmpty()) {
+			processLines = new ArrayList<>();
+			for(ProcessLineEntity entity:processLinesEntities) {
+				processLinesResponse = new ProcessLinesResponse();
+				processLinesResponse.setProcessLineId(entity.getProcessLineId());
+				processLinesResponse.setProcessLineName(entity.getProcessLineCode());
+				processLines.add(processLinesResponse);
+			}
+		}
+		return processLines;
 	}
 
 }
