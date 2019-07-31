@@ -24,10 +24,13 @@ export class ThreeXThreeTableComponent implements OnInit {
       kpiCategoryId: this.kpiCategoryId
     };
 
-    this.chemicalConsumptionService.getDataForGrid(requestData).subscribe((data: any) => {
+    this.chemicalConsumptionService.getDataForGrid(requestData)
+    .subscribe((data: any) => {
       data.map(ob => {
+        debugger;
         ob.series.map(sro => {
           sro['color'] = this.parseAndGetColor(sro);
+          console.log(sro);
         })
       });
       console.log(data)
@@ -38,7 +41,7 @@ export class ThreeXThreeTableComponent implements OnInit {
   public parseAndGetColor(sro) {
     let ar = sro.target.split(",");
     let prev = 0;
-    if(sro.value == "NaN"){
+    if(sro.value == NaN){
       return "black"
     }
     for(let vl of ar) {

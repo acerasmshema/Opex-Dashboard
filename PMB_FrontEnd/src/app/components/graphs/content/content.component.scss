@@ -1,4 +1,27 @@
+#main { 
+  margin: 0 auto;
+  clear: none; 
+  display: flex;
+}
+#sidePanel    {
+  background: #D3D3D3;
+  float: left;
+  margin-left: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: 5px;
+  padding-top: 5px;
+  width:182px;
+  
+  
+}
 
+#chart  {
+  width: 900px;
+  background: #ffffff;
+  float:right;
+  max-height: 400px;
+}
 
 #barChart  {
   width: 600px;

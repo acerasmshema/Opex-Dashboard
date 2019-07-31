@@ -1,4 +1,4 @@
 export class ProcessLine {
     processLineId : string;
-    processLineName: string;
+    processLineName: String;
 }

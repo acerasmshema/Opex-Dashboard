@@ -7,11 +7,12 @@ import { AppConstants } from '../../app.constant';
 export class LoginService {
 
   loginUrl=AppConstants.apiURLs.LOGIN_URL;
-  logoutUrl=AppConstants.apiURLs.LOGOUT_URL;
+  logoutUrl=AppConstants.apiURLs.LOGIN_URL;
 
   constructor(private apiCallService:ApiCallService) { }
 
   public validateUser(data:object){
+    
     return this.apiCallService.callAPIwithData(this.loginUrl,data);
   } 
   

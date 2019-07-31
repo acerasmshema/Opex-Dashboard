@@ -18,7 +18,7 @@ import { maintanenceDaysColumn,processLineColumns,annotationsCols,frequencies,pr
   selector: 'app-wood-consumption-dashboard',
   templateUrl: './wood-consumption-dashboard.component.html',
   styleUrls: ['./wood-consumption-dashboard.component.scss'],
-  providers: [MessageService, DatePipe,LocalStorageService,ChemicalConsumptionService]
+  providers: [MessageService, DatePipe,LocalStorageService]
 })
 export class WoodConsumptionDashboardComponent implements OnInit {
 
@@ -118,12 +118,12 @@ ngOnInit() {
     this.woodConsumptionEnquiry.PLines=[];
     this.woodConsumptionEnquiry.date=[];
     this.woodConsumptionEnquiry.date.push(this.startDate,this.endDate)
-    var frequency;
+    
     if(this.localStorageService.fetchUserRole()=="Mills Operation"){
-      frequency={name: "Daily", code: "0"};
+      var frequency={name: "Daily", code: "0"};
       this.woodConsumptionEnquiry.selectedValue=frequency; 
     }else{
-      frequency={name: "Monthly", code: "1"};
+      var frequency={name: "Monthly", code: "1"};
       this.woodConsumptionEnquiry.selectedValue=frequency; 
     }
     this.showKpiCharts(this.woodConsumptionEnquiry);
@@ -161,8 +161,8 @@ ngOnInit() {
         this.cols.push(this.virtualCols[k]);  
       }
       this.cols.sort(function(a, b) {
-        var nameA = a.header.toUpperCase(); 
-        var nameB = b.header.toUpperCase(); 
+        var nameA = a.header.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.header.toUpperCase(); // ignore upper and lowercase
         if (nameA < nameB) {
           return -1;
         }
@@ -184,8 +184,7 @@ ngOnInit() {
     if (data['AnnotationDate'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Date Cannot be blank');
       return null;
-    } 
-    if (data['AnnotationText'] == "") {
+    } if (data['AnnotationText'] == "") {
       this.showMessage('error', 'UnSuccessful :', 'Text Cannot be blank');
       return null;
     }
@@ -275,7 +274,7 @@ if(event.collapsed=="null"){
   }
 
   showKpiCharts(filterData) {
-    
+    console.log(filterData);
     this.kpiType12show = false;
     this.kpiType13show = false;
     this.processLines = [];
@@ -290,18 +289,23 @@ if(event.collapsed=="null"){
     this.woodConsumptionRequest.startDate = this.datePipe.transform(filterData.date[0], 'yyyy-MM-dd');
     this.woodConsumptionRequest.endDate = this.datePipe.transform(filterData.date[1], 'yyyy-MM-dd');
     this.woodConsumptionRequest.processLines = this.processLines;
-  
+   /*  console.log(filterData.KPITypes);
+    if (filterData.KPITypes == null || filterData.KPITypes==[]) {
+      console.log("asd");
+      filterData.KPITypes=this.kpiTypes;
+    }
+console.log(filterData); */
     filterData.KPITypes.forEach(element => {
       if (element.kpiTypeId == 12) {
         this.kpiType12show = !this.kpiType12show
         this.woodConsumptionRequest.kpiId = "18";
         this.chemicalConsumptionService.getDataforKpi(this.woodConsumptionRequest).subscribe((data: any) => {
-          
+          console.log(data)
           this.kpiId18Data = data;
         });
         this.woodConsumptionRequest.kpiId = "19";
         this.chemicalConsumptionService.getDataforKpi(this.woodConsumptionRequest).subscribe((data: any) => {
-          
+          console.log(data)
           this.kpiId19Data = data;
         });
         this.woodConsumptionRequest.kpiId = "20";

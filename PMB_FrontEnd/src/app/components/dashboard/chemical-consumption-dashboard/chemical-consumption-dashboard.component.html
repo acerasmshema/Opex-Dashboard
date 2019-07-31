@@ -6,7 +6,7 @@
     <div [style.width]="variable2" style="float: right;">
       <div class="row" style="margin-right: 0px;">
         <three-xthree-table [header]="'Chemical Consumption - Y\'Day'" [kpiCategoryId]="'2'"></three-xthree-table>
-        <div *ngIf="kpiType8show" style="border:1px solid lightgrey;border-radius: 10px;width:49%;margin-right: 10px">
+        <div *ngIf="kpiType8show" style="margin-top:5px;border:1px solid lightgrey;border-radius: 10px;width:49%;margin-right: 10px">
           <div class="row"
             style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
             <div class="col-md-12" style="text-align: center;padding-top:5px">
@@ -14,30 +14,17 @@
             </div>
           </div>
           <div class="row" style="height: 30px;width:100%;margin: 0px">
-           <!--  <div class="col-md-7">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="options" autocomplete="off"> Line Chart
-                    </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="options" autocomplete="off" checked> Bar Chart
-                    </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="options" autocomplete="off"> Stack Chart
-                    </label>
-                </div>
-            </div> -->
-
-           
-           <div class="col-md-4">
+            <div class="col-md-4">
             </div>
             <div class="col-md-3">
             </div>
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv10($event)" [(ngModel)]="checked10">
+                  (onChange)="chaneChartTypeDiv10($event)" [(ngModel)]="checked10">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                <!--        <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                                  class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
                 <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('11','White Liquor (m3/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
@@ -58,6 +45,50 @@
             </div>
           </div>
         </div>
+
+        <!--  <div *ngIf="kpiType8show"
+        style="margin-top:5px;border:1px solid lightgrey;border-radius: 10px;;width:49%;">
+        <div class="row"
+          style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
+          <div class="col-md-12" style="text-align: center;padding-top:5px">
+            <h4 style="font-weight: bold;text-align: center">White Liquor (tAA/ADt)</h4>
+          </div>
+        </div>
+        <div class="row" style="height: 30px;width:100%;margin: 0px">
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-3">
+          </div>
+          <div class="col-md-5" style="padding: 0px;margin-left: 65%">
+            <div class="row" style="float:right;width:100%;margin-top: 3px;">
+              <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
+                (onChange)="chaneChartTypeDiv11($event)" [(ngModel)]="checked11">
+              </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                 <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                                  class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; 
+              <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('12','White Liquor (kg/ADt)')"
+                  class="fa fa-download fa-2x" aria-hidden="true"></i></label>
+            </div>
+          </div>
+        </div>
+        <div Class="row" style="width:95%;margin: 0px">
+          <div class="col-md-12" *ngIf="div11StackChart" style="height:250px;display: grid;">
+            <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="kpiId12Data" [gradient]="gradient"
+              [xAxis]="true" [yAxis]="true" [view]="view" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false"
+              [barPadding]="2" [showDataLabel]="false" [xAxisLabel]="" [yAxisLabel]="">
+            </ngx-charts-bar-vertical-stacked>
+          </div>
+          <div class="col-md-12" *ngIf="div11BarChart" style="height:250px;display: grid;">
+            <ngx-charts-bar-vertical-2d [scheme]="colorScheme" [results]="kpiId12Data" [gradient]="gradient"
+              [xAxis]="true" [yAxis]="true" [view]="view" [barPadding]="0" groupPadding="2" [legend]="false"
+              [showXAxisLabel]="false" [showYAxisLabel]="false">
+            </ngx-charts-bar-vertical-2d>
+          </div>
+        </div>
+      </div>  -->
+
+   
+
         <div *ngIf="kpiType2show" style="border:1px solid lightgrey;border-radius: 10px;width:49%;margin-right: 10px">
           <div class="row"
             style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
@@ -73,8 +104,10 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv1($event)" [(ngModel)]="checked1">
+                  (onChange)="chaneChartTypeDiv1($event)" [(ngModel)]="checked1">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                <!-- <label style="float: right"><i (click)="showAnnotationDialog('ClO2 - Consumption')"
+                      class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
                 <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('2', 'ClO2 - Consumption (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
@@ -92,7 +125,49 @@
           </div>
         </div>
 
-   
+     <!--    <div *ngIf="kpiType2show" style="border:1px solid lightgrey;border-radius: 10px;;width:49%">
+          <div class="row"
+            style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
+            <div class="col-md-12" style="text-align: center;padding-top:5px">
+              <h4 style="font-weight: bold;text-align: center">ClO<sub>2</sub> - Total Active Cl<sub>2</sub> (kg/ADt)
+              </h4>
+            </div>
+          </div>
+          <div class="row" style="height: 30px;width:100%;margin: 0px">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-5" style="padding: 0px;margin-left: 65%">
+              <div class="row" style="float:right;width:100%;margin-top: 3px;">
+                <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
+                  (onChange)="chaneChartTypeDiv2($event)" [(ngModel)]="checked2">
+                </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                 <label style="float: right"><i (click)="showAnnotationDialog('ClO2 - Total Active Cl2')"
+                      class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp;
+                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('3', 'ClO2 - Total Active Cl2 (kg/ADt)')"
+                    class="fa fa-download fa-2x" aria-hidden="true"></i></label>
+              </div>
+            </div>
+          </div>
+          <div Class="row" style="width:95%;margin: 0px">
+            <div class="col-md-12" *ngIf="div2StackChart" style="height:250px;display: grid;">
+              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="kpiId3Data" [gradient]="gradient"
+                [xAxis]="true" [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false"
+                [barPadding]="2" [view]="view" [showDataLabel]="false" [xAxisLabel]="" [yAxisLabel]="">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+            <div class="col-md-12" *ngIf="div2BarChart" style="height:250px;display: grid;">
+              <ngx-charts-bar-vertical-2d [scheme]="colorScheme" [results]="kpiId3Data" [gradient]="gradient"
+                [xAxis]="true" [yAxis]="true" [barPadding]="0" groupPadding="2" [legend]="false"
+                [showXAxisLabel]="false" [view]="view" [showYAxisLabel]="false">
+              </ngx-charts-bar-vertical-2d>
+            </div>
+          </div>
+        </div> -->
+
+       
+
         <div *ngIf="kpiType4show" style="margin-top:5px;border:1px solid lightgrey;border-radius: 10px;;width:49%">
           <div class="row"
             style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
@@ -108,8 +183,10 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv4($event)" [(ngModel)]="checked4">
+                  (onChange)="chaneChartTypeDiv4($event)" [(ngModel)]="checked4">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                <!--   <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                      class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
                 <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('5', 'H2O2 (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
@@ -147,8 +224,10 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv5($event)" [(ngModel)]="checked5">
+                  (onChange)="chaneChartTypeDiv5($event)" [(ngModel)]="checked5">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                <!--    <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                        class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
                 <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('6','NaOH Own (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
@@ -185,9 +264,11 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv6($event)" [(ngModel)]="checked6">
+                  (onChange)="chaneChartTypeDiv6($event)" [(ngModel)]="checked6">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-               <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('7','NaOH Purchased (kg/ADt)')"
+                <!--        <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                          class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
+                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('7','NaOH Purchased (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
             </div>
@@ -208,6 +289,47 @@
           </div>
         </div>
 
+       <!--  <div *ngIf="kpiType5show"
+          style="margin-top:5px;border:1px solid lightgrey;border-radius: 10px;;width:49%;margin-right: 10px">
+          <div class="row"
+            style="height: 30px;text-align: center;border-bottom: 1px solid lightgray;width:100%;margin: 0px">
+            <div class="col-md-12" style="text-align: center;padding-top:5px">
+              <h4 style="font-weight: bold;text-align: center">NaOH Total (kg/ADt)</h4>
+            </div>
+          </div>
+          <div class="row" style="height: 30px;width:100%;margin: 0px">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-5" style="padding: 0px;margin-left: 65%">
+              <div class="row" style="float:right;width:100%;margin-top: 3px;">
+                <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
+                  (onChange)="chaneChartTypeDiv7($event)" [(ngModel)]="checked7">
+                </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
+                <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                            class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp;
+                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('8','NaOH Total (kg/ADt)')"
+                    class="fa fa-download fa-2x" aria-hidden="true"></i></label>
+              </div>
+            </div>
+          </div>
+          <div Class="row" style="width:95%;margin: 0px">
+            <div class="col-md-12" *ngIf="div7StackChart" style="height:250px;display: grid;">
+              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="kpiId8Data" [gradient]="gradient"
+                [xAxis]="true" [yAxis]="true" [view]="view" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false"
+                [barPadding]="2" [showDataLabel]="false" [xAxisLabel]="" [yAxisLabel]="">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+            <div class="col-md-12" *ngIf="div7BarChart" style="height:250px;display: grid;">
+              <ngx-charts-bar-vertical-2d [scheme]="colorScheme" [results]="kpiId8Data" [gradient]="gradient"
+                [xAxis]="true" [yAxis]="true" [view]="view" [barPadding]="0" groupPadding="2" [legend]="false"
+                [showXAxisLabel]="false" [showYAxisLabel]="false">
+              </ngx-charts-bar-vertical-2d>
+            </div>
+          </div>
+        </div>
+ -->
 
  <div *ngIf="kpiType3show"
  style="margin-top:5px;border:1px solid lightgrey;border-radius: 10px;width:49%;margin-right: 10px">
@@ -225,9 +347,11 @@
    <div class="col-md-5" style="padding: 0px;margin-left: 65%">
      <div class="row" style="float:right;width:100%;margin-top: 3px;">
        <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-         styleClass="switchClass" (onChange)="changeChartTypeDiv3($event)" [(ngModel)]="checked3">
+         styleClass="switchClass" (onChange)="chaneChartTypeDiv3($event)" [(ngModel)]="checked3">
        </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-      <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('4', 'Defoamer (kg/ADt)')"
+       <!-- <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Own')"
+             class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
+       <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('4', 'Defoamer (kg/ADt)')"
            class="fa fa-download fa-2x" aria-hidden="true"></i></label>
      </div>
    </div>
@@ -265,9 +389,11 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv9($event)" [(ngModel)]="checked9">
+                  (onChange)="chaneChartTypeDiv9($event)" [(ngModel)]="checked9">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-                 <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('10', 'Sulphuric Acid H2SO4 (kg/ADt)')"
+                <!--  <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                                class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
+                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('10', 'Sulphuric Acid H2SO4 (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
             </div>
@@ -304,9 +430,11 @@
             <div class="col-md-5" style="padding: 0px;margin-left: 65%">
               <div class="row" style="float:right;width:100%;margin-top: 3px;">
                 <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartTypeDiv8($event)" [(ngModel)]="checked8">
+                  (onChange)="chaneChartTypeDiv8($event)" [(ngModel)]="checked8">
                 </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-               <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('9','Oxygen (kg/ADt)')"
+                <!--      <label style="float: right"><i (click)="showAnnotationDialog('NaOH - Purchase')"
+                              class="fa fa-commenting fa-2x" aria-hidden="true"></i></label>&nbsp;&nbsp;&nbsp; -->
+                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog('9','Oxygen (kg/ADt)')"
                     class="fa fa-download fa-2x" aria-hidden="true"></i></label>
               </div>
             </div>

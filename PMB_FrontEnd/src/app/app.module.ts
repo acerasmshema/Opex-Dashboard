@@ -7,6 +7,7 @@ export function setupTranslateFactory(
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -61,7 +62,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import {CommonModule} from '@angular/common';
 import {PanelModule} from 'primeng/panel';
 import { StorageServiceModule } from 'ngx-webstorage-service';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
@@ -106,6 +106,7 @@ import { KappaNumberPredictionComponent } from './components/dashboard/kappa-num
     ThreeXThreeTableComponent,
     ConditionalMonitoringComponent,
     KappaNumberPredictionComponent
+    
   ],
   imports: [
     BrowserModule, SidebarModule.forRoot(),

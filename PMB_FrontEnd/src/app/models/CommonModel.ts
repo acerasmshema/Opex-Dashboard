@@ -1,4 +1,4 @@
 export class CommonModel {
-    code: string;
-    name : string;
+    code: String;
+    name : String;
 }

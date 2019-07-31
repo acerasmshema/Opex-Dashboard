@@ -62,6 +62,12 @@
           width:190px;
           height:25px;
       }
+    
+      
+        
+      * {
+        -webkit-box-sizing: border-box;
+      }
 
       .e-daterangepicker.e-popup .e-range-header{
         display: none;

@@ -12,7 +12,7 @@
             animationDuration=".5s"></p-progressSpinner>
         </div>
         <div style="display: flex;justify-content: center;align-items: center;" *ngIf="productonYDayChart">
-          <rg-gauge-chart  [canvasWidth]="275" [needleValue]="productionYDayNeedleValue" [options]="options"
+          <rg-gauge-chart [canvasWidth]="275" [needleValue]="productionYDayNeedleValue" [options]="options"
             [nameFont]="nameFont" [bottomLabel]="productionYDayActualValue"></rg-gauge-chart>
         </div>
         <div style="margin: auto;text-align: center;margin-top: 20%" *ngIf="productonYDayRefresh">
@@ -27,12 +27,11 @@
               <div class="col-md-5" style="padding-right: 0px;text-align: center"><h5 style="font-weight: bold">PRODUCTION (<span style="color:#BA4A00;font-size: .83em">Actual</span> vs. <span style="color:#2E8B57;font-size: .83em">Target</span>) (ADt)</h5></div>
               <div class="col-md-5" style="padding: 0px"><h6 style="font-weight: bold">Projected Daily Target in next {{targetDays}} Days Till {{targetEndDate}} : {{targetValue}} (ADt)  &nbsp;<i (click)="openSettingIcon()" class="fa fa-cog fa-lg"aria-hidden="true"></i></h6>
               </div>
-              
-          
+
           </div>
 
           <div style="height:90%">
-            <ngx-charts-line-chart *ngIf="multiLineDataForLine.length > 0" [scheme]="lineChartColorSchemeProduction" [results]="multiLineDataForLine"
+            <ngx-charts-line-chart [scheme]="lineChartColorSchemeProduction" [results]="multiLineDataForLine"
               [gradient]="gradient" [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false"
               [showXAxisLabel]="false" [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="false"
               yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
@@ -42,7 +41,7 @@
                   {{mod.series}} : {{ mod.value | number }}
                 </div>
               Diff. : {{(model[1].value - model[0].value)  | number }}
-                
+
               </ng-template>
               </ngx-charts-line-chart>
           </div>
@@ -51,10 +50,8 @@
     </div>
 
     <div class="row" style="width: 96%;margin-left:30px;margin-top:10px;height:300px;padding:0px">
-
       <div class="col-md-12" style="border:1px solid lightgrey;border-radius: 10px;">
         <div class="row" style="width:100%">
-
           <div class="col-xs-4 col-sm-4 col-md-4 col-xl-4">
             <div class="radio">
               <label class="radio-inline"><input type="radio" name="optradio1" (change)="changeChartDuration('radio1')"
@@ -94,7 +91,7 @@
           <div class="col-md-12" *ngIf="showStackAreaChart">
             <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="multiStack" [gradient]="gradient"
               [xAxis]="true" [yAxis]="true" [legend]="false" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="false"
-              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" >
+              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
             </ngx-charts-area-chart-stacked>
           </div>
 
@@ -120,17 +117,16 @@
             (change)="changeChartDurationLineChart('radio3')">Last 6 Months</label>
       </div>
     </div>
-    
     <div class="row" style="width: 96%;margin-left:30px;margin-top:0px;height:320px">
       <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
         <div class="row" style="padding-left: 20%;padding-right: 25%">
-          <rg-gauge-chart  [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL1"
+          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL1"
             [centralLabel]="centralLabel1" [options]="options1" [name]="name1" [nameFont]="nameFont"
             [bottomLabel]="productionYDayActualValuePL1">
           </rg-gauge-chart>
-        </div>            
-        <div class="row" *ngIf="pl1Data != undefined && pl1Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl1Data" [gradient]="gradient"
+        </div>
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl1Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -142,8 +138,8 @@
             [bottomLabel]="productionYDayActualValuePL2">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl2Data != undefined &&  pl2Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl2Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl2Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -155,8 +151,8 @@
             [bottomLabel]="productionYDayActualValuePL3">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl3Data != undefined &&  pl3Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl3Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl3Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -168,8 +164,8 @@
             [bottomLabel]="productionYDayActualValuePL4">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl4Data != undefined &&  pl4Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl4Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl4Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -183,8 +179,8 @@
             [bottomLabel]="productionYDayActualValuePL5">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl5Data != undefined && pl5Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl5Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl5Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -196,8 +192,8 @@
             [bottomLabel]="productionYDayActualValuePL6">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl6Data != undefined && pl6Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl6Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl6Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -209,8 +205,8 @@
             [bottomLabel]="productionYDayActualValuePL7">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl7Data != undefined && pl7Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl7Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl7Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -222,8 +218,8 @@
             [bottomLabel]="productionYDayActualValuePL8">
           </rg-gauge-chart>
         </div>
-        <div class="row" *ngIf="pl8Data != undefined && pl8Data.length > 0">
-          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl8Data" [gradient]="gradient"
+        <div class="row">
+          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl8Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -232,11 +228,12 @@
   </div>
 
   <div class="row thirdRow">
-    <form [formGroup]="enquiryForm">
+    <!-- Filter Row -->
+    <form [formGroup]="enquiryForm">Ññ
       <div class="row"
         style="width: 96%;margin-left:30px;margin-top: 5px;border:1px solid lightgrey;border-radius: 10px;padding: 5px;height: 40px">
         <div class="col-md-2">
-          <ejs-daterangepicker class="daterangepicker" id='daterangepicker' [startDate]='startD'[endDate]='endD'
+          <ejs-daterangepicker class="daterangepicker" id='daterangepicker' [startDate]='startDate' [endDate]='endDate'
             [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
             placeholder="{{'Date Range'| translate }}">
           </ejs-daterangepicker>
@@ -259,6 +256,8 @@
             style="background-color: #007ad9;height:30px;margin-top: -2px"></button>
         </div>
       </div>
+
+      <!-- Line Chart Row -->
       <div class="row" style="width: 96%;margin-left:30px;height:250px">
         <div class="col-md-12" style="padding:0px">
           <div class="row" style="width:100%">
@@ -275,7 +274,8 @@
           <div class="row chartRow">
 
             <div class="col-xs-11 col-sm-11 col-md-11 col-xl-11" style="padding-bottom: 0px;" #divElements>
-              <ngx-charts-line-chart *ngIf="multiLineData.length > 0" [scheme]="lineChartColorScheme" [results]="multiLineData" [gradient]="gradient"
+
+             <ngx-charts-line-chart [scheme]="lineChartColorScheme" [results]="multiLineData" [gradient]="gradient"
                 [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
                 [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]="" (select)="onSelect($event)"
                 [xAxisTickFormatting]="xAxisTickFormattingFn" [curve]="lineChartLineInterpolation" [animations]="true"
@@ -283,17 +283,30 @@
               </ngx-charts-line-chart>
             </div>
 
-          
+            <!-- <div class="col-xs-1 col-sm-1 col-md-1 col-xl-1" style="padding-bottom: 0px;">
+                      <div><i class="fa fa-circle text-danger Blink"></i>&nbsp; <span (click)="openAnnotations()" class="fake-link" >Annotations</span> </div>
+                      </div>
+                      *ngIf="colorTheValueOfData()"
+                       -->
 
           </div>
         </div>
       </div>
 
-      
-      <div class="row" style="width: 96%;margin-left:30px;height: 250;margin-top: 2%">
-        <div class="col-md-12" style="padding:0px">
-          <p-table #dt [columns]="cols" [value]="productonLines" [paginator]="true" [rows]="10" [scrollable]="true"
+      <!-- Data Grid Row 
+
+       *ngIf="gridData.length" 
+      -->
+     <div
+     *ngIf="gridData.length"
+      class="row" style="width: 96%;margin-left:30px;height: 250;margin-top: 2%">
+        <div class="col-md-12" style="padding:0px" >
+        
+          <p-table
+           #dt [columns]="cols" [value]="productonLines"
+          [paginator]="true" [rows]="10" [scrollable]="true"
             scrollHeight="150px">
+            
             <ng-template pTemplate="caption">
               <div class="ui-helper-clearfix">
                 <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
@@ -301,16 +314,27 @@
 
               </div>
             </ng-template>
-            <ng-template pTemplate="header" let-columns>
+            <ng-template pTemplate="header" let-columns 
+            let-rule [ngForOf]="gridData.series" >
               <tr>
-                <th *ngFor="let col of columns" class="text-center">
+                <th *ngFor="let col of columns" class="text-center" >
                   {{col.header}}
                 </th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+<!--
+  *ngIf="productonLines.length"
+         [ngStyle]="{'color':productonLines.series['color']}"
+    [ngStyle]="{'color':data3.color}"
+    *ngIf="colorTheValueOfData()"
+
+-->
+            <ng-template pTemplate="body"   *ngFor="let sr of cp"
+            let-rowData let-columns="columns">
               <tr>
-                <td  *ngFor="let col of columns" [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'">
+                <td  *ngFor="let col of columns"
+            [ngStyle]="{color:'rule.color'}"
+                 [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'" >
                   {{rowData[col.field]}}
                 </td>
               </tr>
@@ -321,6 +345,7 @@
     </form>
   </div>
 </div>
+{{gridData}}
 
 <p-dialog header="Annotations for Production on {{annotationDate}}" [responsive]="true"
   [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
@@ -375,8 +400,12 @@
     <div class="container">
       <div class="row" style="height: 320px">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-          <p-table [columns]="annotationsCols" [value]="annotationsLines" [paginator]="true" [rows]="10"
-            [scrollable]="true" scrollHeight="300px">
+
+         <p-table [columns]="annotationsCols"
+           [value]="annotationsLines" [paginator]="true" [rows]="10"
+          [(selection)]="selectAnnotationList"  dataKey="annotationId"
+          (select)="pTableFunction($event)" onselect="testingOnSelect()"
+          selectionMode="multiple"  [scrollable]="true" scrollHeight="300px" >
 
             <ng-template pTemplate="header" let-columns>
               <tr>
@@ -385,14 +414,28 @@
                 </th>
               </tr>
             </ng-template>
+
+
             <ng-template pTemplate="body" let-rowData let-columns="columns">
-              <tr>
-                <td class="text-right" *ngFor="let col of columns" class="text-center">
+              <tr [pSelectableRow]="rowData" >
+                <td class="text-right" *ngFor="let col of columns" class="text-center" >
                   {{rowData[col.field]}}
                 </td>
               </tr>
+
             </ng-template>
           </p-table>
+        <!--
+             [hidden]="selectAnnotationList == undefined || !selectAnnotationList.length"\
+                 *ngIf="selectAnnotationList.userId !=== currentLoggedInUsersName"
+        -->
+           <button
+               [hidden]="selectAnnotationList == undefined || !selectAnnotationList.length " 
+               *ngIf="showDelButtonOnlyForLoggedInUser()"
+          pButton type="button"
+          class="ui-button-primary" (click)="delAnnotationList()" icon="fa fa-trash" label="Delete" iconPos="left"
+          style="height: 28px; margin-top: 8px;"></button>
+
         </div>
       </div>
     </div>
@@ -434,69 +477,39 @@
     <div class="container">
       <div class="row" style="height: 320px;">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                 <!-- @HEma Edit 
-               -->
           <p-table [columns]="maintanenceDaysColumn" [value]="maintanenceDayModel" selectionMode="multiple" editMode="row"
-            scrollHeight="200px" [rows]="5" [paginator]="true" [(selection)]="selectedMaintenanceDay" dataKey="id"
-            [tableStyle]="{'table-layout':'auto'}" >
+            scrollHeight="200px" [rows]="5" [paginator]="true" [(selection)]="selectedMaintenanceDay" dataKey="id">
             <ng-template pTemplate="header" let-columns>
               <tr>
-                  <th style="width: 3em">
-                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                  </th>
-                <th *ngFor="let col of columns" style="text-align: center">
+                <th *ngFor="let col of columns">
                   {{col.header}}
                 </th>
-                <th style="text-align: center"> 
-                    User Actions
-                  </th>
+                <th class="text-align:center">
+                  User Action
+                </th>
               </tr>
-       
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns" let-ri="rowIndex" let-editing="editing">
-                <tr [pEditableRow]="rowData" >
-                    <td>
-                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-                    </td>
-
-                    <td class="" >
-                        {{rowData.id}}
-                    </td>
-                    <td class=".ng-invalid.ng-dirty"style="min-width: 100px">
-                        {{rowData.maintainceDates}}
-                    </td>
-                    <td   >
-                      <p-cellEditor>
-                          <ng-template pTemplate="input" >
-                              <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%"
-                               class="ng-pristine ng-valid ng-star-inserted ng-touched">
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                              {{rowData.remarks}}
-                          </ng-template>
-                      </p-cellEditor>
-                          </td>
-                  <td style="text-align:center; min-width: 180px; " >
-                      <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="fa fa-pencil-square-o"  label="Edit" 
-                      class="ui-button-info" (click)="onRowEditInit(rowData)"></button>
-                      <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="fa fa-check-square-o" label="Save" 
-                      class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
-                      <button *ngIf="editing" pButton type="button" pCancelEditableRow icon=" fa fa-times" label="Cancel" 
-                       class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)"></button>
-                  </td>
-                </tr>
-                
-              </ng-template> 
-
-     <!--        
-       <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr [pSelectableRow]="rowData">
-                <td *ngFor="let col of columns">
-                  {{rowData[col.field]}}
+                <td >
+                  {{rowData.id}}
+                </td>
+                <td>
+                  {{rowData.maintainceDates}}
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="rowData.remarks">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData.remarks}}
+                    </ng-template>
+                </p-cellEditor>
+                <td style="text-align:center">
                 </td>
               </tr>
-            </ng-template> 
-          -->
+            </ng-template>
           </p-table>
           <button [hidden]="selectedMaintenanceDay == undefined || !selectedMaintenanceDay.length" pButton type="button"
             class="ui-button-primary" (click)="delMaintanenceDays()" icon="fa fa-trash" label="Delete" iconPos="left"

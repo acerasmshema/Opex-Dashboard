@@ -11,6 +11,7 @@ export class ProductionService {
    annualTarget= AppConstants.apiURLs.ANNUAL_TARGET_URL;  
    projectedData=AppConstants.apiURLs.PROJECTED_DATA_URL;  
    ydayAllProcessLines=AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
+   kpiCatForYDayAllProcessLineData = AppConstants.apiURLs.KPI_CAT_YDAY_ALL_PROCESS_LINE_URL;
    kpiPulpArea=AppConstants.apiURLs.KPI_PULP_AREA_URL;
    kpiPulp=AppConstants.apiURLs.KPI_PULP_URL;
    ytdProcessLine=AppConstants.apiURLs.YTD_PROCESS_LINE_URL;
@@ -21,6 +22,7 @@ export class ProductionService {
    kpiGrid=AppConstants.apiURLs.DOWNLOAD_DATA_GRID_URL;
    saveAnnotation=AppConstants.apiURLs.SAVE_ANNOTATION_URL;
    findAnnotation=AppConstants.apiURLs.FIND_ANNOTATION_URL;
+   deleteAnnotation =AppConstants.apiURLs.DEL_ANNOTATION_URL;
    getMaintenanceDay=AppConstants.apiURLs.GET_MAINTENANCE_DAYS_URL;
    saveMaintenanceDay=AppConstants.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
    deleteMaintenanceDay=AppConstants.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
@@ -29,14 +31,18 @@ annotationDates=AppConstants.apiURLs.ANNOTATION_DATES_URL;
 
 
 
-   
-   
-  
   constructor(private apiCallService:ApiCallService) { }
 
   public getProductionYDayData(data:object){
     return this.apiCallService.callGetAPIwithData(this.ydayProcessLines,data);
   }  
+
+  public getkpiCatForYDayAllProcessLineData(data:object){
+    return this.apiCallService.callGetAPIwithData(this.kpiCatForYDayAllProcessLineData,data);
+  }
+  public getkpiCatForYDayAllProcessLineData2(data:object){
+    return this.apiCallService.callGetAPIwithOutData(this.kpiCatForYDayAllProcessLineData);
+  }
 
   public getAnnualTarget(data:object){
     return this.apiCallService.callGetAPIwithData(this.annualTarget,data);
@@ -87,6 +93,10 @@ annotationDates=AppConstants.apiURLs.ANNOTATION_DATES_URL;
 
   public fetchAnnotation(data:any){
     return this.apiCallService.callAPIwithData(this.findAnnotation,data);
+  }
+
+  public deleteAnnotationLists(data:any){
+    return this.apiCallService.callAPIwithData(this.deleteAnnotation,data);
   }
 
   public fetchMaintenanceData(data:any){

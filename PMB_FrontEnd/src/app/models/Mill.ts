@@ -1,4 +1,4 @@
 export class Mill {
     millId : string;
-    millName: string;
+    millName: String;
 }
