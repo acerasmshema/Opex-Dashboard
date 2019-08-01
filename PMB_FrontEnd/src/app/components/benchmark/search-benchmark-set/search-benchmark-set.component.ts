@@ -64,7 +64,6 @@ export class SearchBenchmarkSetComponent implements OnInit {
         this.showMessage('error', 'unsuccessful :', 'SET could not be created');
       }else{
         this.plSets=data;
-        console.log(this.plSets);
       }
     });
   }

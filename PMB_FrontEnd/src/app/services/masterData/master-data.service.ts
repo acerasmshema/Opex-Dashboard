@@ -7,11 +7,16 @@ import { AppConstants } from '../../app.constant';
 })
 export class MasterDataService {
   kpiTypeUrl=AppConstants.apiURLs.KPI_TYPE_URL;
+  processLinesUrl=AppConstants.apiURLs.PROCESS_LINES_BY_KPI_ID_URL;
 
   constructor(private apiCallService: ApiCallService) { }
 
   getKpiType(kpiCategoryId: object): any {
     return this.apiCallService.callGetAPIwithData(this.kpiTypeUrl, kpiCategoryId);
+  }
+
+  fetchProcessLineByKpiId(kpiId: object): any {
+    return this.apiCallService.callGetAPIwithData(this.processLinesUrl, kpiId);
   }
 }
 

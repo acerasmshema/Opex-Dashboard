@@ -26,28 +26,28 @@
     </div>
   </div>
 
-  <p-tabPanel header="Production" [selected]="true">
+  <p-tabPanel header="Production" [selected]="true" >
       <ng-template pTemplate="app-production-dashboard">
     <app-production-dashboard></app-production-dashboard>
   </ng-template>
   </p-tabPanel>
-  <p-tabPanel header="Chemical Consumption">
+  <p-tabPanel header="Chemical Consumption" [disabled]="disbaleTab">
     <ng-template pTemplate="app-chemical-consumption-dashboard">
       <app-chemical-consumption-dashboard></app-chemical-consumption-dashboard>
     </ng-template>
   </p-tabPanel>
-  <p-tabPanel header="Utilities Consumption">
+  <p-tabPanel header="Utilities Consumption" [disabled]="disbaleTab">
     <ng-template pTemplate="app-utilities-consumption-dashboard">
       <app-utilities-consumption-dashboard></app-utilities-consumption-dashboard>
     </ng-template>
   </p-tabPanel>
-  <p-tabPanel header="Wood Consumption">
+  <p-tabPanel header="Wood Consumption" [disabled]="disbaleTab">
     <ng-template pTemplate="app-wood-consumption-dashboard">
       <app-wood-consumption-dashboard></app-wood-consumption-dashboard>
     </ng-template>
   </p-tabPanel>
  
-  <p-tabPanel header="Kappa Number Prediction ">
+  <p-tabPanel header="Kappa Number Prediction" [disabled]="disbaleTab">
     <ng-template pTemplate="app-conditional-monitoring">
       <app-kappa-number-prediction></app-kappa-number-prediction>
     </ng-template>

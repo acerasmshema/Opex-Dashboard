@@ -64,7 +64,6 @@ if(name!= 'Region'){
     keys.forEach(contact => {
       this.cols.push({'field':contact,'header':contact});
     });
-    console.log(this.cols);
   }
   constructor(private fb: FormBuilder, private dataService: DataServiceService) {
 
@@ -89,7 +88,6 @@ if(name!= 'Region'){
     return this._ngxDefault;
   }
 public colorPickerSelect(){
-  console.log("asdasdasdas");
 }
 
   public doSelect(event:string) {
@@ -101,7 +99,6 @@ public colorPickerSelect(){
 
   public onSelect(event:any) {
     this.dataService.fetchGridData(event.name).subscribe((data: any) =>{
-      console.log(data);
       this.gridHide=false;
     this.sales = data;
     var sale: any = this.sales[0];

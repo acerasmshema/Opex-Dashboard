@@ -130,9 +130,9 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 			try {
 				kpiAnnotationEntity = kpiAnnotationEntityRepository
 						.findById(Integer.parseInt(annotationDeleteRequest.getAnnotationId())).orElse(null);
-				;
+			
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Exception in fetching the annotation.", e);
 			}
 
 			if (kpiAnnotationEntity != null) {
@@ -142,7 +142,7 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 					try {
 						kpiAnnotationEntityRepository.save(kpiAnnotationEntity);
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Exception in deleting the annotation.", e);
 					}
 				}
 			}

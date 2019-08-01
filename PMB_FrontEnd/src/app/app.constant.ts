@@ -22,7 +22,10 @@ export class AppConstants {
         LOGIN_URL: AppConstants.BASE_API_URL_v1 + '/user_info/login',
         LOGOUT_URL: AppConstants.BASE_API_URL_v1 + '/user_info/logout',
         KPI_TYPE_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/get_kpi_type',
+        PROCESS_LINES_BY_KPI_ID_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/get_process_lines',
         CHEMICAL_CONSUMPTION_API_URL:AppConstants.BASE_API_URL_v1 + '/kpi_category/selected_kpi_process_lines',
+        CHEMICAL_CONSUMPTION_LINE_API_URL:AppConstants.BASE_API_URL_v2 + '/kpi_category/selected_kpi_process_lines',
+        CHEMICAL_CONSUMPTION_LINE_TARGET_API_URL:AppConstants.BASE_API_URL_v2 + '/kpi_category/selected_kpi_process_lines_target',
         CHEMICAL_CONSUMPTION_GRID_API_URL:AppConstants.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data',
 
         CHEMICAL_CONSUMPTION_API_GRID_URL:AppConstants.BASE_API_URL_v1 + '/kpi_category/selected_kpi_grid_data',
@@ -36,5 +39,4 @@ export class AppConstants {
         ANNOTATION_DATES_URL:AppConstants.BASE_API_URL_v1 + '/kpi_annotation/get_annotation_date'
     };
 
-    
 }

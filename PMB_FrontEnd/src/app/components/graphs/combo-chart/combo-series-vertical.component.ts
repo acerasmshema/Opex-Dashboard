@@ -85,7 +85,6 @@ export class ComboSeriesVerticalComponent implements OnChanges {
 
   update(): void {
     let width;
-    console.log(this.series.length);
     if (this.series.length) {
       width =this.xScale.bandwidth();
       this.bandwidth.emit(width);

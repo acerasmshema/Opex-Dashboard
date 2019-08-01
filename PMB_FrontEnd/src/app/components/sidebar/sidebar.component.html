@@ -8,7 +8,8 @@
                     </p-dropdown>
                 </div>
                 <div class="form-group">
-                    <label class="labelClass"><em class="fa fa-fw fa-location-arrow"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="labelClass"><em
+                            class="fa fa-fw fa-location-arrow"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <p-dropdown [options]="mills" [hidden]="hide" optionLabel="millName"></p-dropdown>
                 </div>
                 <div class="form-group">
@@ -18,39 +19,45 @@
                 </div>
                 <div class="form-group">
                     <label class="labelClass"><em class="fa fa-fw fa-wrench"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <p-multiSelect [options]="kpiTypes"  [hidden]="hide"
-                        [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" [(ngModel)]="chemicalConsumptionEnquiry.KPITypes" [ngModelOptions]="{standalone: true}" scrollHeight="250px" defaultLabel="KPI Type"
+                    <p-multiSelect [options]="kpiTypes" [hidden]="hide" [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width: '173px'}" [(ngModel)]="chemicalConsumptionEnquiry.KPITypes"
+                        [ngModelOptions]="{standalone: true}" scrollHeight="250px" defaultLabel="KPI Type"
                         optionLabel="kpiTypeName"></p-multiSelect>
-
-                       
                 </div>
                 <div class="form-group">
                     <label class="labelClass"><em class="fa fa-fw fa-th-list"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <p-multiSelect [options]="processLines" [hidden]="hide" [style]="{width: '173px'}" [panelStyle]="{minWidth:'14em'}"
-                     defaultLabel="Process Lines" scrollHeight="200px" [(ngModel)]="chemicalConsumptionEnquiry.PLines" [ngModelOptions]="{standalone: true}" optionLabel="header">
+                    <p-multiSelect [options]="processLines" [hidden]="hide" [style]="{width: '173px'}"
+                        [panelStyle]="{minWidth:'14em'}" defaultLabel="Process Lines" scrollHeight="200px"
+                        [(ngModel)]="chemicalConsumptionEnquiry.PLines" [ngModelOptions]="{standalone: true}"
+                        optionLabel="header">
                     </p-multiSelect>
-                </div> 
+                </div>
                 <div class="form-group">
                     <label class="labelClass"><em class="fa fa-fw fa-calendar"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <ejs-daterangepicker [hidden]="hide" class="daterangepicker" id='daterangepicker'
-                       [(ngModel)]="chemicalConsumptionEnquiry.date" [ngModelOptions]="{standalone: true}" placeholder="{{ '    Date Range' | translate }}">
+                        [(ngModel)]="chemicalConsumptionEnquiry.date" [ngModelOptions]="{standalone: true}"
+                        placeholder="{{ '    Date Range' | translate }}">
                     </ejs-daterangepicker>
                     <div class="toggle-button" style="width:5px;padding: 0px" [ngClass]="{collapsed: collapsed}"
-                    (click)="toggleCollapsed()">
-                    <em class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></em>
-                </div>
+                        (click)="toggleCollapsed()">
+                        <em class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></em>
+                    </div>
                 </div>
                 <div class="form-group">
-                        <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <p-dropdown [options]="frequencies" [hidden]="hide" [(ngModel)]="chemicalConsumptionEnquiry.selectedValue" [ngModelOptions]="{standalone: true}" optionLabel="name" >
-                        </p-dropdown>
-                    </div>
-               
-                    <div class="form-group">
-                    <button pButton [hidden]="hide" type="button" label="Apply" (click)="searchData()" class="ui-button-primary"
-          style="background-color: #007ad9;height:30px;margin-top: 10px;margin-left: 70%"></button>
+                    <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <p-dropdown [options]="frequencies" [hidden]="hide"
+                        [(ngModel)]="chemicalConsumptionEnquiry.selectedValue" [ngModelOptions]="{standalone: true}"
+                        optionLabel="name">
+                    </p-dropdown>
+                </div>
+                <div class="form-group">
+                    <button pButton [hidden]="hide" type="button" label="Apply" (click)="searchData()"
+                        class="ui-button-primary"
+                        style="background-color: #007ad9;height:30px;margin-top: 10px;margin-left: 70%"></button>
                 </div>
             </div>
         </form>
     </div>
 </nav>
+
+<p-toast [style]="{marginTop: '80px'}"></p-toast>

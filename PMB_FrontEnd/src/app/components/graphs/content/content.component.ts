@@ -153,8 +153,6 @@ clonedCars: { [s: string]: IToDoList; } = {};
       this.lineChartSeries.push(this.lineChartSeries2);
     } 
     ); 
-
-console.log(lineChartSeries);
     Object.assign(this, {
       single,
       multi,
@@ -254,13 +252,13 @@ console.log(lineChartSeries);
   }
 
   select(data) {
-    console.log('Item clicked', data);
+    
   }
 
 
 
   onLegendLabelClick(entry) {
-    console.log('Legend clicked', entry);
+    
   }
 
 
@@ -332,11 +330,11 @@ console.log(lineChartSeries);
   */
 
   onSelect(event) {
-    console.log(event);
+    
   }
 
   dblclick(event) {
-    console.log('Doube click', event);
+    
   }
 
   public doNgxDefault(): any {
@@ -358,8 +356,6 @@ console.log(lineChartSeries);
 
 
   public onClickMe(data: any) {
-
-    console.log(data.targetLine1);
     this.comboBarScheme = {
       name: 'singleLightBlue',
       selectable: true,
@@ -400,12 +396,10 @@ display1: boolean = false;
   }
 
   onRowEditInit(data: IToDoList) {
-    console.log(data);
     this.clonedCars[data.value] = {...data};
 }
 
 onRowEditSave(data: IToDoList) {
-  console.log(data);
      delete this.clonedCars[data.value];
      
     }
@@ -421,7 +415,6 @@ public saveRefData(){
   let x = { "name": "Ref Line",
      "series" : this.cars}
   this.lineChartSeries.push(x); 
-  console.log(this.lineChartSeries);
   Object.assign(this, {
     single,
     multi,

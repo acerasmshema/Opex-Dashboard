@@ -170,17 +170,26 @@ export class SidebarComponent implements OnInit {
   }
 
    searchData(){
-     if(this.chemicalConsumptionEnquiry.date==null){
-      alert("Please select date range");
+     if(this.chemicalConsumptionEnquiry.date==null || this.chemicalConsumptionEnquiry.date==undefined || this.chemicalConsumptionEnquiry.date.length<2){
+      this.showMessage("error", "Error Message", "Please select Date Range.");
       return null;
      }
-     console.log(this.chemicalConsumptionEnquiry.KPITypes);
+     var dateDiff=(Number(this.chemicalConsumptionEnquiry.date[1].valueOf()) - Number(this.chemicalConsumptionEnquiry.date[0].valueOf()))
+     dateDiff=dateDiff/86400000;
+     if(dateDiff > 1000 && this.chemicalConsumptionEnquiry.selectedValue['code'] == "0"){
+      this.showMessage("info", "", "For daily frequency, Please select date range within 60 days");
+      return null;
+     }
      if(this.chemicalConsumptionEnquiry.KPITypes==undefined || this.chemicalConsumptionEnquiry.KPITypes.length==0){
       this.chemicalConsumptionEnquiry.KPITypes=this.kpiTypes;
      }
     this.chemicalConsumptionEnquiry.collapsed="null";
     this.collapsedEvent.emit(this.chemicalConsumptionEnquiry);
   } 
+
+  public showMessage(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity: severity, summary: summary, detail: detail });
+  }
 
 }
 

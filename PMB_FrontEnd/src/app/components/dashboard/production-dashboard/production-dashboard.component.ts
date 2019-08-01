@@ -12,7 +12,7 @@ import { ProductionEnquiry } from '../../../models/ProductionEnquiry';
 import * as $ from "jquery";
 import { MessageService } from 'primeng/components/common/messageservice';
 import { maintanenceDaysColumn, processLineColumns, annotationsCols, frequencies, processLines } from '../../../../assets/data/MasterData';
-
+import { ErrorMessages } from '../../../shared/appMessages';
 @Component({
   selector: 'app-production-dashboard',
   templateUrl: './production-dashboard.component.html',
@@ -401,7 +401,6 @@ export class ProductionDashboardComponent implements OnInit {
     this.productionRequest.endDate = endDate;
     this.productionRequest.frequency = "0";
     this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequest).subscribe((data: any) => {
-      console.log(data);
       this.pl1Data=[];
       var pl1ChartData = [data[0]];
       this.pl1Data = (pl1ChartData);
@@ -454,7 +453,6 @@ export class ProductionDashboardComponent implements OnInit {
   public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest) {
     this.productionService.getAllProductionLinesDateForGrid(productionRequest).subscribe((data: any) => {
       this.productonLines = data[0];
-console.log(this.productonLines);
     });
   }
 
@@ -508,12 +506,15 @@ console.log(this.productonLines);
   processLinesData: any[] = [];
   public searchData() {
     if (this.productionEnquiryData.lineChartDate.length < 2) {
-      alert("Please select date range");
+      this.showMessage("error", "", "Please select date range.");
       return null;
     }
 
     var startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
     var endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
+   this.startDate=startDate;
+   this.endDate=endDate;
+      this.getAnnotationDates();
     this.productionRequest.startDate = startDate;
     this.productionRequest.endDate = endDate;
     this.productionRequest.frequency = this.productionEnquiryData.selectedValue['code'];
@@ -558,9 +559,11 @@ console.log(this.productonLines);
     var dateTick;
     if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
-    } else {
+    }else {
       dateTick = val;
     }
+    $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
+    $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     return dateTick;
   }
 
@@ -585,6 +588,7 @@ console.log(this.productonLines);
 
   annotationDates: any[] = [];
   public getAnnotationDates() {
+    this.annotationDates=[];
     const data = { millId: '1', buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };
     this.productionService.getAnnotationDates(data).subscribe((data: any) => {
       this.annotationDates = data['annotationDates'];
@@ -597,28 +601,29 @@ console.log(this.productonLines);
     var loginId = this.localStorageService.fetchloginId();
     var processLines;
     if (this.annotationProcessLines.length == 0) {
-      alert("Please Select Process Lines");
+      this.showMessage("error", "", ErrorMessages.selectProcessLines);
       return null;
     }
+
     if (this.annotationDescription == "") {
-      alert("Please add description");
+      this.showMessage("error", "", ErrorMessages.addDescription );
       return null;
     }
+
     this.annotationProcessLines.forEach(element => {
-      this.annotationLines = this.annotationLines.concat(element['header'], ' ,');
+      this.annotationLines = this.annotationLines.concat(element['header'], ', ');
     });
     this.annotationLines = this.annotationLines.replace(/,\s*$/, "");
     const data = { millId: '1', buTypeId: '1', kpiId: '1', annotationDate: this.annotationDate, processLines: this.annotationLines, description: this.annotationDescription, userLoginId: loginId };
     this.productionService.createAnnotation(data).subscribe((data: any) => {
       if (data == null) {
-        alert("Annotation saved successfully.")
+        this.showMessage("success", "", "Annotation saved successfully.");
         this.annotationDescription = "";
         this.annotationProcessLines = [];
         this.getAnnotationData();
-        this.getAnnotationDates();
         this.searchData();
       } else {
-        alert("Annotation could not be saved.")
+      this.showMessage("error", "", "Annotation could not be saved.");
         return null;
       }
     });
@@ -634,17 +639,17 @@ console.log(this.productonLines);
 
   maintanenceListDataNew: any[];
   maintErrorMessage: string;
-  public showError(severity: string, summary: string, detail: string) {
+  public showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
   public add() {
     if (this.dateValue == undefined) {
-      this.showError("error", "Error Message", "Please select Date.");
+      this.showMessage("error", "Error Message", ErrorMessages.selectDate);
       return;
     }
     if (this.textAreaValue == undefined || this.textAreaValue == null) {
-      this.showError("error", "Error Message", "Please enter Remarks.");
+      this.showMessage("error", "Error Message", ErrorMessages.addRemarks);
       return;
     }
     this.maintanenceListDataNew = [];
@@ -660,7 +665,7 @@ console.log(this.productonLines);
     };
     this.productionService.saveMaintenanceDays(data).subscribe((data: any) => {
       if (data == null) {
-        this.showError("success", "", "Added Successfully.");
+        this.showMessage("success", "", "Added Successfully.");
         this.textAreaValue = "";
         this.dateValue = null;
         this.viewMaintenanceDays();
@@ -690,7 +695,7 @@ console.log(this.productonLines);
     const data = { ids: this.newdeleteDate };
     this.productionService.deleteMaintenanceDays(data).subscribe(
       (data: any) => {
-        this.showError("success", "", "Deleted.");
+        this.showMessage("success", "", "Deleted.");
         this.viewMaintenanceDays();
         this.getProjectedTarget();
       });
@@ -699,11 +704,11 @@ console.log(this.productonLines);
   finalNoOfDays: number;
   public addTargetDays() {
     if (this.tarGetAreaValue == undefined || this.tarGetAreaValue == null) {
-      this.showError("error", "Error Message", "Please enter target days.");
+      this.showMessage("error", "Error Message", "Please enter target days.");
       return;
     }
     if (this.tarGetAreaValue <= 0) {
-      this.showError("error", "Error Message", "Please enter target days value greater than 0.");
+      this.showMessage("error", "Error Message", "Please enter target days value greater than 0.");
       return;
     }
     var popUpNoOfTargetDays = Number(this.tarGetAreaValue);
@@ -711,7 +716,7 @@ console.log(this.productonLines);
     this.productionService.updateMaintanenceTargetDays(data).subscribe(
       (data: any) => {
         if (data == null) {
-          alert("Added Successfully");
+          this.showMessage("success", "", "Added Successfully.");
           this.getProjectedTarget();
         }
       });
@@ -721,7 +726,5 @@ console.log(this.productonLines);
   public openSettingIcon() {
     this.displaySettingIcon = !this.displaySettingIcon;
   }
-
-  
 
 }
