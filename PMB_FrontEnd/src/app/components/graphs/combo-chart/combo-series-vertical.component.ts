@@ -85,7 +85,6 @@ export class ComboSeriesVerticalComponent implements OnChanges {
 
   update(): void {
     let width;
-    console.log(this.series.length);
     if (this.series.length) {
       width =this.xScale.bandwidth();
       this.bandwidth.emit(width);
@@ -175,7 +174,7 @@ export class ComboSeriesVerticalComponent implements OnChanges {
       if(this.seriesLine){
       this.getSeriesTooltips(this.seriesLine, index);
       const lineValue = this.seriesLine[0].series[index].value;
-      const lineName = this.seriesLine[0].series[index].name;
+     // const lineName = this.seriesLine[0].series[index].name;
     
       bar.tooltipText = `
         <span class="tooltip-label">${tooltipLabel }</span>

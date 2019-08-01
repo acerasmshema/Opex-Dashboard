@@ -1,4 +1,4 @@
 export class KpiType {
     kpiTypeId : string;
-    kpiTypeName: String;
+    kpiTypeName: string;
 }

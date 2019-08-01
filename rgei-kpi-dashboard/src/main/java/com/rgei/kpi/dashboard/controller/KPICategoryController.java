@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
+import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 import com.rgei.kpi.dashboard.service.KPICategoryService;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
 
@@ -49,6 +50,13 @@ public class KPICategoryController {
 	public ResponseEntity<List<KpiTypeResponse>> getRequestedKPIType(@RequestHeader(value="kpiCategoryId") String kpiCategoryId){
 		logger.info("Get kpi type by kpiCategoryId", kpiCategoryId);
 		List<KpiTypeResponse> response = kpiCategoryService.getKPICategory(DailyKpiPulpConverter.covertToInteger(kpiCategoryId));
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/kpi_category/get_process_lines")
+	public ResponseEntity<List<ProcessLinesResponse>> getRequestedProcessLines(@RequestHeader(value="kpiId") String kpiId){
+		logger.info("Get kpi type by kpiCategoryId", kpiId);
+		List<ProcessLinesResponse> response = kpiCategoryService.getProcessLines(DailyKpiPulpConverter.covertToInteger(kpiId));
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 }

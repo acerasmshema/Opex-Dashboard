@@ -18,10 +18,18 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class KpiAnnotationResponse {
 	
+	private Integer annotationId;
 	private String annotationDate;
 	private String userId;
 	private String processLines;
 	private String description;
+	
+	public Integer getAnnotationId() {
+		return annotationId;
+	}
+	public void setAnnotationId(Integer annotationId) {
+		this.annotationId = annotationId;
+	}
 	
 	public String getAnnotationDate() {
 		return annotationDate;
@@ -47,4 +55,5 @@ public class KpiAnnotationResponse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 }

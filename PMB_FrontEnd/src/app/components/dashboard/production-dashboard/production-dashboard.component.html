@@ -12,7 +12,7 @@
             animationDuration=".5s"></p-progressSpinner>
         </div>
         <div style="display: flex;justify-content: center;align-items: center;" *ngIf="productonYDayChart">
-          <rg-gauge-chart [canvasWidth]="275" [needleValue]="productionYDayNeedleValue" [options]="options"
+          <rg-gauge-chart  [canvasWidth]="275" [needleValue]="productionYDayNeedleValue" [options]="options"
             [nameFont]="nameFont" [bottomLabel]="productionYDayActualValue"></rg-gauge-chart>
         </div>
         <div style="margin: auto;text-align: center;margin-top: 20%" *ngIf="productonYDayRefresh">
@@ -32,7 +32,7 @@
           </div>
 
           <div style="height:90%">
-            <ngx-charts-line-chart [scheme]="lineChartColorSchemeProduction" [results]="multiLineDataForLine"
+            <ngx-charts-line-chart *ngIf="multiLineDataForLine.length > 0" [scheme]="lineChartColorSchemeProduction" [results]="multiLineDataForLine"
               [gradient]="gradient" [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false"
               [showXAxisLabel]="false" [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="false"
               yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
@@ -94,7 +94,7 @@
           <div class="col-md-12" *ngIf="showStackAreaChart">
             <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="multiStack" [gradient]="gradient"
               [xAxis]="true" [yAxis]="true" [legend]="false" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="false"
-              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" >
             </ngx-charts-area-chart-stacked>
           </div>
 
@@ -120,16 +120,17 @@
             (change)="changeChartDurationLineChart('radio3')">Last 6 Months</label>
       </div>
     </div>
+    
     <div class="row" style="width: 96%;margin-left:30px;margin-top:0px;height:320px">
       <div class="col-md-3" style="border:1px solid lightgrey;border-radius: 10px;">
         <div class="row" style="padding-left: 20%;padding-right: 25%">
-          <rg-gauge-chart [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL1"
+          <rg-gauge-chart  [canvasWidth]="200" [needleValue]="productionYDayNeedleValuePL1"
             [centralLabel]="centralLabel1" [options]="options1" [name]="name1" [nameFont]="nameFont"
             [bottomLabel]="productionYDayActualValuePL1">
           </rg-gauge-chart>
-        </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl1Data" [gradient]="gradient"
+        </div>            
+        <div class="row" *ngIf="pl1Data != undefined && pl1Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl1Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -141,8 +142,8 @@
             [bottomLabel]="productionYDayActualValuePL2">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl2Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl2Data != undefined &&  pl2Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl2Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -154,8 +155,8 @@
             [bottomLabel]="productionYDayActualValuePL3">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl3Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl3Data != undefined &&  pl3Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl3Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -167,8 +168,8 @@
             [bottomLabel]="productionYDayActualValuePL4">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl4Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl4Data != undefined &&  pl4Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl4Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -182,8 +183,8 @@
             [bottomLabel]="productionYDayActualValuePL5">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl5Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl5Data != undefined && pl5Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl5Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -195,8 +196,8 @@
             [bottomLabel]="productionYDayActualValuePL6">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl6Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl6Data != undefined && pl6Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl6Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -208,8 +209,8 @@
             [bottomLabel]="productionYDayActualValuePL7">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl7Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl7Data != undefined && pl7Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl7Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -221,8 +222,8 @@
             [bottomLabel]="productionYDayActualValuePL8">
           </rg-gauge-chart>
         </div>
-        <div class="row">
-          <ngx-charts-line-chart [scheme]="lineChartColorSchemeForPLines" [results]="pl8Data" [gradient]="gradient"
+        <div class="row" *ngIf="pl8Data != undefined && pl8Data.length > 0">
+          <ngx-charts-line-chart  [scheme]="lineChartColorSchemeForPLines" [results]="pl8Data" [gradient]="gradient"
             [xAxis]="false" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
             [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]=""> </ngx-charts-line-chart>
         </div>
@@ -231,12 +232,11 @@
   </div>
 
   <div class="row thirdRow">
-    <!-- Filter Row -->
     <form [formGroup]="enquiryForm">
       <div class="row"
         style="width: 96%;margin-left:30px;margin-top: 5px;border:1px solid lightgrey;border-radius: 10px;padding: 5px;height: 40px">
         <div class="col-md-2">
-          <ejs-daterangepicker class="daterangepicker" id='daterangepicker' [startDate]='startDate' [endDate]='endDate'
+          <ejs-daterangepicker class="daterangepicker" id='daterangepicker' [startDate]='startD'[endDate]='endD'
             [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
             placeholder="{{'Date Range'| translate }}">
           </ejs-daterangepicker>
@@ -259,8 +259,6 @@
             style="background-color: #007ad9;height:30px;margin-top: -2px"></button>
         </div>
       </div>
-
-      <!-- Line Chart Row -->
       <div class="row" style="width: 96%;margin-left:30px;height:250px">
         <div class="col-md-12" style="padding:0px">
           <div class="row" style="width:100%">
@@ -277,7 +275,7 @@
           <div class="row chartRow">
 
             <div class="col-xs-11 col-sm-11 col-md-11 col-xl-11" style="padding-bottom: 0px;" #divElements>
-              <ngx-charts-line-chart [scheme]="lineChartColorScheme" [results]="multiLineData" [gradient]="gradient"
+              <ngx-charts-line-chart *ngIf="multiLineData.length > 0" [scheme]="lineChartColorScheme" [results]="multiLineData" [gradient]="gradient"
                 [xAxis]="true" [yAxis]="true" xScaleMin="0" [legend]="false" [showXAxisLabel]="false"
                 [showYAxisLabel]="false" [xAxisLabel]="" [yAxisLabel]="" (select)="onSelect($event)"
                 [xAxisTickFormatting]="xAxisTickFormattingFn" [curve]="lineChartLineInterpolation" [animations]="true"
@@ -285,15 +283,13 @@
               </ngx-charts-line-chart>
             </div>
 
-            <!-- <div class="col-xs-1 col-sm-1 col-md-1 col-xl-1" style="padding-bottom: 0px;">
-                      <div><i class="fa fa-circle text-danger Blink"></i>&nbsp; <span (click)="openAnnotations()" class="fake-link" >Annotations</span> </div>
-                      </div> -->
+          
 
           </div>
         </div>
       </div>
 
-      <!-- Data Grid Row -->
+      
       <div class="row" style="width: 96%;margin-left:30px;height: 250;margin-top: 2%">
         <div class="col-md-12" style="padding:0px">
           <p-table #dt [columns]="cols" [value]="productonLines" [paginator]="true" [rows]="10" [scrollable]="true"

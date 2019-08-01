@@ -45,7 +45,8 @@ export class CreateBenchmarkComponent implements OnInit {
     if (data['setName'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Set Name cannot be blank');
       return null;
-    } if (data['setName'].length > 20) {
+    } 
+    if (data['setName'].length > 20) {
       this.showMessage('warn', 'unsuccessful :', 'Set Name cannot be more than 20 character');
       return null;
     }
@@ -56,10 +57,12 @@ export class CreateBenchmarkComponent implements OnInit {
     if (data['setDescription'].length > 100) {
       this.showMessage('warn', 'unsuccessful :', 'Set Description cannot be more than 100 character');
       return null;
-    } if (data['setLocation'] == "") {
+    } 
+    if (data['setLocation'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Location');
       return null;
-    } if (data['setBusinessUnit'] == "") {
+    } 
+    if (data['setBusinessUnit'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Business Unit');
       return null;
     }
@@ -119,7 +122,6 @@ export class CreateBenchmarkComponent implements OnInit {
 
   public onChangePLSet(event) {
     this.plSetId = event.value['code'];
-    console.log(event.value['code']);
   }
 
   public showMessage(severity: string, summary: string, detail: string) {

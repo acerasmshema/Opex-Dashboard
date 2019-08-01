@@ -19,11 +19,13 @@ package com.rgei.kpi.dashboard.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
@@ -36,6 +38,7 @@ import com.rgei.kpi.dashboard.repository.MillBuMaintenanceDayEntityRepository;
 import com.rgei.kpi.dashboard.response.model.DeleteRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysResponse;
+import com.rgei.kpi.dashboard.response.model.UpdateRemarksRequest;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.MaintenanceDaysUtil;
 import com.rgei.kpi.dashboard.util.Utility;
@@ -134,6 +137,36 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 			}
 		}
 		
+	}
+
+	@Override
+	public void updateMaintainanceDayRemarks(UpdateRemarksRequest request) {
+		logger.info("Updating maintenance days remarks", request);
+		if(request != null && Objects.nonNull(request.getRemarks()) && Objects.nonNull(request.getIds()) && !request.getIds().isEmpty() ) {
+			List<Long> ids = new ArrayList<>();
+			for(String id:request.getIds()) {
+				ids.add(CommonFunction.covertToLong(id));
+			}
+			List<MillBuMaintenanceDayEntity> entities = millBuMaintenanceDayEntityRepository.findBymillBuMdIdIn(ids);
+			for(MillBuMaintenanceDayEntity entity:entities) {
+				RgeUserEntity user = new RgeUserEntity();
+				user.setUserId(request.getUpdatedBy());
+				entity.setRemarks(request.getRemarks());
+				entity.setUpdatedBy(user);
+				entity.setUpdatedDate(new Date());
+				try {	
+					millBuMaintenanceDayEntityRepository.save(entity);
+				}
+				catch(EmptyResultDataAccessException e) {
+					logger.error("Error while updating maintenane days remarks for existing ids", e, entity);
+				}
+				catch(JpaObjectRetrievalFailureException e) {
+					logger.error("Invalid user id passed", e, entity);
+				}
+			}
+		}else {
+			logger.info("No ids or empty remarks found in the request", request);
+		}
 	}
 
 }

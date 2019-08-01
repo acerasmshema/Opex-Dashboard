@@ -15,11 +15,6 @@
   to { opacity: 0; }
 }
 
-/* ::ng-deep .ngx-charts  { 
-    text{
-        fill: red!important; 
-    }
-} */
 
 
   
@@ -65,9 +60,7 @@
     margin-top:10px;
 }
 
-::ng-deep .dt .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
-    max-height: 30px;
-}
+
 
 .dot {
     height: 20px;

@@ -50,7 +50,8 @@ export class SearchBenchmarkSetComponent implements OnInit {
      if (data['setLocation'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Location');
       return null;
-    } if (data['setBusinessUnit'] == "") {
+    } 
+    if (data['setBusinessUnit'] == "") {
       this.showMessage('warn', 'unsuccessful :', 'Please select Business Unit');
       return null;
     }
@@ -63,7 +64,6 @@ export class SearchBenchmarkSetComponent implements OnInit {
         this.showMessage('error', 'unsuccessful :', 'SET could not be created');
       }else{
         this.plSets=data;
-        console.log(this.plSets);
       }
     });
   }

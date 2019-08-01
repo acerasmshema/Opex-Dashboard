@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateSerachRes;
+import com.rgei.kpi.dashboard.response.model.KpiAnnotationDeleteRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationResponse;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationSearchRequest;
@@ -72,6 +74,14 @@ public class KpiAnnotationController {
 		logger.info("Get annotation by date", kpiAnnotationDateRangeSerach);
 		KpiAnnotationDateSerachRes response = kpiAnnotationService.kpiAnnotationDateRangeSerach(kpiAnnotationDateRangeSerach);
 		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/kpi_annotation/delete_annotation")
+	public ResponseEntity<HttpStatus> deleteAnnotation(
+			@RequestBody List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
+		logger.info("delete annotation", kpiAnnotationDeleteRequest);
+		kpiAnnotationService.deleteAnnotation(kpiAnnotationDeleteRequest);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
