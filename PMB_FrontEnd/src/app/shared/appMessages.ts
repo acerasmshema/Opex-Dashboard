@@ -6,6 +6,7 @@ export const ErrorMessages = {
  }
 
  export const SuccessMessages = {
+     
 }
 
 export const InfoMessages = {

@@ -33,6 +33,7 @@ public interface ProcessLineRepository extends JpaRepository<ProcessLineEntity, 
 	public List<ProcessLineEntity> findAllByOrderByProcessLineIdAsc();
 	
 	@Query("Select PL from  ProcessLineEntity PL inner join KpiProcessLineEntity KPL on PL.processLineId=KPL.processLine.processLineId "
-			+ "where KPL.kpi.kpiId = :kpiId order by PL.processLineId")
-	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId);
+			+ "where KPL.kpi.kpiId = :kpiId and PL.active=:status order by PL.processLineId")
+	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId,@Param("status") Boolean status);
+	
 }

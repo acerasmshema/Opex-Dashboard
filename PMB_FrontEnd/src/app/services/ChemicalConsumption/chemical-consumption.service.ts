@@ -9,6 +9,7 @@ export class ChemicalConsumptionService {
   
   chemicalConsumptionKpiUrl=AppConstants.apiURLs.CHEMICAL_CONSUMPTION_API_URL;
   chemicalConsumptionLineKpiUrl=AppConstants.apiURLs.CHEMICAL_CONSUMPTION_LINE_API_URL;
+  chemicalConsumptionTargetLineKpiUrl=AppConstants.apiURLs.CHEMICAL_CONSUMPTION_LINE_TARGET_API_URL
   chemicalConsumptionGridKpiUrl=AppConstants.apiURLs.CHEMICAL_CONSUMPTION_GRID_API_URL;
   chemicalConsumptionKpiGridUrl = AppConstants.apiURLs.CHEMICAL_CONSUMPTION_API_GRID_URL;
   annotationDates=AppConstants.apiURLs.ANNOTATION_DATES_URL;
@@ -24,6 +25,11 @@ export class ChemicalConsumptionService {
   public getLineDataforKpi(data: object) {
   return this.apiCallService.callAPIwithData(this.chemicalConsumptionLineKpiUrl, data);
   } 
+
+  public getTargetLineDataforKpi(data: object) {
+    return this.apiCallService.callAPIwithData(this.chemicalConsumptionTargetLineKpiUrl, data);
+    } 
+  
 
   public getKpiGridData(data: object) {
     return this.apiCallService.callAPIwithData(this.chemicalConsumptionKpiGridUrl, data);

@@ -344,9 +344,13 @@ this.annotationsCols=annotationsCols;
 
       if (element.kpiTypeId == 8) {
         this.kpiType8show = !this.kpiType8show;
+        this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
-        this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = data;
+        });
+        this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = [...this.kpiId11LineData, data];
         });
        
       }
