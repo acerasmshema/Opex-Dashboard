@@ -369,6 +369,7 @@ public class KpiDashboardCategoryUtility {
 				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
 					kpiTypeObject.setTarget(line.getTarget());
 					processLines.add(line.getProcessLine().getProcessLineCode());
+					Collections.sort(processLines);
 				}
 			}
 			kpiTypeObject.setProcessLines(processLines);
