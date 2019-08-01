@@ -51,7 +51,11 @@ public class KpiProcessLineEntity implements Serializable {
 	@Column(name="target")
 	private String target;
 	
-
+	// bi-directional many-to-one association to Mill
+	@ManyToOne
+	@JoinColumn(name = "mill_id")
+	private MillEntity mill;
+	
 	//bi-directional many-to-one association to Kpi
 	@ManyToOne
 	@JoinColumn(name="kpi_id")
@@ -132,6 +136,14 @@ public class KpiProcessLineEntity implements Serializable {
 
 	public void setTarget(String target) {
 		this.target = target;
+	}
+
+	public MillEntity getMill() {
+		return mill;
+	}
+
+	public void setMill(MillEntity mill) {
+		this.mill = mill;
 	}
 
 }
