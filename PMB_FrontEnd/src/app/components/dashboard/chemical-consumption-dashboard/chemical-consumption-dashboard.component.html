@@ -346,63 +346,6 @@
   </div>
 </div>
 
-<p-dialog header={{title}} [(visible)]="AnnotationDialog" [style]="{width: '500px', height: '420px'}">
-  <form [formGroup]="createAnnotationForm" (ngSubmit)="saveAnnotation(createAnnotationForm.value)">
-    <div class="container-fluid" style="height:420px">
-
-      <div class="row" style="height: 55px;">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-6" style="padding: 0px">
-          <p-multiSelect [options]="cities2" [style]="{'width':'88%'}" defaultLabel="Production Lines"
-            optionLabel="name">
-          </p-multiSelect>
-        </div>
-        <div class="col-md-3">
-        </div>
-
-      </div>
-      <div class="row" style="height: 60px;">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-6" style="padding: 0px">
-          <p-calendar formControlName="AnnotationDate" placeholder="Annotation Date" [showIcon]="true"></p-calendar>
-        </div>
-        <div class="col-md-3">
-        </div>
-
-      </div>
-      <div class="row" style="height: 170px;">
-
-
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6" style="padding: 0px;">
-          <textarea formControlName="AnnotationText" placeholder="Description" rows="7" cols="25"
-            pInputTextarea></textarea>
-        </div>
-        <div class="col-md-3">
-        </div>
-
-      </div>
-      <div class="row" style="height: 40px;padding-top: 10px;">
-
-        <div class="col-md-3">
-        </div>
-
-        <div class="col-md-6" style="padding-right: 25px">
-          <span class="pull-right"> <button pButton type="submit" label="Save"></button></span>
-        </div>
-        <div class="col-md-3">
-        </div>
-
-      </div>
-    </div>
-  </form>
-</p-dialog>
-
 <p-dialog header={{title}} [(visible)]="GridDialog" [style]="{width: '700px', height: '500px'}">
   <p-table #dt [columns]="cols" [value]="productonLines" [paginator]="true" [rows]="10" [scrollable]="true"
     scrollHeight="450px">
@@ -429,7 +372,7 @@
   </p-table>
 </p-dialog>
 
-<p-dialog header="Annotations for Production on {{annotationDate}}" [responsive]="true"
+<p-dialog header="Annotations for Chemical Consumption on {{annotationDate}}" [responsive]="true"
   [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
   [(visible)]="displayAnnotations">
   <p-panel header="Create Annotation" [collapsed]="createAnnotationCollapsed"
