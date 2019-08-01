@@ -13,6 +13,7 @@ import * as $ from "jquery";
 import { MessageService } from 'primeng/components/common/messageservice';
 import { maintanenceDaysColumn, processLineColumns, annotationsCols, frequencies, processLines } from '../../../../assets/data/MasterData';
 import { stringify } from 'querystring';
+import { debug } from 'util';
 
 // import { Input } from '@syncfusion/ej2-inputs';
 
@@ -26,7 +27,7 @@ export class ProductionDashboardComponent implements OnInit{
 
   // @Input() kpiCategoryId: number;
 
-
+  resultcolor:string = "";;
   newAnnotationDeleteList: any[];
   arrayInfoOfAnnotationSelectedRow:any=[];
   hideDeleteAnnotationButton:boolean=true;
@@ -212,7 +213,17 @@ export class ProductionDashboardComponent implements OnInit{
     // this.getDataForGrid();
     this.getDataForProductionGrid();
     // this.colorTheValueOfData();
+   
   }
+
+  colorValue:string = "";;
+  // $scope.colorPicked = function (color) {
+  //   $scope.colorValue = color;
+
+  //   }
+    public checkColor(){
+      this.colorValue ='blue';
+    }
 
   oneMonthData: any[];
   threeMonthData: any[];
@@ -544,6 +555,7 @@ export class ProductionDashboardComponent implements OnInit{
         { field: 'pd2', header: 'PD2' },
         { field: 'pd3', header: 'PD3' },
         { field: 'pd4', header: 'PD4' }
+        
       ];
     }
     this.productionRequest.processLines = this.processLinesData;
@@ -585,6 +597,10 @@ export class ProductionDashboardComponent implements OnInit{
     const data = { millId: '1', buTypeId: '1', kpiId: '1', annotationDate: this.annotationDate };
     this.productionService.fetchAnnotation(data).subscribe((data: any) => {
       this.annotationsLines = data;
+      debugger;
+      console.log("checking the annotationsLinesdata");
+      console.log(data);
+
     });
 
   }
@@ -638,17 +654,6 @@ export class ProductionDashboardComponent implements OnInit{
   findAnnotationBeforeToggle() {
     this.createAnnotationCollapsed = !this.createAnnotationCollapsed;
   }
-
-
-
-public findUserID (selectAnnotationList){
-  this.selectAnnotationList = selectAnnotationList;
-
-  // return this.selectAnnotationList.forEach()
-  //  ===this.currentLoggedInUsersName;
-}
-
-
 
 
 
@@ -785,10 +790,10 @@ public delAnnotationList() {
   }
 
 
-resultcolor:string = "";;
+
 
 gridData: any[] = [];
-gridDataSeries: any[] = [];
+// gridDataSeries: any[] = [];
 public getDataForProductionGrid(){
   const requestData = {kpiCategoryId:'1'};
   // debugger;
@@ -799,53 +804,29 @@ public getDataForProductionGrid(){
       // debugger;
       ob.series.map(sro => {
         sro['color'] = this.parseAndGetColor(sro);
-        console.log("This is working sro");
-        console.log(sro);
+        console.log("Trying tproductonLines");
+        console.log(this.productonLines);
+        this.gridData=sro;
       })
-    });
-
-    
-    this.gridData = data;
-    console.log("find the type of griddata");
-    console.log(typeof(this.gridData));
-    // console.log(this.gridData.name);?
-    const gridDataName =   this.gridData['0'].name;
-    const gridDataSeries =   this.gridData['0'].series;
-    console.log("find the anme of griddata");
-    console.log(gridDataName);
-    for (const data3 of gridDataSeries){
-      console.log("Trying to find the type of data4");
-      this.resultcolor= data3.color;
-      newcolor = this.resultcolor;
-      console.log(this.resultcolor);
-      console.log(typeof(this.resultcolor));
-     // console.log(typeof(this.resultcolor));
-    }
-    debugger;
-    console.log('get color outside for loop');
-    console.log(newcolor);
-    console.log(this.resultcolor);
 
     });
-    debugger;
-    console.log('get color more out for loop');
-    console.log(newcolor);
-    console.log(this.resultcolor);
-    // console.log(typeof(this.resultcolor));
+    console.log("Trying sro");
+    });
   }
 
+
+
 public parseAndGetColor(sro){
-    // console.log(sro);
-    // debugger;
+  // debugger;
     let ar = sro.target.split(",");
     let prev = 0;
     if(sro.value == NaN){
-      return "red"
+      return "red";
     }
     for(let vl of ar) {
       let ix = vl.split(":");
       if(sro.value >= prev && sro.value <= parseInt(ix[1].trim())) {
-        return ix[0].trim()
+        return ix[0].trim();
       } else {
         prev = parseInt(ix[1].trim())
       }

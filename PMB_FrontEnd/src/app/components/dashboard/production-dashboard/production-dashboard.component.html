@@ -294,28 +294,28 @@
       </div>
 
       <!-- Data Grid Row 
-
+ [(ngModel)]="colorValue"
        *ngIf="gridData.length" 
+       [(ngModel)]="productonLines" [ngModelOptions]="{standalone: true}"
       -->
      <div
-     *ngIf="gridData.length"
       class="row" style="width: 96%;margin-left:30px;height: 250;margin-top: 2%">
-        <div class="col-md-12" style="padding:0px" >
-        
+        <div class="col-md-12" style="padding:0px"  ngDefaultControl 
+        [(ngModel)]="gridData" [ngModelOptions]="{standalone: true}"
+         >
           <p-table
            #dt [columns]="cols" [value]="productonLines"
           [paginator]="true" [rows]="10" [scrollable]="true"
-            scrollHeight="150px">
-            
-            <ng-template pTemplate="caption">
-              <div class="ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
-                  (click)="dt.exportCSV()" style="float:right"></button>
+          >
 
+           <ng-template pTemplate="caption">
+              <div class="ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data" 
+                (click)="dt.exportCSV()" 
+                style="float:right"></button>
               </div>
             </ng-template>
-            <ng-template pTemplate="header" let-columns 
-            let-rule [ngForOf]="gridData.series" >
+            <ng-template pTemplate="header" let-columns >
               <tr>
                 <th *ngFor="let col of columns" class="text-center" >
                   {{col.header}}
@@ -327,25 +327,28 @@
          [ngStyle]="{'color':productonLines.series['color']}"
     [ngStyle]="{'color':data3.color}"
     *ngIf="colorTheValueOfData()"
-
+ style="color:{{colorValue}}"
+ {{productonLines.color}}
 -->
-            <ng-template pTemplate="body"   *ngFor="let sr of cp"
+            <ng-template pTemplate="body"   
             let-rowData let-columns="columns">
               <tr>
                 <td  *ngFor="let col of columns"
-            [ngStyle]="{color:'rule.color'}"
+                  [ngStyle]="{'color': gridData.color}"
+              
                  [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'" >
                   {{rowData[col.field]}}
                 </td>
               </tr>
             </ng-template>
           </p-table>
+          {{ gridData.color }}
         </div>
       </div>
     </form>
   </div>
 </div>
-{{gridData}}
+
 
 <p-dialog header="Annotations for Production on {{annotationDate}}" [responsive]="true"
   [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
