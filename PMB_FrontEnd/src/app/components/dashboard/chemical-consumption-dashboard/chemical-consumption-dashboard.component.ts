@@ -346,9 +346,9 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
-        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+       /*  this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = data;
-        });
+        }); */
         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = [...this.kpiId11LineData, data];
         });
@@ -463,35 +463,33 @@ this.annotationsCols=annotationsCols;
   annotationLines: string = "";
   annotationProcessLines: string[] = [];
   annotationDescription: string = "";
-   public createAnnotation() {
-    this.annotationLines="";
+  public createAnnotation() {
+    this.annotationLines = "";
     var loginId = this.localStorageService.fetchloginId();
     var processLines;
     if (this.annotationProcessLines.length == 0) {
       this.showMessage("error", "", ErrorMessages.selectProcessLines);
-      return null;
+    } else if (this.annotationDescription == "") {
+      this.showMessage("error", "", ErrorMessages.addDescription);
+    } else {
+      this.annotationProcessLines.forEach(element => {
+        this.annotationLines = this.annotationLines.concat(element['processLineName'], ', ');
+      });
+      this.annotationLines = this.annotationLines.replace(/,\s*$/, "");
+      const data = { millId: '1', buTypeId: '1', kpiId: this.annotationKpiId, annotationDate: this.annotationDate, processLines: this.annotationLines, description: this.annotationDescription, userLoginId: loginId };
+      this.chemicalConsumptionService.createAnnotation(data).subscribe((data: any) => {
+        if (data == null) {
+          this.showMessage("success", "", "Annotation saved successfully.");
+          this.annotationDescription = "";
+          this.annotationProcessLines = [];
+          this.getAnnotationData(this.annotationKpiId);
+          this.showKpiCharts(this.chemicalConsumptionEnquiry);
+        } else {
+          this.showMessage("error", "", "Annotation could not be saved.");
+          return null;
+        }
+      });
     }
-if (this.annotationDescription == "") {
-      this.showMessage("error", "", ErrorMessages.addDescription );
-      return null;
-    }
- this.annotationProcessLines.forEach(element => {
-      this.annotationLines = this.annotationLines.concat(element['processLineName'], ', ');
-    });
-    this.annotationLines = this.annotationLines.replace(/,\s*$/, "");
-    const data = { millId: '1', buTypeId: '1', kpiId: this.annotationKpiId, annotationDate: this.annotationDate, processLines: this.annotationLines, description: this.annotationDescription, userLoginId: loginId };
-    this.chemicalConsumptionService.createAnnotation(data).subscribe((data: any) => {
-      if (data == null) {
-        this.showMessage("success", "", "Annotation saved successfully.");
-        this.annotationDescription = "";
-        this.annotationProcessLines = [];
-        this.getAnnotationData(this.annotationKpiId);
-        this.showKpiCharts(this.chemicalConsumptionEnquiry);
-      } else {
-      this.showMessage("error", "", "Annotation could not be saved.");
-        return null;
-      }
-    });
   } 
 
   public xAxisTickFormattingFn = this.dateTickFormatting.bind(this);
