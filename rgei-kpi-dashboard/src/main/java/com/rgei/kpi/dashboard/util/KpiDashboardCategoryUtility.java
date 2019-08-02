@@ -6,7 +6,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
@@ -360,19 +362,21 @@ public class KpiDashboardCategoryUtility {
 		KpiType kpiTypeObject;
 		if (Boolean.TRUE.equals(kpi.getActive())) {
 			kpiTypeObject = new KpiType();
-			List<String> processLines = new ArrayList<>();
+			List<String> processLines =new ArrayList<>();
+			Map<String,String> target = new HashMap<>();
 			if (Boolean.TRUE.equals(value.getActive())) {
 				kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
 				kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
 				kpiTypeObject.setKpiName(kpi.getKpiName() + " (" + kpi.getKpiUnit() + ")");
 				kpiTypeObject.setKpiId(kpi.getKpiId());
 				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
-					kpiTypeObject.setTarget(line.getTarget());
+					target.put(line.getProcessLine().getProcessLineCode(), line.getTarget());
 					processLines.add(line.getProcessLine().getProcessLineCode());
 					Collections.sort(processLines);
 				}
 			}
 			kpiTypeObject.setProcessLines(processLines);
+			kpiTypeObject.setTarget(target);
 			kpiType.add(kpiTypeObject);
 		}
 	}
@@ -399,49 +403,49 @@ public class KpiDashboardCategoryUtility {
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[0].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[1].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[2].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[3].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[4].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[5].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[6].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[7].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setTarget(type.getTarget().get(kpiProcessLine));
 			break;
 		default:
 		}
@@ -452,7 +456,7 @@ public class KpiDashboardCategoryUtility {
 	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(String kpiProcessLine, KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
 		val.setName(kpiProcessLine);
 		val.setValue(DashboardConstant.NA);
-		val.setTarget(type.getTarget());
+		val.setTarget(type.getTarget().get(kpiProcessLine));
 		series.add(val);
 		return series;
 	}
