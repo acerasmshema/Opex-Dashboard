@@ -18,6 +18,7 @@ package com.rgei.kpi.dashboard.response.model;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 public class KpiType {
 	
@@ -31,7 +32,7 @@ public class KpiType {
 	private Timestamp updatedDate;
 	private List<String> processLines;
 	private Integer kpiId;
-	private String target;
+	private Map<String,String> target;
 	
 	public Integer getKpiId() {
 		return kpiId;
@@ -93,10 +94,11 @@ public class KpiType {
 	public void setProcessLines(List<String> processLines) {
 		this.processLines = processLines;
 	}
-	public String getTarget() {
+	public Map<String, String> getTarget() {
 		return target;
 	}
-	public void setTarget(String target) {
+	public void setTarget(Map<String, String> target) {
 		this.target = target;
 	}
+	
 }
