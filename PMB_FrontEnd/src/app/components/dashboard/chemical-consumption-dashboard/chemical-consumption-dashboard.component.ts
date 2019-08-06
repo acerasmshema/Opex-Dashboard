@@ -346,11 +346,12 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
-        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-          this.kpiId11LineData = data;
-        });
+        /* this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = [];
+        }); */
         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-          this.kpiId11LineData = [...this.kpiId11LineData, data];
+          this.kpiId11LineData = data;
+          console.log(this.kpiId11LineData);
         });
        
       }
@@ -360,6 +361,7 @@ this.annotationsCols=annotationsCols;
         this.chemicalConsumptionRequest.kpiId = "2";
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId2Data = data;
+          console.log(this.kpiId2Data);
         });
         /*   this.chemicalConsumptionRequest.kpiId = "3";
           this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
@@ -500,7 +502,7 @@ if (this.annotationDescription == "") {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDatesForKpiId11.length > 0 && this.annotationDatesForKpiId11.includes(val)) {
+    if (this.annotationDatesForKpiId11 != null && this.annotationDatesForKpiId11.length > 0 && this.annotationDatesForKpiId11.includes(val)) {
       dateTick = "*" + val;
     }else {
       dateTick = val;
