@@ -36,5 +36,5 @@ public interface KpiDashboardCategoryService {
 		
 	public List<List<Map<String,Object>>> getKpiCategoryDownloadGridData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 	
-	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId);
+	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId);
 }
