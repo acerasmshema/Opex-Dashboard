@@ -74,10 +74,10 @@ public class KPICategoryConverter {
 				response = new KpiTypeExtendedResponse();
 				response.setKpiTypeId(entity.getKpiTypeId());
 				response.setKpiTypeName(entity.getKpiTypeName());
-				kpiTypeList = new ArrayList<KpiTypeDetails>();
+				kpiTypeList = new ArrayList<>();
 				kpiEntityList = entity.getKpis();
 				for(KpiEntity kpi:kpiEntityList) {
-					if(entity.getKpiTypeId()==kpi.getKpiType().getKpiTypeId()) {
+					if(entity.getKpiTypeId()==kpi.getKpiType().getKpiTypeId() && kpi.getActive().equals(Boolean.TRUE)) {
 						KpiDetails = new KpiTypeDetails();
 						KpiDetails.setKpiId(kpi.getKpiId());
 						KpiDetails.setKpiName(kpi.getKpiName());
