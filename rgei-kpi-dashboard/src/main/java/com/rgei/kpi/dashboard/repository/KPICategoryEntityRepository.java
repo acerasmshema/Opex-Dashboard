@@ -26,6 +26,6 @@ import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 @Repository
 public interface KPICategoryEntityRepository extends JpaRepository<KpiTypeEntity, Integer>{
 
-	@Query("Select k from KpiTypeEntity k where k.kpiCategory.kpiCategoryId = :kpiCategoryId")
+	@Query("Select k from KpiTypeEntity k where k.kpiCategory.kpiCategoryId = :kpiCategoryId and k.active=true")
 	List<KpiTypeEntity> findByKpiCategoryId(@Param("kpiCategoryId")Integer kpiCategoryId);
 }

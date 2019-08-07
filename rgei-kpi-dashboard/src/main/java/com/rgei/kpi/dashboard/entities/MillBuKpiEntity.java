@@ -22,56 +22,70 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the kpi_process_line database table.
+ * The persistent class for the mill_bu_kpi database table.
  * 
  */
 @Entity
-@Table(name="kpi_process_line")
-public class KpiProcessLineEntity implements Serializable {
+@Table(name="mill_bu_kpi")
+public class MillBuKpiEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="kpi_process_line_id")
-	private Integer kpiProcessLineId;
+	@Column(name="mill_bu_kpi_id")
+	private Integer millBuKpiId;
 
 	private Boolean active;
 
+	@Column(name="daily_line_target")
+	private Integer dailyLineTarget;
+	
 	@Column(name="created_by")
 	private String createdBy;
 
 	@Column(name="created_date")
 	private Timestamp createdDate;
-
+	
 	@Column(name="updated_by")
 	private String updatedBy;
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
 	
-	@Column(name="target")
-	private String target;
 	
-	// bi-directional many-to-one association to Mill
-	@ManyToOne
-	@JoinColumn(name = "mill_id")
-	private MillEntity mill;
-	
-	//bi-directional many-to-one association to Kpi
+	//bi-directional many-to-one association to KPI
 	@ManyToOne
 	@JoinColumn(name="kpi_id")
 	private KpiEntity kpi;
-
-	//bi-directional many-to-one association to ProcessLine
-	@ManyToOne
-	@JoinColumn(name="process_line_id")
-	private ProcessLineEntity processLine;
-
-	public Integer getKpiProcessLineId() {
-		return this.kpiProcessLineId;
+	
+	public KpiEntity getKpi() {
+		return kpi;
 	}
 
-	public void setKpiProcessLineId(Integer kpiProcessLineId) {
-		this.kpiProcessLineId = kpiProcessLineId;
+	public void setKpi(KpiEntity kpi) {
+		this.kpi = kpi;
+	}
+
+	//bi-directional many-to-one association to BusinessUnit
+	@ManyToOne
+	@JoinColumn(name="business_unit_id")
+	private BusinessUnitEntity businessUnit;
+
+	//bi-directional many-to-one association to KpiCategory
+	@ManyToOne
+	@JoinColumn(name="kpi_category_id")
+	private KpiCategoryEntity kpiCategory;
+
+	//bi-directional many-to-one association to Mill
+	@ManyToOne
+	@JoinColumn(name="mill_id")
+	private MillEntity mill;
+
+	public Integer getMillBuKpiId() {
+		return this.millBuKpiId;
+	}
+
+	public void setMillBuKpiId(Integer millBuKpiId) {
+		this.millBuKpiId = millBuKpiId;
 	}
 
 	public Boolean getActive() {
@@ -114,36 +128,29 @@ public class KpiProcessLineEntity implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public KpiEntity getKpi() {
-		return this.kpi;
+	public BusinessUnitEntity getBusinessUnit() {
+		return this.businessUnit;
 	}
 
-	public void setKpi(KpiEntity kpi) {
-		this.kpi = kpi;
+	public void setBusinessUnit(BusinessUnitEntity businessUnit) {
+		this.businessUnit = businessUnit;
 	}
 
-	public ProcessLineEntity getProcessLine() {
-		return this.processLine;
+	public KpiCategoryEntity getKpiCategory() {
+		return this.kpiCategory;
 	}
 
-	public void setProcessLine(ProcessLineEntity processLine) {
-		this.processLine = processLine;
-	}
-
-	public String getTarget() {
-		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
+	public void setKpiCategory(KpiCategoryEntity kpiCategory) {
+		this.kpiCategory = kpiCategory;
 	}
 
 	public MillEntity getMill() {
-		return mill;
+		return this.mill;
 	}
 
 	public void setMill(MillEntity mill) {
 		this.mill = mill;
 	}
+
 
 }
