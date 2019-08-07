@@ -48,14 +48,17 @@ public class KpiCategorySeriesResponse {
 	
 	private String target;
 	
+	private String color;
+	
 	public KpiCategorySeriesResponse() {
 		super();
 	}
 
-	public KpiCategorySeriesResponse(String name, String value) {
+	public KpiCategorySeriesResponse(String name, String value, String color) {
 		super();
 		this.name = name;
 		this.value = value;
+		this.color = color;
 	}
 
 	public String getName() {
@@ -81,7 +84,14 @@ public class KpiCategorySeriesResponse {
 	public void setTarget(String target) {
 		this.target = target;
 	}
-	
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 	
 }
 

@@ -31,15 +31,9 @@ public class KpiType {
 	private String updatedBy;
 	private Timestamp updatedDate;
 	private List<String> processLines;
-	private Integer kpiId;
 	private Map<String,String> target;
+	private Kpi kpi;
 	
-	public Integer getKpiId() {
-		return kpiId;
-	}
-	public void setKpiId(Integer kpiId) {
-		this.kpiId = kpiId;
-	}
 	public Integer getKpiTypeId() {
 		return kpiTypeId;
 	}
@@ -100,5 +94,10 @@ public class KpiType {
 	public void setTarget(Map<String, String> target) {
 		this.target = target;
 	}
-	
+	public Kpi getKpi() {
+		return kpi;
+	}
+	public void setKpi(Kpi kpi) {
+		this.kpi = kpi;
+	}
 }
