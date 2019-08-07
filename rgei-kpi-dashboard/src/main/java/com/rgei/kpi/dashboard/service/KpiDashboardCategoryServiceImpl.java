@@ -1,7 +1,5 @@
 package com.rgei.kpi.dashboard.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
-import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
@@ -72,7 +69,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		Kpi kpi = null;
 		Optional<KpiEntity> kpiEntity  = Optional.ofNullable(kpiRepository.findByKpiId(kpiDashboardCategoryRequest.getKpiId()));
 		if (kpiEntity.isPresent()) {
-		kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get());
+		kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get(), kpiDashboardCategoryRequest.getMillId());
 		}
 		List<String> finalKpiProcessLines = null;
 		List<String> lineList = Arrays.asList(kpiDashboardCategoryRequest.getProcessLines());
@@ -107,7 +104,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		Kpi kpi = null;
 		Optional<KpiEntity> kpiEntity  = Optional.ofNullable(kpiRepository.findByKpiId(kpiDashboardCategoryRequest.getKpiId()));
 		if (kpiEntity.isPresent()) {
-		kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get());
+		kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get(), kpiDashboardCategoryRequest.getMillId());
 		}
 		List<String> finalKpiProcessLines = null;
 		List<String> lineList = Arrays.asList(kpiDashboardCategoryRequest.getProcessLines());
@@ -141,7 +138,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		Kpi kpi = null;
 		Optional<KpiEntity> kpiEntity  = Optional.ofNullable(kpiRepository.findByKpiId(kpiDashboardCategoryRequest.getKpiId()));
 		if (kpiEntity.isPresent()) {
-			kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get());
+			kpi = KpiDashboardCategoryUtility.convertToKpiDTO(kpiEntity.get(), kpiDashboardCategoryRequest.getMillId());
 		}
 		List<String> finalKpiProcessLines = null;
 		List<String> lineList = Arrays.asList(kpiDashboardCategoryRequest.getProcessLines());
@@ -191,8 +188,6 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 	}
 
 	
-	
-
 	private void getYearlyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {
 		logger.info("Creating yearly frequency grid response for process lines", finalKpiProcessLines);
