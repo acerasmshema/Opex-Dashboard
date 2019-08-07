@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,10 +81,22 @@ public class ProcessLineUtility {
 			processLineObject.setColorRange(entity.getColorRange());
 			processLineObject.setDailyLineTarget(entity.getDailyLineTarget());
 			processLine.add(processLineObject);
+			sortResponse(processLine);
 		}
 		return processLine;
 	}
 
+	
+	private static void sortResponse(List<ProcessLine> kpiType) {
+		Collections.sort(kpiType, (o1, o2) -> {
+			int value1 = o1.getProcessLineId().compareTo(o2.getProcessLineId());
+			if (value1 == 0) {
+				return o1.getProcessLineId().compareTo(o2.getProcessLineId());
+			}
+			return value1;
+		});
+	}
+	
 	/*
 	 * Api is to get the result for download data grid
 	 */

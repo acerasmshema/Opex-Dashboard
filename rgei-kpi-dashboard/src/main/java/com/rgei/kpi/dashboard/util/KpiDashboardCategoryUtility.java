@@ -459,17 +459,21 @@ public class KpiDashboardCategoryUtility {
 	
 	private static String fetchColor(String value, String threshold) {
 		String color = null;
-		String[] target = threshold.split(","); 
-		String[] targetColor = target[0].split(":");
-		String colorThreshold = targetColor[1];
-		Double colorValue = Double.parseDouble(colorThreshold);
-		Double val = Double.parseDouble(value);
-		if(val > colorValue) {
-			color = "red";
+		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value)) {
+			color = DashboardConstant.BLACK;
+		} else {
+			String[] target = threshold.split(",");
+			String[] targetColor = target[0].split(":");
+			String colorThreshold = targetColor[1];
+			Double colorValue = Double.parseDouble(colorThreshold);
+			Double val = Double.parseDouble(value);
+			if (val > colorValue) {
+				color = DashboardConstant.RED;
+			} else {
+				color = DashboardConstant.BLACK;
+			}
 		}
-		else {
-			color = "black";
-		}
+
 		return color;
 	}
 	

@@ -1,7 +1,5 @@
 package com.rgei.kpi.dashboard.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
-import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
