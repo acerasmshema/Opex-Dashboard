@@ -33,7 +33,7 @@ public class KpiDashboardCategoryUtility {
 	private KpiDashboardCategoryUtility() {
 	}
 
-	public static Kpi convertToKpiDTO(KpiEntity entity) {
+	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
 		Kpi kpiObject = new Kpi();
 		if(Boolean.TRUE.equals(entity.getActive())) {
 		List<String> kpiProcessLines = new ArrayList<>();
@@ -42,8 +42,9 @@ public class KpiDashboardCategoryUtility {
 		kpiObject.setKpiTypeId(entity.getKpiType().getKpiTypeId());
 		kpiObject.setKpiUnit(entity.getKpiUnit());
 		for (KpiProcessLineEntity value : entity.getKpiProcessLines()) {
-			if(Boolean.TRUE.equals(value.getActive())) {
+			if(Boolean.TRUE.equals(value.getActive()) && millId.equals(value.getMill().getMillId())) {
 			kpiProcessLines.add(value.getProcessLine().getProcessLineCode());
+			Collections.sort(kpiProcessLines);
 			}
 		}
 		kpiObject.setKpiProcessLines(kpiProcessLines);
