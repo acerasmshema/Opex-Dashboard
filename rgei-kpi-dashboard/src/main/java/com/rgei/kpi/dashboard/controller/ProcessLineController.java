@@ -35,12 +35,15 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
+import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineProjectedResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineRequest;
+import com.rgei.kpi.dashboard.response.model.ProcessLineResponse;
 import com.rgei.kpi.dashboard.response.model.ResponseObject;
 import com.rgei.kpi.dashboard.response.model.TargetProceessLine;
 import com.rgei.kpi.dashboard.service.DailyKpiPulpService;
 import com.rgei.kpi.dashboard.service.ProcessLinePulpKpiService;
+import com.rgei.kpi.dashboard.service.ProcessLineService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -54,6 +57,9 @@ public class ProcessLineController {
 	
 	@Resource
 	ProcessLinePulpKpiService processLinePulpKpiService;
+	
+	@Resource
+	ProcessLineService processLineService;
 	
 
 	@GetMapping(value = "/v1/yesterday/ytd_process_line")
@@ -110,8 +116,6 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	
-	
 	@GetMapping(value = "/v2/yesterday/ytd_process_line")
 	public ResponseEntity<TargetProceessLine> getAnnualProcessLineV2(@RequestHeader(value="millId") String millId,
 			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
@@ -163,6 +167,14 @@ public class ProcessLineController {
 		List<List<Map<String,Object>>> response = processLinePulpKpiService.getDataGridProcessLinesForFrequecy(productionRequestDTO);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/v1/process_line/get_all_process_lines")
+	public ResponseEntity<List<ProcessLineDetailsResponse>> getProcessLineResponse(@RequestHeader(value="millId") String millId){
+		logger.info("Fetching process line data against the requested location id", millId);
+		List<ProcessLineDetailsResponse> response = processLineService.getProcessLines(millId);
+		return new ResponseEntity<List<ProcessLineDetailsResponse>>(response,HttpStatus.OK);
+	}
+	
 	
 	
 	

@@ -30,6 +30,7 @@ import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
+import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineUtility {
@@ -212,5 +213,21 @@ public class ProcessLineUtility {
 			processLine8.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
 					(processLine.get(7).getDailyLineTarget().doubleValue())));
 		});
+	}
+
+	public static List<ProcessLineDetailsResponse> generateResponse(List<ProcessLineEntity> processLine) {
+		ProcessLineDetailsResponse response = null;
+		List<ProcessLineDetailsResponse> responses = new ArrayList<>();
+		if(processLine != null && !processLine.isEmpty()) {
+			for(ProcessLineEntity entity : processLine) {
+				response = new ProcessLineDetailsResponse();
+				response.setProcessLineId(entity.getProcessLineId());
+				response.setProcessLineCode(entity.getProcessLineCode());
+				response.setProcessLineName(entity.getProcessLineName());
+				response.setLegendColor(entity.getLegendColor());
+				responses.add(response);
+			}
+		}
+		return responses;
 	}
 }
