@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -18,11 +20,14 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
+import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.KPICategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.KpiDashboardCategoryRepository;
 import com.rgei.kpi.dashboard.repository.KpiRepository;
+import com.rgei.kpi.dashboard.repository.MillBuKpiEntityRepository;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.Kpi;
 import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
@@ -32,6 +37,7 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
 import com.rgei.kpi.dashboard.util.KpiConsumptionLineChartUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryDataGridUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtility;
+import com.rgei.kpi.dashboard.util.MillBuKpiUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
 /**
@@ -52,6 +58,12 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 	
 	@Resource
 	KPICategoryEntityRepository kpiCategoryRepository;
+	
+	@Resource
+	MillBuKpiEntityRepository millBuKpiEntityRepository;
+	
+	@Resource
+	DailyKpiPulpEntityRepository dailyKpiPulpEntityRepository;
 
 	@Override
 	public List<DateRangeResponse> getKpiCategoryData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
@@ -375,4 +387,95 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			resultList.add(val);
 		}
 	}
+
+	@Override
+	public DateRangeResponse getKpiCategoryLineChartTargetData(
+			KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
+		List<Object[]> dailyKpiPulpDates = null;
+		List<String> targetDates = new ArrayList<String>();
+		String targetValue = null;
+		boolean status=Boolean.TRUE;
+
+		if (!Objects.nonNull(kpiDashboardCategoryRequest.getFrequency())) {
+			kpiDashboardCategoryRequest.setFrequency(0);
+		}
+
+		try {
+			switch (kpiDashboardCategoryRequest.getFrequency()) {
+			case 0:
+				dailyKpiPulpDates = dailyKpiPulpEntityRepository.findDatesForLineChartsDailyTargets(
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(),
+								DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(),
+								DashboardConstant.FORMAT),
+						kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getBuId(),
+						kpiDashboardCategoryRequest.getKpiCategoryId(), kpiDashboardCategoryRequest.getKpiId());
+
+				for (Object[] obj : dailyKpiPulpDates) {
+					targetDates.add(
+							Utility.dateToStringConvertor(Date.valueOf(obj[0].toString()), DashboardConstant.FORMAT));
+				}
+
+				break;
+			case 1:
+				dailyKpiPulpDates = dailyKpiPulpEntityRepository.findDatesForLineChartsMonthlyTargets(
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(),
+								DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(),
+								DashboardConstant.FORMAT),
+						kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getBuId(),
+						kpiDashboardCategoryRequest.getKpiCategoryId(), kpiDashboardCategoryRequest.getKpiId());
+				for (Object[] obj : dailyKpiPulpDates) {
+					targetDates.add(Month.of(Integer.valueOf(String.valueOf(obj[0]).split("\\.")[0])).getDisplayName(
+							TextStyle.SHORT, Locale.ENGLISH) + "-" + String.valueOf(obj[1]).split("\\.")[0]);
+				}
+				break;
+			case 2:
+				dailyKpiPulpDates = dailyKpiPulpEntityRepository.findDatesForLineChartsQuarterlyTargets(
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(),
+								DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(),
+								DashboardConstant.FORMAT),
+						kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getBuId(),
+						kpiDashboardCategoryRequest.getKpiCategoryId(), kpiDashboardCategoryRequest.getKpiId());
+				for (Object[] obj : dailyKpiPulpDates) {
+					targetDates.add(KpiDashboardCategoryUtility.DatetimeToQuarterConverter(obj));
+				}
+				break;
+			case 3:
+				dailyKpiPulpDates = dailyKpiPulpEntityRepository.findDatesForLineChartsYearlyTargets(
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(),
+								DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(),
+								DashboardConstant.FORMAT),
+						kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getBuId(),
+						kpiDashboardCategoryRequest.getKpiCategoryId(), kpiDashboardCategoryRequest.getKpiId());
+				for (Object[] obj : dailyKpiPulpDates) {
+					targetDates.add(obj[0].toString());
+				}
+				break;
+			default:
+				dailyKpiPulpDates = dailyKpiPulpEntityRepository.findDatesForLineChartsDailyTargets(
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(),
+								DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(),
+								DashboardConstant.FORMAT),
+						kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getBuId(),
+						kpiDashboardCategoryRequest.getKpiCategoryId(), kpiDashboardCategoryRequest.getKpiId());
+				for (Object[] obj : dailyKpiPulpDates) {
+					targetDates.add(Utility.dateToStringConvertor(Date.valueOf(obj[0].toString()),
+							DashboardConstant.DATE_FORMAT));
+				}
+			}
+
+			targetValue = millBuKpiEntityRepository.findTargetValueForKpi(kpiDashboardCategoryRequest.getMillId(),
+					kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getKpiId(),status);
+		}
+
+		catch (Exception e) {
+			logger.info("exception in fetching target data for KPI", e);
+		}
+		return MillBuKpiUtility.getDailySeriesResponse(targetDates, targetValue);
+	}
+	
 }

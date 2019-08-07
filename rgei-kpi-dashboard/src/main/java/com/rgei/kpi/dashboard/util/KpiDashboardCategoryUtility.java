@@ -485,4 +485,18 @@ public class KpiDashboardCategoryUtility {
 public static String parseProcessLineValue(Double value) {
 		return value.isNaN()?DashboardConstant.NA:BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).toString();
 	}
+
+public static String DatetimeToQuarterConverter(Object[] obj) {
+	String quarter=null;
+	if (Quarter.Q1.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q1.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q2.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q2.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q3.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q3.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q4.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q4.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	}
+	return quarter;
+}
 }

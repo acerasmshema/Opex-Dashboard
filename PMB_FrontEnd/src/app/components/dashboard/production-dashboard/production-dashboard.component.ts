@@ -40,6 +40,7 @@ export class ProductionDashboardComponent implements OnInit {
   annotationsLines: any[];
   displayAnnotations: boolean = false;
   productionEnquiryData = new ProductionEnquiry();
+  annotationDates: any[] = [];
   selectedValue: CommonModel[] = [];
   createAnnotationCollapsed: boolean = true;
   findAnnotationCollapsed: boolean = false;
@@ -557,7 +558,7 @@ export class ProductionDashboardComponent implements OnInit {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
+    if (this.annotationDates != null && this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
     }else {
       dateTick = val;
@@ -586,7 +587,7 @@ export class ProductionDashboardComponent implements OnInit {
     });
   }
 
-  annotationDates: any[] = [];
+  
   public getAnnotationDates() {
     this.annotationDates=[];
     const data = { millId: '1', buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };
