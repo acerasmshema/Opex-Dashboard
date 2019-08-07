@@ -85,6 +85,7 @@ export class ChemicalConsumptionDashboardComponent implements OnInit {
   private activeEntries: any[] = [];
   productonLines: any[] = [];
   colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000'] };
+  colorSchemeForLineChart  = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000','#000000'] };
   title: string = "";
   annotationsLines: any[];
   createAnnotationCollapsed: boolean = true;
@@ -346,13 +347,14 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
-        /* this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-          this.kpiId11LineData = [];
-        }); */
-        this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+        
+         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = data;
-          console.log(this.kpiId11LineData);
-        });
+        }); 
+        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = [...this.kpiId11LineData,data];
+        }); 
+       
        
       }
 
@@ -363,10 +365,6 @@ this.annotationsCols=annotationsCols;
           this.kpiId2Data = data;
           console.log(this.kpiId2Data);
         });
-        /*   this.chemicalConsumptionRequest.kpiId = "3";
-          this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-            this.kpiId3Data = data;
-          }); */
       }
 
       if (element.kpiTypeId == 3) {

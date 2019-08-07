@@ -33,7 +33,7 @@ public class KpiDashboardCategoryUtility {
 	private KpiDashboardCategoryUtility() {
 	}
 
-	public static Kpi convertToKpiDTO(KpiEntity entity) {
+	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
 		Kpi kpiObject = new Kpi();
 		if(Boolean.TRUE.equals(entity.getActive())) {
 		List<String> kpiProcessLines = new ArrayList<>();
@@ -42,8 +42,9 @@ public class KpiDashboardCategoryUtility {
 		kpiObject.setKpiTypeId(entity.getKpiType().getKpiTypeId());
 		kpiObject.setKpiUnit(entity.getKpiUnit());
 		for (KpiProcessLineEntity value : entity.getKpiProcessLines()) {
-			if(Boolean.TRUE.equals(value.getActive())) {
+			if(Boolean.TRUE.equals(value.getActive()) && millId.equals(value.getMill().getMillId())) {
 			kpiProcessLines.add(value.getProcessLine().getProcessLineCode());
+			Collections.sort(kpiProcessLines);
 			}
 		}
 		kpiObject.setKpiProcessLines(kpiProcessLines);
@@ -458,17 +459,21 @@ public class KpiDashboardCategoryUtility {
 	
 	private static String fetchColor(String value, String threshold) {
 		String color = null;
-		String[] target = threshold.split(","); 
-		String[] targetColor = target[0].split(":");
-		String colorThreshold = targetColor[1];
-		Double colorValue = Double.parseDouble(colorThreshold);
-		Double val = Double.parseDouble(value);
-		if(val > colorValue) {
-			color = "red";
+		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value)) {
+			color = DashboardConstant.BLACK;
+		} else {
+			String[] target = threshold.split(",");
+			String[] targetColor = target[0].split(":");
+			String colorThreshold = targetColor[1];
+			Double colorValue = Double.parseDouble(colorThreshold);
+			Double val = Double.parseDouble(value);
+			if (val > colorValue) {
+				color = DashboardConstant.RED;
+			} else {
+				color = DashboardConstant.BLACK;
+			}
 		}
-		else {
-			color = "black";
-		}
+
 		return color;
 	}
 	
@@ -484,4 +489,18 @@ public class KpiDashboardCategoryUtility {
 public static String parseProcessLineValue(Double value) {
 		return value.isNaN()?DashboardConstant.NA:BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).toString();
 	}
+
+public static String DatetimeToQuarterConverter(Object[] obj) {
+	String quarter=null;
+	if (Quarter.Q1.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q1.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q2.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q2.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q3.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q3.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q4.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q4.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	}
+	return quarter;
+}
 }

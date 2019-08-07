@@ -64,5 +64,4 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 		logger.info("Fetching KPI Category for id", kpiCategoryId);
 		return KPICategoryConverter.convertToResponse(kpiCategoryEntityRepository.findByKpiCategoryId(kpiCategoryId));
 	}
-
 }
