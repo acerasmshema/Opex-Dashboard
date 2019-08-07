@@ -69,6 +69,14 @@ public class KpiDashboardCategoryController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/v2/kpi_category/selected_kpi_process_lines_target")
+	public ResponseEntity<DateRangeResponse> getKpiCategoryLineChartTargetData(
+			@RequestBody KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
+		logger.info("Inside KPIDashboardCategoryController to fetch KPI data for line charts targets", kpiDashboardCategoryRequest);
+		DateRangeResponse response = kpiDashboardCategoryService.getKpiCategoryLineChartTargetData(kpiDashboardCategoryRequest);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/v1/kpi_category/selected_kpi_grid_data")
 	public ResponseEntity<List<List<Map<String,Object>>>> getKpiCategoryDownloadGridData(
 			@RequestBody KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {

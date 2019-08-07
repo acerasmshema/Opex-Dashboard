@@ -14,29 +14,20 @@
  * SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
  * THIS SOFTWARE OR ITS DERIVATIVES.
  ******************************************************************************/
-package com.rgei.kpi.dashboard.service;
+package com.rgei.kpi.dashboard.repository;
 
-import java.util.List;
-import java.util.Map;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
-import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
-import com.rgei.kpi.dashboard.response.model.KpiDashboardCategoryRequest;
+import com.rgei.kpi.dashboard.entities.MillBuKpiEntity;
 
-/**
- * @author dixit.sharma
- *
- */
-
-public interface KpiDashboardCategoryService {
-
-	public List<DateRangeResponse> getKpiCategoryData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
+@Repository
+public interface MillBuKpiEntityRepository extends JpaRepository<MillBuKpiEntity, Integer>{
 	
-	public List<DateRangeResponse> getKpiCategoryLineChartData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 	
-	public DateRangeResponse getKpiCategoryLineChartTargetData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
-		
-	public List<List<Map<String,Object>>> getKpiCategoryDownloadGridData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
-	
-	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId);
+	@Query("Select dailyLineTarget from MillBuKpiEntity e where e.mill.millId = :millId and e.kpi.kpiId = :kpiId and e.businessUnit.businessUnitId = :buId and e.active = :status")
+	public String findTargetValueForKpi(@Param("millId")Integer millId,
+		 @Param("buId")Integer buId,@Param("kpiId")Integer kpiId,@Param("status") boolean status);
 }
