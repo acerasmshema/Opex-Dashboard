@@ -158,7 +158,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 	}
 	
 	@Override
-	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId) {
+	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId) {
 		logger.info("Getting yesterday values for kpi category against id", kpiCategoryId);
 		List<KpiCategoryResponse> resultList = new ArrayList<>();
 		List<KpiType> kpiType = null;
@@ -166,14 +166,14 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		Integer endKpiId = 0;
 		Optional<List<KpiTypeEntity>> kpiTypeEntity  = Optional.ofNullable(kpiCategoryRepository.findByKpiCategoryId(kpiCategoryId));
 		if (kpiTypeEntity.isPresent()) {
-			kpiType = KpiDashboardCategoryUtility.convertToKpiTypeDTO(kpiTypeEntity.get());
+			kpiType = KpiDashboardCategoryUtility.convertToKpiTypeDTO(kpiTypeEntity.get(), millId);
 		}
 		if(kpiType != null) {
-			startKpiId = kpiType.get(0).getKpiId();
-			endKpiId = kpiType.get(kpiType.size()-1).getKpiId();
+			startKpiId = kpiType.get(0).getKpi().getKpiId();
+			endKpiId = kpiType.get(kpiType.size()-1).getKpi().getKpiId();
 		}
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getYesterdayAllProcessLinesData(
-				  KpiDashboardCategoryUtility.getYesterdayDate(), startKpiId, endKpiId, kpiCategoryId);
+				  KpiDashboardCategoryUtility.getYesterdayDate(), startKpiId, endKpiId, kpiCategoryId, millId);
 		KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
 		return resultList;
 	}

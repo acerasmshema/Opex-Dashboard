@@ -68,7 +68,7 @@ public interface KpiDashboardCategoryRepository extends JpaRepository<DailyKpiPu
 
 	@Query(value = "SELECT process_line_1 as FL1, process_line_2 as FL2, process_line_3 as FL3,\r\n"
 			+ "process_line_4 as PCD, process_line_5 as PD1, process_line_6 as PD2, process_line_7 as PD3,\r\n"
-			+ "process_line_8 as PD4 FROM daily_kpi_pulp dkp inner join kpi on kpi.kpi_id= dkp.kpi_id WHERE kpi_category_id= :kpiCategoryId AND date(datetime)= :yesterdayDate AND dkp.kpi_id between :startKpiId AND :endKpiId  and kpi.active='true' order by dkp.kpi_id asc", nativeQuery=true)
+			+ "process_line_8 as PD4 FROM daily_kpi_pulp dkp inner join kpi on kpi.kpi_id= dkp.kpi_id WHERE kpi_category_id= :kpiCategoryId AND mill_id= :millId AND date(datetime)= :yesterdayDate AND dkp.kpi_id between :startKpiId AND :endKpiId  and kpi.active='true' order by dkp.kpi_id asc", nativeQuery=true)
 	public List<Object[]> getYesterdayAllProcessLinesData(@Param("yesterdayDate")Date yesterdayDate, @Param("startKpiId")Integer startKpiId,
-			@Param("endKpiId")Integer endKpiId, @Param("kpiCategoryId")Integer kpiCategoryId);
+			@Param("endKpiId")Integer endKpiId, @Param("kpiCategoryId")Integer kpiCategoryId, @Param("millId")Integer millId);
 }
