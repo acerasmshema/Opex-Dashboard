@@ -1,0 +1,119 @@
+
+.Blink {
+    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ::ng-deep .ngx-charts  { 
+    text{
+        fill: red!important; 
+    }
+} */
+
+
+  
+  .firstRow{
+      height:600px;
+      border-bottom: 1px solid black;
+      padding: 0px;
+  }
+  .secondRow{
+    height:690px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 0px;
+    
+}
+.thirdRow{
+    height:590px;
+    border-top: 1px solid black;
+    padding: 0px;
+    margin-top: 10px;
+}
+
+.footerRow{
+    height:60px;
+    text-align: center;
+    
+}
+.btn-primary{
+    height:30px;
+    
+    
+}
+
+.kpiLabel{
+    margin:10px;
+}
+
+.gauge-chart__label{
+    font-size: 12px;
+    margin-top: -46px;
+}
+
+
+.radio{
+    margin-top:10px;
+}
+
+::ng-deep .dt .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
+    max-height: 30px;
+}
+
+.ypd-row {
+    width: 96%;
+    margin-left:30px;
+    margin-top:10px;
+    height:200px
+}
+
+.border {
+    text-align: center;
+    padding:0px;
+    border:1px solid lightgrey;
+    border-radius: 10px;
+}
+
+.dot {
+    height: 20px;
+    width: 20px;
+    border-radius: 30%;
+    display: inline-block;
+    margin-left:5px;
+    margin-top: 4px;
+    
+}
+
+.chartRow{
+    height: 250px;
+  }
+
+  .gridline-path {
+    stroke: #ddd;
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .fake-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* .tick .ng-star-inserted title{
+    font-weight:bold;
+} */
+
+.center-align {
+    text-align: center !important;
+
+}
+
+.right-align {
+    text-align: right !important;
+}
+

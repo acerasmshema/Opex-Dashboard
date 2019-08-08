@@ -1,0 +1,48 @@
+<p-tabView [activeIndex]="index" (onChange)="openSidebar($event)">
+  <div class="container-fluid" style="padding: 0px">
+    <div class="card color_legend">
+      <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <div *ngFor="let legend of processUnitLegends">
+            <div class="dot" [style.backgroundColor]="legend.legendColor"></div>
+            <div class="labelClass">{{legend.processLineCode}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mainContainer">
+      <p-tabPanel header="Production" [selected]="true">
+        <ng-template pTemplate="app-production-dashboard">
+          <app-production-dashboard></app-production-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Chemical Consumption">
+        <ng-template pTemplate="app-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'2'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Utilities Consumption">
+        <ng-template pTemplate="app-utilities-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'3'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Wood Consumption">
+        <ng-template pTemplate="app-wood-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'4'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Kappa Number Prediction">
+        <ng-template pTemplate="app-conditional-monitoring">
+          <app-kappa-number-prediction></app-kappa-number-prediction>
+        </ng-template>
+      </p-tabPanel>
+     
+      <div class="row footer">
+        <div class="col">
+          <app-footer></app-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-tabView>
