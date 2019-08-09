@@ -38,7 +38,6 @@ import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineProjectedResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineRequest;
-import com.rgei.kpi.dashboard.response.model.ProcessLineResponse;
 import com.rgei.kpi.dashboard.response.model.ResponseObject;
 import com.rgei.kpi.dashboard.response.model.TargetProceessLine;
 import com.rgei.kpi.dashboard.service.DailyKpiPulpService;

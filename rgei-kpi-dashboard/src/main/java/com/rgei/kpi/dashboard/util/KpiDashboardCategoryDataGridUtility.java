@@ -116,35 +116,35 @@ public class KpiDashboardCategoryDataGridUtility {
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			value = parseNaNValue(Double.valueOf(obj[1].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			value = parseNaNValue(Double.valueOf(obj[2].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			value = parseNaNValue(Double.valueOf(obj[3].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			value = parseNaNValue(Double.valueOf(obj[4].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseNaNValue(Double.valueOf(obj[5].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseNaNValue(Double.valueOf(obj[6].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseNaNValue(Double.valueOf(obj[7].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			value = parseNaNValue(Double.valueOf(obj[8].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		default:
 		}
@@ -155,35 +155,35 @@ public class KpiDashboardCategoryDataGridUtility {
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			value = parseProcessLineNullValue(obj[1]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			value = parseProcessLineNullValue(obj[2]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			value = parseProcessLineNullValue(obj[3]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			value = parseProcessLineNullValue(obj[4]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseProcessLineNullValue(obj[5]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseProcessLineNullValue(obj[6]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseProcessLineNullValue(obj[7]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			value = parseProcessLineNullValue(obj[8]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		default:
 		}
