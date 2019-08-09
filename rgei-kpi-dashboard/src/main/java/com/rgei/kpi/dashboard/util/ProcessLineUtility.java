@@ -28,8 +28,10 @@ import java.util.Map;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
+import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
+import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
@@ -242,5 +244,22 @@ public class ProcessLineUtility {
 			}
 		}
 		return responses;
+	}
+
+	public static List<MillsResponse> prePareMillResponse(List<MillEntity> mills) {
+		
+		MillsResponse millObject = null;
+		List<MillsResponse> response = null;
+		if(mills != null && !mills.isEmpty()) {
+			response = new ArrayList<>();
+			for(MillEntity millEntity:mills) {
+				millObject = new MillsResponse();
+				millObject.setMillId(millEntity.getMillId());
+				millObject.setMillCode(millEntity.getMillCode());
+				millObject.setMillName(millEntity.getMillName());
+				response.add(millObject);
+			}
+		}
+		return response;
 	}
 }
