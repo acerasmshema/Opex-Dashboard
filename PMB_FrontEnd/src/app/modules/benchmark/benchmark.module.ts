@@ -5,10 +5,10 @@ import { BenchmarkRoutingModule } from './benchmark-routing.module';
 import { CoreModule } from '../core/core.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxSelectModule } from 'ngx-select-ex';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { PrimeNgModule } from '../shared/primeng-modules';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [BenchmarkComponent],
@@ -22,6 +22,7 @@ import { PrimeNgModule } from '../shared/primeng-modules';
     PrimeNgModule,
     CommonModule,
     CoreModule,
+    GoogleChartsModule.forRoot(), 
   ]
 })
 export class BenchmarkModule { }

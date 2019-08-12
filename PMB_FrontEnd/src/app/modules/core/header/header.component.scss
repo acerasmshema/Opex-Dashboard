@@ -1,3 +1,11 @@
+.topbar {
+  position: fixed;
+  width: 100%;
+  z-index: 50;
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
 .navbarlogo {
     margin-top:-3%;
     margin-bottom:-3%;
@@ -56,4 +64,27 @@
   margin-top: 1px;
 padding-right: 0px;
 padding-left: 0px;  
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  border-radius: 30%;
+  
+  margin-left:5px;
+  margin-top: 4px;
+  float: left;
+}
+
+.labelClass{
+  font-weight: bold;
+  margin:8px;
+  float: left;
+}
+
+.color_legend{
+  padding-top:3px;
+  height:35px;
+  background: white;
+  border:1px solid lightgrey;
 }

@@ -13,8 +13,8 @@ import { Subscription } from 'rxjs';
 export class LayoutComponent implements OnInit, OnDestroy {
   user: any;
   showSidebar: boolean;
-  sidebarWidth: string = "0";
-  mainWidth: string = "100%";
+  sidebarClass: string = "left1";
+  mainClass: string = "main1";
   sidebarSizeSubscription: Subscription;
 
   constructor(private localStorageService: LocalStorageService,
@@ -28,9 +28,20 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.router.navigate([], { relativeTo: this.route });
     }
     this.sidebarSizeSubscription = this.statusService.sidebarSizeSubject.
-      subscribe((data: any) => {
-        this.sidebarWidth = data["sidebarWidth"];
-        this.mainWidth = data["mainWidth"];
+      subscribe((className: string) => {
+        if (className === 'hide') {
+          this.mainClass = "main1";
+          this.sidebarClass = "left1";
+        }
+        else if (className === 'collapse') {
+          this.mainClass = "main2";
+          this.sidebarClass = "left2";
+        }
+        else if (className === 'show') {
+          this.mainClass = "main3";
+          this.sidebarClass = "left3";
+        }
+
       });
   }
 

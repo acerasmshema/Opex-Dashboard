@@ -1,152 +1,133 @@
-<div class="dashboard">
-  <div class="row">
+<div style="background: #edf1f5;">
+  <div class="row m-t-5">
     <div class="col-md-12">
-      <div *ngIf="consumptionTable.length > 0" class="table-header">
-        <div class="row" style="height: auto;width:100%;margin: 0px">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-xl-12" style="text-align: center;">
-            <h4 style="font-weight: bold">{{header}}</h4>
+      <div class="card">
+        <div *ngIf="consumptionTable.length > 0" class="card-body">
+          <div class="row text-center">
+            <div class="col-md-12">
+              <h4>{{header}}</h4>
+            </div>
           </div>
-        </div>
-        <div class="row" style="height: auto;width:100%;margin: 0px">
-          <div *ngFor="let ct of consumptionTable" class="col-md-4"
-            style="border:1px solid lightgrey;border-radius: 10px;">
-            <div class="row" style="height: auto;text-align: center;margin: 0px">
-              <div class="col-md-12" style="text-align: center;padding-top:5px">
-                <h5 style="font-weight: bold;text-align: center">{{ct.kpiName}} {{ct.unit}}</h5>
+          <div class="row">
+            <div *ngFor="let ct of consumptionTable" class="col-md-4 border-grey">
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <h5>{{ct.kpiName}} {{ct.unit}}</h5>
+                </div>
               </div>
-            </div>
-            <div class="row" style="height: auto;width:100%;margin: 0px 0px 2% 0px">
-              <div *ngFor="let processLine of ct.series | orderBy:'name'" [style.width.%]="100/ct.series.length"
-                class="chemicalcell">
-                <h6 style="font-weight: bold;text-align: center;margin-top: 2px;">
-                  {{processLine.name}}</h6>
-                <h6 [style.color]="processLine.color" style="text-align: center;margin-top: -8px;">
-                  {{processLine.value}}</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div *ngFor="let ccm of consumptions; let i = index; let even = even">
-    <div *ngIf="even" class="row">
-      <div *ngIf="ccm !== undefined" class="col-md-6">
-        <div class="chart-type-container">
-          <div class="row c2">
-            <div class="col-md-12" style="text-align: center;padding-top:5px">
-              <h4 style="font-weight: bold;text-align: center">{{ccm.kpiName}}</h4>
-            </div>
-          </div>
-          <div class="row" style="height: 30px;width:100%;margin: 0px">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-5  chart-type-main">
-              <div class="row chart-type">
-                <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartType($event, ccm.kpiId)" [(ngModel)]="ccm.checked">
-                </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-                <label style="float: right;margin-top: 2px;"><i (click)="showGridDialog(ccm.kpiId, ccm.kpiName)"
-                    class="fa fa-download fa-2x" aria-hidden="true"></i></label>
-              </div>
-            </div>
-          </div>
-          <div Class="row" style="width:95%;margin: 0px">
-            <div class="col-md-12" *ngIf="ccm.chartType === 'stack'" style="height:250px;display: grid;">
-              <ngx-charts-bar-vertical-stacked [scheme]="ccm.colorScheme" [results]="ccm.data" [xAxis]="ccm.xAxis"
-                [yAxis]="ccm.yAxis" [view]="ccm.view" [legend]="ccm.legend" [showXAxisLabel]="ccm.showXAxisLabel"
-                [showYAxisLabel]="ccm.showYAxisLabel" [barPadding]="ccm.barPadding" [showDataLabel]="ccm.showDataLabel"
-                [xAxisLabel]="ccm.xAxisLabel" [yAxisLabel]="ccm.yAxisLabel">
-              </ngx-charts-bar-vertical-stacked>
-            </div>
-            <div class="col-md-12" *ngIf="ccm.chartType === 'bar'" style="height:250px;display: grid;">
-              <ngx-charts-bar-vertical-2d [scheme]="ccm.colorScheme" [results]="ccm.data" [xAxis]="ccm.xAxis"
-                [yAxis]="ccm.yAxis" [view]="ccm.view" [legend]="ccm.legend" [showXAxisLabel]="ccm.showXAxisLabel"
-                [showYAxisLabel]="ccm.showYAxisLabel" [barPadding]="ccm.barPadding" [showDataLabel]="ccm.showDataLabel"
-                [xAxisLabel]="ccm.xAxisLabel" [yAxisLabel]="ccm.yAxisLabel" [groupPadding]="ccm.groupPadding">
-              </ngx-charts-bar-vertical-2d>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="consumptions[i +1] !== undefined" class="col-md-6">
-        <div class="chart-type-container">
-          <div class="row c2">
-            <div class="col-md-12" style="text-align: center;padding-top:5px">
-              <h4 style="font-weight: bold;text-align: center">{{consumptions[i +1].kpiName}}</h4>
-            </div>
-          </div>
-          <div class="row" style="height: 30px;width:100%;margin: 0px">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-5  chart-type-main">
-              <div class="row chart-type">
-                <H6 style="margin-top:3px">Bar</H6>&nbsp;<p-inputSwitch [style]="{width: '35px', height: '20px'}"
-                  (onChange)="changeChartType($event, consumptions[i +1].kpiId)"
-                  [(ngModel)]="consumptions[i +1].checked">
-                </p-inputSwitch> &nbsp;<H6 style="margin-top:3px">Stack</H6>&nbsp;&nbsp;&nbsp;
-                <label style="float: right;margin-top: 2px;"><i
-                    (click)="showGridDialog(consumptions[i +1].kpiId, consumptions[i +1].kpiName)"
-                    class="fa fa-download fa-2x" aria-hidden="true"></i></label>
-              </div>
-            </div>
-          </div>
-          <div Class="row" style="width:95%;margin: 0px">
-            <div class="col-md-12" *ngIf="consumptions[i +1].chartType === 'stack'" style="height:250px;display: grid;">
-              <ngx-charts-bar-vertical-stacked [scheme]="consumptions[i +1].colorScheme"
-                [results]="consumptions[i +1].data" [xAxis]="consumptions[i +1].xAxis"
-                [yAxis]="consumptions[i +1].yAxis" [view]="consumptions[i +1].view" [legend]="consumptions[i +1].legend"
-                [showXAxisLabel]="consumptions[i +1].showXAxisLabel"
-                [showYAxisLabel]="consumptions[i +1].showYAxisLabel" [barPadding]="consumptions[i +1].barPadding"
-                [showDataLabel]="consumptions[i +1].showDataLabel" [xAxisLabel]="consumptions[i +1].xAxisLabel"
-                [yAxisLabel]="consumptions[i +1].yAxisLabel">
-              </ngx-charts-bar-vertical-stacked>
-            </div>
-            <div class="col-md-12" *ngIf="consumptions[i +1].chartType === 'bar'" style="height:250px;display: grid;">
-              <ngx-charts-bar-vertical-2d [scheme]="consumptions[i +1].colorScheme" [results]="consumptions[i +1].data"
-                [xAxis]="consumptions[i +1].xAxis" [yAxis]="consumptions[i +1].yAxis" [view]="consumptions[i +1].view"
-                [legend]="consumptions[i +1].legend" [showXAxisLabel]="consumptions[i +1].showXAxisLabel"
-                [showYAxisLabel]="consumptions[i +1].showYAxisLabel" [barPadding]="consumptions[i +1].barPadding"
-                [showDataLabel]="consumptions[i +1].showDataLabel" [xAxisLabel]="consumptions[i +1].xAxisLabel"
-                [yAxisLabel]="consumptions[i +1].yAxisLabel" [groupPadding]="consumptions[i +1].groupPadding">
-              </ngx-charts-bar-vertical-2d>
+              <div class="row m-t-5">
+                 <div *ngFor="let processLine of ct.series | orderBy:'name'" [style.width.%]="100/ct.series.length"
+                    class="chemicalcell text-center">
+                    <h6> {{processLine.name}}</h6>
+                    <h6 [style.color]="processLine.color">{{processLine.value}}</h6>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<p-dialog header={{title}} [(visible)]="GridDialog" [style]="{width: '700px', height: '500px'}">
-  <p-table #dt [columns]="cols" [value]="productonLines" [paginator]="true" [rows]="10" [scrollable]="true"
-    scrollHeight="450px">
-    <ng-template pTemplate="caption">
-      <div class="ui-helper-clearfix">
-        <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data" (click)="dt.exportCSV()"
-          style="float:right"></button>
+  <div class="row" *ngIf="consumptionsMap !== undefined">
+    <div class="col-md-12" *ngFor="let cMap of consumptionsMap | keyvalue">
+      <div [hidden]="cMap.key !== kpiCategoryId">
+        <div *ngFor="let ccm of cMap.value; let i = index; let even = even">
+          <div *ngIf="even" class="row m-t-5">
+            <div *ngIf="ccm !== undefined" class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row border-bottom-grey">
+                    <div class="col-md-12 text-center">
+                      <h4>{{ccm.kpiName}}</h4>
+                    </div>
+                  </div>
+                  <div class="row m-t-5">
+                    <div class="col-md-12 text-right">
+                      <h6>Bar
+                        <p-inputSwitch (onChange)="changeChartType($event, ccm.kpiId)" [(ngModel)]="ccm.checked">
+                        </p-inputSwitch>
+                        Stack
+                        <span class="m-l-5" (click)="showGridDialog(ccm.kpiId, ccm.kpiName)">
+                          <i class="fa fa-download fa-2x"></i>
+                        </span>
+                      </h6>
+                    </div>
+                  </div>
+                  <div class="row m-t-5">
+                    <div class="col-md-12 p-0">
+                      <div *ngIf="ccm.chartType === 'stack'" style="height:270px;">
+                        <ngx-charts-bar-vertical-stacked [scheme]="ccm.colorScheme" [results]="ccm.data"
+                          [xAxis]="ccm.xAxis" [yAxis]="ccm.yAxis" [legend]="ccm.legend"
+                          [showXAxisLabel]="ccm.showXAxisLabel" [showYAxisLabel]="ccm.showYAxisLabel"
+                          [barPadding]="ccm.barPadding" [showDataLabel]="ccm.showDataLabel"
+                          [xAxisLabel]="ccm.xAxisLabel" [yAxisLabel]="ccm.yAxisLabel">
+                        </ngx-charts-bar-vertical-stacked>
+                      </div>
+                      <div *ngIf="ccm.chartType === 'bar'" style="height:270px;">
+                        <ngx-charts-bar-vertical-2d [scheme]="ccm.colorScheme" [results]="ccm.data" [xAxis]="ccm.xAxis"
+                          [yAxis]="ccm.yAxis" [legend]="ccm.legend" [showXAxisLabel]="ccm.showXAxisLabel"
+                          [showYAxisLabel]="ccm.showYAxisLabel" [barPadding]="ccm.barPadding"
+                          [showDataLabel]="ccm.showDataLabel" [xAxisLabel]="ccm.xAxisLabel"
+                          [yAxisLabel]="ccm.yAxisLabel" [groupPadding]="ccm.groupPadding">
+                        </ngx-charts-bar-vertical-2d>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="cMap.value[i +1] !== undefined" class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row border-bottom-grey">
+                    <div class="col-md-12 text-center">
+                      <h4>{{cMap.value[i +1].kpiName}}</h4>
+                    </div>
+                  </div>
+                  <div class="row m-t-5">
+                    <div class="col-md-12 text-right">
+                      <h6>Bar
+                        <p-inputSwitch (onChange)="changeChartType($event, cMap.value[i +1].kpiId)"
+                          [(ngModel)]="cMap.value[i +1].checked">
+                        </p-inputSwitch>
+                        Stack
+                        <span class="m-l-5" (click)="showGridDialog(cMap.value[i +1].kpiId, cMap.value[i +1].kpiName)">
+                          <i class="fa fa-download fa-2x"></i>
+                        </span>
+                      </h6>
+                    </div>
+                  </div>
+                  <div class="row m-t-5">
+                    <div class="col-md-12 p-0">
+                      <div *ngIf="cMap.value[i +1].chartType === 'stack'" style="height:270px;">
+                        <ngx-charts-bar-vertical-stacked [scheme]="cMap.value[i +1].colorScheme"
+                          [results]="cMap.value[i +1].data" [xAxis]="cMap.value[i +1].xAxis"
+                          [yAxis]="cMap.value[i +1].yAxis" [legend]="cMap.value[i +1].legend"
+                          [showXAxisLabel]="cMap.value[i +1].showXAxisLabel"
+                          [showYAxisLabel]="cMap.value[i +1].showYAxisLabel" [barPadding]="cMap.value[i +1].barPadding"
+                          [showDataLabel]="cMap.value[i +1].showDataLabel" [xAxisLabel]="cMap.value[i +1].xAxisLabel"
+                          [yAxisLabel]="cMap.value[i +1].yAxisLabel">
+                        </ngx-charts-bar-vertical-stacked>
+                      </div>
+                      <div *ngIf="cMap.value[i +1].chartType === 'bar'" style="height:270px;">
+                        <ngx-charts-bar-vertical-2d [scheme]="cMap.value[i +1].colorScheme"
+                          [results]="cMap.value[i +1].data" [xAxis]="cMap.value[i +1].xAxis"
+                          [yAxis]="cMap.value[i +1].yAxis" [legend]="cMap.value[i +1].legend"
+                          [showXAxisLabel]="cMap.value[i +1].showXAxisLabel"
+                          [showYAxisLabel]="cMap.value[i +1].showYAxisLabel" [barPadding]="cMap.value[i +1].barPadding"
+                          [showDataLabel]="cMap.value[i +1].showDataLabel" [xAxisLabel]="cMap.value[i +1].xAxisLabel"
+                          [yAxisLabel]="cMap.value[i +1].yAxisLabel" [groupPadding]="cMap.value[i +1].groupPadding">
+                        </ngx-charts-bar-vertical-2d>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th *ngFor="let col of columns">
-          {{col.header}}
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-      <tr>
-        <td *ngFor="let col of columns" [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'">
-          {{rowData[col.field]}}
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</p-dialog>
+    </div>
+  </div>
 
-<p-toast [style]="{marginTop: '250px'}" position="top-center"></p-toast>
+  <p-toast [style]="{marginTop: '250px'}" position="top-center"></p-toast>

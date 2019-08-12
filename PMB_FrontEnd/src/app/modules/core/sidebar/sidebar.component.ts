@@ -48,9 +48,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
             this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
         }
 
-        let sidebarSize = (sidebarRequestData.isShow) ? { "sidebarWidth": "4%", "mainWidth": "96%" } : { "sidebarWidth": "0%", "mainWidth": "100%" }
+        let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
         this.statusService.sidebarSizeSubject.next(sidebarSize);
-        this.showSidebar = sidebarRequestData.isShow; 
+        this.showSidebar = sidebarRequestData.isShow;
       });
 
     this.router.events.subscribe(val => {
@@ -72,11 +72,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleCollapsed() {
     this.sidebarForm.collapsed = !this.sidebarForm.collapsed;
-    if (!this.sidebarForm.collapsed)
-      this.statusService.sidebarSizeSubject.next({ "sidebarWidth": "15%", "mainWidth": "85%" });
-    else
-      this.statusService.sidebarSizeSubject.next({ "sidebarWidth": "4%", "mainWidth": "96%" });
-
+    let sidebarSize = (!this.sidebarForm.collapsed) ? "show" : "collapse"
+    this.statusService.sidebarSizeSubject.next(sidebarSize);
     this.sidebarForm.hide = !this.sidebarForm.hide;
   }
 
@@ -98,7 +95,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
       this.searchKpiData.type = type;
       this.statusService.kpiSubject.next(this.searchKpiData);
-      this.toggleCollapsed();
     }
   }
 

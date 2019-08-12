@@ -1,17 +1,22 @@
-<div class="container-fluid">
-    <div class="row header">
-        <div class="col">
+<div class="main-wrapper">
+    <div class="row">
+        <div class="col-md-12">
             <app-header></app-header>
         </div>
     </div>
-    <div class="row center">
+    <div class="row">
         <div class="col-md-12">
-            <div [style.width]="sidebarWidth">
+            <div [class]="sidebarClass">
                 <app-sidebar></app-sidebar>
             </div>
-            <div [style.width]="mainWidth" style="float: right;">
+            <div [class]="mainClass">
                 <router-outlet></router-outlet>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+          <app-footer></app-footer>
+        </div>
+      </div>
 </div>

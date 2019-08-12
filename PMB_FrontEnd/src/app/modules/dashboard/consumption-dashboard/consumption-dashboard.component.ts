@@ -20,31 +20,32 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
   @Input() kpiCategoryId: string;
 
-  GridDialog: boolean = false;
-  cities2: any[] = [];
-  productonLines: any[] = [];
-  title: string = "";
-  cols: any[];
-  virtualCols: any[];
-  consumptions: ConsumptionModel[] = [];
-  header: string;
-  kpiSubjectSubsciption: Subscription;
-  consumptionTable: ConsumptionTable[] = [];
+
+  public consumptionsMap: Map<string, ConsumptionModel[]>;
+  public header: string;
+  public consumptionTable: ConsumptionTable[] = [];
+  kpiSubjectSubscription: Subscription;
+  kpiCategorySubscription: Subscription;
 
   constructor(private localStorageService: LocalStorageService,
     private consumptionService: ConsumptionService,
     private messageService: MessageService,
     private statusService: StatusService,
     private datePipe: DatePipe) {
+    this.consumptionsMap = new Map<string, ConsumptionModel[]>();
   }
 
   ngOnInit() {
     this.getConsumptionTable();
-    this.kpiSubjectSubsciption = this.statusService.kpiSubject.
+    this.kpiSubjectSubscription = this.statusService.kpiSubject.
       subscribe((searchKpiData: SearchKpiData) => {
         if (searchKpiData.type === 'dashboard') {
           this.filterCharts(searchKpiData);
         }
+      });
+    this.kpiCategorySubscription = this.statusService.kpiCategoryUpdate.
+      subscribe((kpiCategoryId: string) => {
+        this.kpiCategoryId = kpiCategoryId;
       });
   }
 
@@ -59,12 +60,14 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
         this.consumptionTable = [];
         this.consumptionTable = consumptionsTable;
 
+        let consumptions = [];
         consumptionsTable.forEach(kpi => {
           let consumptionModel = this.consumptionService.createChart(kpi.kpiId, kpi.kpiName + "  " + kpi.unit);
-          this.consumptions.push(consumptionModel);
+          consumptions.push(consumptionModel);
           this.showKpiCharts(consumptionModel.kpiId, consumptionModel.kpiName);
         });
-        this.header = this.consumptionService.getHeader(this.kpiCategoryId);
+        this.consumptionsMap.set(this.kpiCategoryId, consumptions);
+        this.header = this.consumptionService.getHeader("" + this.kpiCategoryId);
       });
   }
 
@@ -72,44 +75,17 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
     searchKpiData.endDate = this.datePipe.transform(searchKpiData.date[1], 'yyyy-MM-dd');
 
-    this.consumptions = [];
+    this.consumptionsMap.delete(this.kpiCategoryId);
+    let consumptions = [];
     searchKpiData.kpiTypes.forEach(kpiType => {
       kpiType.kpiList.forEach(kpi => {
-        let consumptionModel = this.consumptionService.createChart(kpi.kpiId, kpi.kpiName + "  "+ kpi.unit);
-        this.consumptions.push(consumptionModel);
+        let consumptionModel = this.consumptionService.createChart(kpi.kpiId, kpi.kpiName + "  " + kpi.unit);
+        consumptions.push(consumptionModel);
         searchKpiData.kpiId = kpi.kpiId;
         this.updateChart(searchKpiData);
       });
     });
-  }
-
-  public showGridDialog(kpiId: number, title: string) {
-    this.productonLines = [];
-    this.title = title;
-    let consumptionRequest = new ConsumptionRequest();
-    consumptionRequest.kpiId = kpiId;
-
-    this.consumptionService.getKpiGridData(consumptionRequest).
-      subscribe((data: any) => {
-        this.cols = [];
-        for (const k in data[0][0]) {
-          this.cols.push(this.virtualCols[k]);
-        }
-        this.cols.sort(function (a, b) {
-          const nameA = a.header.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.header.toUpperCase(); // ignore upper and lowercase
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        });
-
-        this.productonLines = data[0];
-      });
-    this.GridDialog = !this.GridDialog;
+    this.consumptionsMap.set(this.kpiCategoryId, consumptions);
   }
 
   public showMessage(severity: string, summary: string, detail: string) {
@@ -117,7 +93,8 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public changeChartType(event: any, kpiId: number) {
-    let consumtionModel = this.consumptions.find((ccm) => ccm.kpiId === kpiId);
+    const consumptions = this.consumptionsMap.get(this.kpiCategoryId);
+    let consumtionModel = consumptions.find((ccm) => ccm.kpiId === kpiId);
     if (event.checked) {
       consumtionModel.chartType = "stack";
       consumtionModel.groupPadding = 2;
@@ -157,7 +134,8 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
     this.consumptionService.getDataforKpi(consumptionRequest).
       subscribe((data: any) => {
-        let consumption = this.consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
+        const consumptions = this.consumptionsMap.get(this.kpiCategoryId);
+        let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
         if (consumption !== undefined) {
           consumption.data = data;
         }
@@ -165,6 +143,7 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.kpiSubjectSubsciption.unsubscribe();
+    this.kpiSubjectSubscription.unsubscribe();
+    this.kpiCategorySubscription.unsubscribe();
   }
 }

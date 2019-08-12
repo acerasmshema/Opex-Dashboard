@@ -1,64 +1,77 @@
-<div class="container-fluid">
-  <div class="navbar navbar-expand-lg navbar-light navbar-fixed-top" style="background-color: #32475a"
-    role="navigation">
-    <a class="navbar-brand" href="#">
-      <img src="/assets/img/rge1.png" class="navbarlogo" alt="Avatar">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item ">
-          <a routerLink='/home/dashboard' class="nav-link" style="color:white;">
-            <i class="fa fa-home"></i><span class="header-size">
-              {{ 'Home' | translate }}</span></a>
-        </li>
-        <li class="nav-item ">
-          <a routerLink='/home/benchmark' class="nav-link" style="color:white;"><i class="fa fa-dot-circle-o"></i><span
-              class="header-size">
-              {{ 'Benchmark' | translate }}</span></a>
-        </li>
-        <li class="nav-item ">
-          <a class="nav-link" style="color:white;"><i class="fa fa-users"></i><span class="header-size">
-              {{ 'User Management' | translate }}</span></a>
-        </li>
-        <li class="nav-item ">
-          <a class="nav-link" style="color:white;"><i class="fa fa-empire"></i><span class="header-size">
-              {{ 'Setup' | translate }}</span></a>
-        </li>
-      </ul>
-      <div class="pull-right">
-        <ul class="nav pull-right">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Mill' | translate }}</a>
-            <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-              <li><a class="dropdown-item">Kerinci</a></li>
-              <li><a class="dropdown-item">Rizhao</a></li>
+<header class="topbar">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="navbar navbar-expand-lg navbar-light navbar-fixed-top" style="background-color: #32475a"
+        role="navigation">
+        <a class="navbar-brand" href="#">
+          <img src="/assets/img/rge1.png" class="navbarlogo" alt="Avatar">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+              <a routerLink='/home/dashboard' class="nav-link" style="color:white;">
+                <i class="fa fa-home"></i><span class="header-size">
+                  {{ 'Home' | translate }}</span></a>
+            </li>
+            <li class="nav-item ">
+              <a routerLink='/home/benchmark' class="nav-link" style="color:white;"><i
+                  class="fa fa-dot-circle-o"></i><span class="header-size">
+                  {{ 'Benchmark' | translate }}</span></a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" style="color:white;"><i class="fa fa-users"></i><span class="header-size">
+                  {{ 'User Management' | translate }}</span></a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" style="color:white;"><i class="fa fa-empire"></i><span class="header-size">
+                  {{ 'Setup' | translate }}</span></a>
+            </li>
+          </ul>
+          <div class="pull-right">
+            <ul class="nav pull-right">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Mill' | translate }}</a>
+                <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
+                  <li><a class="dropdown-item">Kerinci</a></li>
+                  <li><a class="dropdown-item">Rizhao</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Language' | translate }}</a>
+                <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
+                  <li><a (click)="setLang('en')" class="dropdown-item">English</a></li>
+                  <li><a (click)="setLang('ch')" class="dropdown-item">简体中文</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                  style="color:white;font-size: 11pt;"> {{ user }} <b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
+                  <li><a class="dropdown-item"> {{ 'Preferences' | translate }}</a></li>
+                  <li><a class="dropdown-item"> {{ 'Contact Support' | translate }}</a></li>
+                  <li class="divider"></li>
+                  <li (click)="logOut()"><a class="dropdown-item"> {{ 'Logout' | translate }}</a></li>
+                </ul>
+              </li>
             </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Language' | translate }}</a>
-            <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-              <li><a (click)="setLang('en')" class="dropdown-item">English</a></li>
-              <li><a (click)="setLang('ch')" class="dropdown-item">简体中文</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-              style="color:white;font-size: 11pt;"> {{ user }} <b class="caret"></b></a>
-            <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-              <li><a class="dropdown-item"> {{ 'Preferences' | translate }}</a></li>
-              <li><a class="dropdown-item"> {{ 'Contact Support' | translate }}</a></li>
-              <li class="divider"></li>
-              <li (click)="logOut()"><a class="dropdown-item"> {{ 'Logout' | translate }}</a></li>
-            </ul>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <div class="row color_legend">
+    <div class="col-md-5"></div>
+    <div class="col-md-7">
+      <div *ngFor="let legend of processUnitLegends">
+        <div class="dot" [style.backgroundColor]="legend.legendColor"></div>
+        <div class="labelClass">{{legend.processLineCode}}</div>
+      </div>
+    </div>
+  </div>
+</header>

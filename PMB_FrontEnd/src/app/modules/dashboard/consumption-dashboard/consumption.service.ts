@@ -49,7 +49,6 @@ export class ConsumptionService {
     let ccm = new ConsumptionModel();
     ccm.kpiName = kpiName;
     ccm.kpiId = kpiId;
-    ccm.view = [587, 250];
     ccm.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
     ccm.xAxis = true;
     ccm.yAxis = true;

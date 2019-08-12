@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="mainContainer">
         <div *ngFor="let ccm of consumptions" class="card benchmark-border" style="margin: 15px;">
             <div class="card-title" style="margin-top: 10px">
@@ -24,20 +24,11 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <ngx-charts-bar-vertical-2d [scheme]="ccm.colorScheme" [results]="ccm.data" [xAxis]="ccm.xAxis"
-                            [yAxis]="ccm.yAxis" [view]="ccm.view" [legend]="ccm.legend"
-                            [showXAxisLabel]="ccm.showXAxisLabel" [showYAxisLabel]="ccm.showYAxisLabel"
-                            [barPadding]="ccm.barPadding" [groupPadding]="ccm.groupPadding"
-                            [showDataLabel]="ccm.showDataLabel" [xAxisLabel]="ccm.xAxisLabel"
-                            [yAxisLabel]="ccm.yAxisLabel">
-                        </ngx-charts-bar-vertical-2d>
+                        <google-chart #chart [type]="type" [data]="ccm.data" [columnNames]="columnNames"
+                            [options]="options" [width]="width" [height]="height">
+                        </google-chart>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row footer">
-            <div class="col">
-                <app-footer></app-footer>
             </div>
         </div>
     </div>

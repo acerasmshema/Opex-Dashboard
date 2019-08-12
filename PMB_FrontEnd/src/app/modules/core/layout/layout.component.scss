@@ -1,4 +1,7 @@
-
+.main-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+}
 
 .container-fluid {
     padding-left:0px;
@@ -7,7 +10,36 @@
     }
 
 .footer {
-        background-color: lightgray;
-      }
+    background-color: lightgray;
+ }
+
+
+.left1 {
+    width: 0%    
+} 
+
+.main1 {
+    margin-left: 0%;
+    width: 100%;
+}
+
+.left2 {
+    width: 4%    
+} 
+
+.main2 {
+    margin-left: 4%;
+    width: 96%;
+}
+
+.left3 {
+    width: 7%;    
+} 
+
+.main3 {
+    margin-left: 15%;
+    width: 85%;
+}
+  
 
       

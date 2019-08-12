@@ -29,7 +29,6 @@ export class ProductionDashboardComponent implements OnInit {
   prodLineChart: ProductionLine;
   producionLineForm: ProducionLineForm;
   productionEnquiryData: ProductionEnquiry;
-  productionRequest: ProductionRequest;
   productionLineView: ProductionLineView;
   startDate: string = '';
   endDate: string = '';
@@ -39,16 +38,11 @@ export class ProductionDashboardComponent implements OnInit {
     private productionService: ProductionService,
     private datePipe: DatePipe) {
     this.productionEnquiryData = new ProductionEnquiry();
-    this.productionRequest = new ProductionRequest;
     this.productionLineView = new ProductionLineView();
     this.annualChart = new ProductionBar();
   }
 
   ngOnInit() {
-    this.productionRequest.startDate = this.startDate;
-    this.productionRequest.endDate = this.endDate;
-    this.productionRequest.processLines = [];
-
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
     this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
@@ -59,14 +53,15 @@ export class ProductionDashboardComponent implements OnInit {
       this.productionEnquiryData.selectedValue = this.producionLineForm.frequencies.find(frequency => frequency.name === 'Monthly');
     }
     this.productionEnquiryData.lineChartDate.push(this.startDate, this.endDate);
+    const frequency = this.productionEnquiryData.selectedValue['code'];
 
     this.getProductionYTDData();
     this.getProjectedTarget();
     this.getProductionYDayData();
     this.getAnnualTarget();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
-    this.getAllProductionLinesYDayData();
-    this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, true);
+    this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
+    this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, true, [], frequency);
   }
 
   setProductionLineForm() {
@@ -141,8 +136,6 @@ export class ProductionDashboardComponent implements OnInit {
 
   public getMonthlyChartData(startDate: string, endDate: string, chartType: string) {
     this.monthlyChart = new ProductionBar();
-    this.productionRequest.startDate = startDate;
-    this.productionRequest.endDate = endDate;
     this.monthlyChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A'] };
     this.monthlyChart.xAxis = true;
     this.monthlyChart.yAxis = true;
@@ -152,18 +145,24 @@ export class ProductionDashboardComponent implements OnInit {
     this.monthlyChart.barPadding = 2;
     this.monthlyChart.chartType = chartType;
 
-    this.productionService.getStackBarChartData(this.productionRequest).
+    let frequency = this.productionEnquiryData.selectedValue['code'];
+    let productionRequest = this.getProductionRequest(startDate, endDate, [], frequency);
+
+    this.productionService.getStackBarChartData(productionRequest).
       subscribe((data: any) => {
         this.monthlyChart.stackBar = data;
       });
-    this.productionService.getStackAreaChartData(this.productionRequest).
+    this.productionService.getStackAreaChartData(productionRequest).
       subscribe((data: any) => {
         this.monthlyChart.stackArea = data;
       });
   }
 
-  public getAllProductionLinesYDayData() {
-    this.productionService.getAllproductionLinesYDayData(this.productionRequest).
+  public getAllProductionLinesYDayData(startDate: string, endDate: string, processLines: any) {
+    const frequency = this.productionEnquiryData.selectedValue['code'];
+    let productionRequest = this.getProductionRequest(startDate, endDate, [], frequency);
+
+    this.productionService.getAllproductionLinesYDayData(productionRequest).
       subscribe((data: any) => {
         if (data !== "e") {
 
@@ -206,18 +205,15 @@ export class ProductionDashboardComponent implements OnInit {
   }
 
   public getAllProductionLinesDateRangeData(startDate: string, endDate: string) {
-    this.productionRequest.startDate = startDate;
-    this.productionRequest.endDate = endDate;
-    this.productionRequest.frequency = "0";
-
+    let productionRequest = this.getProductionRequest(startDate, endDate, [], "0");
     this.prodLines.forEach(prodLine => {
       prodLine.productionLineData = [];
     });
 
-    this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequest).
+    this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((processLines: any) => {
 
-        this.productionService.getAllProductionLinesDateRangeDataTarget(this.productionRequest).
+        this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
           subscribe((plTargetData: any) => {
             for (let index = 0; index < plTargetData.length; index++) {
               let prodLine = this.prodLines[index]
@@ -232,11 +228,10 @@ export class ProductionDashboardComponent implements OnInit {
       });
   }
 
-  public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, showColumns: boolean) {
-    this.productionRequest.startDate = startDate;
-    this.productionRequest.endDate = endDate;
 
-    this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequest).
+  public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, showColumns: boolean, processLines: any, frequency: any) {
+    let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
+    this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((data: any) => {
         this.producionLineForm.processLines = this.statusService.processLineMap.get("1");
 
@@ -248,7 +243,6 @@ export class ProductionDashboardComponent implements OnInit {
         this.prodLineChart.animations = true;
         this.prodLineChart.legend = false;
         this.prodLineChart.showRefLines = false;
-        this.prodLineChart.xAxis = false;
         this.prodLineChart.showXAxisLabel = false;
         this.prodLineChart.showYAxisLabel = false;
         this.prodLineChart.showDataLabel = false;
@@ -258,7 +252,7 @@ export class ProductionDashboardComponent implements OnInit {
         this.prodLineChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
         this.prodLineChart.productionLineData = data;
       });
-    this.getAllProductionLinesDateForGrid(this.productionRequest, showColumns);
+    this.getAllProductionLinesDateForGrid(productionRequest, showColumns);
   }
 
   public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest, showColumns: boolean) {
@@ -327,7 +321,7 @@ export class ProductionDashboardComponent implements OnInit {
 
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
-      this.productionRequest.frequency = this.productionEnquiryData.selectedValue['code'];
+      let frequency = this.productionEnquiryData.selectedValue['code'];
       this.productionLineView.columnNames.push({ processLineCode: 'DATE', processLineName: 'Date' });
 
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
@@ -339,8 +333,8 @@ export class ProductionDashboardComponent implements OnInit {
       else {
         this.productionLineView.columnNames = this.statusService.processLineMap.get("1");
       }
-      this.productionRequest.processLines = this.productionLineView.productionLines;
-      this.getSelectedProductionLinesDateRangeData(startDate, endDate, false);
+      let processLines = this.productionLineView.productionLines;
+      this.getSelectedProductionLinesDateRangeData(startDate, endDate, false, processLines, frequency);
     }
     else {
       alert("Please select date range");
@@ -349,6 +343,16 @@ export class ProductionDashboardComponent implements OnInit {
 
   xAxisTickFormatting(val: any): string {
     return val.replace("-2019", "");
+  }
+
+  getProductionRequest(startDate: string, endDate: string, processLines: any, frequency: string): ProductionRequest {
+    let productionRequest = new ProductionRequest();
+    productionRequest.startDate = startDate;
+    productionRequest.endDate = endDate;
+    productionRequest.processLines = processLines;
+    productionRequest.frequency = frequency;
+
+    return productionRequest;
   }
 
   displaySettingIcon: boolean = false;
