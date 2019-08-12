@@ -19,6 +19,11 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
+        path: "",
+        redirectTo: "dashboard",
+        pathMatch: "full"
+      },
+      {
         path: "dashboard",
         pathMatch: 'full',
         loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
