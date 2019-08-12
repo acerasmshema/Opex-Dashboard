@@ -46,6 +46,12 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
     this.kpiCategorySubscription = this.statusService.kpiCategoryUpdate.
       subscribe((kpiCategoryId: string) => {
         this.kpiCategoryId = kpiCategoryId;
+        let consumptions = this.consumptionsMap.get(kpiCategoryId);
+        if(consumptions !== undefined) {
+          consumptions.forEach(consumption => {
+            consumption.view = [537, 250];
+          });
+        }
       });
   }
 

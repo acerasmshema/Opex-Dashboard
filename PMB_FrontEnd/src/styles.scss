@@ -74,6 +74,14 @@
  text-align:  right !important;
 }
 
+.input-switch {
+  margin-top: -3px;
+}
+
+.input-switch-div {
+  display: inline-flex;
+}
+
 .p-0 {
   padding: 0px;
 }
@@ -82,6 +90,9 @@
   padding-left: 0px;
 }
 
+ml-auto, .mx-auto {
+  margin-left: auto!important;
+}
 .m-l-5 {
   margin-left: 5px;
 }
@@ -90,8 +101,16 @@
   margin-left: 20px;
 }
 
+.m-r-5 {
+  margin-right: 5px;
+}
+
 .m-t-5 {
   margin-top: 5px;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
 }
 
 .m-b-10 {

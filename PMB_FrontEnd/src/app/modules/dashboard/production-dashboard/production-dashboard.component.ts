@@ -269,10 +269,10 @@ export class ProductionDashboardComponent implements OnInit {
         if (showColumns) {
           let colNames = [];
 
-          colNames.push({ processLineCode: 'DATE', processLineName: 'Date' });
+          colNames.push({ field: 'DATE', header: 'Date' });
           let columnsNames = this.statusService.processLineMap.get("1");
           columnsNames.forEach(columnName => {
-            colNames.push({ processLineCode: columnName.processLineCode, processLineName: columnName.processLineName })
+            colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
           });
           this.productionLineView.columnNames = colNames;
         }
@@ -326,17 +326,21 @@ export class ProductionDashboardComponent implements OnInit {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
       let frequency = this.productionEnquiryData.selectedValue['code'];
-      this.productionLineView.columnNames.push({ processLineCode: 'DATE', processLineName: 'Date' });
+      this.productionLineView.columnNames.push({ field: 'DATE', header: 'Date' });
 
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
           this.productionLineView.productionLines.push(processLine['processLineCode']);
-          this.productionLineView.columnNames.push(processLine);
+          this.productionLineView.columnNames.push({ header: processLine['processLineCode'], field: processLine['processLineCode']});
         });
       }
       else {
-        this.productionLineView.columnNames.push(...this.statusService.processLineMap.get("1"));
+        let columnsNames = this.statusService.processLineMap.get("1");
+        columnsNames.forEach(columnName => {
+          this.productionLineView.columnNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
+        });
       }
+
       let processLines = this.productionLineView.productionLines;
       this.getSelectedProductionLinesDateRangeData(startDate, endDate, false, processLines, frequency);
     }

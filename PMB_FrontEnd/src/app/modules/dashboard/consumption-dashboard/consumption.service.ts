@@ -48,6 +48,7 @@ export class ConsumptionService {
   createChart(kpiId: number, kpiName: string): ConsumptionModel {
     let ccm = new ConsumptionModel();
     ccm.kpiName = kpiName;
+    ccm.view = [537, 250];
     ccm.kpiId = kpiId;
     ccm.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
     ccm.xAxis = true;
