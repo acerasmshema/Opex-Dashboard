@@ -258,6 +258,7 @@ export class ProductionDashboardComponent implements OnInit {
   public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest, showColumns: boolean) {
     this.productionLineView.rows = 10;
     this.productionLineView.scrollable = true;
+    this.productionLineView.paginator = true;
     this.productionLineView.productionLines = [];
 
     this.productionService.getAllProductionLinesDateForGrid(productionRequest).
@@ -331,7 +332,7 @@ export class ProductionDashboardComponent implements OnInit {
         });
       }
       else {
-        this.productionLineView.columnNames = this.statusService.processLineMap.get("1");
+        this.productionLineView.columnNames.push(...this.statusService.processLineMap.get("1"));
       }
       let processLines = this.productionLineView.productionLines;
       this.getSelectedProductionLinesDateRangeData(startDate, endDate, false, processLines, frequency);

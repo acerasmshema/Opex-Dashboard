@@ -136,17 +136,8 @@
                         [yAxisLabel]="prod.yAxisLabel"> </ngx-charts-line-chart>
                     </div>
                   </div>
-                  <div *ngIf="prod.productionLineData === undefined || prod.productionLineData.length == 0">
-                    <p-progressSpinner [style]="{width: '70px', height: '70px'}" strokeWidth="4" fill="#EEEEEE"
-                      animationDuration=".5s"></p-progressSpinner>
-                  </div>
                 </div>
               </div>
-            </div>
-            <div *ngIf="prodLines.length == 0">
-              <p-progressSpinner [style]="{width: '70px', height: '70px'}" strokeWidth="4" fill="#EEEEEE"
-                animationDuration=".5s">
-              </p-progressSpinner>
             </div>
           </div>
         </div>
@@ -199,11 +190,6 @@
               </ngx-charts-line-chart>
             </div>
           </div>
-          <div *ngIf="prodLineChart === undefined">
-            <p-progressSpinner [style]="{width: '70px', height: '70px'}" strokeWidth="4" fill="#EEEEEE"
-              animationDuration=".5s">
-            </p-progressSpinner>
-          </div>
         </div>
       </div>
     </div>
@@ -215,7 +201,7 @@
           <div *ngIf="productionLineView.productionLines.length > 0" class="row">
             <div class="col-md-12">
               <p-table #dt [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
-                [paginator]="productionLineView.paginator" [scrollable]="productionLineView.scrollable"
+                [rows]="productionLineView.rows" [paginator]="productionLineView.paginator" [scrollable]="productionLineView.scrollable"
                 scrollHeight="200px">
                 <ng-template pTemplate="caption">
                   <div class="ui-helper-clearfix">
