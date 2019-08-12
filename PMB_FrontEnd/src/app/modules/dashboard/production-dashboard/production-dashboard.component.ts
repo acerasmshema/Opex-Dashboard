@@ -12,6 +12,7 @@ import { ProductionLine } from './production-LINE';
 import { ProducionLineForm } from './production-line-form';
 import { ProductionLineView } from './production-line-view';
 import { StatusService } from '../../shared/service/status.service';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-production-dashboard',
@@ -30,6 +31,7 @@ export class ProductionDashboardComponent implements OnInit {
   producionLineForm: ProducionLineForm;
   productionEnquiryData: ProductionEnquiry;
   productionLineView: ProductionLineView;
+  annotationDates: any = [];
   startDate: string = '';
   endDate: string = '';
 
@@ -59,6 +61,7 @@ export class ProductionDashboardComponent implements OnInit {
     this.getProjectedTarget();
     this.getProductionYDayData();
     this.getAnnualTarget();
+    this.getAnnotationDates();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, true, [], frequency);
@@ -361,4 +364,23 @@ export class ProductionDashboardComponent implements OnInit {
     this.displaySettingIcon = !this.displaySettingIcon;
   }
 
+  public xAxisTickFormattingFn = this.dateTickFormatting.bind(this);
+  dateTickFormatting(val: any): string {
+    $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
+    $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
+    var dateTick;
+    if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
+      dateTick = "*" + val;
+    } else {
+      dateTick = val;
+    }
+    return dateTick;
+  }
+
+  public getAnnotationDates() {
+    const data = { millId: '1', buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };
+    this.productionService.getAnnotationDates(data).subscribe((data: any) => {
+      this.annotationDates = data['annotationDates'];
+    });
+  }
 }

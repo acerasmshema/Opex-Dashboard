@@ -179,7 +179,7 @@
             </div>
           </div>
           <div *ngIf="prodLineChart !== undefined" class="row">
-            <div class="col-md-12" style="height: 250px;">
+            <div class="col-md-12 p-0" style="height: 250px;">
               <ngx-charts-line-chart [scheme]="prodLineChart.colorScheme" [results]="prodLineChart.productionLineData"
                 [gradient]="gradient" [xAxis]="prodLineChart.xAxis" [yAxis]="prodLineChart.yAxis" xScaleMin="0"
                 [legend]="prodLineChart.legend" [showXAxisLabel]="prodLineChart.showXAxisLabel"
@@ -200,13 +200,13 @@
         <div class="card-body">
           <div *ngIf="productionLineView.productionLines.length > 0" class="row">
             <div class="col-md-12">
-              <p-table #dt [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
+              <p-table #dtf [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
                 [rows]="productionLineView.rows" [paginator]="productionLineView.paginator" [scrollable]="productionLineView.scrollable"
                 scrollHeight="200px">
                 <ng-template pTemplate="caption">
                   <div class="ui-helper-clearfix">
                     <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
-                      (click)="dt.exportCSV()" style="float:right"></button>
+                      (click)="dtf.exportCSV()" style="float:right"></button>
                   </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
