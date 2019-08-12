@@ -157,7 +157,7 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/v1/date_range/selected_process_lines_grid_data.")
+	@PostMapping(value = "/v1/date_range/selected_process_lines_grid_data")
 	public ResponseEntity<List<List<Map<String,Object>>>> getDataGridProcessLinesForFrequecy(
 			@RequestBody ProcessLineRequest productionRequestDTO) {
 		logger.info("Fetching grid data for selected process lines on production dashboard.", productionRequestDTO);
