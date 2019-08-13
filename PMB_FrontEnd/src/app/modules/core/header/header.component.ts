@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.user = this.localStorageService.fetchUserName();
+    this.processUnitLegends = this.getProcessUnitLegends();
 
     this.routerSubscription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {

@@ -74,7 +74,6 @@ export class ConsumptionService {
         if (consumptions != undefined) {
           let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
           if (consumption !== undefined) {
-            consumption.view = [550, 250];
             consumption.data = data;
           }
         }
@@ -157,7 +156,6 @@ export class ConsumptionService {
         const chartType = consumption.chartType;
         consumption.chartType = "";
         setTimeout(() => {
-          console.log(chartType);
           consumption.chartType = chartType;
         }, 100);
       });
