@@ -27,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
@@ -261,5 +263,21 @@ public class ProcessLineUtility {
 			}
 		}
 		return response;
+	}
+
+	public static List<BuTypeResponse> preareBUTypeResponse(List<BusinessUnitTypeEntity> businessUnitTypeEntityList) {
+		List<BuTypeResponse> buTypeList=new ArrayList<BuTypeResponse>();
+		BuTypeResponse buTypeResponse=null;
+		if(buTypeList!=null) {
+			for(BusinessUnitTypeEntity businessUnitTypeEntity:businessUnitTypeEntityList) {
+				buTypeResponse= new BuTypeResponse();
+				buTypeResponse.setBuTypeId(businessUnitTypeEntity.getBusinessUnitTypeId());
+				buTypeResponse.setBuId(businessUnitTypeEntity.getBusinessUnit().getBusinessUnitId());
+				buTypeResponse.setBuTypeCode(businessUnitTypeEntity.getBusinessUnitTypeCode());
+				buTypeResponse.setBuTypeName(businessUnitTypeEntity.getBusinessUnitTypeName());
+				buTypeList.add(buTypeResponse);
+			}
+		}
+		return buTypeList;
 	}
 }
