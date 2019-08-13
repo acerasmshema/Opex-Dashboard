@@ -20,7 +20,7 @@ export class SidebarService {
         sidebarForm.hide = true;
         sidebarForm.countries = MasterData.country;
         sidebarForm.mills = MasterData.mill;
-        sidebarForm.businessUnits = MasterData.businessUnit;
+        sidebarForm.buisnessUnits = MasterData.businessUnit;
         sidebarForm.processLines = this.statusService.processLineMap.get("1");
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
@@ -35,7 +35,7 @@ export class SidebarService {
         let sidebarForm = new SidebarForm();
         sidebarForm.collapsed = true;
         sidebarForm.hide = true;
-        sidebarForm.businessUnits = MasterData.businessUnit;
+        sidebarForm.buisnessUnits = MasterData.businessUnit;
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
         sidebarForm.kpiCategoryId = sidebarRequestData.kpiCategoryId;

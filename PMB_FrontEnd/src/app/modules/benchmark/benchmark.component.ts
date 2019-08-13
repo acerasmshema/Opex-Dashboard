@@ -52,7 +52,7 @@ export class BenchmarkComponent implements OnInit {
     ccm.showKpiType = true;
     this.consumptions.push(ccm);
   }
-  
+
   columnNames = ['Year',
     'FL1', { role: 'annotation' },
     'FL2', { role: 'annotation' },
@@ -71,20 +71,25 @@ export class BenchmarkComponent implements OnInit {
     legend: { position: 'none' },
     vAxis: {
       title: "BDt/ADt",
-      gridlines: {
-        count: 9,
-      },
+      // gridlines: {
+      //   count: 9,
+      // },
       viewWindow: { max: 4 }
     },
+    hAxis: {
+      textStyle: {
+        fontName: 'Arial',
+        color: 'black',
+        bold: true
+      },
+    },
     width: 1300,
-    height: 300,
+    height: 250,
     annotations: {
       alwaysOutside: true,
       highContrast: false,
       textStyle: {
         fontName: 'Arial',
-        fontSize: 13,
-        bold: true,
         color: 'black',
       },
       stem: {
@@ -99,7 +104,7 @@ export class BenchmarkComponent implements OnInit {
     ['2017', 1.94, 'FL1', 2.924, 'FL2', 1.425, 'FL3', 1.92, 'KRC', 2.44, 'PL11', 1.25, 'PL12', 2.45, 'RZ'],
     ['2018Q1', 1.34, 'FL1', 1.324, 'FL2', 2.95, 'FL3', 1.114, 'KRC', 2.94, 'PL11', 1.25, 'PL12', 2.45, 'RZ'],
     ['2018Q2', 1.24, 'FL1', 2.34, 'FL2', 2.45, 'FL3', 2.94, 'KRC', 2.154, 'PL11', 1.55, 'PL12', 1.75, 'RZ'],
-    ['2018Q3', 2.942, 'FL1', 2.24, 'FL2', 1.15, 'FL3', 1.94, 'KRC', 1.24, 'PL11', 2.45, 'PL12', 1.55, 'RZ', 1.4],
+    ['2018Q3', 2.942, 'FL1', 2.24, 'FL2', 1.15, 'FL3', 1.94, 'KRC', 1.24, 'PL11', 2.45, 'PL12', 1.55, 'RZ'],
   ];
 
   data1 = [

@@ -74,15 +74,7 @@ export class ConsumptionService {
         if (consumptions != undefined) {
           let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
           if (consumption !== undefined) {
-            let width = document.getElementById('' + consumption.kpiId).clientWidth;
-            if (width === 0) {
-              setTimeout(() => {
-                let width = document.getElementById('' + consumption.kpiId).clientWidth;
-                consumption.view = [width, 250];
-              }, 300);
-            } else {
-              consumption.view = [width, 250];
-            }
+            consumption.view = [550, 250];
             consumption.data = data;
           }
         }
@@ -162,17 +154,15 @@ export class ConsumptionService {
     const consumptions = consumptionDetail.consumptions;
     if (consumptions !== undefined) {
       consumptions.forEach(consumption => {
-        let width = document.getElementById('' + consumption.kpiId).clientWidth;
-        if (width === 0) {
-          setTimeout(() => {
-            let width = document.getElementById('' + consumption.kpiId).clientWidth;
-            consumption.view = [width, 250];
-          }, 300);
-        } else {
-          consumption.view = [width, 250];
-        }
+        const chartType = consumption.chartType;
+        consumption.chartType = "";
+        setTimeout(() => {
+          console.log(chartType);
+          consumption.chartType = chartType;
+        }, 100);
       });
     }
   }
+
 
 }

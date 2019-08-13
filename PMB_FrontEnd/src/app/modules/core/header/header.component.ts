@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd, Event } from '@angular/router';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { TranslateService } from '../../shared/service/translate/translate.service';
 import { LoginService } from '../../shared/login/login.service';
@@ -7,6 +7,7 @@ import { AppConstants } from 'src/app/app.constant';
 import { ApiCallService } from '../../shared/service/APIService/ApiCall.service';
 import { SidebarRequest } from '../sidebar/sidebar-request';
 import { StatusService } from '../../shared/service/status.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -14,13 +15,14 @@ import { StatusService } from '../../shared/service/status.service';
   styleUrls: ['./header.component.scss'],
   providers: [LocalStorageService]
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   allProcessLines = AppConstants.apiURLs.ALL_PROCESS_LINES_URL;
 
   user: any;
   loginId: any;
   processUnitLegends: any[] = [];
+  routerSubscription: Subscription;
 
   constructor(private router: Router,
     private apiCallService: ApiCallService,
@@ -31,7 +33,17 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.localStorageService.fetchUserName();
-    this.processUnitLegends = this.getProcessUnitLegends();
+
+    this.routerSubscription = this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        if (event.url === '/home/benchmark') {
+          this.processUnitLegends = this.getProcessBCUnitLegends();
+        }
+        else {
+          this.processUnitLegends = this.getProcessUnitLegends();
+        }
+      }
+    });
   }
   setLang(lang: string) {
     this.translate.use(lang);
@@ -68,4 +80,16 @@ export class HeaderComponent implements OnInit {
     this.router.navigateByUrl('login');
   }
 
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
+  }
+
+  getProcessBCUnitLegends(): any {
+    let processUnitLegends = [
+      { processLineCode: "KRC", legendColor: "#6694d9" },
+      { processLineCode: "RZ", legendColor: "#f0d646" },
+    ];
+
+    return processUnitLegends;
+  }
 }

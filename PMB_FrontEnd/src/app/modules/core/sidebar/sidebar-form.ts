@@ -2,7 +2,7 @@ export class SidebarForm {
     type: string;
     countries: any;
     mills: any;
-    businessUnits: any;
+    buisnessUnits: any;
     processLines: any[];
     kpiTypes: any;
     frequencies: any;
