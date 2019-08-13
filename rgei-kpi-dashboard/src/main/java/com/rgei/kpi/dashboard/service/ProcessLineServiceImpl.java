@@ -61,7 +61,7 @@ public class ProcessLineServiceImpl implements ProcessLineService{
 	}
 
 	@Override
-	public List<BuTypeResponse> GetAllBuType() {
+	public List<BuTypeResponse> getAllBuType() {
 		List<BuTypeResponse> buTypeResponse=null; 
 		try {
 			Optional<List<BusinessUnitTypeEntity>> businessUnitTypeEntity  = Optional.ofNullable(businessUnitTypeRepository.findAll());

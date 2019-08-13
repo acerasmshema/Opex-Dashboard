@@ -182,9 +182,9 @@ public class ProcessLineController {
 	
 	
 	@GetMapping(value = "/v1/location/get_all_bu_type")
-	public ResponseEntity<List<BuTypeResponse>> GetAllBuType(){
+	public ResponseEntity<List<BuTypeResponse>> getAllBuType(){
 		logger.info("Fetching All BU Types");
-		List<BuTypeResponse> response = processLineService.GetAllBuType();
+		List<BuTypeResponse> response = processLineService.getAllBuType();
 		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
 	}
 	

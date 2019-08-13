@@ -12,6 +12,6 @@ public interface ProcessLineService {
 	
 	List<MillsResponse> getMillDetails(List<String> countryIds);
 	
-	List<BuTypeResponse> GetAllBuType();
+	List<BuTypeResponse> getAllBuType();
  
 }
