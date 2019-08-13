@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
@@ -177,6 +178,14 @@ public class ProcessLineController {
 		logger.info("Fetching mills against the requested country ids.", countryIds);
 		List<MillsResponse> response = processLineService.getMillDetails(countryIds);
 		return new ResponseEntity<List<MillsResponse>>(response,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/v1/location/get_all_bu_type")
+	public ResponseEntity<List<BuTypeResponse>> GetAllBuType(){
+		logger.info("Fetching All BU Types");
+		List<BuTypeResponse> response = processLineService.GetAllBuType();
+		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
 	}
 	
 	
