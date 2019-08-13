@@ -18,7 +18,7 @@ import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { GaugeChartModule } from 'angular-gauge-chart';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { StorageServiceModule } from 'ngx-webstorage-service';
 import { ApiCallService } from './modules/shared/service/APIService/ApiCall.service';
 import { TranslateService } from './modules/shared/service/translate/translate.service';
@@ -28,12 +28,14 @@ import { SharedBootstrapModule } from './modules/shared/shared-bootstrap.module'
 import { RequestHelperService } from './modules/shared/service/request-helper.service';
 import { StatusService } from './modules/shared/service/status.service';
 import { PrimeNgModule } from './modules/shared/primeng-modules';
+import { MessageService } from 'primeng/primeng';
+import { LocalStorageService } from './modules/shared/service/localStorage/local-storage.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ],
+  ],
   imports: [
     BrowserModule,
     SidebarModule.forRoot(),
@@ -62,7 +64,13 @@ import { PrimeNgModule } from './modules/shared/primeng-modules';
       }
     }),
   ],
-  providers: [ApiCallService, RequestHelperService, TranslateService, StatusService],
+  providers: [ApiCallService,
+    RequestHelperService,
+    DatePipe,
+    MessageService,
+    LocalStorageService,
+    TranslateService,
+    StatusService],
   bootstrap: [AppComponent]
 })
 

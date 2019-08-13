@@ -52,7 +52,7 @@ export class BenchmarkComponent implements OnInit {
     ccm.showKpiType = true;
     this.consumptions.push(ccm);
   }
-
+  
   columnNames = ['Year',
     'FL1', { role: 'annotation' },
     'FL2', { role: 'annotation' },
@@ -67,17 +67,16 @@ export class BenchmarkComponent implements OnInit {
 
   options = {
     bar: { groupWidth: "97%", },
-    colors: ['#4700b3', '#4700b3', '#4700b3', '#4700b3', '#e6e600', '#e6e600', '#e6e600'],
+    colors: ['#6694d9', '#6694d9', '#6694d9', '#6694d9', '#f0d646', '#f0d646', '#f0d646'],
     legend: { position: 'none' },
     vAxis: {
       title: "BDt/ADt",
       gridlines: {
         count: 9,
-        color:"white"
       },
       viewWindow: { max: 4 }
     },
-    width: 1470,
+    width: 1300,
     height: 300,
     annotations: {
       alwaysOutside: true,
@@ -120,8 +119,8 @@ export class BenchmarkComponent implements OnInit {
 
   getProcessUnitLegends(): any {
     let processUnitLegends = [
-      { name: "KRC", color: "#4700b3" },
-      { name: "RZ", color: "#e6e600" },
+      { name: "KRC", color: "#6694d9" },
+      { name: "RZ", color: "#f0d646" },
     ];
 
     return processUnitLegends;
@@ -203,7 +202,7 @@ export class BenchmarkComponent implements OnInit {
 
 //   options = {
 //     bar: { groupWidth: "97%", },
-//     colors: ['#4700b3', '#4700b3', '#4700b3', '#4700b3', '#e6e600', '#e6e600', '#e6e600', 'red', 'red', 'red', 'red'],
+//     colors: ['#6694d9', '#6694d9', '#6694d9', '#6694d9', '#f0d646', '#f0d646', '#f0d646', 'red', 'red', 'red', 'red'],
 //     legend: { position: 'none' },
 //     vAxis: {
 //       title: "BDt/ADt",
@@ -256,8 +255,8 @@ export class BenchmarkComponent implements OnInit {
 
 //   getProcessUnitLegends(): any {
 //     let processUnitLegends = [
-//       { name: "KRC", color: "#4700b3" },
-//       { name: "RZ", color: "#e6e600" },
+//       { name: "KRC", color: "#6694d9" },
+//       { name: "RZ", color: "#f0d646" },
 //       { name: "XYZ", color: "RED" },
 //     ];
 
