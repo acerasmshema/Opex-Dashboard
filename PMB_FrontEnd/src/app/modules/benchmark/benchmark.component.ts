@@ -16,6 +16,7 @@ export class BenchmarkComponent implements OnInit {
 
   ngOnInit() {
     this.processUnitLegends = this.getProcessUnitLegends();
+    document.getElementById("select_mill").style.display = "none";
 
     this.getConsumption(this.data, "ClO2 - Consumption (kg/ADt)");
     this.getConsumption(this.data1, "White Liquor (m3/ADt)");

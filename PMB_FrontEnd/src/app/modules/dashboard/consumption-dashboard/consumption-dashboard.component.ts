@@ -75,11 +75,6 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
     this.consumptionService.changeChartType(event, kpiId, this.kpiCategoryId);
   }
 
-
-  onResize(event: any) {
-    this.consumptionService.refreshDahboard(this.kpiCategoryId);
-  }
-
   ngOnDestroy() {
     this.kpiCategorySubscription.unsubscribe();
   }

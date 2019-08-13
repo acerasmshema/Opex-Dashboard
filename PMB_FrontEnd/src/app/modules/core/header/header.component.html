@@ -33,7 +33,7 @@
           </ul>
           <div class="pull-right">
             <ul class="nav pull-right">
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown" id="select_mill">
                 <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Mill' | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
@@ -62,15 +62,6 @@
             </ul>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="row color_legend">
-    <div class="col-md-7"></div>
-    <div class="col-md-5">
-      <div *ngFor="let legend of processUnitLegends">
-        <div class="dot" [style.backgroundColor]="legend.legendColor"></div>
-        <div class="labelClass">{{legend.processLineCode}}</div>
       </div>
     </div>
   </div>

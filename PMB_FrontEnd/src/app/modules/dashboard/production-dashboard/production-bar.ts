@@ -8,6 +8,7 @@ export class ProductionBar {
     annualData: any;
     stackBar: any;
     stackArea: any;
+    show: boolean;
     showXAxisLabel: boolean;
     showYAxisLabel: boolean;
     legend: boolean;

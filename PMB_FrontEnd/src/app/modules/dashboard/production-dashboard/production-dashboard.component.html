@@ -34,21 +34,20 @@
           </div>
         </div>
         <div class="row">
-          <div *ngIf="annualChart.annualData !== undefined && annualChart.annualData.length > 0" class="col-md-12 p-l-0"
-            style="height: 195px;">
-            <ngx-charts-line-chart [scheme]="annualChart.colorScheme" [results]="annualChart.annualData"
-              [gradient]="gradient" [xAxis]="annualChart.xAxis" [yAxis]="annualChart.yAxis" xScaleMin="0"
-              [legend]="annualChart.legend" [showXAxisLabel]="annualChart.showXAxisLabel"
-              [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="annualChart.showYAxisLabel"
-              yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
-              <ng-template #seriesTooltipTemplate let-model="model">
-                {{model[0].name}}
-                <div *ngFor="let mod of model.slice().reverse(); let i = index">
-                  {{mod.series}} : {{ mod.value | number }}
-                </div>
-                Diff. : {{(model[1].value - model[0].value)  | number }}
-              </ng-template>
-            </ngx-charts-line-chart>
+          <div *ngIf="annualChart.annualData !== undefined && annualChart.annualData.length > 0" class="col-md-12 p-l-0" style="height: 195px;">
+             <ngx-charts-line-chart [scheme]="annualChart.colorScheme" [results]="annualChart.annualData"
+                [gradient]="gradient" [xAxis]="annualChart.xAxis" [yAxis]="annualChart.yAxis" xScaleMin="0"
+                [legend]="annualChart.legend" [showXAxisLabel]="annualChart.showXAxisLabel"
+                [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="annualChart.showYAxisLabel"
+                yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
+                <ng-template #seriesTooltipTemplate let-model="model">
+                  {{model[0].name}}
+                  <div *ngFor="let mod of model.slice().reverse(); let i = index">
+                    {{mod.series}} : {{ mod.value | number }}
+                  </div>
+                  Diff. : {{(model[1].value - model[0].value)  | number }}
+                </ng-template>
+              </ngx-charts-line-chart>
           </div>
         </div>
       </div>
@@ -91,8 +90,7 @@
           <div *ngIf="monthlyChart.chartType == 'stack-area'" class="col-md-12">
             <ngx-charts-area-chart-stacked [scheme]="monthlyChart.colorScheme" [results]="monthlyChart.stackArea"
               [gradient]="gradient" [xAxis]="monthlyChart.xAxis" [yAxis]="monthlyChart.yAxis"
-              [showXAxisLabel]="monthlyChart.showYAxisLabel" [showYAxisLabel]="monthlyChart.showYAxisLabel"
-              (select)="onSelect($event)">
+              [showXAxisLabel]="monthlyChart.showYAxisLabel" [showYAxisLabel]="monthlyChart.showYAxisLabel">
             </ngx-charts-area-chart-stacked>
           </div>
         </div>
@@ -182,9 +180,9 @@
               [gradient]="gradient" [xAxis]="prodLineChart.xAxis" [yAxis]="prodLineChart.yAxis" xScaleMin="0"
               [legend]="prodLineChart.legend" [showXAxisLabel]="prodLineChart.showXAxisLabel"
               [showYAxisLabel]="prodLineChart.showYAxisLabel" [xAxisLabel]="prodLineChart.xAxisLabel"
-              [yAxisLabel]="prodLineChart.yAxisLabel" (select)="onSelect($event)"
-              [xAxisTickFormatting]="xAxisTickFormattingFn" [curve]="prodLineChart.lineChartLineInterpolation"
-              [animations]="prodLineChart.animations" [showRefLines]="prodLineChart.showRefLines">
+              [yAxisLabel]="prodLineChart.yAxisLabel" [xAxisTickFormatting]="xAxisTickFormattingFn"
+              [curve]="prodLineChart.lineChartLineInterpolation" [animations]="prodLineChart.animations"
+              [showRefLines]="prodLineChart.showRefLines">
             </ngx-charts-line-chart>
           </div>
         </div>
@@ -216,8 +214,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                  <td *ngFor="let col of columns"
-                    [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
+                  <td *ngFor="let col of columns" [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
                     {{rowData[col.field]}}
                   </td>
                 </tr>

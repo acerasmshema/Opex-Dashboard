@@ -5,7 +5,7 @@
                 <form class="form-inline">
                     <div class="list-group">
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-globe"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-globe"></i></label>
                             <p-dropdown [options]="sidebarForm.countries" [hidden]="sidebarForm.hide"
                                 [(ngModel)]="searchKpiData.country" [ngModelOptions]="{standalone: true}"
                                 optionLabel="countryName">
@@ -13,21 +13,21 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i
-                                    class="fa fa-fw fa-location-arrow"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="fa fa-fw fa-location-arrow"></i></label>
                             <p-dropdown [options]="sidebarForm.mills" [(ngModel)]="searchKpiData.mill"
                                 [ngModelOptions]="{standalone: true}" [hidden]="sidebarForm.hide"
                                 optionLabel="millName">
                             </p-dropdown>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.buisnessUnits" [hidden]="sidebarForm.hide"
                                 [(ngModel)]="searchKpiData.businessUnit" [ngModelOptions]="{standalone: true}"
                                 optionLabel="businessUnitName">
                             </p-dropdown>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>
                             <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
                                 [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}"
                                 [(ngModel)]="searchKpiData.kpiTypes" [ngModelOptions]="{standalone: true}"
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i
-                                    class="fa fa-fw fa-th-list"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="fa fa-fw fa-th-list"></i></label>
                             <p-multiSelect [options]="sidebarForm.processLines" [hidden]="sidebarForm.hide"
                                 [style]="{width: '173px'}" [panelStyle]="{minWidth:'14em'}" defaultLabel="Process Lines"
                                 scrollHeight="200px" [(ngModel)]="searchKpiData.processLines"
@@ -45,7 +45,7 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i
-                                    class="fa fa-fw fa-calendar"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="fa fa-fw fa-calendar"></i></label>   
                             <ejs-daterangepicker [hidden]="sidebarForm.hide" class="daterangepicker"
                                 id='daterangepicker' [(ngModel)]="searchKpiData.date"
                                 [ngModelOptions]="{standalone: true}" placeholder="{{'Date Range' | translate }}">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.frequencies" [hidden]="sidebarForm.hide"
                                 [(ngModel)]="searchKpiData.frequency" [ngModelOptions]="{standalone: true}"
                                 optionLabel="name">
@@ -78,21 +78,21 @@
                 <form class="form-inline">
                     <div class="list-group">
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.buisnessUnits" [hidden]="sidebarForm.hide"
                                 optionLabel="businessUnitName">
                             </p-dropdown>
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i
-                                    class="fa fa-fw fa-location-arrow"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="fa fa-fw fa-location-arrow"></i></label>
                             <p-multiSelect [options]="sidebarForm.mills" [hidden]="sidebarForm.hide"
                                 [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" scrollHeight="250px"
                                 defaultLabel="Mill" optionLabel="millName">
                             </p-multiSelect>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>
                             <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
                                 [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" scrollHeight="250px"
                                 defaultLabel="KPI Type" optionLabel="kpiTypeName">
@@ -100,7 +100,7 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i
-                                    class="fa fa-fw fa-calendar"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="fa fa-fw fa-calendar"></i></label>
                             <ejs-daterangepicker [hidden]="sidebarForm.hide" class="daterangepicker"
                                 id='daterangepicker' placeholder="{{ '    Date Range' | translate }}">
                             </ejs-daterangepicker>
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.frequencies" [hidden]="sidebarForm.hide"
                                 optionLabel="name">
                             </p-dropdown>

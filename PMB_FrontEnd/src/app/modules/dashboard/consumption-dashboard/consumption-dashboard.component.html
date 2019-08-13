@@ -63,8 +63,7 @@
                           [xAxis]="ccm.xAxis" [yAxis]="ccm.yAxis" [legend]="ccm.legend"
                           [showXAxisLabel]="ccm.showXAxisLabel" [showYAxisLabel]="ccm.showYAxisLabel"
                           [barPadding]="ccm.barPadding" [showDataLabel]="ccm.showDataLabel"
-                          [xAxisLabel]="ccm.xAxisLabel" [yAxisLabel]="ccm.yAxisLabel"
-                          (window:resize)="onResize($event)">
+                          [xAxisLabel]="ccm.xAxisLabel" [yAxisLabel]="ccm.yAxisLabel">
                         </ngx-charts-bar-vertical-stacked>
                       </div>
                       <div *ngIf="ccm.chartType === 'bar'" style="height: 250px">
@@ -72,8 +71,7 @@
                           [yAxis]="ccm.yAxis" [legend]="ccm.legend" [showXAxisLabel]="ccm.showXAxisLabel"
                           [showYAxisLabel]="ccm.showYAxisLabel" [barPadding]="ccm.barPadding"
                           [showDataLabel]="ccm.showDataLabel" [xAxisLabel]="ccm.xAxisLabel"
-                          [yAxisLabel]="ccm.yAxisLabel" [groupPadding]="ccm.groupPadding"
-                          (window:resize)="onResize($event)">
+                          [yAxisLabel]="ccm.yAxisLabel" [groupPadding]="ccm.groupPadding">
                         </ngx-charts-bar-vertical-2d>
                       </div>
                     </div>
@@ -117,7 +115,7 @@
                           [barPadding]="cMap.value.consumptions[i +1].barPadding"
                           [showDataLabel]="cMap.value.consumptions[i +1].showDataLabel"
                           [xAxisLabel]="cMap.value.consumptions[i +1].xAxisLabel"
-                          [yAxisLabel]="cMap.value.consumptions[i +1].yAxisLabel" (window:resize)="onResize($event)">
+                          [yAxisLabel]="cMap.value.consumptions[i +1].yAxisLabel">
                         </ngx-charts-bar-vertical-stacked>
                       </div>
                       <div *ngIf="cMap.value.consumptions[i +1].chartType === 'bar'" style="height: 250px">
@@ -130,8 +128,7 @@
                           [showDataLabel]="cMap.value.consumptions[i +1].showDataLabel"
                           [xAxisLabel]="cMap.value.consumptions[i +1].xAxisLabel"
                           [yAxisLabel]="cMap.value.consumptions[i +1].yAxisLabel"
-                          [groupPadding]="cMap.value.consumptions[i +1].groupPadding"
-                          (window:resize)="onResize($event)">
+                          [groupPadding]="cMap.value.consumptions[i +1].groupPadding">
                         </ngx-charts-bar-vertical-2d>
                       </div>
                     </div>

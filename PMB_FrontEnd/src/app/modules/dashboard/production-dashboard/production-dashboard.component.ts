@@ -387,4 +387,9 @@ export class ProductionDashboardComponent implements OnInit {
       this.annotationDates = data['annotationDates'];
     });
   }
+
+  openTabs() {
+    let annChartRendered = this.annualChart.show;
+    let prodChartRendered = this.prodLineChart.show;
+  }
 }
