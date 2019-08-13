@@ -215,19 +215,15 @@ export class ProductionDashboardComponent implements OnInit {
 
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((processLines: any) => {
-
+        
         this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
           subscribe((plTargetData: any) => {
             for (let index = 0; index < plTargetData.length; index++) {
               let prodLine = this.prodLines[index]
-              prodLine.productionLineData = [...prodLine.productionLineData, plTargetData[index]];
+              prodLine.productionLineData.push(processLines[index]);
+              prodLine.productionLineData.push(plTargetData[index]);
             }
           });
-
-        for (let index = 0; index < processLines.length; index++) {
-          let prodLine = this.prodLines[index]
-          prodLine.productionLineData = [...prodLine.productionLineData, processLines[index]];
-        }
       });
   }
 
@@ -386,10 +382,5 @@ export class ProductionDashboardComponent implements OnInit {
     this.productionService.getAnnotationDates(data).subscribe((data: any) => {
       this.annotationDates = data['annotationDates'];
     });
-  }
-
-  openTabs() {
-    let annChartRendered = this.annualChart.show;
-    let prodChartRendered = this.prodLineChart.show;
   }
 }

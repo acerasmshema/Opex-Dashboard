@@ -11,7 +11,7 @@ import { DashboardService } from './dashboard.service';
 })
 export class DashboardComponent implements OnInit {
 
-  disbaleTab: boolean = false;
+  disbaleTab: boolean = true;
   processUnitLegends: any[] = [];
 
   constructor(private statusService: StatusService,
@@ -20,6 +20,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.processUnitLegends = this.getProcessUnitLegends();
     document.getElementById("select_mill").style.display = "block";
+ 
+    setTimeout(() => {
+      this.disbaleTab = false;
+    }, 5000);
   }
 
   openSidebar(event: any) {
