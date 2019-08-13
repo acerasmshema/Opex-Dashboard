@@ -5,12 +5,6 @@ export class MasterData {
       "countryName": "Indonesia"
     }];
 
-  static mill = [
-    {
-      "millId": "1",
-      "millName": "Kerinci"
-    }];
-
   static businessUnit = [
     {
       "businessUnitId": "1",

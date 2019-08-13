@@ -1,0 +1,62 @@
+<div *ngIf="dialogName === 'annotation'">
+        <p-dialog header="Annotations for Production on {{annotationDialog.annotationDate}}" [responsive]="true"
+        [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
+        [(visible)]="displayAnnotations">
+        <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
+            (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
+            <div class="card`">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p-multiSelect [options]="annotationDialog.processLinesForAnnotation" scrollHeight="80px"
+                                [(ngModel)]="annotationDialog.annotationProcessLines"
+                                [ngModelOptions]="{standalone: true}" [style]="{'width':'60%'}" defaultLabel="Process Lines"
+                                optionLabel="processLineName">
+                            </p-multiSelect>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea placeholder="Description" rows="2" cols="25"
+                                [(ngModel)]="annotationDialog.annotationDescription" pInputTextarea></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="pull-right">
+                                <button pButton type="button" (click)="createAnnotation()" label="Save"></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+    
+        <p-panel header="View Annotations" [collapsed]="annotationDialog.findAnnotationCollapsed"
+            (onBeforeToggle)="findAnnotationBeforeToggle()" [toggleable]="true">
+            <div class="card" style="height:320px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <p-table [columns]="annotationsCols" [value]="annotationDialog.annotationsLines"
+                                [paginator]="true" [rows]="10" [scrollable]="true" scrollHeight="300px">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns" class="text-center">
+                                            {{col.header}}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr>
+                                        <td class="text-right" *ngFor="let col of columns" class="text-center">
+                                            {{rowData[col.field]}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+    </p-dialog>
+</div>

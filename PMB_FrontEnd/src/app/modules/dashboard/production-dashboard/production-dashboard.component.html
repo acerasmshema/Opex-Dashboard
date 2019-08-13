@@ -182,7 +182,7 @@
               [showYAxisLabel]="prodLineChart.showYAxisLabel" [xAxisLabel]="prodLineChart.xAxisLabel"
               [yAxisLabel]="prodLineChart.yAxisLabel" [xAxisTickFormatting]="xAxisTickFormattingFn"
               [curve]="prodLineChart.lineChartLineInterpolation" [animations]="prodLineChart.animations"
-              [showRefLines]="prodLineChart.showRefLines">
+              [showRefLines]="prodLineChart.showRefLines" (select)="onSelect($event)">
             </ngx-charts-line-chart>
           </div>
         </div>

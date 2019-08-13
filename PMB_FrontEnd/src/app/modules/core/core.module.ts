@@ -9,6 +9,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { PrimeNgModule } from '../shared/primeng-modules';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { PrimeNgModule } from '../shared/primeng-modules';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
+    DialogComponent,
     TranslatePipe,
     OrderByPipe
   ],
@@ -31,6 +33,7 @@ import { PrimeNgModule } from '../shared/primeng-modules';
   exports: [
     LayoutComponent,
     FooterComponent,
+    DialogComponent,
     TranslatePipe,
     OrderByPipe
   ],

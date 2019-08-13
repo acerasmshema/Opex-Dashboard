@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getProcessUnitLegends(): any {
-    let millId = "1";
+    let millId = this.statusService.selectedMill.millId;
     const requestData = {
       millId: millId
     }

@@ -64,6 +64,7 @@ export class ConsumptionService {
     consumptionRequest.endDate = searchKpiData.endDate;
     consumptionRequest.kpiId = searchKpiData.kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
+    consumptionRequest.millId = this.statusService.selectedMill.millId;
     consumptionRequest.frequency = searchKpiData.frequency["code"];
     consumptionRequest.processLines = processLinesHeads;
 

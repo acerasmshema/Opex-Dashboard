@@ -20,6 +20,7 @@ export class AppConstants {
         DR_SELECTED_PROCESS_LINES_URL: AppConstants.BASE_API_URL_v1 + '/date_range/selected_process_lines',
         DOWNLOAD_DATA_GRID_URL: AppConstants.BASE_API_URL_v1 + '/date_range/selected_process_lines_grid_data',
         LOGIN_URL: AppConstants.BASE_API_URL_v1 + '/user_info/login',
+        PROCESS_LINES_BY_KPI_ID_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/get_process_lines',
         LOGOUT_URL: AppConstants.BASE_API_URL_v1 + '/user_info/logout',
         KPI_TYPE_URL: AppConstants.BASE_API_URL_v2 + '/kpi_category/get_kpi_type',
         CONSUMPTION_API_URL:AppConstants.BASE_API_URL_v1 + '/kpi_category/selected_kpi_process_lines',

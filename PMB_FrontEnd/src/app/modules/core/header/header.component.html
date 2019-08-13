@@ -37,8 +37,7 @@
                 <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false" style="color:white;font-size: 11pt;">{{ 'Select Mill' | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li><a class="dropdown-item">Kerinci</a></li>
-                  <li><a class="dropdown-item">Rizhao</a></li>
+                  <li *ngFor="let mill of mills"><a class="dropdown-item">{{mill.millName}}</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">

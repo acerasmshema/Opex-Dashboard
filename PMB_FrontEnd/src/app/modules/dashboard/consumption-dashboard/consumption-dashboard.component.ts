@@ -45,7 +45,7 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
   public getConsumptionTable() {
     const requestData = {
       kpiCategoryId: this.kpiCategoryId,
-      millId: "1"
+      millId: this.statusService.selectedMill.millId
     };
 
     this.consumptionService.getDataForGrid(requestData).
