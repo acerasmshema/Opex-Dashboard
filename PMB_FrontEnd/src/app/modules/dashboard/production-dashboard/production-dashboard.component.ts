@@ -36,6 +36,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   startDate: string = '';
   endDate: string = '';
   updateChartSubscription: Subscription;
+  millSubscription: Subscription;
 
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
@@ -51,6 +52,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe((dashboardName: string) => {
         if (dashboardName === 'production')
           this.searchData();
+      });
+
+    this.millSubscription = this.statusService.changeMill.
+      subscribe((millId: string) => {
+        console.log(millId)
       });
 
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
@@ -136,7 +142,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     const requestData = { millId: this.statusService.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProductionYTDData(requestData).
       subscribe((actualData: any) => {
-
         this.productionService.getProductionYTDTargetData(requestData).
           subscribe((targetData: any) => {
             this.annualChart.annualData = [...this.annualChart.annualData, targetData];
@@ -407,5 +412,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.updateChartSubscription.unsubscribe();
+    this.millSubscription.unsubscribe();
   }
 }

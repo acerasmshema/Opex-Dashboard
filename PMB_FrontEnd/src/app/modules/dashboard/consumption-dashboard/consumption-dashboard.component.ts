@@ -19,6 +19,7 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
   public header: string;
   public consumptionTable: ConsumptionTable[] = [];
   kpiCategorySubscription: Subscription;
+  millSubscription: Subscription;
 
   constructor(private consumptionService: ConsumptionService,
     private messageService: MessageService,
@@ -28,6 +29,12 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getConsumptionTable();
+
+    this.millSubscription = this.statusService.changeMill.
+      subscribe((millId: string) => {
+        console.log(millId)
+      });
+
     this.kpiCategorySubscription = this.statusService.kpiCategoryUpdate.
       subscribe((kpiCategoryId: string) => {
         this.kpiCategoryId = kpiCategoryId;
@@ -55,7 +62,7 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
         let consumptions = [];
         consumptionsTable.forEach(kpi => {
-          let consumptionModel = this.consumptionService.createChart(kpi.kpiId, kpi.kpiName + "  " + kpi.unit);
+          let consumptionModel = this.consumptionService.createChart(kpi.kpiId, kpi.kpiName + "  (" + kpi.unit + ")");
           consumptions.push(consumptionModel);
           this.consumptionService.showKpiCharts(consumptionModel.kpiId, consumptionModel.kpiName, this.kpiCategoryId);
         });

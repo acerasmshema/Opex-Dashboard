@@ -10,9 +10,10 @@ export class StatusService {
     public kpiCategoryUpdate: Subject<string> = new Subject<string>();
     public dialogSubject: Subject<any> = new Subject<any>();
     public updateChartSubject: Subject<string> = new Subject<string>();
+    public changeMill: Subject<string> = new Subject<string>();
 
     public processLineMap = new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();
     public mills: any = [];
-    public selectedMill: any = { millId: "1", millName: 'Kerinci' };
+    public selectedMill: any;
 }

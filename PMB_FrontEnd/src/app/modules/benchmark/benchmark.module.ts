@@ -8,7 +8,6 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { PrimeNgModule } from '../shared/primeng-modules';
-import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [BenchmarkComponent],
@@ -22,7 +21,6 @@ import { GoogleChartsModule } from 'angular-google-charts';
     PrimeNgModule,
     CommonModule,
     CoreModule,
-    GoogleChartsModule.forRoot(), 
   ]
 })
 export class BenchmarkModule { }

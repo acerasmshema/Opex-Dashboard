@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   user: any;
   loginId: any;
   mills: any = [];
+  selectedMill: any;
 
   constructor(private router: Router,
     private loginService: LoginService,
@@ -49,5 +50,7 @@ export class HeaderComponent implements OnInit {
       { millId: "2", millName: 'Rizaho' },
   ];
     this.mills = this.statusService.mills;
+    this.statusService.selectedMill =  { millId: "1", millName: 'Kerinci' }
+    this.selectedMill = this.statusService.selectedMill; 
   }
 }

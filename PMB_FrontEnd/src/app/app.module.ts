@@ -16,7 +16,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { NgxGaugeModule } from 'ngx-gauge';
-import { GoogleChartsModule } from 'angular-google-charts';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { CommonModule, DatePipe } from '@angular/common';
 import { StorageServiceModule } from 'ngx-webstorage-service';
@@ -55,7 +54,6 @@ import { LocalStorageService } from './modules/shared/service/localStorage/local
     SelectDropDownModule,
     NgxGaugeModule,
     PrimeNgModule,
-    GoogleChartsModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -1,20 +1,27 @@
 <div class="container-fluid">
-    <div class="row m-t-5" *ngFor="let ccm of consumptions">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title text-center m-t-5">
-                        <h5 style="font-weight: bold">{{ccm.kpiName}}</h5>
-                    </div>
+        
+        <div class="mainContainer">
+            <div *ngFor="let ccm of consumptions" class="card benchmark-border" style="margin: 10px;">
+                <div class="card-title" style="margin-top: 10px">
                     <div class="row">
-                        <div class="col-md-12">
-                            <google-chart #chart [type]="type" [data]="ccm.data" [columnNames]="columnNames"
-                                [options]="options" [width]="width" [height]="height">
-                            </google-chart>
+                        <div class="col-md-12" style="text-align: center;">
+                            <h5 style="font-weight: bold">White Liquor (m3/ADt)</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div  class="col-md-12" style="padding-left: 12px; height: 250px;">
+                            <ngx-charts-bar-vertical-2d [scheme]="ccm.colorScheme" [results]="ccm.data" [xAxis]="ccm.xAxis"
+                                [yAxis]="ccm.yAxis" [legend]="ccm.legend"
+                                [showXAxisLabel]="ccm.showXAxisLabel" [showYAxisLabel]="ccm.showYAxisLabel"
+                                [barPadding]="ccm.barPadding" [yScaleMax]= "4.0" [groupPadding]="ccm.groupPadding"
+                                [showDataLabel]="ccm.showDataLabel" [xAxisLabel]="ccm.xAxisLabel"
+                                [yAxisLabel]="ccm.yAxisLabel" [dataLabelFormatting] = "boundFormatDataLabel">
+                            </ngx-charts-bar-vertical-2d>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
