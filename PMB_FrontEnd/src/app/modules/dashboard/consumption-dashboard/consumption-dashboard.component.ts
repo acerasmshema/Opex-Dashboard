@@ -30,7 +30,7 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
     this.millSubscription = this.statusService.changeMill.
       subscribe((millId: string) => {
-        console.log(millId)
+        console.log("Consumption: " + millId)
       });
 
     this.kpiCategorySubscription = this.statusService.kpiCategoryUpdate.

@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
 
   disbaleTab: boolean = true;
   processUnitLegends: any[] = [];
+  showTabs: boolean = false;
 
   constructor(private statusService: StatusService,
     private dashboardService: DashboardService) { }
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
         sidebarRequest.isShow = false;
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
+        this.showTabs = true;
       });
 
   }

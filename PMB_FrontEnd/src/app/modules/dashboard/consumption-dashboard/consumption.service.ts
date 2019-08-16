@@ -149,7 +149,7 @@ export class ConsumptionService {
         consumptionGridView.gridData = response[0];
         consumptionGridView.title = kpiName;
 
-        let columnNames = Object.keys(response[0][0]);
+        let columnNames = Object.keys(response[0][0]).sort();
         columnNames.forEach(columnName => {
           consumptionGridView.columnNames.push({ header: columnName, field: columnName });
         });

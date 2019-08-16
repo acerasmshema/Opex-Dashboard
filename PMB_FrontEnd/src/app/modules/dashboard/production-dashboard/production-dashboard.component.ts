@@ -52,7 +52,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.updateChartSubscription = this.statusService.updateChartSubject.
       subscribe((dashboardName: string) => {
         if (dashboardName === 'production') {
-          this.searchData();
+          this.searchData(false);
         }
       });
 
@@ -63,7 +63,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     this.millSubscription = this.statusService.changeMill.
       subscribe((millId: string) => {
-        console.log(millId)
+        console.log("Production: " + millId)
       });
 
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
@@ -84,7 +84,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getAnnualTarget();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
-    this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, true, [], frequency);
+    this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
   }
 
   setProductionLineForm() {
@@ -246,7 +246,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, showColumns: boolean, processLines: any, frequency: any) {
+  public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, processLines: any, frequency: any, isGridRequest: boolean) {
 
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
@@ -282,27 +282,33 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             this.prodLineChart.productionLineData = response;
           });
       });
-    this.getAllProductionLinesDateForGrid(productionRequest, showColumns);
+    if (isGridRequest)
+      this.getAllProductionLinesDateForGrid(productionRequest);
   }
 
-  public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest, showColumns: boolean) {
+  public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest) {
     this.productionLineView.rows = 10;
     this.productionLineView.scrollable = true;
     this.productionLineView.paginator = true;
     this.productionLineView.productionLines = [];
+    let colNames = [];
 
+    colNames.push({ field: 'DATE', header: 'Date' });
+    if (productionRequest.processLines.length > 0) {
+      productionRequest.processLines.forEach(processLine => {
+        colNames.push({ header: processLine, field: processLine });
+      });
+    }
+    else {
+      let columnsNames = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+      columnsNames.forEach(columnName => {
+        colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
+      });
+    }
+    
     this.productionService.getAllProductionLinesDateForGrid(productionRequest).
       subscribe((data: any) => {
-        if (showColumns) {
-          let colNames = [];
-
-          colNames.push({ field: 'DATE', header: 'Date' });
-          let columnsNames = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
-          columnsNames.forEach(columnName => {
-            colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
-          });
-          this.productionLineView.columnNames = colNames;
-        }
+        this.productionLineView.columnNames = colNames;
         this.productionLineView.productionLines = data[0];
       });
   }
@@ -345,31 +351,20 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getAllProductionLinesDateRangeData(startDate, endDate);
   }
 
-  public searchData() {
+  public searchData(isGridRequest: boolean) {
     if (this.productionEnquiryData.lineChartDate !== null) {
-      this.productionLineView.productionLines = [];
-      this.productionLineView.columnNames = [];
-
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
       let frequency = this.productionEnquiryData.selectedValue['code'];
       this.productionLineView.columnNames.push({ field: 'DATE', header: 'Date' });
 
+      let processLines = [];
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
-          this.productionLineView.productionLines.push(processLine['processLineCode']);
-          this.productionLineView.columnNames.push({ header: processLine['processLineCode'], field: processLine['processLineCode'] });
+          processLines.push(processLine['processLineCode']);
         });
       }
-      else {
-        let columnsNames = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
-        columnsNames.forEach(columnName => {
-          this.productionLineView.columnNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
-        });
-      }
-
-      let processLines = this.productionLineView.productionLines;
-      this.getSelectedProductionLinesDateRangeData(startDate, endDate, false, processLines, frequency);
+      this.getSelectedProductionLinesDateRangeData(startDate, endDate, processLines, frequency, isGridRequest);
     }
     else {
       alert("Please select date range");

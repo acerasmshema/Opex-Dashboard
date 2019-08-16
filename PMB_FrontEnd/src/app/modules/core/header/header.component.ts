@@ -16,7 +16,6 @@ export class HeaderComponent implements OnInit {
   user: any;
   loginId: any;
   mills: any = [];
-  selectedMill: any;
 
   constructor(private router: Router,
     private loginService: LoginService,
@@ -43,6 +42,12 @@ export class HeaderComponent implements OnInit {
     });
     this.router.navigateByUrl('login');
   }
+  
+  onChangeMill(millId: string) {
+    if(this.statusService.selectedMill.millId !== millId) {
+      this.statusService.changeMill.next(millId);
+    }
+  }
 
   getMills() {
     this.statusService.mills =  [
@@ -51,6 +56,5 @@ export class HeaderComponent implements OnInit {
   ];
     this.mills = this.statusService.mills;
     this.statusService.selectedMill =  { millId: "1", millName: 'Kerinci' }
-    this.selectedMill = this.statusService.selectedMill; 
   }
 }

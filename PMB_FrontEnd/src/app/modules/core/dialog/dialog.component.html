@@ -4,14 +4,14 @@
         [(visible)]="annotationDialog.displayAnnotations">
         <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
             (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
-            <div class="card`">
+            <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
                             <p-multiSelect [options]="annotationDialog.processLinesForAnnotation" scrollHeight="80px"
                                 [(ngModel)]="annotationDialog.annotationProcessLines"
                                 [ngModelOptions]="{standalone: true}" [style]="{'width':'60%'}"
-                                defaultLabel="Process Lines" optionLabel="processLineName">
+                                defaultLabel="Process Lines" optionLabel="processLineCode">
                             </p-multiSelect>
                         </div>
                         <div class="col-md-8">
@@ -75,14 +75,14 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" class="text-center">
                         {{col.header}}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                    <td *ngFor="let col of columns" [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'">
+                    <td *ngFor="let col of columns" [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
                         {{rowData[col.field]}}
                     </td>
                 </tr>

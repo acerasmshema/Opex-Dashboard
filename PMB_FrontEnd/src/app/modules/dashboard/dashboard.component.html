@@ -1,38 +1,40 @@
 <div class="container-fluid">
   <div class="row color_legend">
-    <div class="col-md-7"></div>
-    <div class="col-md-5">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
       <div *ngFor="let legend of processUnitLegends">
         <div class="dot" [style.backgroundColor]="legend.legendColor"></div>
         <div class="labelClass">{{legend.processLineCode}}</div>
       </div>
     </div>
   </div>
-  <p-tabView [activeIndex]="index" (onChange)="openSidebar($event)">
-    <p-tabPanel header="Production" [selected]="true">
-      <ng-template pTemplate="app-production-dashboard">
-        <app-production-dashboard></app-production-dashboard>
-      </ng-template>
-    </p-tabPanel>
-    <p-tabPanel header="Chemical Consumption" [disabled]="disbaleTab">
-      <ng-template pTemplate="app-consumption-dashboard">
-        <app-consumption-dashboard [kpiCategoryId]="'2'"></app-consumption-dashboard>
-      </ng-template>
-    </p-tabPanel>
-    <p-tabPanel header="Utilities Consumption" [disabled]="disbaleTab">
-      <ng-template pTemplate="app-utilities-consumption-dashboard">
-        <app-consumption-dashboard [kpiCategoryId]="'3'"></app-consumption-dashboard>
-      </ng-template>
-    </p-tabPanel>
-    <p-tabPanel header="Wood Consumption" [disabled]="disbaleTab">
-      <ng-template pTemplate="app-wood-consumption-dashboard">
-        <app-consumption-dashboard [kpiCategoryId]="'4'"></app-consumption-dashboard>
-      </ng-template>
-    </p-tabPanel>
-    <p-tabPanel header="Kappa Number Prediction" [disabled]="disbaleTab">
-      <ng-template pTemplate="app-conditional-monitoring">
-        <app-kappa-number-prediction></app-kappa-number-prediction>
-      </ng-template>
-    </p-tabPanel>
-  </p-tabView>
+  <div *ngIf="showTabs">
+    <p-tabView [activeIndex]="index" (onChange)="openSidebar($event)">
+      <p-tabPanel header="Production" [selected]="true">
+        <ng-template pTemplate="app-production-dashboard">
+          <app-production-dashboard></app-production-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Chemical Consumption" [disabled]="disbaleTab">
+        <ng-template pTemplate="app-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'2'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Utilities Consumption" [disabled]="disbaleTab">
+        <ng-template pTemplate="app-utilities-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'3'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Wood Consumption" [disabled]="disbaleTab">
+        <ng-template pTemplate="app-wood-consumption-dashboard">
+          <app-consumption-dashboard [kpiCategoryId]="'4'"></app-consumption-dashboard>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="Kappa Number Prediction" [disabled]="disbaleTab">
+        <ng-template pTemplate="app-conditional-monitoring">
+          <app-kappa-number-prediction></app-kappa-number-prediction>
+        </ng-template>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
 </div>
