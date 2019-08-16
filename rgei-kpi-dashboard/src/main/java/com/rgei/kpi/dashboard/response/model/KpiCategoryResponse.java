@@ -44,7 +44,11 @@ import java.util.List;
 
 public class KpiCategoryResponse {
 	
-	private String name;
+	private Integer kpiId;
+	
+	private String kpiName;
+	
+	private String unit;
 	
 	private List<KpiCategorySeriesResponse> series;
 	
@@ -52,18 +56,36 @@ public class KpiCategoryResponse {
 		super();
 	}
 
-	public KpiCategoryResponse(String name, List<KpiCategorySeriesResponse> series) {
+	public KpiCategoryResponse(Integer kpiId, String kpiName, String unit, List<KpiCategorySeriesResponse> series) {
 		super();
-		this.name = name;
+		this.kpiId = kpiId;
+		this.kpiName = kpiName;
+		this.unit = unit;
 		this.series = series;
 	}
 
-	public String getName() {
-		return name;
+	public Integer getKpiId() {
+		return kpiId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setKpiId(Integer kpiId) {
+		this.kpiId = kpiId;
+	}
+
+	public String getKpiName() {
+		return kpiName;
+	}
+
+	public void setKpiName(String kpiName) {
+		this.kpiName = kpiName;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public List<KpiCategorySeriesResponse> getSeries() {
@@ -73,4 +95,6 @@ public class KpiCategoryResponse {
 	public void setSeries(List<KpiCategorySeriesResponse> series) {
 		this.series = series;
 	}
+
+	
 }

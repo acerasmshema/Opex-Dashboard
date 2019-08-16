@@ -85,6 +85,7 @@ export class ChemicalConsumptionDashboardComponent implements OnInit {
   private activeEntries: any[] = [];
   productonLines: any[] = [];
   colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000'] };
+  colorSchemeForLineChart  = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000','#000000'] };
   title: string = "";
   annotationsLines: any[];
   createAnnotationCollapsed: boolean = true;
@@ -346,12 +347,23 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
+<<<<<<< HEAD
         // this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           // this.kpiId11LineData = data;
         // });
         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = [...this.kpiId11LineData, data];
         });
+=======
+        
+         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = data;
+        }); 
+        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = [...this.kpiId11LineData,data];
+        }); 
+       
+>>>>>>> 3564751c3c5f47695fc40f51e5f76a4cfc87d60e
        
       }
 
@@ -360,11 +372,8 @@ this.annotationsCols=annotationsCols;
         this.chemicalConsumptionRequest.kpiId = "2";
         this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId2Data = data;
+          console.log(this.kpiId2Data);
         });
-        /*   this.chemicalConsumptionRequest.kpiId = "3";
-          this.chemicalConsumptionService.getDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-            this.kpiId3Data = data;
-          }); */
       }
 
       if (element.kpiTypeId == 3) {
@@ -500,7 +509,7 @@ if (this.annotationDescription == "") {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDatesForKpiId11.length > 0 && this.annotationDatesForKpiId11.includes(val)) {
+    if (this.annotationDatesForKpiId11 != null && this.annotationDatesForKpiId11.length > 0 && this.annotationDatesForKpiId11.includes(val)) {
       dateTick = "*" + val;
     }else {
       dateTick = val;

@@ -16,26 +16,18 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.entities.MillBuKpiEntity;
 
 @Repository
-public interface ProcessLineRepository extends JpaRepository<ProcessLineEntity, Integer>{
+public interface MillBuKpiEntityRepository extends JpaRepository<MillBuKpiEntity, Integer>{
 	
-	public List<ProcessLineEntity> findByProcessLineNameIn(@Param("processLines") List<String> processLines);
 	
-	public List<ProcessLineEntity> findAllByOrderByProcessLineIdAsc();
-	
-	@Query("Select PL from  ProcessLineEntity PL inner join KpiProcessLineEntity KPL on PL.processLineId=KPL.processLine.processLineId "
-			+ "where KPL.kpi.kpiId = :kpiId and PL.active=:status order by PL.processLineId")
-	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId,@Param("status") Boolean status);
-	
-	@Query("Select PL from  ProcessLineEntity PL where PL.mill.millId = :millId And PL.active = :status order by PL.processLineId")
-	List<ProcessLineEntity> getPrcessLineByLocation(@Param("millId") Integer millId, @Param("status") Boolean status);
+	@Query("Select dailyLineTarget from MillBuKpiEntity e where e.mill.millId = :millId and e.kpi.kpiId = :kpiId and e.businessUnit.businessUnitId = :buId and e.active = :status")
+	public String findTargetValueForKpi(@Param("millId")Integer millId,
+		 @Param("buId")Integer buId,@Param("kpiId")Integer kpiId,@Param("status") boolean status);
 }
