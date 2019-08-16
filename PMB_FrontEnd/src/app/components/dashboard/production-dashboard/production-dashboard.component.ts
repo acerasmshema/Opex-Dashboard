@@ -28,6 +28,7 @@ export class ProductionDashboardComponent implements OnInit {
   pl6Data: any[];
   pl7Data: any[];
   pl8Data: any[];
+  annotationDates: any[] = [];
   maintanenceDaysColumn: any[];
   maintanenceDayModel: any[];
   selectedMaintenanceDay: any[];
@@ -557,7 +558,9 @@ export class ProductionDashboardComponent implements OnInit {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
+    console.log("Annptation")
+    console.log(this.annotationDates)
+    if (this.annotationDates != null && this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
     }else {
       dateTick = val;
@@ -586,7 +589,7 @@ export class ProductionDashboardComponent implements OnInit {
     });
   }
 
-  annotationDates: any[] = [];
+  
   public getAnnotationDates() {
     this.annotationDates=[];
     const data = { millId: '1', buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };

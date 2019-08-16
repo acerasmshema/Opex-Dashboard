@@ -26,9 +26,9 @@ export class ChemicalConsumptionService {
   return this.apiCallService.callAPIwithData(this.chemicalConsumptionLineKpiUrl, data);
   } 
 
-  public getTargetLineDataforKpi(data: object) {
-    return this.apiCallService.callAPIwithData(this.chemicalConsumptionTargetLineKpiUrl, data);
-    } 
+  // public getTargetLineDataforKpi(data: object) {
+  //   return this.apiCallService.callAPIwithData(this.chemicalConsumptionTargetLineKpiUrl, data);
+  //   } 
   
 
   public getKpiGridData(data: object) {

@@ -346,9 +346,9 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
-        this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
-          this.kpiId11LineData = data;
-        });
+        // this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          // this.kpiId11LineData = data;
+        // });
         this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = [...this.kpiId11LineData, data];
         });
