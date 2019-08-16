@@ -89,10 +89,12 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.annotationDialog.annotationLines = "";
     const loginId = this.localStorageService.fetchloginId();
     if (this.annotationDialog.annotationProcessLines.length === 0) {
-      this.showMessage("error", "", "");
+      this.showMessage("error", "Error Message", "Please select process lines.");
+      return;
     }
     if (this.annotationDialog.annotationDescription == "") {
-      this.showMessage("error", "", "");
+      this.showMessage("error", "Error Message", "Please add description.");
+      return;
     }
 
     this.annotationDialog.annotationProcessLines.forEach(element => {
@@ -226,7 +228,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       subscribe(
         (data: any) => {
           if (data == null) {
-            alert("Added Successfully");
+            this.showError("success", "", "Target days changed successfully");
             this.statusService.projectTargetSubject.next();
           }
         });

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { ConsumptionService } from './consumption.service';
 import { StatusService } from '../../shared/service/status.service';
 import { Subscription } from 'rxjs';
@@ -22,7 +21,6 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
   millSubscription: Subscription;
 
   constructor(private consumptionService: ConsumptionService,
-    private messageService: MessageService,
     private statusService: StatusService) {
     this.consumptionsMap = this.statusService.consumptionDetailMap;
   }
@@ -75,11 +73,6 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
   public showGridDialog(kpiId: number, title: string) {
     this.consumptionService.getKpiGridData(kpiId, title, this.kpiCategoryId);
-  }
-
-
-  public showMessage(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
   public changeChartType(event: any, kpiId: number) {

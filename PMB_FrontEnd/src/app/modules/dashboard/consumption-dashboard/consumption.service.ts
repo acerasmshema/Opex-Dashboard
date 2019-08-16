@@ -8,6 +8,7 @@ import { LocalStorageService } from '../../shared/service/localStorage/local-sto
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
+import { MasterData } from '../../shared/constant/MasterData';
 
 @Injectable({
   providedIn: 'root'
@@ -106,18 +107,37 @@ export class ConsumptionService {
   }
 
   public getKpiGridData(kpiId: number, kpiName: string, kpiCategoryId: string) {
-    let consumptionRequest = new ConsumptionRequest();
-    consumptionRequest.kpiId = kpiId;
 
     let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
     let searchKpiData = consumptionDetail.searchKpiData;
 
+    let consumptionRequest = new ConsumptionRequest();
     consumptionRequest.millId = this.statusService.selectedMill.millId;
-    consumptionRequest.startDate = searchKpiData.startDate;
-    consumptionRequest.endDate = searchKpiData.endDate;
+    consumptionRequest.kpiId = kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
-    consumptionRequest.frequency = searchKpiData.frequency.code;
-    consumptionRequest.processLines = searchKpiData.processLines;
+
+    if (searchKpiData === undefined) {
+      let startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
+      let frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+        MasterData.dashboardFrequencies.find(frequency => frequency.name === 'Daily') :
+        MasterData.dashboardFrequencies.find(frequency => frequency.name === 'Monthly');
+
+      consumptionRequest.frequency = frequency.code;
+      consumptionRequest.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
+      consumptionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      consumptionRequest.processLines = [];
+    }
+    else {
+      let processLinesHeads = [];
+      searchKpiData.processLines.forEach(pl => {
+        processLinesHeads.push(pl["processLineCode"]);
+      });
+
+      consumptionRequest.startDate = searchKpiData.startDate;
+      consumptionRequest.endDate = searchKpiData.endDate;
+      consumptionRequest.frequency = searchKpiData.frequency.code;
+      consumptionRequest.processLines = processLinesHeads;
+    }
 
     this.apiCallService.callAPIwithData(this.consumptionKpiGridUrl, consumptionRequest).
       subscribe((response: any) => {

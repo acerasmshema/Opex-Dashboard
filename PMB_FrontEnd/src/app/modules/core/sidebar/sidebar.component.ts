@@ -119,7 +119,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.searchKpiData.type = type;
       const consumptionDetail = this.statusService.consumptionDetailMap.get(this.sidebarForm.kpiCategoryId);
       consumptionDetail.searchKpiData = this.searchKpiData;
-      console.log("1 " +  this.searchKpiData);
       this.consumptionService.filterCharts(this.searchKpiData, this.sidebarForm.kpiCategoryId);
     }
   }

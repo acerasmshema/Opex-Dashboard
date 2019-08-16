@@ -21,14 +21,12 @@ export class LoginComponent implements OnInit {
   constructor(private localStorageService: LocalStorageService,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private messageService: MessageService,
     private loginService: LoginService) {
-
-    this.loginForm = fb.group({ loginId: "", userPassword: "" });
   }
 
   ngOnInit() {
+    this.loginForm = this.fb.group({ loginId: "", userPassword: "" });
     this.localStorageService.emptyLocalStorage();
   }
 
