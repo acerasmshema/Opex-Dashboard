@@ -5,8 +5,9 @@ import { ConsumptionModel } from '../../shared/models/Consumption.model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
-import { ConsumptionRequest } from './Consumption';
+import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
+import { ConsumptionGridView } from './consumption-grid-view';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,10 @@ export class ConsumptionService {
   consumptionGridKpiUrl = AppConstants.apiURLs.CONSUMPTION_GRID_API_URL;
   consumptionKpiGridUrl = AppConstants.apiURLs.CONSUMPTION_API_GRID_URL;
 
-  constructor(private apiCallService: ApiCallService, private statusService: StatusService,
-    private datePipe: DatePipe, private localStorageService: LocalStorageService) { }
+  constructor(private apiCallService: ApiCallService,
+    private statusService: StatusService,
+    private datePipe: DatePipe,
+    private localStorageService: LocalStorageService) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
@@ -38,7 +41,6 @@ export class ConsumptionService {
     this.statusService.consumptionDetailMap.set(kpiCategoryId, consumptionDetail);
   }
 
-
   showKpiCharts(kpiId: number, kpiName: string, kpiCategoryId: string) {
     let searchKpiData = new SearchKpiData();
     let startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
@@ -50,6 +52,7 @@ export class ConsumptionService {
     searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
       { name: "Daily", code: "0" } :
       { name: "Monthly", code: "1" };
+
     this.updateChart(searchKpiData, kpiCategoryId);
   }
 
@@ -98,13 +101,47 @@ export class ConsumptionService {
     return this.apiCallService.callAPIwithData(this.consumptionKpiUrl, data);
   }
 
-  public getKpiGridData(data: object) {
-    return this.apiCallService.callAPIwithData(this.consumptionKpiGridUrl, data);
-  }
-
   public getDataForGrid(data: object) {
     return this.apiCallService.callGetAPIwithData(this.consumptionGridKpiUrl, data);
   }
+
+  public getKpiGridData(kpiId: number, kpiName: string, kpiCategoryId: string) {
+    let consumptionRequest = new ConsumptionRequest();
+    consumptionRequest.kpiId = kpiId;
+
+    let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
+    let searchKpiData = consumptionDetail.searchKpiData;
+
+    consumptionRequest.millId = this.statusService.selectedMill.millId;
+    consumptionRequest.startDate = searchKpiData.startDate;
+    consumptionRequest.endDate = searchKpiData.endDate;
+    consumptionRequest.kpiCategoryId = kpiCategoryId;
+    consumptionRequest.frequency = searchKpiData.frequency.code;
+    consumptionRequest.processLines = searchKpiData.processLines;
+
+    this.apiCallService.callAPIwithData(this.consumptionKpiGridUrl, consumptionRequest).
+      subscribe((response: any) => {
+        let consumptionGridView = new ConsumptionGridView();
+        consumptionGridView.show = true;
+        consumptionGridView.paginator = true;
+        consumptionGridView.scrollable = true;
+        consumptionGridView.rows = 10;
+        consumptionGridView.gridData = response[0];
+        consumptionGridView.title = kpiName;
+
+        let columnNames = Object.keys(response[0][0]);
+        columnNames.forEach(columnName => {
+          consumptionGridView.columnNames.push({ header: columnName, field: columnName });
+        });
+
+        const data = {
+          dialogName: "consumptionGridView",
+          consumptionGridView: consumptionGridView
+        }
+        this.statusService.dialogSubject.next(data);
+      });
+  }
+
 
   getHeader(kpiCategoryId: string): string {
     let headerName = "";

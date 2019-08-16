@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { Subscription } from 'rxjs';
@@ -36,7 +35,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarSubscription = this.statusService.sidebarSubject.
       subscribe((sidebarRequestData: SidebarRequest) => {
         if (sidebarRequestData.isShow) {
-
           if (sidebarRequestData.type === "dashboard") {
             this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
 
@@ -121,6 +119,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.searchKpiData.type = type;
       const consumptionDetail = this.statusService.consumptionDetailMap.get(this.sidebarForm.kpiCategoryId);
       consumptionDetail.searchKpiData = this.searchKpiData;
+      console.log("1 " +  this.searchKpiData);
       this.consumptionService.filterCharts(this.searchKpiData, this.sidebarForm.kpiCategoryId);
     }
   }

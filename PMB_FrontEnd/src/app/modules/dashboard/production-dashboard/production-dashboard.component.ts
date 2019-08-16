@@ -37,6 +37,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   endDate: string = '';
   updateChartSubscription: Subscription;
   millSubscription: Subscription;
+  projectTargetSubscription: Subscription;
 
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
@@ -50,8 +51,14 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.updateChartSubscription = this.statusService.updateChartSubject.
       subscribe((dashboardName: string) => {
-        if (dashboardName === 'production')
+        if (dashboardName === 'production') {
           this.searchData();
+        }
+      });
+
+    this.projectTargetSubscription = this.statusService.projectTargetSubject.
+      subscribe(() => {
+        this.getProjectedTarget();
       });
 
     this.millSubscription = this.statusService.changeMill.
@@ -75,7 +82,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getProjectedTarget();
     this.getProductionYDayData();
     this.getAnnualTarget();
-    this.getAnnotationDates();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, true, [], frequency);
@@ -241,27 +247,40 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, showColumns: boolean, processLines: any, frequency: any) {
+
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
-      subscribe((data: any) => {
-        this.producionLineForm.processLines = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+      subscribe((response: any) => {
 
-        this.prodLineChart = new ProductionLine();
-        this.prodLineChart.productionLineData = [];
-        this.prodLineChart.xScaleMin = 0;
-        this.prodLineChart.yAxis = true;
-        this.prodLineChart.xAxis = true;
-        this.prodLineChart.animations = true;
-        this.prodLineChart.legend = false;
-        this.prodLineChart.showRefLines = false;
-        this.prodLineChart.showXAxisLabel = false;
-        this.prodLineChart.showYAxisLabel = false;
-        this.prodLineChart.showDataLabel = false;
-        this.prodLineChart.yAxisLabel = "";
-        this.prodLineChart.xAxisLabel = "";
-        this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
-        this.prodLineChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
-        this.prodLineChart.productionLineData = data;
+        const requestData = {
+          millId: this.statusService.selectedMill.millId,
+          buTypeId: '1',
+          kpiId: '1',
+          startDate: this.startDate,
+          endDate: this.endDate
+        };
+        this.productionService.getAnnotationDates(requestData).
+          subscribe((data: any) => {
+            this.annotationDates = data['annotationDates'];
+            this.producionLineForm.processLines = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+
+            this.prodLineChart = new ProductionLine();
+            this.prodLineChart.productionLineData = [];
+            this.prodLineChart.xScaleMin = 0;
+            this.prodLineChart.yAxis = true;
+            this.prodLineChart.xAxis = true;
+            this.prodLineChart.animations = true;
+            this.prodLineChart.legend = false;
+            this.prodLineChart.showRefLines = false;
+            this.prodLineChart.showXAxisLabel = false;
+            this.prodLineChart.showYAxisLabel = false;
+            this.prodLineChart.showDataLabel = false;
+            this.prodLineChart.yAxisLabel = "";
+            this.prodLineChart.xAxisLabel = "";
+            this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
+            this.prodLineChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
+            this.prodLineChart.productionLineData = response;
+          });
       });
     this.getAllProductionLinesDateForGrid(productionRequest, showColumns);
   }
@@ -372,9 +391,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     return productionRequest;
   }
 
-  displaySettingIcon: boolean = false;
   public openSettingIcon() {
-    this.displaySettingIcon = !this.displaySettingIcon;
+    this.statusService.dialogSubject.next({ dialogName: "maintenanceDays" });
   }
 
   onSelect(event) {
@@ -403,15 +421,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     return dateTick;
   }
 
-  public getAnnotationDates() {
-    const data = { millId: this.statusService.selectedMill.millId, buTypeId: '1', kpiId: '1', startDate: this.startDate, endDate: this.endDate };
-    this.productionService.getAnnotationDates(data).subscribe((data: any) => {
-      this.annotationDates = data['annotationDates'];
-    });
-  }
-
   ngOnDestroy() {
     this.updateChartSubscription.unsubscribe();
     this.millSubscription.unsubscribe();
+    this.projectTargetSubscription.unsubscribe();
   }
 }

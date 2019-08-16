@@ -1,4 +1,5 @@
 export class AnnotationDialog {
+    displayAnnotations: boolean;
     processLinesForAnnotation: any[];
     createAnnotationCollapsed: boolean;
     findAnnotationCollapsed: boolean;

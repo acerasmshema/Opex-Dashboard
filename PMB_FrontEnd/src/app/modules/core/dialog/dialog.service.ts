@@ -17,5 +17,4 @@ export class DialogService {
     public fetchAnnotation(data: any) {
         return this.apiCallService.callAPIwithData(this.findAnnotation, data);
     }
-
 }

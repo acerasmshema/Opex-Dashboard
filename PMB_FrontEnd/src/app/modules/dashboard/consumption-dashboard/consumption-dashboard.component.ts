@@ -73,6 +73,10 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  public showGridDialog(kpiId: number, title: string) {
+    this.consumptionService.getKpiGridData(kpiId, title, this.kpiCategoryId);
+  }
+
 
   public showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });

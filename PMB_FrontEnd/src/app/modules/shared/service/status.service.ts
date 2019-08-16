@@ -11,6 +11,7 @@ export class StatusService {
     public dialogSubject: Subject<any> = new Subject<any>();
     public updateChartSubject: Subject<string> = new Subject<string>();
     public changeMill: Subject<string> = new Subject<string>();
+    public projectTargetSubject: Subject<any> = new Subject<any>();
 
     public processLineMap = new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();
