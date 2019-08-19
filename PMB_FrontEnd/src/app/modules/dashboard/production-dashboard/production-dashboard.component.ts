@@ -256,8 +256,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
           millId: this.statusService.common.selectedMill.millId,
           buTypeId: '1',
           kpiId: '1',
-          startDate: this.startDate,
-          endDate: this.endDate
+          startDate: startDate,
+          endDate: endDate
         };
         this.productionService.getAnnotationDates(requestData).
           subscribe((data: any) => {
