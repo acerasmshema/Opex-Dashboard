@@ -2,14 +2,14 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class MillsResponse {
 
-	private Integer millId;
+	private String millId;
 	private String millCode;
 	private String millName;
 	
-	public Integer getMillId() {
+	public String getMillId() {
 		return millId;
 	}
-	public void setMillId(Integer millId) {
+	public void setMillId(String millId) {
 		this.millId = millId;
 	}
 	public String getMillCode() {
