@@ -53,12 +53,17 @@ public class ProcessLineUtility {
 		return processLines;
 	}
 	
-	public static List<String> getAllProcessLines(List<ProcessLine> processLines) {
-		List<String> processLinesList = new ArrayList<>();
-		for(ProcessLine line : processLines) {
-		processLinesList.add(line.getProcessLineCode());
-		}
-		return processLinesList;
+	public static List<String> getAllProcessLines() {
+		List<String> processLines = new ArrayList<>();
+		processLines.add(DashboardConstant.PROCESS_LINE_FL1);
+		processLines.add(DashboardConstant.PROCESS_LINE_FL2);
+		processLines.add(DashboardConstant.PROCESS_LINE_FL3);
+		processLines.add(DashboardConstant.PROCESS_LINE_PCD);
+		processLines.add(DashboardConstant.PROCESS_LINE_PD1);
+		processLines.add(DashboardConstant.PROCESS_LINE_PD2);
+		processLines.add(DashboardConstant.PROCESS_LINE_PD3);
+		processLines.add(DashboardConstant.PROCESS_LINE_PD4);
+		return processLines;
 	}
 	
 	public static java.util.Date getYesterdayDate() {
@@ -175,34 +180,25 @@ public class ProcessLineUtility {
 	
 	public static List<DateRangeResponse> createDailyTargetLineResponse(List<ProcessLine> processLine, List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		List<DateRangeResponse> dailyTargetResponse = new ArrayList<>();
-		List<String> lineList = new ArrayList<>();
-		for(ProcessLine line: processLine) {
-			lineList.add(DashboardConstant.TARGET_LINE);
-		}
+		List<String> lineList = Arrays
+				.asList(DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
+						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
+						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
+						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE );
 		lineList.forEach(item -> {
 			DateRangeResponse processObj = new DateRangeResponse(item, new ArrayList<>());
 			dailyTargetResponse.add(processObj);
 		});
-		List<SeriesObject> processLine1=null;
-		List<SeriesObject> processLine2=null;
-		List<SeriesObject> processLine3=null;
-		List<SeriesObject> processLine4=null;
-		List<SeriesObject> processLine5=null;
-		List<SeriesObject> processLine6=null;
-		List<SeriesObject> processLine7=null;
-		List<SeriesObject> processLine8=null;
-		try {
-		processLine1 = dailyTargetResponse.get(0).getSeries();
-		processLine2 = dailyTargetResponse.get(1).getSeries();
-		processLine3 = dailyTargetResponse.get(2).getSeries();
-		processLine4 = dailyTargetResponse.get(3).getSeries();
-		processLine5 = dailyTargetResponse.get(4).getSeries();
-		processLine6 = dailyTargetResponse.get(5).getSeries();
-		processLine7 = dailyTargetResponse.get(6).getSeries();
-		processLine8 = dailyTargetResponse.get(7).getSeries();
-		}catch(ArrayIndexOutOfBoundsException e) {
 		
-		}
+		List<SeriesObject> processLine1 = dailyTargetResponse.get(0).getSeries();
+		List<SeriesObject> processLine2 = dailyTargetResponse.get(1).getSeries();
+		List<SeriesObject> processLine3 = dailyTargetResponse.get(2).getSeries();
+		List<SeriesObject> processLine4 = dailyTargetResponse.get(3).getSeries();
+		List<SeriesObject> processLine5 = dailyTargetResponse.get(4).getSeries();
+		List<SeriesObject> processLine6 = dailyTargetResponse.get(5).getSeries();
+		List<SeriesObject> processLine7 = dailyTargetResponse.get(6).getSeries();
+		List<SeriesObject> processLine8 = dailyTargetResponse.get(7).getSeries();
+		
 		populateDailyLineTargetReponse(processLine, dailyKpiPulpEntities, processLine1, processLine2, processLine3,
 				processLine4, processLine5, processLine6, processLine7, processLine8);
 		

@@ -62,9 +62,9 @@ public class KPICategoryController {
 	}
 	
 	@GetMapping(value = "/v1/kpi_category/get_process_lines")
-	public ResponseEntity<List<ProcessLinesResponse>> getRequestedProcessLines(@RequestHeader(value="kpiId") String kpiId, @RequestHeader(value="millId") String millId){
+	public ResponseEntity<List<ProcessLinesResponse>> getRequestedProcessLines(@RequestHeader(value="kpiId") String kpiId){
 		logger.info("Get kpi type by kpiCategoryId", kpiId);
-		List<ProcessLinesResponse> response = kpiCategoryService.getProcessLines(DailyKpiPulpConverter.covertToInteger(kpiId), DailyKpiPulpConverter.covertToInteger(millId));
+		List<ProcessLinesResponse> response = kpiCategoryService.getProcessLines(DailyKpiPulpConverter.covertToInteger(kpiId));
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 

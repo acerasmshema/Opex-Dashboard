@@ -23,7 +23,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 
 @Repository
@@ -31,11 +30,11 @@ public interface ProcessLineRepository extends JpaRepository<ProcessLineEntity, 
 	
 	public List<ProcessLineEntity> findByProcessLineNameIn(@Param("processLines") List<String> processLines);
 	
-	public List<ProcessLineEntity> findAllByMillOrderByProcessLineIdAsc(MillEntity millId);
+	public List<ProcessLineEntity> findAllByOrderByProcessLineIdAsc();
 	
 	@Query("Select PL from  ProcessLineEntity PL inner join KpiProcessLineEntity KPL on PL.processLineId=KPL.processLine.processLineId "
-			+ "where KPL.kpi.kpiId = :kpiId and PL.active=:status and PL.mill.millId = :millId order by PL.processLineId")
-	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId,@Param("status") Boolean status, @Param("millId") Integer millId);
+			+ "where KPL.kpi.kpiId = :kpiId and PL.active=:status order by PL.processLineId")
+	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId,@Param("status") Boolean status);
 	
 	@Query("Select PL from  ProcessLineEntity PL where PL.mill.millId = :millId And PL.active = :status order by PL.processLineId")
 	List<ProcessLineEntity> getPrcessLineByLocation(@Param("millId") Integer millId, @Param("status") Boolean status);
