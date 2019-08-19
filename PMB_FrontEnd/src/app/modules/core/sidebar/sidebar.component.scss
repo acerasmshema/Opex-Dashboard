@@ -1,12 +1,9 @@
 $topnav-background-color: #32475a;
 .sidebar {
     position: fixed;
-    height: 100vh;
-    top: 57px;
-    z-index: 20;
+    min-height: 88vh;
     width: 16.5%;
     padding-top: 120px;
-    background: #fff;
     box-shadow: 1px 0 20px rgba(0,0,0,.08);
     background-color: $topnav-background-color;
     

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppConstants } from 'src/app/app.constant';
 import { ApiCallService } from '../../shared/service/APIService/ApiCall.service';
-import { ConsumptionModel } from '../../shared/models/Consumption.model';
+import { ConsumptionModel } from '../../shared/models/consumption-model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
@@ -68,7 +68,7 @@ export class ConsumptionService {
     consumptionRequest.endDate = searchKpiData.endDate;
     consumptionRequest.kpiId = searchKpiData.kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
-    consumptionRequest.millId = this.statusService.selectedMill.millId;
+    consumptionRequest.millId = this.statusService.common.selectedMill.millId;
     consumptionRequest.frequency = searchKpiData.frequency["code"];
     consumptionRequest.processLines = processLinesHeads;
 
@@ -112,7 +112,7 @@ export class ConsumptionService {
     let searchKpiData = consumptionDetail.searchKpiData;
 
     let consumptionRequest = new ConsumptionRequest();
-    consumptionRequest.millId = this.statusService.selectedMill.millId;
+    consumptionRequest.millId = this.statusService.common.selectedMill.millId;
     consumptionRequest.kpiId = kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
 

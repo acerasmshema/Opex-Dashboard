@@ -1,6 +1,6 @@
 <div *ngIf="dialogName === 'annotation'">
-    <p-dialog header="Annotations for Production on {{annotationDialog.annotationDate}}" [responsive]="true"
-        [style]="{width: '800px', minWidth: '200px',height: '800px'}" [minY]="70" [baseZIndex]="10000"
+    <p-dialog modal="true" header="Annotations for Production on {{annotationDialog.annotationDate}}" [responsive]="true"
+        [style]="{width: '800px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000"
         [(visible)]="annotationDialog.displayAnnotations">
         <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
             (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
@@ -62,8 +62,8 @@
 </div>
 
 <div *ngIf="dialogName === 'consumptionGridView'">
-    <p-dialog [header]="consumptionGridView.title" [(visible)]="consumptionGridView.show"
-        [style]="{width: '700px', height: '500px'}">
+    <p-dialog modal="true" [header]="consumptionGridView.title" [(visible)]="consumptionGridView.show"
+        [style]="{width: '700px'}">
         <p-table #consumptionGrid [columns]="consumptionGridView.columnNames" [value]="consumptionGridView.gridData"
             [paginator]="consumptionGridView.paginator" [rows]="consumptionGridView.rows"
             [scrollable]="consumptionGridView.scrollable" scrollHeight="450px">
@@ -92,8 +92,8 @@
 </div>
 
 <div *ngIf="dialogName === 'maintenanceDays'">
-    <p-dialog header="Maintenance Days" [responsive]="true"
-        [style]="{width: '800px', minWidth: '300px',height: '500px'}" [minY]="70" [baseZIndex]="10000"
+    <p-dialog modal="true" header="Maintenance Days" [responsive]="true"
+        [style]="{width: '800px', minWidth: '300px', height: '500px'}" [minY]="70" [baseZIndex]="10000"
         [(visible)]="maintenanceDays.show">
         <p-panel header="Maintenance Days Configurations" [collapsed]="maintenanceDays.collapsed" [toggleable]="true">
             <div class="container">

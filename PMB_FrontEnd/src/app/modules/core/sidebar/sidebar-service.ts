@@ -19,9 +19,9 @@ export class SidebarService {
         sidebarForm.collapsed = true;
         sidebarForm.hide = true;
         sidebarForm.countries = MasterData.country;
-        sidebarForm.mills = [this.statusService.selectedMill];
+        sidebarForm.mills = [this.statusService.common.selectedMill];
         sidebarForm.buisnessUnits = MasterData.businessUnit;
-        sidebarForm.processLines = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+        sidebarForm.processLines = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
         sidebarForm.kpiCategoryId = sidebarRequestData.kpiCategoryId;

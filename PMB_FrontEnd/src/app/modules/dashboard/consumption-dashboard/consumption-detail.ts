@@ -1,4 +1,4 @@
-import { ConsumptionModel } from '../../shared/models/Consumption.model';
+import { ConsumptionModel } from '../../shared/models/consumption-model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
 
 export class ConsumptionDetiail {

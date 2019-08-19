@@ -100,7 +100,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
   public getProductionYDayData() {
     this.yesterdayProductionData = new ProductionLine();
-    const data = { millId: this.statusService.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
+    const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProductionYDayData(data).
       subscribe((data: any) => {
         let valueArr = data['range'].split(',');
@@ -120,7 +120,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public getProjectedTarget() {
-    const data = { millId: this.statusService.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
+    const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProjectedTarget(data).subscribe((data: any) => {
       this.annualChart.targetDays = data['targetDays'];
       this.annualChart.targetValue = data['projectedTarget'].toLocaleString('en-us');
@@ -129,7 +129,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public getAnnualTarget() {
-    const data = { millId: this.statusService.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
+    const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getAnnualTarget(data).subscribe((data: any) => {
       this.annualChart.annualTarget = data['annualTarget'].toLocaleString('en-us');
     });
@@ -145,7 +145,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.annualChart.legend = false;
     this.annualChart.annualData = [];
 
-    const requestData = { millId: this.statusService.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
+    const requestData = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProductionYTDData(requestData).
       subscribe((actualData: any) => {
         this.productionService.getProductionYTDTargetData(requestData).
@@ -189,7 +189,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (data !== "e") {
 
           let processLines = data.dailyKpiPulp;
-          let processLinesNames = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+          let processLinesNames = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
           for (let index = 0; index < processLines.length; index++) {
             const processLine = processLines[index];
             let prodLine = new ProductionLine();
@@ -253,7 +253,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe((response: any) => {
 
         const requestData = {
-          millId: this.statusService.selectedMill.millId,
+          millId: this.statusService.common.selectedMill.millId,
           buTypeId: '1',
           kpiId: '1',
           startDate: this.startDate,
@@ -262,7 +262,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.productionService.getAnnotationDates(requestData).
           subscribe((data: any) => {
             this.annotationDates = data['annotationDates'];
-            this.producionLineForm.processLines = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+            this.producionLineForm.processLines = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
 
             this.prodLineChart = new ProductionLine();
             this.prodLineChart.productionLineData = [];
@@ -300,7 +300,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
     }
     else {
-      let columnsNames = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+      let columnsNames = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
       columnsNames.forEach(columnName => {
         colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
       });
@@ -379,7 +379,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     let productionRequest = new ProductionRequest();
     productionRequest.startDate = startDate;
     productionRequest.endDate = endDate;
-    productionRequest.millId = this.statusService.selectedMill.millId;
+    productionRequest.millId = this.statusService.common.selectedMill.millId;
     productionRequest.processLines = processLines;
     productionRequest.frequency = frequency;
 

@@ -48,7 +48,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.annotationDialog.annotationKpiId = data.annotationKpiId;
           this.annotationDialog.annotationDate = data.annotationDate;
           this.annotationDialog.dashboardName = data.dashboardName;
-          this.annotationDialog.processLinesForAnnotation = this.statusService.processLineMap.get(this.statusService.selectedMill.millId);
+          this.annotationDialog.processLinesForAnnotation = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
           this.getAnnotationData(this.annotationDialog.annotationKpiId);
           this.annotationDialog.displayAnnotations = true;
           this.dialogName = dialogName;
@@ -74,7 +74,7 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   public getAnnotationData(kpiId) {
     const kpiData = {
-      millId: this.statusService.selectedMill.millId,
+      millId: this.statusService.common.selectedMill.millId,
       buTypeId: '1',
       kpiId: kpiId,
       annotationDate: this.annotationDialog.annotationDate
@@ -103,7 +103,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.annotationDialog.annotationLines = this.annotationDialog.annotationLines.replace(/,\s*$/, "");
 
     const data = {
-      millId: this.statusService.selectedMill.millId,
+      millId: this.statusService.common.selectedMill.millId,
       buTypeId: '1',
       kpiId: this.annotationDialog.annotationKpiId,
       annotationDate: this.annotationDialog.annotationDate,
@@ -158,7 +158,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     maintanenceListDataNew.push(totalDate);
 
     const requestData = {
-      millId: this.statusService.selectedMill.millId,
+      millId: this.statusService.common.selectedMill.millId,
       buId: 1,
       createdBy: 1,
       updatedBy: 1,
@@ -180,7 +180,7 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   public viewMaintenanceDays() {
     const requestData = {
-      millId: this.statusService.selectedMill.millId,
+      millId: this.statusService.common.selectedMill.millId,
       buId: "1"
     };
     this.productionService.getMaintenanceData(requestData).
@@ -219,7 +219,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       return;
     }
     const requestData = {
-      millId: this.statusService.selectedMill.millId,
+      millId: this.statusService.common.selectedMill.millId,
       buId: 1,
       kpiCategoryId: 1,
       noOfTargetDays: +this.maintenanceDays.targetAreaValue

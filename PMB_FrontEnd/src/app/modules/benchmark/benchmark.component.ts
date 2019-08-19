@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarRequest } from '../core/sidebar/sidebar-request';
 import { StatusService } from '../shared/service/status.service';
-import { ConsumptionModel } from '../shared/models/Consumption.model';
+import { ConsumptionModel } from '../shared/models/consumption-model';
 
 @Component({
   selector: 'app-benchmark',

@@ -44,17 +44,18 @@ export class HeaderComponent implements OnInit {
   }
   
   onChangeMill(millId: string) {
-    if(this.statusService.selectedMill.millId !== millId) {
+    if(this.statusService.common.selectedMill.millId !== millId) {
       this.statusService.changeMill.next(millId);
     }
   }
 
   getMills() {
-    this.statusService.mills =  [
+    this.statusService.common.mills =  [
       { millId: "1", millName: 'Kerinci' },
       { millId: "2", millName: 'Rizaho' },
   ];
-    this.mills = this.statusService.mills;
-    this.statusService.selectedMill =  { millId: "1", millName: 'Kerinci' }
+    this.mills = this.statusService.common.mills;
+    this.statusService.common.selectedMill =  { millId: "1", millName: 'Kerinci' }
   }
+  
 }

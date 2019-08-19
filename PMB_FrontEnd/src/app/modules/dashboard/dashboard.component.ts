@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
  
     setTimeout(() => {
       this.disbaleTab = false;
-    }, 5000);
+    }, 1000);
   }
 
   openSidebar(event: any) {
@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getProcessUnitLegends(): any {
-    let millId = this.statusService.selectedMill.millId;
+    let millId = this.statusService.common.selectedMill.millId;
     const requestData = {
       millId: millId
     }

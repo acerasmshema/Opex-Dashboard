@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject } from 'rxjs';
 import { SidebarRequest } from '../../core/sidebar/sidebar-request';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
+import { CommonModel } from '../models/common-model';
 
 @Injectable()
 export class StatusService {
@@ -15,6 +16,5 @@ export class StatusService {
 
     public processLineMap = new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();
-    public mills: any = [];
-    public selectedMill: any;
+    public common: CommonModel = new CommonModel();
 }
