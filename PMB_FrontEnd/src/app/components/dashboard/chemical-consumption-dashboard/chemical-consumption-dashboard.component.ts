@@ -347,6 +347,14 @@ this.annotationsCols=annotationsCols;
         this.kpiType8show = !this.kpiType8show;
         this.kpiId11LineData=[];
         this.chemicalConsumptionRequest.kpiId = "11";
+<<<<<<< HEAD
+        // this.chemicalConsumptionService.getTargetLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          // this.kpiId11LineData = data;
+        // });
+        this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
+          this.kpiId11LineData = [...this.kpiId11LineData, data];
+        });
+=======
         
          this.chemicalConsumptionService.getLineDataforKpi(this.chemicalConsumptionRequest).subscribe((data: any) => {
           this.kpiId11LineData = data;
@@ -355,6 +363,7 @@ this.annotationsCols=annotationsCols;
           this.kpiId11LineData = [...this.kpiId11LineData,data];
         }); 
        
+>>>>>>> 3564751c3c5f47695fc40f51e5f76a4cfc87d60e
        
       }
 

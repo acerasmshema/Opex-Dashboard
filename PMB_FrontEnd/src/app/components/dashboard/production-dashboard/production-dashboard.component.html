@@ -310,7 +310,10 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr>
-                <td  *ngFor="let col of columns" [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'">
+                <td
+                *ngFor="let col of columns "  
+                 [ngStyle]="{'color':col.field == 'date' ? 'black':checkSroColor(col.field, rowData[col.field])}"
+                [ngClass]="col.field == 'date' ? 'center-align' : 'right-align'" >
                   {{rowData[col.field]}}
                 </td>
               </tr>
@@ -393,6 +396,12 @@
               </tr>
             </ng-template>
           </p-table>
+                     <button
+               [hidden]="selectAnnotationList == undefined || !selectAnnotationList.length " 
+               *ngIf="showDelButtonOnlyForLoggedInUser()"
+          pButton type="button"
+          class="ui-button-primary" (click)="delAnnotationList()" icon="fa fa-trash" label="Delete" iconPos="left"
+          style="height: 28px; margin-top: 8px;"></button>
         </div>
       </div>
     </div>
@@ -443,10 +452,28 @@
                 </th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
-              <tr [pSelectableRow]="rowData">
-                <td *ngFor="let col of columns">
-                  {{rowData[col.field]}}
+        <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="rowData">
+                <td >
+                  {{rowData.id}}
+                </td>
+                <td>
+                  {{rowData.maintainceDates}} 
+                </td>
+                <td >
+                  <p-cellEditor  >
+                    <ng-template pTemplate="input" >
+                       <textarea [(ngModel)]="rowData.remarks" placeholder="" rows="1" cols="10" pInputTextarea ></textarea>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData.remarks }}
+                    </ng-template>
+                </p-cellEditor>
+                </td>
+                <td style="text-align:center"  >
+                <button *ngIf="editing" placeholder=" " pButton type="button" pInitEditableRow  icon="pi pi-pencil"  class="ui-button-info" (click)="rowData.remarks=''"></button>
+                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)"></button>
                 </td>
               </tr>
             </ng-template>

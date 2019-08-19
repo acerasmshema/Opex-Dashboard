@@ -20,6 +20,16 @@ import { ErrorMessages } from '../../../shared/appMessages';
   providers: [MessageService, DatePipe, DecimalPipe, LocalStorageService]
 })
 export class ProductionDashboardComponent implements OnInit {
+
+  // Hema Variable ---------
+  currentLoggedIdUserID:string;
+  currentLoggedInUsersName:string;
+  newAnnotationDeleteList: any[];
+  annotations_annoID:any; 
+  annotations_userID:any;
+  selectAnnotationList:any[]=[];
+  // Hema Variable ---------
+
   pl1Data: any[];   
   pl2Data: any[];
   pl3Data: any[];
@@ -28,6 +38,7 @@ export class ProductionDashboardComponent implements OnInit {
   pl6Data: any[];
   pl7Data: any[];
   pl8Data: any[];
+  annotationDates: any[] = [];
   maintanenceDaysColumn: any[];
   maintanenceDayModel: any[];
   selectedMaintenanceDay: any[];
@@ -558,6 +569,11 @@ export class ProductionDashboardComponent implements OnInit {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
+<<<<<<< HEAD
+    console.log("Annptation")
+    console.log(this.annotationDates)
+=======
+>>>>>>> 3564751c3c5f47695fc40f51e5f76a4cfc87d60e
     if (this.annotationDates != null && this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
     }else {
@@ -638,6 +654,47 @@ export class ProductionDashboardComponent implements OnInit {
     this.createAnnotationCollapsed = !this.createAnnotationCollapsed;
   }
 
+
+  getSelectRowAnnotationUserID:any=[];
+  public showDelButtonOnlyForLoggedInUser(){
+    this.currentLoggedInUsersName = this.localStorageService.fetchUserName();
+    if(this.selectAnnotationList.length>0){
+      this.selectAnnotationList.forEach(element => {
+        this.annotations_userID = element["userId"];
+      });
+      if(this.annotations_userID==this.currentLoggedInUsersName){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+
+  }
+
+
+  public delAnnotationList() {
+    this.currentLoggedIdUserID = this.localStorageService.fetchloginId();
+    this.newAnnotationDeleteList = [];
+    var data;
+    this.selectAnnotationList.forEach(element => {
+      this.annotations_annoID = element["annotationId"];
+      this.annotations_userID = element["userId"];
+    });
+    data = {"annotationId" : this.annotations_annoID, "userId" : this.currentLoggedIdUserID};
+    this.newAnnotationDeleteList.push(data);
+    const dataany = this.newAnnotationDeleteList;
+    this.productionService.deleteAnnotationLists(dataany).subscribe(
+      (dataany: any) => {
+        this.showMessage("success", "", "Deleted.");
+        this.getAnnotationData();
+        this.getAnnotationDates();
+    });
+  }
+  
+
+
   maintanenceListDataNew: any[];
   maintErrorMessage: string;
   public showMessage(severity: string, summary: string, detail: string) {
@@ -685,6 +742,9 @@ export class ProductionDashboardComponent implements OnInit {
     )
   }
 
+
+
+
   msgs: any[];
   newdeleteDate: any[]
   public delMaintanenceDays() {
@@ -727,5 +787,115 @@ export class ProductionDashboardComponent implements OnInit {
   public openSettingIcon() {
     this.displaySettingIcon = !this.displaySettingIcon;
   }
+
+
+
+ // Hema Methods ---------
+// production threshold , below 5% is red, above 95% black
+
+gridData:  any[] = [];
+sroItem: any[] = [];
+newSROCOlor:any[] = [];
+sroColor:string;
+public getDataForProductionGrid(){
+const newWork = this.productionService.getAllProductionLinesDateForGrid(this.productionRequest);
+newWork.subscribe((data:any)=>{
+  data.map(ob=>{
+    ob.map(newdata =>{
+      for (let each in newdata){
+        if(newdata.hasOwnProperty(each)){
+          this.getSroValues(each.toUpperCase(), newdata[each])
+        }
+      }
+    });
+  })
+});
+}
+
+eachKey:string;
+eachKeyValue:string;
+public getSroValues (newDataKeys, newDataValues){
+  const requestData = {kpiCategoryId:'1'};
+  this.productionService.getkpiCatForYDayAllProcessLineData(requestData)
+  .subscribe((data: any) => {
+    data.map(ob => {
+      ob.series.map(sro => {
+        sro['id'] = newDataKeys;
+        if(sro['value'] != null || sro['value'] != "N/A"){
+          if(sro['name'] === sro['id']){
+            sro['value']= newDataValues;
+             this.parseAndGetColor(sro);
+             sro['color'] = this.parseAndGetColor( sro );
+             this.sroItem.push(sro);
+            //  console.log("SroItem Value after cycle",this.sroItem);
+            }
+        }
+      })
+      });
+    });
+}
+
+
+
+
+public parseAndGetColor( sro ){
+  let prev = 0;
+  let ar = sro.target.split(",");
+  let blackValue, redValue:number;
+
+  if(sro.value ==="N/A" || sro.value === null){
+    return 'red';
+  }else{
+    for (let v1 of ar ){
+      let ix = v1.split(":");
+      if(ix[0].trim()==="black"){
+        blackValue =  parseInt(ix[1].trim());
+      }else if( ix[0].trim()==="red"){
+        redValue  =  parseInt(ix[1].trim());
+      }
+    }
+    // console.log("This the done parser  of sro ",sro);
+    if(sro.value <= blackValue && sro.value <= redValue){
+      return 'red';
+    } else if (sro.value <= blackValue && sro.value >= redValue){
+      return 'black'
+    }else if (sro.value >= blackValue && sro.value >= redValue){
+      return 'black';
+    }
+   }
+  }
+
+eachSroItem:any;
+eachProductoNlines_Outside :any;
+eachkeyNew :string[];
+eachKeyValueNum:any[];
+sroItemColor:string;
+
+// macam mana nak buat ?
+// if the productonLines id & productons.value match the SroItem id & SroItem.values
+// then color the productonLines.Value with sroItem color
+
+
+  public checkSroColor(data_header, data_value){
+    // console.log("data header  ",data_header);
+    // console.log(" data value",data_value);
+    // method2
+    if(this.sroItem.length>0){
+      for (let eachLineofSroItem of this.sroItem){
+        if (eachLineofSroItem.value == data_value){
+          // console.log("This color eachLineofSroItem",eachLineofSroItem.color);
+          return eachLineofSroItem.color;
+        }
+      }
+    }
+
+
+
+  }
+
+// Hema Methods ---------
+
+
+
 
 }
