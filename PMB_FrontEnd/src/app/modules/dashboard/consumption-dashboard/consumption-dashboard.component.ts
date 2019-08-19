@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConsumptionService } from './consumption.service';
 import { StatusService } from '../../shared/service/status.service';
-import { Subscription } from 'rxjs';
 import { ConsumptionTable } from './consumption-table';
 import { ConsumptionDetiail } from './consumption-detail';
 
@@ -10,41 +9,21 @@ import { ConsumptionDetiail } from './consumption-detail';
   templateUrl: './consumption-dashboard.component.html',
   styleUrls: ['./consumption-dashboard.component.scss'],
 })
-export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
+export class ConsumptionDashboardComponent implements OnInit {
 
   @Input() kpiCategoryId: string;
 
   public consumptionsMap: Map<string, ConsumptionDetiail>;
   public header: string;
   public consumptionTable: ConsumptionTable[] = [];
-  kpiCategorySubscription: Subscription;
-  millSubscription: Subscription;
-
+ 
   constructor(private consumptionService: ConsumptionService,
     private statusService: StatusService) {
-    this.consumptionsMap = this.statusService.consumptionDetailMap;
   }
 
   ngOnInit() {
+    this.consumptionsMap = this.statusService.consumptionDetailMap;
     this.getConsumptionTable();
-
-    this.millSubscription = this.statusService.changeMill.
-      subscribe((millId: string) => {
-        console.log("Consumption: " + millId)
-      });
-
-    this.kpiCategorySubscription = this.statusService.kpiCategoryUpdate.
-      subscribe((kpiCategoryId: string) => {
-        this.kpiCategoryId = kpiCategoryId;
-        const consumptionDetailMap = this.statusService.consumptionDetailMap;
-        if (consumptionDetailMap !== undefined) {
-          const consumptionDetail = consumptionDetailMap.get(this.kpiCategoryId);
-          if (consumptionDetail !== undefined && consumptionDetail.isRefreshed) {
-            this.consumptionService.refreshDahboard(this.kpiCategoryId);
-            consumptionDetail.isRefreshed = false;
-          }
-        }
-      });
   }
 
   public getConsumptionTable() {
@@ -77,9 +56,5 @@ export class ConsumptionDashboardComponent implements OnInit, OnDestroy {
 
   public changeChartType(event: any, kpiId: number) {
     this.consumptionService.changeChartType(event, kpiId, this.kpiCategoryId);
-  }
-
-  ngOnDestroy() {
-    this.kpiCategorySubscription.unsubscribe();
   }
 }

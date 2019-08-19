@@ -7,6 +7,8 @@ export class AppConstants {
     static BASE_API_URL_v2 = environment.API_URL + '/restCall/v2';
     
     static apiURLs = {
+        ALL_MILLS_URL: AppConstants.BASE_API_URL_v1 + '/location/all_mills',
+        ALL_BU_TYPE_URL: AppConstants.BASE_API_URL_v1 + '/location/get_all_bu_type',
         PROCESS_LINES_URL: AppConstants.BASE_API_URL_v1 + '/yesterday/total_process_line',
         ANNUAL_TARGET_URL: AppConstants.BASE_API_URL_v1 + '/yesterday/ytd_process_line',
         PROJECTED_DATA_URL: AppConstants.BASE_API_URL_v1 + '/process_line/projected_target_details',

@@ -5,12 +5,6 @@ export class MasterData {
       "countryName": "Indonesia"
     }];
 
-  static businessUnit = [
-    {
-      "businessUnitId": "1",
-      "businessUnitName": "Pulp"
-    }];
-
   static dashboardFrequencies = [
     { name: 'Daily', code: '0' },
     { name: 'Monthly', code: '1' },

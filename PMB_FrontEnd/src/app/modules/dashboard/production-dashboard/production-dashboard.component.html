@@ -5,7 +5,7 @@
         <div *ngIf="yesterdayProductionData !== undefined" class="col-lg-3 p-r-0">
           <div class="card">
             <div class="card-body text-center">
-              <h5 class="card-title">{{millName}} PRODUCTION - Y'day (ADt/d)</h5>
+              <h5 class="card-title">{{yesterdayProductionData.millName | uppercase}} PRODUCTION - Y'day (ADt/d)</h5>
               <div class="gauge-center" *ngIf="yesterdayProductionData.show">
                 <rg-gauge-chart [canvasWidth]="yesterdayProductionData.canvasWidth"
                   [needleValue]="yesterdayProductionData.productionYDayNeedleValue"
@@ -19,7 +19,7 @@
         <div class="col-lg-9">
           <div class="card">
             <div class="card-body">
-              <div class="row">
+              <div *ngIf="annualChart !== undefined" class="row">
                 <div class="col-md-2">
                   <h6>Annual Target :{{annualChart.annualTarget}}</h6>
                 </div>
@@ -103,9 +103,9 @@
           </div>
         </div>
       </div>
-      <div class="row m-t-5" style="min-height: 729px">
+      <div class="row m-t-5">
         <div class="col-md-12">
-          <div class="card">
+          <div class="card" style="min-height: 729px">
             <div class="card-body">
               <div class="row m-b-10">
                 <div class="col-md-4">
@@ -152,7 +152,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <div class="row">
+              <div *ngIf="producionLineForm !== undefined" class="row">
                 <div class="col-md-2">
                   <ejs-daterangepicker class="daterangepicker" id='daterangepicker'
                     [startDate]='producionLineForm.startDate' [endDate]='producionLineForm.endDate'
@@ -202,7 +202,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <div *ngIf="productionLineView.productionLines.length > 0" class="row">
+              <div *ngIf="productionLineView !== undefiend && productionLineView.productionLines.length > 0" class="row">
                 <div class="col-md-12">
                   <p-table #dtf [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
                     [rows]="productionLineView.rows" [paginator]="productionLineView.paginator"

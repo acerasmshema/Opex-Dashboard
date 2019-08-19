@@ -1,4 +1,5 @@
 export class ProductionLine {
+    millName: string;
     show: boolean = false;
     canvasWidth: number;
     nameFont: number;

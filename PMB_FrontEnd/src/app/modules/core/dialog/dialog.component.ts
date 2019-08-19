@@ -48,7 +48,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.annotationDialog.annotationKpiId = data.annotationKpiId;
           this.annotationDialog.annotationDate = data.annotationDate;
           this.annotationDialog.dashboardName = data.dashboardName;
-          this.annotationDialog.processLinesForAnnotation = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
+          this.annotationDialog.processLinesForAnnotation = this.statusService.common.processLines;
           this.getAnnotationData(this.annotationDialog.annotationKpiId);
           this.annotationDialog.displayAnnotations = true;
           this.dialogName = dialogName;

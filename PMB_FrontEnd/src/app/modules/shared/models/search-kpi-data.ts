@@ -2,7 +2,7 @@ export class SearchKpiData {
     mill: string;
     mills: any;
     country: string;
-    buisnessUnit: string;
+    buisnessUnit: any;
     type: string;
     startDate: string;
     endDate: string;

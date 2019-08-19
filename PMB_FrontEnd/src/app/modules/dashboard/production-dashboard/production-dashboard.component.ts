@@ -23,7 +23,6 @@ import { Subscription } from 'rxjs';
 })
 export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
-  millName: string = "KERINCI";
   yesterdayProductionData: ProductionLine;
   prodLines: ProductionLine[] = [];
   annualChart: ProductionBar;
@@ -36,19 +35,17 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   startDate: string = '';
   endDate: string = '';
   updateChartSubscription: Subscription;
-  millSubscription: Subscription;
   projectTargetSubscription: Subscription;
 
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
     private productionService: ProductionService,
     private datePipe: DatePipe) {
-    this.productionEnquiryData = new ProductionEnquiry();
-    this.productionLineView = new ProductionLineView();
-    this.annualChart = new ProductionBar();
   }
 
   ngOnInit() {
+    this.openProductionDashboard();
+
     this.updateChartSubscription = this.statusService.updateChartSubject.
       subscribe((dashboardName: string) => {
         if (dashboardName === 'production') {
@@ -60,12 +57,12 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe(() => {
         this.getProjectedTarget();
       });
+  }
 
-    this.millSubscription = this.statusService.changeMill.
-      subscribe((millId: string) => {
-        console.log("Production: " + millId)
-      });
-
+  openProductionDashboard() {
+    this.productionEnquiryData = new ProductionEnquiry();
+    this.productionLineView = new ProductionLineView();
+    this.annualChart = new ProductionBar();
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
     this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
@@ -100,6 +97,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
   public getProductionYDayData() {
     this.yesterdayProductionData = new ProductionLine();
+    this.yesterdayProductionData.millName = this.statusService.common.selectedMill.millName;
     const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionService.getProductionYDayData(data).
       subscribe((data: any) => {
@@ -189,7 +187,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (data !== "e") {
 
           let processLines = data.dailyKpiPulp;
-          let processLinesNames = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
+          let processLinesNames = this.statusService.common.processLines;
           for (let index = 0; index < processLines.length; index++) {
             const processLine = processLines[index];
             let prodLine = new ProductionLine();
@@ -262,7 +260,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.productionService.getAnnotationDates(requestData).
           subscribe((data: any) => {
             this.annotationDates = data['annotationDates'];
-            this.producionLineForm.processLines = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
+            this.producionLineForm.processLines = this.statusService.common.processLines;
 
             this.prodLineChart = new ProductionLine();
             this.prodLineChart.productionLineData = [];
@@ -300,12 +298,12 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
     }
     else {
-      let columnsNames = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
+      let columnsNames = this.statusService.common.processLines;
       columnsNames.forEach(columnName => {
         colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
       });
     }
-    
+
     this.productionService.getAllProductionLinesDateForGrid(productionRequest).
       subscribe((data: any) => {
         this.productionLineView.columnNames = colNames;
@@ -422,7 +420,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.updateChartSubscription.unsubscribe();
-    this.millSubscription.unsubscribe();
     this.projectTargetSubscription.unsubscribe();
   }
 }

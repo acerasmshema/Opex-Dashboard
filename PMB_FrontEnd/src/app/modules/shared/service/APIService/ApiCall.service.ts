@@ -57,7 +57,6 @@ export class ApiCallService {
     return this.httpClient.post(url, data, httpOptions).pipe(catchError(this.errorHandler));
   }
 
-
   errorHandler(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);

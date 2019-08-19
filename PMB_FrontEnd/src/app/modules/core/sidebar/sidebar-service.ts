@@ -10,7 +10,7 @@ import { StatusService } from '../../shared/service/status.service';
 export class SidebarService {
 
     kpiTypeUrl = AppConstants.apiURLs.KPI_TYPE_URL;
-
+    
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService) { }
 
@@ -20,8 +20,8 @@ export class SidebarService {
         sidebarForm.hide = true;
         sidebarForm.countries = MasterData.country;
         sidebarForm.mills = [this.statusService.common.selectedMill];
-        sidebarForm.buisnessUnits = MasterData.businessUnit;
-        sidebarForm.processLines = this.statusService.processLineMap.get(this.statusService.common.selectedMill.millId);
+        sidebarForm.buisnessUnits = this.statusService.common.buTypes;
+        sidebarForm.processLines = this.statusService.common.processLines;
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
         sidebarForm.kpiCategoryId = sidebarRequestData.kpiCategoryId;
@@ -35,10 +35,11 @@ export class SidebarService {
         let sidebarForm = new SidebarForm();
         sidebarForm.collapsed = true;
         sidebarForm.hide = true;
-        sidebarForm.buisnessUnits = MasterData.businessUnit;
+        sidebarForm.buisnessUnits = this.statusService.common.buTypes;
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
         sidebarForm.kpiCategoryId = sidebarRequestData.kpiCategoryId;
+        sidebarForm.mills = this.statusService.common.mills;
         sidebarForm.kpiTypes = [
             { kpiId: "2", kpiTypeName: "ClO2 - Consumption (kg/ADt)" },
             { kpiId: "4", kpiTypeName: "Defoamer (kg/ADt)" },
@@ -59,10 +60,7 @@ export class SidebarService {
             { kpiId: "22", kpiTypeName: "Yield - Cooking (%)" },
             { kpiId: "23", kpiTypeName: "Yield - Screening (%)" },
         ];
-        sidebarForm.mills = [
-            { millId: "1", millName: 'Kerinci' },
-            { millId: "2", millName: 'Rizaho' },
-        ];
+
         sidebarForm.frequencies = [
             { name: 'Monthly', code: '1' },
             { name: 'Quarterly', code: '2' },

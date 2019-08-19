@@ -17,18 +17,18 @@ import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consum
   providers: [SidebarService, ConsumptionService]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  sidebarSubscription: Subscription;
+
   public sidebarForm: SidebarForm;
   public searchKpiData: SearchKpiData;
   public showSidebar: boolean;
-  private kpiCategoryMap: Map<string, any>;
 
+  sidebarSubscription: Subscription;
+  
   constructor(private router: Router,
     private sidebarService: SidebarService,
     private consumptionService: ConsumptionService,
     private localStorageService: LocalStorageService,
     private statusService: StatusService) {
-    this.kpiCategoryMap = new Map<string, any>();
   }
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           if (sidebarRequestData.type === "dashboard") {
             this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
 
-            let kpiTypes = this.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
+            let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
             if (kpiTypes === undefined || kpiTypes === null)
               this.getKpiDetails(sidebarRequestData.kpiCategoryId);
             else
@@ -78,7 +78,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     };
     this.sidebarService.getKpiTypes(requestData)
       .subscribe((kpiTypes: any) => {
-        this.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
+        this.statusService.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
         this.sidebarForm.kpiTypes = kpiTypes;
       });
   }
@@ -125,7 +125,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sidebarSubscription.unsubscribe();
-    this.kpiCategoryMap = null;
     this.showSidebar = false;
   }
 

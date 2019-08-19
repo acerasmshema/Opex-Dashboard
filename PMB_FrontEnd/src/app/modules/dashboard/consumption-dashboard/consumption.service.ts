@@ -219,6 +219,4 @@ export class ConsumptionService {
       });
     }
   }
-
-
 }
