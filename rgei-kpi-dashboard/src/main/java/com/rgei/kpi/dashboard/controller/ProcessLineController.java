@@ -18,7 +18,9 @@ package com.rgei.kpi.dashboard.controller;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
@@ -91,20 +94,26 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/v1/date_range/download_data_grid")
-	public ResponseEntity<List<Map<String, Object>>> getDownloadDataGrid(@RequestBody ProcessLineRequest productionRequestDTO) {
-		logger.info("Fetching grid data for downloading.", productionRequestDTO);
-		List<Map<String, Object>> response = processLinePulpKpiService.getDownloadDataGrid(productionRequestDTO);
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+	/*
+	 * @PostMapping(value = "/v1/date_range/download_data_grid") public
+	 * ResponseEntity<List<Map<String, Object>>> getDownloadDataGrid(@RequestBody
+	 * ProcessLineRequest productionRequestDTO) {
+	 * logger.info("Fetching grid data for downloading.", productionRequestDTO);
+	 * List<Map<String, Object>> response =
+	 * processLinePulpKpiService.getDownloadDataGrid(productionRequestDTO); return
+	 * new ResponseEntity<>(response,HttpStatus.OK); }
+	 */
 	
-	@PostMapping(value = "/v1/date_range/all_process_lines")
-	public ResponseEntity<List<DateRangeResponse>> getProcessLinesForDateRange(
-			@RequestBody ProcessLineRequest productionRequestDTO) {
-		logger.info("Fetching process lines data for requested date range.", productionRequestDTO);
-		List<DateRangeResponse> response = processLinePulpKpiService.getLineChartData(productionRequestDTO);
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+	/*
+	 * @PostMapping(value = "/v1/date_range/all_process_lines") public
+	 * ResponseEntity<List<DateRangeResponse>> getProcessLinesForDateRange(
+	 * 
+	 * @RequestBody ProcessLineRequest productionRequestDTO) {
+	 * logger.info("Fetching process lines data for requested date range.",
+	 * productionRequestDTO); List<DateRangeResponse> response =
+	 * processLinePulpKpiService.getLineChartData(productionRequestDTO); return new
+	 * ResponseEntity<>(response,HttpStatus.OK); }
+	 */
 	
 	@PostMapping(value = "/v1/date_range/all_process_lines_target")
 	public ResponseEntity<List<DateRangeResponse>> getProcessLinesTargetForDateRange(
@@ -158,7 +167,7 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/v1/date_range/selected_process_lines_grid_data.")
+	@PostMapping(value = "/v1/date_range/selected_process_lines_grid_data")
 	public ResponseEntity<List<List<Map<String,Object>>>> getDataGridProcessLinesForFrequecy(
 			@RequestBody ProcessLineRequest productionRequestDTO) {
 		logger.info("Fetching grid data for selected process lines on production dashboard.", productionRequestDTO);
@@ -180,15 +189,12 @@ public class ProcessLineController {
 		return new ResponseEntity<List<MillsResponse>>(response,HttpStatus.OK);
 	}
 	
-	
 	@GetMapping(value = "/v1/location/get_all_bu_type")
 	public ResponseEntity<List<BuTypeResponse>> getAllBuType(){
 		logger.info("Fetching All BU Types");
 		List<BuTypeResponse> response = processLineService.getAllBuType();
 		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
 	}
-	
-	
 	
 	
 }

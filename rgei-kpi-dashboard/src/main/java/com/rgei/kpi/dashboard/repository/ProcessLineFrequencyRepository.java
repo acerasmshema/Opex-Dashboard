@@ -69,11 +69,11 @@ public interface ProcessLineFrequencyRepository extends JpaRepository<DailyKpiPu
 			@Param("buTypeId") Integer buTypeId, @Param("kpiId") Integer kpiId);
 	
 	
-	@Query(value = "SELECT cast(u.datetime as date) as date, u.processLine1 as fl1,"
-			+ "u.processLine2 as fl2, u.processLine3 as fl3, "
-			+ "u.processLine4 as pcd, u.processLine5 as pd1, "
-			+ "u.processLine6 as pd2, u.processLine7 as pd3, "
-			+ "u.processLine8 as pd4 FROM DailyKpiPulpEntity u WHERE "
+	@Query(value = "SELECT cast(u.datetime as date) as date, u.processLine1 as FL1,"
+			+ "u.processLine2 as FL2, u.processLine3 as FL3, "
+			+ "u.processLine4 as PCD, u.processLine5 as PD1, "
+			+ "u.processLine6 as PD2, u.processLine7 as PD3, "
+			+ "u.processLine8 as PD4 FROM DailyKpiPulpEntity u WHERE "
 			+ "u.businessUnitType.businessUnitTypeId = :buId "
 			+ "and u.mill.millId = :millId "
 			+ "and u.businessUnitType.businessUnitTypeId = :buTypeId "
