@@ -18,7 +18,9 @@ package com.rgei.kpi.dashboard.controller;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,8 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
@@ -185,7 +189,12 @@ public class ProcessLineController {
 		return new ResponseEntity<List<MillsResponse>>(response,HttpStatus.OK);
 	}
 	
-	
+	@GetMapping(value = "/v1/location/get_all_bu_type")
+	public ResponseEntity<List<BuTypeResponse>> getAllBuType(){
+		logger.info("Fetching All BU Types");
+		List<BuTypeResponse> response = processLineService.getAllBuType();
+		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
+	}
 	
 	
 }
