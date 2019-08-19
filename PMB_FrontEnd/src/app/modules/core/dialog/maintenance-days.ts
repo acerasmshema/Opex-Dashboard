@@ -3,7 +3,7 @@ export class MaintenanceDays {
     collapsed: boolean;
     dateValue: any;
     maintenance: string;
-    targetAreaValue: number;
+    targetDays: number;
     textAreaValue: any;
     maintanenceDaysColumn: any;
     selectedMaintenanceDay: any;

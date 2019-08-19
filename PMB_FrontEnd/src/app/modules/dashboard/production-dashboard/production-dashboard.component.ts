@@ -387,7 +387,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public openSettingIcon() {
-    this.statusService.dialogSubject.next({ dialogName: "maintenanceDays" });
+    const reqeustData = {
+      dialogName: "maintenanceDays",
+      targetDays: this.annualChart.targetDays
+    }
+    this.statusService.dialogSubject.next(reqeustData);
   }
 
   onSelect(event) {

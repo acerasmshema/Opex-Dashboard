@@ -58,7 +58,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.dialogName = dialogName;
         }
         else if (dialogName === 'maintenanceDays') {
-          this.openSettingIcon();
+          this.openSettingIcon(data);
           this.dialogName = dialogName;
         }
       });
@@ -210,11 +210,11 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   public addTargetDays() {
-    if (this.maintenanceDays.targetAreaValue == undefined || this.maintenanceDays.targetAreaValue == null) {
+    if (this.maintenanceDays.targetDays == undefined || this.maintenanceDays.targetDays == null) {
       this.showError("error", "Error Message", "Please enter target days.");
       return;
     }
-    if (this.maintenanceDays.targetAreaValue <= 0) {
+    if (this.maintenanceDays.targetDays <= 0) {
       this.showError("error", "Error Message", "Please enter target days value greater than 0.");
       return;
     }
@@ -222,7 +222,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       millId: this.statusService.common.selectedMill.millId,
       buId: 1,
       kpiCategoryId: 1,
-      noOfTargetDays: +this.maintenanceDays.targetAreaValue
+      noOfTargetDays: +this.maintenanceDays.targetDays
     };
     this.productionService.updateMaintanenceTargetDays(requestData).
       subscribe(
@@ -238,9 +238,10 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
-  public openSettingIcon() {
+  public openSettingIcon(maintenanceData: any) {
     this.maintenanceDays = new MaintenanceDays();
     this.maintenanceDays.maintanenceDaysColumn = MasterData.maintanenceDaysColumn;
+    this.maintenanceDays.targetDays = maintenanceData.targetDays;
     this.maintenanceDays.collapsed = false;
     this.maintenanceDays.show = !this.maintenanceDays.show;
   }
