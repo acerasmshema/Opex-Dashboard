@@ -260,7 +260,7 @@ public class ProcessLineUtility {
 			response = new ArrayList<>();
 			for(MillEntity millEntity:mills) {
 				millObject = new MillsResponse();
-				millObject.setMillId(millEntity.getMillId());
+				millObject.setMillId(millEntity.getMillId().toString());
 				millObject.setMillCode(millEntity.getMillCode());
 				millObject.setMillName(millEntity.getMillName());
 				response.add(millObject);
