@@ -52,10 +52,10 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 	}
 
 	@Override
-	public List<ProcessLinesResponse> getProcessLines(Integer kpiId) {
+	public List<ProcessLinesResponse> getProcessLines(Integer kpiId, Integer millId) {
 		logger.info("Fetching Process Lines KPI id", kpiId);
 		boolean status=Boolean.TRUE;
-		List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId,status);
+		List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId, status, millId);
 		return KPICategoryConverter.covertToProcessLineResponse(processLinesEntities);
 	}
 
@@ -64,5 +64,4 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 		logger.info("Fetching KPI Category for id", kpiCategoryId);
 		return KPICategoryConverter.convertToResponse(kpiCategoryEntityRepository.findByKpiCategoryId(kpiCategoryId));
 	}
-
 }

@@ -79,6 +79,9 @@ public class ProcessLineEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="mill_id")
 	private MillEntity mill;
+	
+	@Column(name="legend_color")
+	private String legendColor;
 
 	public Integer getProcessLineId() {
 		return this.processLineId;
@@ -212,5 +215,13 @@ public class ProcessLineEntity implements Serializable {
 
 	public void setDailyLineTarget(BigDecimal dailyLineTarget) {
 		this.dailyLineTarget = dailyLineTarget;
+	}
+
+	public String getLegendColor() {
+		return legendColor;
+	}
+
+	public void setLegendColor(String legendColor) {
+		this.legendColor = legendColor;
 	}
 }
