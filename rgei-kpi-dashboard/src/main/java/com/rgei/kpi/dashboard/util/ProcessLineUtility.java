@@ -33,6 +33,7 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
+import com.rgei.kpi.dashboard.response.model.KpiType;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
@@ -274,14 +275,27 @@ public class ProcessLineUtility {
 		BuTypeResponse buTypeResponse=null;
 		if(buTypeList!=null) {
 			for(BusinessUnitTypeEntity businessUnitTypeEntity:businessUnitTypeEntityList) {
+				if(Boolean.TRUE.equals(businessUnitTypeEntity.getActive())) {
 				buTypeResponse= new BuTypeResponse();
 				buTypeResponse.setBuTypeId(businessUnitTypeEntity.getBusinessUnitTypeId());
 				buTypeResponse.setBuId(businessUnitTypeEntity.getBusinessUnit().getBusinessUnitId());
 				buTypeResponse.setBuTypeCode(businessUnitTypeEntity.getBusinessUnitTypeCode());
 				buTypeResponse.setBuTypeName(businessUnitTypeEntity.getBusinessUnitTypeName());
 				buTypeList.add(buTypeResponse);
+				sortBuTypeResponse(buTypeList);
+				}
 			}
 		}
 		return buTypeList;
+	}
+	
+	private static void sortBuTypeResponse(List<BuTypeResponse> buTypeList) {
+		Collections.sort(buTypeList, (o1, o2) -> {
+			int value1 = o1.getBuTypeId().compareTo(o2.getBuTypeId());
+			if (value1 == 0) {
+				return o1.getBuTypeId().compareTo(o2.getBuTypeId());
+			}
+			return value1;
+		});
 	}
 }
