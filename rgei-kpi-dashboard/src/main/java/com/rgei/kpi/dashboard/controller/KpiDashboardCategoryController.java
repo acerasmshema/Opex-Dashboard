@@ -69,6 +69,14 @@ public class KpiDashboardCategoryController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/v2/kpi_category/selected_kpi_process_lines_target")
+	public ResponseEntity<DateRangeResponse> getKpiCategoryLineChartTargetData(
+			@RequestBody KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
+		logger.info("Inside KPIDashboardCategoryController to fetch KPI data for line charts targets", kpiDashboardCategoryRequest);
+		DateRangeResponse response = kpiDashboardCategoryService.getKpiCategoryLineChartTargetData(kpiDashboardCategoryRequest);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/v1/kpi_category/selected_kpi_grid_data")
 	public ResponseEntity<List<List<Map<String,Object>>>> getKpiCategoryDownloadGridData(
 			@RequestBody KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
@@ -78,9 +86,9 @@ public class KpiDashboardCategoryController {
 	}
 	
 	@GetMapping(value = "/v1/kpi_category/yesterday_all_process_lines_data")
-	public ResponseEntity<List<KpiCategoryResponse>> getYesterdayValuesForKpiCategory(@RequestHeader(value="kpiCategoryId") Integer kpiCategoryId) {
+	public ResponseEntity<List<KpiCategoryResponse>> getYesterdayValuesForKpiCategory(@RequestHeader(value="kpiCategoryId") Integer kpiCategoryId,@RequestHeader(value="millId") Integer millId ) {
 		logger.info("Inside KPIDashboardCategoryController to fetch yesterday values for kpi category", kpiCategoryId);
-		List<KpiCategoryResponse> response = kpiDashboardCategoryService.getYesterdayValuesForKpiCategory(kpiCategoryId);
+		List<KpiCategoryResponse> response = kpiDashboardCategoryService.getYesterdayValuesForKpiCategory(kpiCategoryId, millId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 }

@@ -24,11 +24,11 @@ import org.springframework.stereotype.Service;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
-import com.rgei.kpi.dashboard.entities.KpiProcessLineEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.repository.KPICategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
+import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 import com.rgei.kpi.dashboard.util.KPICategoryConverter;
@@ -52,10 +52,16 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 	}
 
 	@Override
-	public List<ProcessLinesResponse> getProcessLines(Integer kpiId) {
+	public List<ProcessLinesResponse> getProcessLines(Integer kpiId, Integer millId) {
 		logger.info("Fetching Process Lines KPI id", kpiId);
-		List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId);
+		boolean status=Boolean.TRUE;
+		List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId, status, millId);
 		return KPICategoryConverter.covertToProcessLineResponse(processLinesEntities);
 	}
 
+	@Override
+	public List<KpiTypeExtendedResponse> getKPICategoryDetails(Integer kpiCategoryId) {
+		logger.info("Fetching KPI Category for id", kpiCategoryId);
+		return KPICategoryConverter.convertToResponse(kpiCategoryEntityRepository.findByKpiCategoryId(kpiCategoryId));
+	}
 }

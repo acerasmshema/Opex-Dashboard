@@ -124,6 +124,10 @@ local.properties
 *.tar.gz
 *.rar
 
+# Ignore folder with propery files
+resources/
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -137,5 +141,7 @@ hs_err_pid*
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+
+
 
 # End of https://www.gitignore.io/api/java,angular,eclipse,visualstudiocode

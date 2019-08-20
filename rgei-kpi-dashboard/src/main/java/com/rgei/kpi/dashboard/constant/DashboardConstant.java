@@ -32,8 +32,10 @@ public class DashboardConstant {
 	public static final String PROCESS_LINE_PD3="PD3";
 	public static final String PROCESS_LINE_PD4="PD4";
 	public static final String TARGET_LINE="Target";
+	public static final String BLACK="black";
+	public static final String RED="red";
 	
-	public static final String DATE="date";
+	public static final String DATE="DATE";
 	public static final String NAN = "NaN";
 	public static final String NA = "N/A";
 	public static final String SERIES = "series";

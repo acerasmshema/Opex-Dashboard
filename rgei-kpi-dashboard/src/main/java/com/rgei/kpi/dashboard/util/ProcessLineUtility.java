@@ -20,16 +20,22 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
+import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
+import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
+import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineUtility {
@@ -47,17 +53,12 @@ public class ProcessLineUtility {
 		return processLines;
 	}
 	
-	public static List<String> getAllProcessLines() {
-		List<String> processLines = new ArrayList<>();
-		processLines.add(DashboardConstant.PROCESS_LINE_FL1);
-		processLines.add(DashboardConstant.PROCESS_LINE_FL2);
-		processLines.add(DashboardConstant.PROCESS_LINE_FL3);
-		processLines.add(DashboardConstant.PROCESS_LINE_PCD);
-		processLines.add(DashboardConstant.PROCESS_LINE_PD1);
-		processLines.add(DashboardConstant.PROCESS_LINE_PD2);
-		processLines.add(DashboardConstant.PROCESS_LINE_PD3);
-		processLines.add(DashboardConstant.PROCESS_LINE_PD4);
-		return processLines;
+	public static List<String> getAllProcessLines(List<ProcessLine> processLines) {
+		List<String> processLinesList = new ArrayList<>();
+		for(ProcessLine line : processLines) {
+		processLinesList.add(line.getProcessLineCode());
+		}
+		return processLinesList;
 	}
 	
 	public static java.util.Date getYesterdayDate() {
@@ -80,10 +81,22 @@ public class ProcessLineUtility {
 			processLineObject.setColorRange(entity.getColorRange());
 			processLineObject.setDailyLineTarget(entity.getDailyLineTarget());
 			processLine.add(processLineObject);
+			sortResponse(processLine);
 		}
 		return processLine;
 	}
 
+	
+	private static void sortResponse(List<ProcessLine> kpiType) {
+		Collections.sort(kpiType, (o1, o2) -> {
+			int value1 = o1.getProcessLineId().compareTo(o2.getProcessLineId());
+			if (value1 == 0) {
+				return o1.getProcessLineId().compareTo(o2.getProcessLineId());
+			}
+			return value1;
+		});
+	}
+	
 	/*
 	 * Api is to get the result for download data grid
 	 */
@@ -162,25 +175,34 @@ public class ProcessLineUtility {
 	
 	public static List<DateRangeResponse> createDailyTargetLineResponse(List<ProcessLine> processLine, List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		List<DateRangeResponse> dailyTargetResponse = new ArrayList<>();
-		List<String> lineList = Arrays
-				.asList(DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
-						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
-						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE,
-						DashboardConstant.TARGET_LINE, DashboardConstant.TARGET_LINE );
+		List<String> lineList = new ArrayList<>();
+		for(ProcessLine line: processLine) {
+			lineList.add(DashboardConstant.TARGET_LINE);
+		}
 		lineList.forEach(item -> {
 			DateRangeResponse processObj = new DateRangeResponse(item, new ArrayList<>());
 			dailyTargetResponse.add(processObj);
 		});
+		List<SeriesObject> processLine1=null;
+		List<SeriesObject> processLine2=null;
+		List<SeriesObject> processLine3=null;
+		List<SeriesObject> processLine4=null;
+		List<SeriesObject> processLine5=null;
+		List<SeriesObject> processLine6=null;
+		List<SeriesObject> processLine7=null;
+		List<SeriesObject> processLine8=null;
+		try {
+		processLine1 = dailyTargetResponse.get(0).getSeries();
+		processLine2 = dailyTargetResponse.get(1).getSeries();
+		processLine3 = dailyTargetResponse.get(2).getSeries();
+		processLine4 = dailyTargetResponse.get(3).getSeries();
+		processLine5 = dailyTargetResponse.get(4).getSeries();
+		processLine6 = dailyTargetResponse.get(5).getSeries();
+		processLine7 = dailyTargetResponse.get(6).getSeries();
+		processLine8 = dailyTargetResponse.get(7).getSeries();
+		}catch(ArrayIndexOutOfBoundsException e) {
 		
-		List<SeriesObject> processLine1 = dailyTargetResponse.get(0).getSeries();
-		List<SeriesObject> processLine2 = dailyTargetResponse.get(1).getSeries();
-		List<SeriesObject> processLine3 = dailyTargetResponse.get(2).getSeries();
-		List<SeriesObject> processLine4 = dailyTargetResponse.get(3).getSeries();
-		List<SeriesObject> processLine5 = dailyTargetResponse.get(4).getSeries();
-		List<SeriesObject> processLine6 = dailyTargetResponse.get(5).getSeries();
-		List<SeriesObject> processLine7 = dailyTargetResponse.get(6).getSeries();
-		List<SeriesObject> processLine8 = dailyTargetResponse.get(7).getSeries();
-		
+		}
 		populateDailyLineTargetReponse(processLine, dailyKpiPulpEntities, processLine1, processLine2, processLine3,
 				processLine4, processLine5, processLine6, processLine7, processLine8);
 		
@@ -212,5 +234,54 @@ public class ProcessLineUtility {
 			processLine8.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
 					(processLine.get(7).getDailyLineTarget().doubleValue())));
 		});
+	}
+
+	public static List<ProcessLineDetailsResponse> generateResponse(List<ProcessLineEntity> processLine) {
+		ProcessLineDetailsResponse response = null;
+		List<ProcessLineDetailsResponse> responses = new ArrayList<>();
+		if(processLine != null && !processLine.isEmpty()) {
+			for(ProcessLineEntity entity : processLine) {
+				response = new ProcessLineDetailsResponse();
+				response.setProcessLineId(entity.getProcessLineId());
+				response.setProcessLineCode(entity.getProcessLineCode());
+				response.setProcessLineName(entity.getProcessLineName());
+				response.setLegendColor(entity.getLegendColor());
+				responses.add(response);
+			}
+		}
+		return responses;
+	}
+
+	public static List<MillsResponse> prePareMillResponse(List<MillEntity> mills) {
+		
+		MillsResponse millObject = null;
+		List<MillsResponse> response = null;
+		if(mills != null && !mills.isEmpty()) {
+			response = new ArrayList<>();
+			for(MillEntity millEntity:mills) {
+				millObject = new MillsResponse();
+				millObject.setMillId(millEntity.getMillId().toString());
+				millObject.setMillCode(millEntity.getMillCode());
+				millObject.setMillName(millEntity.getMillName());
+				response.add(millObject);
+			}
+		}
+		return response;
+	}
+
+	public static List<BuTypeResponse> preareBUTypeResponse(List<BusinessUnitTypeEntity> businessUnitTypeEntityList) {
+		List<BuTypeResponse> buTypeList=new ArrayList<BuTypeResponse>();
+		BuTypeResponse buTypeResponse=null;
+		if(buTypeList!=null) {
+			for(BusinessUnitTypeEntity businessUnitTypeEntity:businessUnitTypeEntityList) {
+				buTypeResponse= new BuTypeResponse();
+				buTypeResponse.setBuTypeId(businessUnitTypeEntity.getBusinessUnitTypeId());
+				buTypeResponse.setBuId(businessUnitTypeEntity.getBusinessUnit().getBusinessUnitId());
+				buTypeResponse.setBuTypeCode(businessUnitTypeEntity.getBusinessUnitTypeCode());
+				buTypeResponse.setBuTypeName(businessUnitTypeEntity.getBusinessUnitTypeName());
+				buTypeList.add(buTypeResponse);
+			}
+		}
+		return buTypeList;
 	}
 }

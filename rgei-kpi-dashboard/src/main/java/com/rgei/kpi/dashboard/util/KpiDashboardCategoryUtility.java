@@ -6,7 +6,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
@@ -31,7 +33,7 @@ public class KpiDashboardCategoryUtility {
 	private KpiDashboardCategoryUtility() {
 	}
 
-	public static Kpi convertToKpiDTO(KpiEntity entity) {
+	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
 		Kpi kpiObject = new Kpi();
 		if(Boolean.TRUE.equals(entity.getActive())) {
 		List<String> kpiProcessLines = new ArrayList<>();
@@ -40,8 +42,9 @@ public class KpiDashboardCategoryUtility {
 		kpiObject.setKpiTypeId(entity.getKpiType().getKpiTypeId());
 		kpiObject.setKpiUnit(entity.getKpiUnit());
 		for (KpiProcessLineEntity value : entity.getKpiProcessLines()) {
-			if(Boolean.TRUE.equals(value.getActive())) {
+			if(Boolean.TRUE.equals(value.getActive()) && millId.equals(value.getMill().getMillId())) {
 			kpiProcessLines.add(value.getProcessLine().getProcessLineCode());
+			Collections.sort(kpiProcessLines);
 			}
 		}
 		kpiObject.setKpiProcessLines(kpiProcessLines);
@@ -77,7 +80,9 @@ public class KpiDashboardCategoryUtility {
 			for (Object[] obj : responseEntity) {
 				KpiCategoryResponse val = new KpiCategoryResponse();
 				List<KpiCategorySeriesResponse> series = new ArrayList<>();
-					val.setName(kpiType.get(i).getKpiName());
+					val.setKpiId(kpiType.get(i).getKpi().getKpiId());
+					val.setKpiName(kpiType.get(i).getKpi().getKpiName());
+					val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
 					for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
 						KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
 						val.setSeries(KpiDashboardCategoryUtility.getSeriesObject(obj, kpiProcessLine, value, series,
@@ -92,7 +97,9 @@ public class KpiDashboardCategoryUtility {
 	private static int fetchDefaultTableResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType, int i) {
 		KpiCategoryResponse val = new KpiCategoryResponse();
 		List<KpiCategorySeriesResponse> series = new ArrayList<>();
-		val.setName(kpiType.get(i).getKpiName());
+		val.setKpiId(kpiType.get(i).getKpi().getKpiId());
+		val.setKpiName(kpiType.get(i).getKpi().getKpiName());
+		val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
 		for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
 			KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
 			val.setSeries(KpiDashboardCategoryUtility.getDefaultSeriesObject(kpiProcessLine, value, series,
@@ -343,28 +350,12 @@ public class KpiDashboardCategoryUtility {
 		return Objects.nonNull(value)?Double.valueOf(value.toString()):-1;
 	}
 	
-	public static List<KpiType> convertToKpiTypeDTO(List<KpiTypeEntity> entities) {
+	public static List<KpiType> convertToKpiTypeDTO(List<KpiTypeEntity> entities, Integer millId) {
 		List<KpiType> kpiType = new ArrayList<>();
-		KpiType kpiTypeObject = null;
 		for (KpiTypeEntity value : entities) {
 			if (Boolean.TRUE.equals(value.getActive())) {
 				for (KpiEntity kpi : value.getKpis()) {
-					if (Boolean.TRUE.equals(kpi.getActive())) {
-						kpiTypeObject = new KpiType();
-						List<String> processLines = new ArrayList<>();
-						if (Boolean.TRUE.equals(value.getActive())) {
-							kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
-							kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
-							kpiTypeObject.setKpiName(kpi.getKpiName() + " (" + kpi.getKpiUnit() + ")");
-							kpiTypeObject.setKpiId(kpi.getKpiId());
-							for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
-								kpiTypeObject.setTarget(line.getTarget());
-								processLines.add(line.getProcessLine().getProcessLineCode());
-							}
-						}
-						kpiTypeObject.setProcessLines(processLines);
-						kpiType.add(kpiTypeObject);
-					}
+					populateKPITypeDTO(kpiType, value, kpi, millId);
 				}
 				sortResponse(kpiType);
 			}
@@ -372,11 +363,39 @@ public class KpiDashboardCategoryUtility {
 		return kpiType;
 	}
 
+	private static void populateKPITypeDTO(List<KpiType> kpiType, KpiTypeEntity value, KpiEntity kpi, Integer millId) {
+		KpiType kpiTypeObject;
+		if (Boolean.TRUE.equals(kpi.getActive())) {
+			kpiTypeObject = new KpiType();
+			List<String> processLines =new ArrayList<>();
+			Map<String,String> target = new HashMap<>();
+			if (Boolean.TRUE.equals(value.getActive())) {
+				kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
+				kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
+				Kpi obj = new Kpi();
+				obj.setKpiId(kpi.getKpiId());
+				obj.setKpiName(kpi.getKpiName());
+				obj.setKpiUnit(kpi.getKpiUnit());
+				kpiTypeObject.setKpi(obj);
+				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
+					if(millId.equals(line.getMill().getMillId())) {
+					target.put(line.getProcessLine().getProcessLineCode(), line.getTarget());
+					processLines.add(line.getProcessLine().getProcessLineCode());
+					Collections.sort(processLines);
+					}
+				}
+			}
+			kpiTypeObject.setProcessLines(processLines);
+			kpiTypeObject.setTarget(target);
+			kpiType.add(kpiTypeObject);
+		}
+	}
+	
 	private static void sortResponse(List<KpiType> kpiType) {
 		Collections.sort(kpiType, (o1, o2) -> {
-			int value1 = o1.getKpiId().compareTo(o2.getKpiId());
+			int value1 = o1.getKpi().getKpiId().compareTo(o2.getKpi().getKpiId());
 			if (value1 == 0) {
-				return o1.getKpiId().compareTo(o2.getKpiId());
+				return o1.getKpi().getKpiId().compareTo(o2.getKpi().getKpiId());
 			}
 			return value1;
 		});
@@ -389,54 +408,48 @@ public class KpiDashboardCategoryUtility {
 	
 	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, String kpiProcessLine, KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
 		String value = null;
+		val.setName(kpiProcessLine);
+		val.setTarget(type.getTarget().get(kpiProcessLine));
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[0].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[1].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[2].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[3].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[4].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[5].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[6].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
-			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(Double.valueOf(obj[7].toString()));
 			val.setValue(value);
-			val.setTarget(type.getTarget());
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
 		default:
 		}
@@ -444,10 +457,31 @@ public class KpiDashboardCategoryUtility {
 		return series;
 	}
 	
+	private static String fetchColor(String value, String threshold) {
+		String color = null;
+		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value)) {
+			color = DashboardConstant.BLACK;
+		} else {
+			String[] target = threshold.split(",");
+			String[] targetColor = target[0].split(":");
+			String colorThreshold = targetColor[1];
+			Double colorValue = Double.parseDouble(colorThreshold);
+			Double val = Double.parseDouble(value);
+			if (val > colorValue) {
+				color = DashboardConstant.RED;
+			} else {
+				color = DashboardConstant.BLACK;
+			}
+		}
+
+		return color;
+	}
+	
 	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(String kpiProcessLine, KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
 		val.setName(kpiProcessLine);
 		val.setValue(DashboardConstant.NA);
-		val.setTarget(type.getTarget());
+		val.setTarget(type.getTarget().get(kpiProcessLine));
+		val.setColor("black");
 		series.add(val);
 		return series;
 	}
@@ -455,4 +489,18 @@ public class KpiDashboardCategoryUtility {
 public static String parseProcessLineValue(Double value) {
 		return value.isNaN()?DashboardConstant.NA:BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).toString();
 	}
+
+public static String DatetimeToQuarterConverter(Object[] obj) {
+	String quarter=null;
+	if (Quarter.Q1.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q1.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q2.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q2.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q3.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q3.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	} else if (Quarter.Q4.getValue().equalsIgnoreCase(new Double(obj[0].toString()).toString())) {
+		quarter=Quarter.Q4.toString()+"/"+ String.valueOf(obj[1]).split("\\.")[0];
+	}
+	return quarter;
+}
 }

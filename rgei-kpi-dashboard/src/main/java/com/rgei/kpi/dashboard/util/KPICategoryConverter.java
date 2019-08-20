@@ -19,8 +19,11 @@ package com.rgei.kpi.dashboard.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.response.model.KpiTypeDetails;
+import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 
@@ -58,6 +61,35 @@ public class KPICategoryConverter {
 			}
 		}
 		return processLines;
+	}
+
+	public static List<KpiTypeExtendedResponse> convertToResponse(List<KpiTypeEntity> kpiTypeEntities) {
+		KpiTypeDetails KpiDetails = null;
+		KpiTypeExtendedResponse response = null;
+		List<KpiTypeDetails> kpiTypeList = null;
+		List<KpiTypeExtendedResponse>  responses = new ArrayList<KpiTypeExtendedResponse>();
+		if(kpiTypeEntities != null && !kpiTypeEntities.isEmpty()) {
+			List<KpiEntity> kpiEntityList = null;
+			for(KpiTypeEntity entity:kpiTypeEntities) {
+				response = new KpiTypeExtendedResponse();
+				response.setKpiTypeId(entity.getKpiTypeId());
+				response.setKpiTypeName(entity.getKpiTypeName());
+				kpiTypeList = new ArrayList<>();
+				kpiEntityList = entity.getKpis();
+				for(KpiEntity kpi:kpiEntityList) {
+					if(entity.getKpiTypeId()==kpi.getKpiType().getKpiTypeId() && kpi.getActive().equals(Boolean.TRUE)) {
+						KpiDetails = new KpiTypeDetails();
+						KpiDetails.setKpiId(kpi.getKpiId());
+						KpiDetails.setKpiName(kpi.getKpiName());
+						KpiDetails.setUnit(kpi.getKpiUnit());
+						kpiTypeList.add(KpiDetails);
+						response.setKpiList(kpiTypeList);
+					}
+				}
+				responses.add(response);
+			}
+		}
+		return responses;
 	}
 
 }

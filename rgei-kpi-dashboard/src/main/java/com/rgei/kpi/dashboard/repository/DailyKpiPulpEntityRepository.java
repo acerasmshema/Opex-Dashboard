@@ -101,4 +101,52 @@ public interface DailyKpiPulpEntityRepository extends JpaRepository<DailyKpiPulp
 			@Param("kpiCategoryId")Integer kpiCategoryId,
 			@Param("kpiId")Integer kpiId);
 	
+	@Query(value = "SELECT cast(u.datetime as date) as dt FROM DailyKpiPulpEntity u WHERE "
+			+ "u.businessUnitType.businessUnitTypeId = :buId "
+			+ "and u.mill.millId = :millId "
+			+ "and u.kpi.kpiId = :kpiId "
+			+ "and u.kpiCategory.kpiCategoryId = :kpiCategoryId "
+			+ "and date(u.datetime) between :startDate and :endDate order by dt asc")
+	public List<Object[]> findDatesForLineChartsDailyTargets(@Param("startDate")Date startDate, @Param("endDate")Date endDate,
+			@Param("millId")Integer millId,
+			@Param("buId")Integer buId,
+			@Param("kpiCategoryId")Integer kpiCategoryId,
+			@Param("kpiId")Integer kpiId);
+	
+	@Query(value = "SELECT extract(month from date(u.datetime)) as mn,extract(year from u.datetime) as yr FROM DailyKpiPulpEntity u WHERE "
+			+ "u.businessUnitType.businessUnitTypeId = :buId "
+			+ "and u.mill.millId = :millId "
+			+ "and u.kpi.kpiId = :kpiId "
+			+ "and u.kpiCategory.kpiCategoryId = :kpiCategoryId "
+			+ "and date(u.datetime) between :startDate and :endDate group by extract(year from u.datetime),extract(month from date(u.datetime)) order by extract(year from u.datetime),extract(month from date(u.datetime)) asc")
+	public List<Object[]> findDatesForLineChartsMonthlyTargets(@Param("startDate")Date startDate, @Param("endDate")Date endDate,
+			@Param("millId")Integer millId,
+			@Param("buId")Integer buId,
+			@Param("kpiCategoryId")Integer kpiCategoryId,
+			@Param("kpiId")Integer kpiId);
+	
+	@Query(value = "SELECT extract(quarter from date(datetime)) as qr,extract(year from u.datetime) as yr FROM DailyKpiPulpEntity u WHERE "
+			+ "u.businessUnitType.businessUnitTypeId = :buId "
+			+ "and u.mill.millId = :millId "
+			+ "and u.kpi.kpiId = :kpiId "
+			+ "and u.kpiCategory.kpiCategoryId = :kpiCategoryId "
+			+ "and date(u.datetime) between :startDate and :endDate group by  extract(year from u.datetime),extract(quarter from date(u.datetime)) order by extract(year from u.datetime),extract(quarter from date(u.datetime))  asc")
+	public List<Object[]> findDatesForLineChartsQuarterlyTargets(@Param("startDate")Date startDate, @Param("endDate")Date endDate,
+			@Param("millId")Integer millId,
+			@Param("buId")Integer buId,
+			@Param("kpiCategoryId")Integer kpiCategoryId,
+			@Param("kpiId")Integer kpiId);
+	
+	@Query(value = "SELECT extract(year from date(u.datetime)) as yr FROM DailyKpiPulpEntity u WHERE "
+			+ "u.businessUnitType.businessUnitTypeId = :buId "
+			+ "and u.mill.millId = :millId "
+			+ "and u.kpi.kpiId = :kpiId "
+			+ "and u.kpiCategory.kpiCategoryId = :kpiCategoryId "
+			+ "and date(u.datetime) between :startDate and :endDate GROUP by extract(year from date(u.datetime)) order by extract(year from date(u.datetime)) asc")
+	public List<Object[]> findDatesForLineChartsYearlyTargets(@Param("startDate")Date startDate, @Param("endDate")Date endDate,
+			@Param("millId")Integer millId,
+			@Param("buId")Integer buId,
+			@Param("kpiCategoryId")Integer kpiCategoryId,
+			@Param("kpiId")Integer kpiId);
+	
 }

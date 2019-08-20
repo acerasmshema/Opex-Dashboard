@@ -1,0 +1,45 @@
+CREATE TABLE MILL_BU_KPI(
+ MILL_BU_KPI_ID INTEGER PRIMARY KEY,
+ MILL_ID INTEGER NOT NULL,
+ BUSINESS_UNIT_ID INTEGER NOT NULL,
+ KPI_ID INTEGER NOT NULL,
+ DAILY_LINE_TARGET DECIMAL(20,4) DEFAULT 0,
+ ACTIVE BOOLEAN NOT NULL,
+ CREATED_BY VARCHAR(100)  NOT NULL,
+ CREATED_DATE TIMESTAMP NOT NULL,
+ UPDATED_BY VARCHAR(100)  NOT NULL,
+ UPDATED_DATE TIMESTAMP NOT NULL,
+ CONSTRAINT MILL_BU_KPI_MILL_ID_FKEY FOREIGN KEY (MILL_ID)
+ REFERENCES MILL (MILL_ID) MATCH SIMPLE
+ ON UPDATE NO ACTION ON DELETE NO ACTION,
+ CONSTRAINT MILL_BU_KPI_BUSINESS_UNIT_ID_FKEY FOREIGN KEY (BUSINESS_UNIT_ID)
+ REFERENCES BUSINESS_UNIT (BUSINESS_UNIT_ID) MATCH SIMPLE
+ ON UPDATE NO ACTION ON DELETE NO ACTION,
+ CONSTRAINT MILL_BU_KPI_KPI_ID_FKEY FOREIGN KEY (KPI_ID)
+ REFERENCES KPI (KPI_ID) MATCH SIMPLE
+ ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (1, 1, 1, 11, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (2, 1, 1, 10, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (3, 1, 1, 9, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (4, 1, 1, 4, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (5, 1, 1, 2, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (6, 1, 1, 5, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (7, 1, 1, 6, 3, true, 'admin',now(), 'admin',now());
+
+INSERT INTO public.mill_bu_kpi(mill_bu_kpi_id, mill_id, business_unit_id, kpi_id, daily_line_target, active, created_by, created_date, updated_by, updated_date)
+VALUES (8, 1, 1, 7, 3, true, 'admin',now(), 'admin',now());

@@ -33,6 +33,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
+import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
@@ -92,7 +93,9 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		ResponseObject response;
 		List<ProcessLine> processLine = null;
 		List<DailyKpiPulp> dailyKpiPulp = null;
-		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByOrderByProcessLineIdAsc());
+		MillEntity mill = new MillEntity();
+		mill.setMillId(productionRequest.getMillId());
+		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
 			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
@@ -166,7 +169,9 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<DateRangeResponse> getDailyTargetLineData(ProcessLineRequest processLineRequest) {
 		logger.info("Getting daily target line data", processLineRequest);
 		List<ProcessLine> processLine = null;
-		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByOrderByProcessLineIdAsc());
+		MillEntity mill = new MillEntity();
+		mill.setMillId(processLineRequest.getMillId());
+		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
 			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
@@ -239,10 +244,19 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<DateRangeResponse> getProcessLinesForFrequency(ProcessLineRequest processLineRequest) {
 		logger.info("Getting process line data for specific frequencies", processLineRequest);
 		List<DateRangeResponse> resultList = new ArrayList<>();
+		List<ProcessLine> processLines = null;
 		List<String> lineList = Arrays.asList(processLineRequest.getProcessLines());
-		if (lineList.isEmpty()) {
-			lineList = ProcessLineUtility.getAllProcessLines();
+		MillEntity mill = new MillEntity();
+		mill.setMillId(processLineRequest.getMillId());
+		Optional<List<ProcessLineEntity>> processLineEntity = Optional
+				.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
+		if (processLineEntity.isPresent()) {
+			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
+		if (lineList.isEmpty()) {
+			lineList = ProcessLineUtility.getAllProcessLines(processLines);
+		}
+		 
 		if (!Objects.nonNull(processLineRequest.getFrequency())) {
 			processLineRequest.setFrequency(0);
 		}
@@ -270,9 +284,17 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	@Override
 	public List<List<Map<String, Object>>> getDataGridProcessLinesForFrequecy(ProcessLineRequest processLineRequest) {
 		logger.info("Getting process line grid data for specific frequencies", processLineRequest);
+		List<ProcessLine> processLines = null;
 		List<String> lineList = Arrays.asList(processLineRequest.getProcessLines());
+		MillEntity mill = new MillEntity();
+		mill.setMillId(processLineRequest.getMillId());
+		Optional<List<ProcessLineEntity>> processLineEntity = Optional
+				.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
+		if (processLineEntity.isPresent()) {
+			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
+		}
 		if (lineList.isEmpty()) {
-			lineList = ProcessLineUtility.getAllProcessLines();
+			lineList = ProcessLineUtility.getAllProcessLines(processLines);
 		}
 		if (!Objects.nonNull(processLineRequest.getFrequency())) {
 			processLineRequest.setFrequency(0);
