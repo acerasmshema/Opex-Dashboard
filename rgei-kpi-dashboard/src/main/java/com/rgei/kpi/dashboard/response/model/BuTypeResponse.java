@@ -2,21 +2,20 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class BuTypeResponse {
 
-	private int buTypeId;
-	private int buId;
+	private Integer buTypeId;
+	private Integer buId;
 	private String buTypeCode;
 	private String  buTypeName;
-	
-	public int getBuTypeId() {
+	public Integer getBuTypeId() {
 		return buTypeId;
 	}
-	public void setBuTypeId(int buTypeId) {
+	public void setBuTypeId(Integer buTypeId) {
 		this.buTypeId = buTypeId;
 	}
-	public int getBuId() {
+	public Integer getBuId() {
 		return buId;
 	}
-	public void setBuId(int buId) {
+	public void setBuId(Integer buId) {
 		this.buId = buId;
 	}
 	public String getBuTypeCode() {
@@ -31,6 +30,8 @@ public class BuTypeResponse {
 	public void setBuTypeName(String buTypeName) {
 		this.buTypeName = buTypeName;
 	}
+	
+	
 	
 	
 	

@@ -1,0 +1,239 @@
+<div class="dashboard-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="min-height: 250px">
+        <div *ngIf="yesterdayProductionData !== undefined" class="col-lg-3 p-r-0">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{yesterdayProductionData.millName | uppercase}} PRODUCTION - Y'day (ADt/d)</h5>
+              <div class="gauge-center" *ngIf="yesterdayProductionData.show">
+                <rg-gauge-chart [canvasWidth]="yesterdayProductionData.canvasWidth"
+                  [needleValue]="yesterdayProductionData.productionYDayNeedleValue"
+                  [options]="yesterdayProductionData.options" [nameFont]="yesterdayProductionData.nameFont"
+                  [bottomLabel]="yesterdayProductionData.productionYDayActualValue">
+                </rg-gauge-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9">
+          <div class="card">
+            <div class="card-body">
+              <div *ngIf="annualChart !== undefined" class="row">
+                <div class="col-md-2">
+                  <h6>Annual Target :{{annualChart.annualTarget}}</h6>
+                </div>
+                <div class="col-md-4 text-center">
+                  <h5>
+                    PRODUCTION ( <span class="prod-chart-header" style="color:#BA4A00;">Actual</span> vs.
+                    <span class="prod-chart-header" style="color:#2E8B57;">Target</span>) (ADt)
+                  </h5>
+                </div>
+                <div class="col-md-6">
+                  <h6>Projected Daily Target in next {{annualChart.targetDays}} Days Till {{annualChart.targetEndDate}}
+                    :
+                    {{annualChart.targetValue}} (ADt)
+                    <span (click)="openSettingIcon()"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></span>
+                  </h6>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="annualChart.annualData !== undefined && annualChart.annualData.length > 0"
+                  class="col-md-12 p-l-0" style="height: 195px;">
+                  <ngx-charts-line-chart [scheme]="annualChart.colorScheme" [results]="annualChart.annualData"
+                    [gradient]="gradient" [xAxis]="annualChart.xAxis" [yAxis]="annualChart.yAxis" xScaleMin="0"
+                    [legend]="annualChart.legend" [showXAxisLabel]="annualChart.showXAxisLabel"
+                    [xAxisTickFormatting]="xAxisTickFormatting" [showYAxisLabel]="annualChart.showYAxisLabel"
+                    yScaleMax="3000000" [xAxisLabel]="" [yAxisLabel]="">
+                    <ng-template #seriesTooltipTemplate let-model="model">
+                      {{model[0].name}}
+                      <div *ngFor="let mod of model.slice().reverse(); let i = index">
+                        {{mod.series}} : {{ mod.value | number }}
+                      </div>
+                      Diff. : {{(model[1].value - model[0].value)  | number }}
+                    </ng-template>
+                  </ngx-charts-line-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-5" style="min-height: 315px">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row m-b-10">
+                <div class="col-md-4">
+                  <label class="radio-inline"><input type="radio" name="monthlyRadio"
+                      (change)="changeMonthlyChartDuration('radio1')" checked>Last Month</label>
+                  <label class="radio-inline m-l-20"><input type="radio" name="monthlyRadio"
+                      (change)="changeMonthlyChartDuration('radio2')">Last 3 Months</label>
+                  <label class="radio-inline m-l-20"><input type="radio" name="monthlyRadio"
+                      (change)="changeMonthlyChartDuration('radio3')">Last 6 Months</label>
+                </div>
+                <div class="col-md-4 text-center">
+                  <h5>{{ 'PRODUCTION' | translate }}</h5>
+                </div>
+                <div class="col-md-4 input-switch-div" style="padding-left: 10%;">
+                  <h6 class="m-r-5">Stack Bar</h6>
+                  <div class="input-switch">
+                    <p-inputSwitch [style]="{width: '35px', height: '20px'}" (onChange)="changeMonthlyChartType()">
+                    </p-inputSwitch>
+                  </div>
+                  <h6 class="m-l-5">Stack Area</h6>
+                </div>
+              </div>
+              <div *ngIf="monthlyChart !== undefined" class="row p-l-0" style=" height: 250px;">
+                <div *ngIf="monthlyChart.chartType == 'stack-bar'" class="col-md-12">
+                  <ngx-charts-bar-vertical-stacked [scheme]="monthlyChart.colorScheme" [results]="monthlyChart.stackBar"
+                    [gradient]="gradient" [xAxis]="monthlyChart.xAxis" [yAxis]="monthlyChart.yAxis"
+                    [showXAxisLabel]="monthlyChart.showYAxisLabel" [showYAxisLabel]="monthlyChart.showYAxisLabel"
+                    [barPadding]="monthlyChart.barPadding">
+                  </ngx-charts-bar-vertical-stacked>
+                </div>
+                <div *ngIf="monthlyChart.chartType == 'stack-area'" class="col-md-12">
+                  <ngx-charts-area-chart-stacked [scheme]="monthlyChart.colorScheme" [results]="monthlyChart.stackArea"
+                    [gradient]="gradient" [xAxis]="monthlyChart.xAxis" [yAxis]="monthlyChart.yAxis"
+                    [showXAxisLabel]="monthlyChart.showYAxisLabel" [showYAxisLabel]="monthlyChart.showYAxisLabel">
+                  </ngx-charts-area-chart-stacked>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-5">
+        <div class="col-md-12">
+          <div class="card" style="min-height: 729px">
+            <div class="card-body">
+              <div class="row m-b-10">
+                <div class="col-md-4">
+                  <label class="radio-inline"><input type="radio" name="optradio"
+                      (change)="changeChartDurationLineChart('radio1')" checked>Last Month</label>
+                  <label class="radio-inline m-l-20"><input type="radio" name="optradio"
+                      (change)="changeChartDurationLineChart('radio2')">Last 3 Months</label>
+                  <label class="radio-inline m-l-20"><input type="radio" name="optradio"
+                      (change)="changeChartDurationLineChart('radio3')">Last 6 Months</label>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngFor="let prod of prodLines" class="col-md-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12 gauge-center">
+                          <rg-gauge-chart [canvasWidth]="prod.canvasWidth"
+                            [needleValue]="prod.productionYDayNeedleValue" [centralLabel]="prod.centralLabel"
+                            [options]="prod.options" [name]="prod.processLineCode" [nameFont]="prod.fontSize"
+                            [bottomLabel]="prod.productionYDayActualValue">
+                          </rg-gauge-chart>
+                        </div>
+                      </div>
+                      <div *ngIf="prod.productionLineData !== undefined && prod.productionLineData.length > 0"
+                        class="row">
+                        <div class="col md-12 p-0" style="height: 134px;">
+                          <ngx-charts-line-chart [scheme]="prod.colorScheme" [results]="prod.productionLineData"
+                            [gradient]="gradient" [xAxis]="prod.xAxis" [yAxis]="prod.yAxis" xScaleMin="prod.xScaleMin"
+                            [legend]="prod.legend" [showXAxisLabel]="prod.showXAxisLabel"
+                            [showYAxisLabel]="prod.showYAxisLabel" [xAxisLabel]="prod.xAxisLabel"
+                            [yAxisLabel]="prod.yAxisLabel"> </ngx-charts-line-chart>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-5" style="min-height: 345px">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <div *ngIf="producionLineForm !== undefined" class="row">
+                <div class="col-md-2">
+                  <ejs-daterangepicker class="daterangepicker" id='daterangepicker'
+                    [startDate]='producionLineForm.startDate' [endDate]='producionLineForm.endDate'
+                    [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
+                    placeholder="{{'Date Range'| translate }}">
+                  </ejs-daterangepicker>
+                </div>
+                <div class="col-md-2">
+                  <p-dropdown [options]="producionLineForm.frequencies"
+                    [(ngModel)]="productionEnquiryData.selectedValue" [ngModelOptions]="{standalone: true}"
+                    optionLabel="name">
+                  </p-dropdown>
+                </div>
+                <div class="col-md-3">
+                  <p-multiSelect [options]="producionLineForm.processLines" scrollHeight="150px"
+                    [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
+                    [style]="{'width':'60%'}" defaultLabel="Process Lines" optionLabel="processLineCode">
+                  </p-multiSelect>
+                </div>
+                <div class="col-md-2">
+                  <button pButton type="button" label="Search" (click)="searchData(true)" class="ui-button-primary"></button>
+                </div>
+              </div>
+              <div class="row m-t-5">
+                <div class="col-md-12 text-center">
+                  <h5>{{ 'PRODUCTION' | translate }}</h5>
+                </div>
+              </div>
+              <div *ngIf="prodLineChart !== undefined" class="row">
+                <div class="col-md-12 p-0" style="height: 250px;">
+                  <ngx-charts-line-chart [scheme]="prodLineChart.colorScheme"
+                    [results]="prodLineChart.productionLineData" [gradient]="gradient" [xAxis]="prodLineChart.xAxis"
+                    [yAxis]="prodLineChart.yAxis" xScaleMin="0" [legend]="prodLineChart.legend"
+                    [showXAxisLabel]="prodLineChart.showXAxisLabel" [showYAxisLabel]="prodLineChart.showYAxisLabel"
+                    [xAxisLabel]="prodLineChart.xAxisLabel" [yAxisLabel]="prodLineChart.yAxisLabel"
+                    [xAxisTickFormatting]="xAxisTickFormattingFn" [curve]="prodLineChart.lineChartLineInterpolation"
+                    [animations]="prodLineChart.animations" [showRefLines]="prodLineChart.showRefLines"
+                    (select)="onSelect($event)">
+                  </ngx-charts-line-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-5" style="min-height: 196px">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <div *ngIf="productionLineView !== undefined && productionLineView.productionLines.length > 0" class="row">
+                <div class="col-md-12">
+                  <p-table #dtf [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
+                    [rows]="productionLineView.rows" [paginator]="productionLineView.paginator"
+                    [scrollable]="productionLineView.scrollable" scrollHeight="200px">
+                    <ng-template pTemplate="caption">
+                      <div class="ui-helper-clearfix">
+                        <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
+                          (click)="dtf.exportCSV()" style="float:right"></button>
+                      </div>
+                    </ng-template>
+                    <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        <th *ngFor="let col of columns" class="text-center">
+                          {{col.header}}
+                        </th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                      <tr>
+                        <td *ngFor="let col of columns" [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
+                          {{rowData[col.field]}}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
