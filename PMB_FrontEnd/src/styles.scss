@@ -36,33 +36,97 @@
           font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
           font-size: 12px;
         }
-
-
-
-        .panel-header {
-          margin-left: 15px;
-          margin-right: 15px;
-          border-radius: 0px;
-      }
-      
-      .panel-grid {
-          margin-left: 2px;
-          margin-right: 2px;
-          border-radius: 0px;
-      }
-      
-      .control-label {
-          text-align: right;
-          font-size: 11px;
-          margin-right: -25px;
-          margin-top: 6px;    
-      }
-      
-      .input-custom {
-          width:190px;
-          height:25px;
-      }
-
-      .e-daterangepicker.e-popup .e-range-header{
-        display: none;
+    
+    .e-daterangepicker.e-popup .e-range-header{
+      display: none;
     }
+
+    ::-webkit-scrollbar {
+      width: 15px;
+      height: 11px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px grey;
+      background: #e9edf2;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #b5b2b2;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #32475a; 
+    }
+
+.border-bottom-grey {
+  border-bottom: 1px solid lightgray
+}
+
+.border-grey {
+  border: 1px solid lightgray;
+}
+
+.text-right {
+ text-align:  right !important;
+}
+
+.input-switch {
+  margin-top: -3px;
+}
+
+.input-switch-div {
+  display: inline-flex;
+}
+
+.p-0 {
+  padding: 0px;
+}
+
+.p-t-10 {
+  padding-top: 10px;
+}
+
+.p-l-0 {
+  padding-left: 0px;
+}
+
+ml-auto, .mx-auto {
+  margin-left: auto!important;
+}
+
+.m-l-5 {
+  margin-left: 5px;
+}
+
+.m-l-20 {
+  margin-left: 20px;
+}
+
+.m-r-5 {
+  margin-right: 5px;
+}
+
+.m-r-30 {
+  margin-right: 30px;
+}
+
+.m-t-5 {
+  margin-top: 5px;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
+}
+
+.dashboard-container {
+  height: 75vh;
+  overflow-y: scroll;
+}
