@@ -208,15 +208,17 @@ export class ConsumptionService {
 
   refreshDahboard(kpiCategoryId: string) {
     let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
-    const consumptions = consumptionDetail.consumptions;
-    if (consumptions !== undefined) {
-      consumptions.forEach(consumption => {
-        const chartType = consumption.chartType;
-        consumption.chartType = "";
-        setTimeout(() => {
-          consumption.chartType = chartType;
-        }, 100);
-      });
+    if (consumptionDetail !== undefined) {
+      const consumptions = consumptionDetail.consumptions;
+      if (consumptions !== undefined) {
+        consumptions.forEach(consumption => {
+          const chartType = consumption.chartType;
+          consumption.chartType = "";
+          setTimeout(() => {
+            consumption.chartType = chartType;
+          }, 100);
+        });
+      }
     }
   }
 }

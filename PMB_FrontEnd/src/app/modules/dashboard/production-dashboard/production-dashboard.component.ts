@@ -354,8 +354,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
       let frequency = this.productionEnquiryData.selectedValue['code'];
-      this.productionLineView.columnNames.push({ field: 'DATE', header: 'Date' });
-
+      
       let processLines = [];
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
