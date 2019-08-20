@@ -33,7 +33,6 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
-import com.rgei.kpi.dashboard.response.model.KpiType;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
@@ -264,6 +263,7 @@ public class ProcessLineUtility {
 				millObject.setMillId(millEntity.getMillId().toString());
 				millObject.setMillCode(millEntity.getMillCode());
 				millObject.setMillName(millEntity.getMillName());
+				millObject.setCountryId(millEntity.getCountry().getCountryId().toString());
 				response.add(millObject);
 			}
 		}

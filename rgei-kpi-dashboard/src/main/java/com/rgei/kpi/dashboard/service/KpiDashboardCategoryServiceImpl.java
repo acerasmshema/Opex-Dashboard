@@ -33,7 +33,9 @@ import com.rgei.kpi.dashboard.response.model.KpiType;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 import com.rgei.kpi.dashboard.util.KpiConsumptionLineChartUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryDataGridUtility;
+import com.rgei.kpi.dashboard.util.KpiDashboardCategoryDataGridUtilityRZ;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtility;
+import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtilityRZ;
 import com.rgei.kpi.dashboard.util.MillBuKpiUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
@@ -191,52 +193,68 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 	private void getYearlyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {
 		logger.info("Creating yearly frequency grid response for process lines", finalKpiProcessLines);
-		List<Map<String, Object>> response;
+		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getProcessLinesTotalYearly(
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(), DashboardConstant.FORMAT),
 				kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getKpiCategoryId(), 
 				kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getCountryId(), kpiDashboardCategoryRequest.getKpiId());
-		response = KpiDashboardCategoryDataGridUtility.getGridDataYearly(finalKpiProcessLines, responseEntity);
+		if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+			response = KpiDashboardCategoryDataGridUtility.getGridDataYearly(finalKpiProcessLines, responseEntity);
+		}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+			response = KpiDashboardCategoryDataGridUtilityRZ.getGridDataYearly(finalKpiProcessLines, responseEntity);	
+		}
 		responseData.add(response);
 	}
 
 	private void getQuarterlyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {
 		logger.info("Creating quarterly frequency grid response for process lines", finalKpiProcessLines);
-		List<Map<String, Object>> response;
+		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getProcessLinesTotalQuarterly(
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(), DashboardConstant.FORMAT),
 				kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getKpiCategoryId(), 
 				kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getCountryId(), kpiDashboardCategoryRequest.getKpiId());
-		response = KpiDashboardCategoryDataGridUtility.getGridDataQuarterly(finalKpiProcessLines, responseEntity);
+		if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+			response = KpiDashboardCategoryDataGridUtility.getGridDataQuarterly(finalKpiProcessLines, responseEntity);
+		}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+			response = KpiDashboardCategoryDataGridUtilityRZ.getGridDataQuarterly(finalKpiProcessLines, responseEntity);	
+		}
 		responseData.add(response);
 	}
 
 	private void getMonthlyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {
 		logger.info("Creating monthly frequency grid response for process lines", finalKpiProcessLines);
-		List<Map<String, Object>> response;
+		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getProcessLinesTotalMonthly(
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(), DashboardConstant.FORMAT),
 				kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getKpiCategoryId(), 
 				kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getCountryId(), kpiDashboardCategoryRequest.getKpiId());
-		response = KpiDashboardCategoryDataGridUtility.getGridDataMonthly(finalKpiProcessLines, responseEntity);
+		if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+			response = KpiDashboardCategoryDataGridUtility.getGridDataMonthly(finalKpiProcessLines, responseEntity);
+		}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+			response = KpiDashboardCategoryDataGridUtilityRZ.getGridDataMonthly(finalKpiProcessLines, responseEntity);	
+		}
 		responseData.add(response);
 	}
 
 	private void getDailyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {
 		logger.info("Creating daily frequency grid response for process lines", finalKpiProcessLines);
-		List<Map<String, Object>> response;
+		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getProcessLinesDailyTotal(
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(kpiDashboardCategoryRequest.getEndDate(), DashboardConstant.FORMAT),
 				kpiDashboardCategoryRequest.getMillId(), kpiDashboardCategoryRequest.getKpiCategoryId(), 
 				kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getCountryId(), kpiDashboardCategoryRequest.getKpiId());
-		response = KpiDashboardCategoryDataGridUtility.getGridDataDailyResponse(finalKpiProcessLines, responseEntity);
+		if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+			response = KpiDashboardCategoryDataGridUtility.getGridDataDailyResponse(finalKpiProcessLines, responseEntity);
+		}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+			response = KpiDashboardCategoryDataGridUtilityRZ.getGridDataDailyResponse(finalKpiProcessLines, responseEntity);	
+		}
 		responseData.add(response);
 	}
 
@@ -257,7 +275,11 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			val.setName(String.valueOf(obj[0]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 			SeriesObject value = new SeriesObject();
-			val.setSeries(KpiDashboardCategoryUtility.getYearlySeriesResponse(obj, kpiProcessLine, value, series));
+			if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+			}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+				val.setSeries(KpiDashboardCategoryUtilityRZ.getSeriesResponse(obj, kpiProcessLine, value, series));	
+			}
 			}
 			resultList.add(val);
 		}
@@ -273,7 +295,11 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 				kpiDashboardCategoryRequest.getBuId(), kpiDashboardCategoryRequest.getCountryId(), kpiDashboardCategoryRequest.getKpiId());
 
 		for (Object[] obj: responseEntity) {
-			KpiDashboardCategoryUtility.populateQuarterlyData(resultList, finalKpiProcessLines, obj);
+			if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+				KpiDashboardCategoryUtility.populateQuarterlyData(resultList, finalKpiProcessLines, obj);
+			}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+				KpiDashboardCategoryUtilityRZ.populateQuarterlyData(resultList, finalKpiProcessLines, obj);	
+			}
 		}
 	}
 
@@ -292,7 +318,11 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			val.setName(Month.of(Integer.valueOf(String.valueOf(obj[0]).split("\\.")[0])).getDisplayName(TextStyle.SHORT, Locale.ENGLISH)+"-"+String.valueOf(obj[9]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 			SeriesObject value = new SeriesObject();
-			val.setSeries(KpiDashboardCategoryUtility.getMonthlySeriesResponse(obj, kpiProcessLine, value, series));
+			if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+			}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+				val.setSeries(KpiDashboardCategoryUtilityRZ.getSeriesResponse(obj, kpiProcessLine, value, series));	
+			}
 			}
 			resultList.add(val);
 		}
@@ -312,7 +342,11 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			val.setName(Utility.dateToStringConvertor(Date.valueOf(obj[0].toString()), DashboardConstant.DATE_FORMAT));
 			for(String kpiProcessLine: finalKpiProcessLines) {
 			SeriesObject value = new SeriesObject();
-			val.setSeries(KpiDashboardCategoryUtility.getDailySeriesResponse(obj, kpiProcessLine, value, series));
+			if(DashboardConstant.KRC.equals(kpiDashboardCategoryRequest.getMillId().toString())){
+				val.setSeries(KpiDashboardCategoryUtility.getDailySeriesResponse(obj, kpiProcessLine, value, series));
+			}else if(DashboardConstant.RZ.equals(kpiDashboardCategoryRequest.getMillId().toString())) {
+				val.setSeries(KpiDashboardCategoryUtilityRZ.getDailySeriesResponse(obj, kpiProcessLine, value, series));	
+			}
 			}
 			resultList.add(val);
 		}

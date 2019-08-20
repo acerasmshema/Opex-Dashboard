@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
-import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.repository.BusinessUnitTypeRepository;
 import com.rgei.kpi.dashboard.repository.MillEntityRepository;
@@ -21,7 +20,6 @@ import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.util.CommonFunction;
-import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtility;
 import com.rgei.kpi.dashboard.util.ProcessLineUtility;
 
 @Service
