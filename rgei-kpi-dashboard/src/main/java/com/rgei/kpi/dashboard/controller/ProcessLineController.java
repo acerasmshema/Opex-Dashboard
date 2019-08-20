@@ -179,21 +179,21 @@ public class ProcessLineController {
 	public ResponseEntity<List<ProcessLineDetailsResponse>> getProcessLineResponse(@RequestHeader(value="millId") String millId){
 		logger.info("Fetching process line data against the requested location id.", millId);
 		List<ProcessLineDetailsResponse> response = processLineService.getProcessLines(millId);
-		return new ResponseEntity<List<ProcessLineDetailsResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/location/all_mills")
 	public ResponseEntity<List<MillsResponse>> getMills(@RequestHeader(value="countryIds") List<String> countryIds){
 		logger.info("Fetching mills against the requested country ids.", countryIds);
 		List<MillsResponse> response = processLineService.getMillDetails(countryIds);
-		return new ResponseEntity<List<MillsResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/location/get_all_bu_type")
 	public ResponseEntity<List<BuTypeResponse>> getAllBuType(){
 		logger.info("Fetching All BU Types");
 		List<BuTypeResponse> response = processLineService.getAllBuType();
-		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	

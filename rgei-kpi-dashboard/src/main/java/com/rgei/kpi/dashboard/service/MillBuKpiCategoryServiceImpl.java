@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
@@ -35,6 +36,7 @@ import com.rgei.kpi.dashboard.response.model.ProcessLineDailyTargetResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineResponse;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
+import com.rgei.kpi.dashboard.util.DailyKpiPulpConverterRZ;
 import com.rgei.kpi.dashboard.util.ProcessLineUtility;
 
 
@@ -57,12 +59,19 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService{
 	public ProcessLineResponse yesterdayAvgProductionLine(String millId,
 			String buId, String kpiCategoryId, String kpiId) {
 		logger.info("Yesterday avg production line");
+		ProcessLineResponse processLineResponse=null;
 		List<ProcessLineEntity> processLineEntites = processLineRepository.findByProcessLineNameIn(ProcessLineUtility.getRequestedProcessLines());
 		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
 		List<DailyKpiPulpEntity>  dailyKpiPulpEntities = dailyKpiPulpEntityRepository.readByRequestedParameters(CommonFunction.getYesterdayDate(),
 				CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(buId),
 				CommonFunction.covertToInteger(kpiCategoryId),CommonFunction.covertToInteger(kpiId));
-		return DailyKpiPulpConverter.prePareResponse(processLineEntites,dailyKpiPulpEntities,millBuKpiCategoryEntity);
+		if(millId.equals(DashboardConstant.KRC)) {
+			processLineResponse = DailyKpiPulpConverter.prePareResponse(processLineEntites,dailyKpiPulpEntities,millBuKpiCategoryEntity);
+		}
+		else if(millId.equals(DashboardConstant.RZ)) {
+			processLineResponse = DailyKpiPulpConverterRZ.prePareResponse(processLineEntites,dailyKpiPulpEntities,millBuKpiCategoryEntity);
+		}
+		return processLineResponse;
 	}
 	
 	
