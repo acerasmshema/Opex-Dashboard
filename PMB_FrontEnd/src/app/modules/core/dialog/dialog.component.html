@@ -1,0 +1,207 @@
+<div *ngIf="dialogName === 'annotation'">
+    <p-dialog modal="true" header="Annotations for Production on {{annotationDialog.annotationDate}}" [responsive]="true"
+        [style]="{width: '800px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000"
+        [(visible)]="annotationDialog.displayAnnotations">
+        <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
+            (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p-multiSelect [options]="annotationDialog.processLinesForAnnotation" scrollHeight="80px"
+                                [(ngModel)]="annotationDialog.annotationProcessLines"
+                                [ngModelOptions]="{standalone: true}" [style]="{'width':'60%'}"
+                                defaultLabel="Process Lines" optionLabel="processLineCode">
+                            </p-multiSelect>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea placeholder="Description" rows="2" cols="25"
+                                [(ngModel)]="annotationDialog.annotationDescription" pInputTextarea></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="pull-right">
+                                <button pButton type="button" (click)="createAnnotation()" label="Save"></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <p-panel header="View Annotations" [collapsed]="annotationDialog.findAnnotationCollapsed"
+            (onBeforeToggle)="findAnnotationBeforeToggle()" [toggleable]="true">
+            <div class="card" style="height:320px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <p-table [columns]="annotationsCols" [value]="annotationDialog.annotationsLines"
+                                [paginator]="true" [rows]="10" [scrollable]="true" scrollHeight="300px">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns" class="text-center">
+                                            {{col.header}}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr>
+                                        <td class="text-right" *ngFor="let col of columns" class="text-center">
+                                            {{rowData[col.field]}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+    </p-dialog>
+</div>
+
+<div *ngIf="dialogName === 'consumptionGridView'">
+    <p-dialog modal="true" [header]="consumptionGridView.title" [(visible)]="consumptionGridView.show"
+        [style]="{width: '700px'}">
+        <p-table #consumptionGrid [columns]="consumptionGridView.columnNames" [value]="consumptionGridView.gridData"
+            [paginator]="consumptionGridView.paginator" [rows]="consumptionGridView.rows"
+            [scrollable]="consumptionGridView.scrollable" scrollHeight="450px">
+            <ng-template pTemplate="caption">
+                <div class="ui-helper-clearfix">
+                    <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Download Data"
+                        (click)="consumptionGrid.exportCSV()" style="float:right"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" class="text-center">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns" [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-dialog>
+</div>
+
+<div *ngIf="dialogName === 'maintenanceDays'">
+    <p-dialog modal="true" header="Maintenance Days" [responsive]="true"
+        [style]="{width: '800px', minWidth: '300px', height: '500px'}" [minY]="70" [baseZIndex]="10000"
+        [(visible)]="maintenanceDays.show">
+        <p-panel header="Maintenance Days Configurations" [collapsed]="maintenanceDays.collapsed" [toggleable]="true">
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <p-calendar [(ngModel)]="maintenanceDays.dateValue" placeholder="Maintenance Date"
+                                    [showIcon]="true">
+                                </p-calendar>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea class="form-control" [(ngModel)]="maintenanceDays.textAreaValue"
+                                    placeholder="Remark" rows="2" cols="28" pInputTextarea></textarea>
+                            </div>
+                            <div class="col-md-3">
+                                <button pButton type="button" label="Add" (click)="add()" class="ui-button-primary"
+                                    style="background-color: #007ad9;height:30px;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-t-5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="number" class="form-control" style="padding-left: 5px;" pInputText
+                                    placeholder="Target Days" [(ngModel)]="maintenanceDays.targetDays" />
+                            </div>
+                            <div class="col-md-8">
+                                <button pButton type="button" label="Save" (click)="addTargetDays()"
+                                    class="ui-button-primary" style="background-color: #007ad9;height:30px;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="List of Maintenance Days " [collapsed]="!maintenanceDays.collapsed" [toggleable]="true"
+            (click)="viewMaintenanceDays();">
+            <div class="container">
+                <div class="row" style="height: 260px;">
+                    <div class="col-md-12">
+                        <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
+                            [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
+                            scrollHeight="200px" [rows]="5" [paginator]="true"
+                            [(selection)]="maintenanceDays.selectedMaintenanceDay" dataKey="id"
+                            [tableStyle]="{'table-layout':'auto'}">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width: 3em">
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th *ngFor="let col of columns" style="text-align: center">
+                                        {{col.header}}
+                                    </th>
+                                </tr>
+
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-ri="rowIndex"
+                                let-editing="editing">
+                                <tr [pEditableRow]="rowData">
+                                    <td>
+                                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                    </td>
+
+                                    <td class="">
+                                        {{rowData.id}}
+                                    </td>
+                                    <td class=".ng-invalid.ng-dirty" style="min-width: 100px">
+                                        {{rowData.maintainceDates}}
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%"
+                                                    class="ng-pristine ng-valid ng-star-inserted ng-touched">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{rowData.remarks}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td style="text-align:center; min-width: 180px; ">
+                                        <button *ngIf="!maintenanceDays.editing" pButton type="button" pInitEditableRow
+                                            icon="fa fa-pencil-square-o" label="Edit" class="ui-button-info"
+                                            (click)="onRowEditInit(rowData)"></button>
+                                        <button *ngIf="maintenanceDays.editing" pButton type="button" pSaveEditableRow
+                                            icon="fa fa-check-square-o" label="Save" class="ui-button-success"
+                                            style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                                        <button *ngIf="maintenanceDays.editing" pButton type="button" pCancelEditableRow
+                                            icon=" fa fa-times" label="Cancel" class="ui-button-danger"
+                                            (click)="onRowEditCancel(rowData, ri)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <button
+                            [hidden]="maintenanceDays.selectedMaintenanceDay == undefined || !maintenanceDays.selectedMaintenanceDay.length"
+                            pButton type="button" class="ui-button-primary" (click)="delMaintanenceDays()"
+                            icon="fa fa-trash" label="Delete" iconPos="left"
+                            style="height: 28px; margin-top: 8px;"></button>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+    </p-dialog>
+</div>
+
+
+<p-toast [style]="{marginTop: '20px'}"></p-toast>

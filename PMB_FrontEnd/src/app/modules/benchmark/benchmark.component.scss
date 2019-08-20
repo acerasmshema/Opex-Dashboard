@@ -1,0 +1,34 @@
+.mainContainer {
+    height: 88vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.benchmark-border  {
+    border:1px solid #8c8c8c;
+    border-radius: 10px;
+}
+
+.dot {
+    height: 20px;
+    width: 20px;
+    border-radius: 30%;
+    
+    margin-left:5px;
+    margin-top: 4px;
+    float: left;
+}
+
+.labelClass{
+    font-weight: bold;
+    margin:8px;
+    float: left;
+}
+
+.color_legend{
+    padding:0px;
+    margin-bottom: 10px;
+    height:30px;
+    border:1px solid lightgrey;
+    border-radius: 10px;
+}
