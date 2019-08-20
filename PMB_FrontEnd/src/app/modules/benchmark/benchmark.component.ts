@@ -33,6 +33,8 @@ export class BenchmarkComponent implements OnInit {
   };
 
   ngOnInit() {
+    document.getElementById("select_mill").style.display = "none";
+
     this.getConsumption(this.data1, "Kraft Pulp Wood Chip Conversion (BDt/ADt)");
     setTimeout(() => {
       let nodes = document.getElementsByClassName("textDataLabel");

@@ -41,16 +41,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.cacheMap.set("2", false);
         this.cacheMap.set("3", false);
         this.cacheMap.set("4", false);
-        this.processUnitLegends = this.getProcessUnitLegends();
-        setTimeout(() => {
-          document.getElementById("ui-tabpanel-0-label").click();
-          this.selected = true;
-        }, 200);
+        this.processUnitLegends = this.getProcessUnitLegends(true);
       });
   }
 
   openDashboard() {
-    this.processUnitLegends = this.getProcessUnitLegends();
+    this.processUnitLegends = this.getProcessUnitLegends(false);
     document.getElementById("select_mill").style.display = "block";
 
     setTimeout(() => {
@@ -90,7 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProcessUnitLegends(): any {
+  getProcessUnitLegends(isMillChange: boolean): any {
     let millId = this.statusService.common.selectedMill.millId;
     const requestData = {
       millId: millId
@@ -103,6 +99,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
+
+        if (isMillChange) {
+          setTimeout(() => {
+            document.getElementById("ui-tabpanel-0-label").click();
+            this.selected = true;
+          }, 200);
+        }
       });
   }
 

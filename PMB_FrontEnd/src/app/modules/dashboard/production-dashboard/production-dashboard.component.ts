@@ -409,7 +409,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
+    if (this.annotationDates !== null && this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
     } else {
       dateTick = val;
