@@ -53,12 +53,22 @@ public class ProcessLineUtility {
 		return processLines;
 	}
 	
-	public static List<String> getAllProcessLines(List<ProcessLine> processLines) {
+	public static List<String> fetchProcessLines(List<ProcessLine> processLines, List<String> lineList) {
 		List<String> processLinesList = new ArrayList<>();
+		List<String> finalKpiProcessLines = new ArrayList<>();
 		for(ProcessLine line : processLines) {
-		processLinesList.add(line.getProcessLineCode());
+			processLinesList.add(line.getProcessLineCode());
 		}
-		return processLinesList;
+		if (lineList.isEmpty()) {
+			return processLinesList;
+		}else {
+			for(String processLine : processLinesList) {
+				if(lineList.contains(processLine)) {
+					finalKpiProcessLines.add(processLine);
+				}
+			}
+		}
+		return finalKpiProcessLines;
 	}
 	
 	public static java.util.Date getYesterdayDate() {

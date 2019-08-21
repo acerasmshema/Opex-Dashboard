@@ -271,7 +271,6 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		logger.info("Getting process line data for specific frequencies", processLineRequest);
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<ProcessLine> processLines = null;
-		List<String> lineList = Arrays.asList(processLineRequest.getProcessLines());
 		MillEntity mill = new MillEntity();
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional
@@ -279,9 +278,9 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		if (processLineEntity.isPresent()) {
 			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
-		if (lineList.isEmpty()) {
-			lineList = ProcessLineUtility.getAllProcessLines(processLines);
-		}
+		List<String> lineList = null;
+		List<String> processLinesList = Arrays.asList(processLineRequest.getProcessLines());
+		lineList = ProcessLineUtility.fetchProcessLines(processLines, processLinesList);
 		 
 		if (!Objects.nonNull(processLineRequest.getFrequency())) {
 			processLineRequest.setFrequency(0);
@@ -311,7 +310,6 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<List<Map<String, Object>>> getDataGridProcessLinesForFrequecy(ProcessLineRequest processLineRequest) {
 		logger.info("Getting process line grid data for specific frequencies", processLineRequest);
 		List<ProcessLine> processLines = null;
-		List<String> lineList = Arrays.asList(processLineRequest.getProcessLines());
 		MillEntity mill = new MillEntity();
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional
@@ -319,12 +317,10 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		if (processLineEntity.isPresent()) {
 			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
-		if (lineList.isEmpty()) {
-			lineList = ProcessLineUtility.getAllProcessLines(processLines);
-		}
-		if (!Objects.nonNull(processLineRequest.getFrequency())) {
-			processLineRequest.setFrequency(0);
-		}
+		List<String> lineList = null;
+		List<String> processLinesList = Arrays.asList(processLineRequest.getProcessLines());
+		lineList = ProcessLineUtility.fetchProcessLines(processLines, processLinesList);
+		
 		List<List<Map<String, Object>>> responseData = new ArrayList<>();
 		
 		switch (processLineRequest.getFrequency()) {
@@ -497,15 +493,20 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	private void getDailyFrequencyGridData(ProcessLineRequest processLineRequest, List<String> lineList,
 			List<List<Map<String, Object>>> responseData) {
 		List<Map<String, Object>> response= null;
-		List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGridRZ(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
-		if(DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())){
-		response = ProcessLineFrequencyDataGridUtility.getGridDataDailyResponse(lineList, responseEntity);
-		}else if(DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
-		response = ProcessLineFrequencyDataGridUtilityRZ.getGridDataDailyResponse(lineList, responseEntity);	
+		if (DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())) {
+			List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGrid(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			response = ProcessLineFrequencyDataGridUtility.getGridDataDailyResponse(lineList, responseEntity);
+		} else if (DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
+			List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGridRZ(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			response = ProcessLineFrequencyDataGridUtilityRZ.getGridDataDailyResponse(lineList, responseEntity);
 		}
 		responseData.add(response);
 	}

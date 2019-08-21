@@ -257,7 +257,7 @@ public class ProcessLineUtilityRZ {
 	}
 
 	public static List<BuTypeResponse> preareBUTypeResponse(List<BusinessUnitTypeEntity> businessUnitTypeEntityList) {
-		List<BuTypeResponse> buTypeList=new ArrayList<BuTypeResponse>();
+		List<BuTypeResponse> buTypeList=new ArrayList<>();
 		BuTypeResponse buTypeResponse=null;
 		if(buTypeList!=null) {
 			for(BusinessUnitTypeEntity businessUnitTypeEntity:businessUnitTypeEntityList) {
