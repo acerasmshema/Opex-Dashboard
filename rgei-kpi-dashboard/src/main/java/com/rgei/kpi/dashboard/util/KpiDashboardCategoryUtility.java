@@ -59,8 +59,8 @@ public class KpiDashboardCategoryUtility {
 		}else {
 			List<String> kpiProcessLines = kpi.getKpiProcessLines();
 			finalKpiProcessLines = new ArrayList<>();
-			for(String processLine: lineList) {
-				if(kpiProcessLines.contains(processLine)) {
+			for(String processLine : kpiProcessLines) {
+				if(lineList.contains(processLine)) {
 					finalKpiProcessLines.add(processLine);
 				}
 			}
