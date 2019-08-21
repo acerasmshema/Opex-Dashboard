@@ -360,7 +360,7 @@ public class KpiDashboardCategoryUtility {
 	
 	private static String fetchColor(String value, String threshold) {
 		String color = null;
-		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value)) {
+		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value) || Objects.isNull(threshold)) {
 			color = DashboardConstant.BLACK;
 		} else {
 			String[] target = threshold.split(",");

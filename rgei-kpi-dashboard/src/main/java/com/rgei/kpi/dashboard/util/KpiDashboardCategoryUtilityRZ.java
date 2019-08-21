@@ -283,43 +283,28 @@ public class KpiDashboardCategoryUtilityRZ {
 		val.setName(kpiProcessLine);
 		val.setTarget(type.getTarget().get(kpiProcessLine));
 		switch (kpiProcessLine) {
-		case DashboardConstant.PROCESS_LINE_FL1:
+		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseProcessLineValue(Double.valueOf(obj[0].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_FL2:
+		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseProcessLineValue(Double.valueOf(obj[1].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_FL3:
+		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseProcessLineValue(Double.valueOf(obj[2].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_PCD:
+		case DashboardConstant.PROCESS_LINE_PL11:
 			value = parseProcessLineValue(Double.valueOf(obj[3].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_PD1:
+		case DashboardConstant.PROCESS_LINE_PL12:
 			value = parseProcessLineValue(Double.valueOf(obj[4].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD2:
-			value = parseProcessLineValue(Double.valueOf(obj[5].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD3:
-			value = parseProcessLineValue(Double.valueOf(obj[6].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD4:
-			value = parseProcessLineValue(Double.valueOf(obj[7].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
@@ -331,7 +316,7 @@ public class KpiDashboardCategoryUtilityRZ {
 	
 	private static String fetchColor(String value, String threshold) {
 		String color = null;
-		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value)) {
+		if (DashboardConstant.NA.equalsIgnoreCase(value) || DashboardConstant.NAN.equalsIgnoreCase(value) || Objects.isNull(threshold)) {
 			color = DashboardConstant.BLACK;
 		} else {
 			String[] target = threshold.split(",");

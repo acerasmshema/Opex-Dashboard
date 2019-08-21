@@ -79,7 +79,9 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		if (!Objects.nonNull(kpiDashboardCategoryRequest.getFrequency())) {
 			kpiDashboardCategoryRequest.setFrequency(0);
 		}
-		
+		if(finalKpiProcessLines.isEmpty()) {
+			return resultList;
+		}else {
 		switch (kpiDashboardCategoryRequest.getFrequency()) {
 		case 0:
 			getDailyFrequencyResponse(kpiDashboardCategoryRequest, resultList, finalKpiProcessLines);
@@ -95,6 +97,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			break;
 		default:
 			getDailyFrequencyResponse(kpiDashboardCategoryRequest, resultList, finalKpiProcessLines);
+		}
 		}
 		return resultList;
 	}
@@ -185,7 +188,11 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		}
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository.getYesterdayAllProcessLinesData(
 				  KpiDashboardCategoryUtility.getYesterdayDate(), startKpiId, endKpiId, kpiCategoryId, millId);
-		KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
+		if(DashboardConstant.KRC.equals(millId.toString())){
+			KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
+		}else if(DashboardConstant.RZ.equals(millId.toString())) {
+			KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);	
+		}
 		return resultList;
 	}
 
