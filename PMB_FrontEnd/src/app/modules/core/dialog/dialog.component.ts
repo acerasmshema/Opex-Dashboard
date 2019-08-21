@@ -92,7 +92,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.showMessage("error", "Error Message", "Please select process lines.");
       return;
     }
-    if (this.annotationDialog.annotationDescription == "") {
+    if (this.annotationDialog.annotationDescription === undefined || this.annotationDialog.annotationDescription == "") {
       this.showMessage("error", "Error Message", "Please add description.");
       return;
     }

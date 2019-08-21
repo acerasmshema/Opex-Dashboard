@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.disableTab = false;
-    }, 1000);
+    }, 5000);
   }
 
   openSidebar(event: any) {
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const consumptionDetailMap = this.statusService.consumptionDetailMap;
     if (consumptionDetailMap !== undefined) {
       const consumptionDetail = consumptionDetailMap.get(sidebarRequest.kpiCategoryId);
-      if (consumptionDetail !== undefined && consumptionDetail.isRefreshed) {
+      if (consumptionDetail !== undefined) {
         this.consumptionService.refreshDahboard(sidebarRequest.kpiCategoryId);
         consumptionDetail.isRefreshed = false;
       }
@@ -102,6 +102,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         if (isMillChange) {
           setTimeout(() => {
+            this.disableTab = true;
+            setTimeout(() => {
+              this.disableTab = false;
+            }, 5000);
+ 
             document.getElementById("ui-tabpanel-0-label").click();
             this.selected = true;
           }, 200);

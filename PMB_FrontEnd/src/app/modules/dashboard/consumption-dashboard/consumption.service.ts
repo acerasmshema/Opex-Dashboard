@@ -167,7 +167,6 @@ export class ConsumptionService {
     let ccm = new ConsumptionModel();
     ccm.kpiName = kpiName;
     ccm.kpiId = kpiId;
-    ccm.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
     ccm.xAxis = true;
     ccm.yAxis = true;
     ccm.showDataLabel = false;
@@ -183,7 +182,13 @@ export class ConsumptionService {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
-
+    let processLines = this.statusService.common.processLines;
+    let domains = [];
+    
+    processLines.forEach(processLine => {
+      domains.push(processLine.legendColor);
+    });
+    ccm.colorScheme = { domain: domains };
     return ccm;
   }
 
