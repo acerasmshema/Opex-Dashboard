@@ -69,6 +69,7 @@ export class ConsumptionService {
     consumptionRequest.kpiId = searchKpiData.kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
     consumptionRequest.millId = this.statusService.common.selectedMill.millId;
+    consumptionRequest.countryId = this.statusService.common.selectedMill.countryId;
     consumptionRequest.frequency = searchKpiData.frequency["code"];
     consumptionRequest.processLines = processLinesHeads;
 
@@ -109,57 +110,37 @@ export class ConsumptionService {
   public getKpiGridData(kpiId: number, kpiName: string, kpiCategoryId: string) {
 
     let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
-    let searchKpiData = consumptionDetail.searchKpiData;
+    let consumption = consumptionDetail.consumptions.find((consumption) => consumption.kpiId === kpiId);
+    if (consumption !== undefined && consumption.data !== undefined) {
+      let consumptionGridView = new ConsumptionGridView();
+      consumptionGridView.show = true;
+      consumptionGridView.paginator = true;
+      consumptionGridView.scrollable = true;
+      consumptionGridView.rows = 10;
+      consumptionGridView.title = kpiName;
 
-    let consumptionRequest = new ConsumptionRequest();
-    consumptionRequest.millId = this.statusService.common.selectedMill.millId;
-    consumptionRequest.kpiId = kpiId;
-    consumptionRequest.kpiCategoryId = kpiCategoryId;
-
-    if (searchKpiData === undefined) {
-      let startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
-      let frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
-        MasterData.dashboardFrequencies.find(frequency => frequency.name === 'Daily') :
-        MasterData.dashboardFrequencies.find(frequency => frequency.name === 'Monthly');
-
-      consumptionRequest.frequency = frequency.code;
-      consumptionRequest.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-      consumptionRequest.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-      consumptionRequest.processLines = [];
-    }
-    else {
-      let processLinesHeads = [];
-      searchKpiData.processLines.forEach(pl => {
-        processLinesHeads.push(pl["processLineCode"]);
+      consumptionGridView.columnNames.push({ header: "DATE", field: "DATE" });
+      consumption.data[0].series.forEach(processLine => {
+        consumptionGridView.columnNames.push({ header: processLine.name, field: processLine.name });
       });
 
-      consumptionRequest.startDate = searchKpiData.startDate;
-      consumptionRequest.endDate = searchKpiData.endDate;
-      consumptionRequest.frequency = searchKpiData.frequency.code;
-      consumptionRequest.processLines = processLinesHeads;
-    }
-
-    this.apiCallService.callAPIwithData(this.consumptionKpiGridUrl, consumptionRequest).
-      subscribe((response: any) => {
-        let consumptionGridView = new ConsumptionGridView();
-        consumptionGridView.show = true;
-        consumptionGridView.paginator = true;
-        consumptionGridView.scrollable = true;
-        consumptionGridView.rows = 10;
-        consumptionGridView.gridData = response[0];
-        consumptionGridView.title = kpiName;
-
-        let columnNames = Object.keys(response[0][0]).sort();
-        columnNames.forEach(columnName => {
-          consumptionGridView.columnNames.push({ header: columnName, field: columnName });
+      let gridsData = [];
+      consumption.data.forEach(processDetail => {
+        let grid = {};
+        grid["DATE"] = processDetail.name;
+        processDetail.series.forEach(processline => {
+          grid[processline.name] = processline.value;
         });
-
-        const data = {
-          dialogName: "consumptionGridView",
-          consumptionGridView: consumptionGridView
-        }
-        this.statusService.dialogSubject.next(data);
+        gridsData.push(grid);
       });
+      consumptionGridView.gridData = gridsData;
+      
+      const data = {
+        dialogName: "consumptionGridView",
+        consumptionGridView: consumptionGridView
+      }
+      this.statusService.dialogSubject.next(data);
+    }
   }
 
 

@@ -32,29 +32,29 @@
             </li>
           </ul>
           <div class="pull-right">
-            <ul class="nav pull-right" (click)="onChangeMill($event.target.value)">
-              <select name="" id="select_mill" class="select-header m-r-30">
+            <ul class="nav pull-right">
+              <!-- <select name="" id="select_mill" class="select-header m-r-30">
                 <option [value]="mill.millId" *ngFor="let mill of mills">{{mill.millName}}</option>
               </select>
               <select name="" id="" class="select-header m-r-30">
                 <option value="" selected>English</option>
                 <option value="">简体中文</option>
-              </select>
-              <!-- <li class="nav-item dropdown" id="select_mill">
+              </select> -->
+              <li class="nav-item dropdown" id="select_mill">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                  style="color:white;font-size: 11pt;">{{ selectedMill.millName | translate }}</a>
+                  style="color:white;font-size: 11pt;">{{ selectedMillName | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li *ngFor="let mill of mills"><a class="dropdown-item">{{mill.millName}}</a></li>
+                  <li *ngFor="let mill of mills"><a class="dropdown-item" style="font-size: 11pt;" (click)="onChangeMill(mill.millId)">{{mill.millName}}</a></li>
                 </ul>
-              </li> -->
-              <!-- <li class="nav-item dropdown">
+              </li> 
+               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;">{{ 'English' | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
                   <li><a (click)="setLang('en')" class="dropdown-item">English</a></li>
                   <li><a (click)="setLang('ch')" class="dropdown-item">简体中文</a></li>
                 </ul>
-              </li> -->
+              </li> 
               <li class="nav-item dropdown">
                 <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;"> {{ user }} <b class="caret"></b></a>
