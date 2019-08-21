@@ -5,6 +5,7 @@ public class MillsResponse {
 	private String millId;
 	private String millCode;
 	private String millName;
+	private String countryId;
 	
 	public String getMillId() {
 		return millId;
@@ -23,5 +24,11 @@ public class MillsResponse {
 	}
 	public void setMillName(String millName) {
 		this.millName = millName;
+	}
+	public String getCountryId() {
+		return countryId;
+	}
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
 }

@@ -28,9 +28,9 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
  *
  */
 
-public class KpiDashboardCategoryUtility {
+public class KpiDashboardCategoryUtilityRZ {
 	
-	private KpiDashboardCategoryUtility() {
+	private KpiDashboardCategoryUtilityRZ() {
 	}
 
 	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
@@ -85,7 +85,7 @@ public class KpiDashboardCategoryUtility {
 					val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
 					for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
 						KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
-						val.setSeries(KpiDashboardCategoryUtility.getSeriesObject(obj, kpiProcessLine, value, series,
+						val.setSeries(KpiDashboardCategoryUtilityRZ.getSeriesObject(obj, kpiProcessLine, value, series,
 								kpiType.get(i)));
 					}
 					i++;
@@ -102,7 +102,7 @@ public class KpiDashboardCategoryUtility {
 		val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
 		for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
 			KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
-			val.setSeries(KpiDashboardCategoryUtility.getDefaultSeriesObject(kpiProcessLine, value, series,
+			val.setSeries(KpiDashboardCategoryUtilityRZ.getDefaultSeriesObject(kpiProcessLine, value, series,
 					kpiType.get(i)));
 		}
 		i++;
@@ -118,28 +118,28 @@ public class KpiDashboardCategoryUtility {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 				SeriesObject value = new SeriesObject();
-				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+				val.setSeries(getSeriesResponse(obj, kpiProcessLine, value, series));
 				}
 			resultList.add(val);
 		} else if (Quarter.Q2.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q2.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 				SeriesObject value = new SeriesObject();
-				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+				val.setSeries(getSeriesResponse(obj, kpiProcessLine, value, series));
 				}
 			resultList.add(val);
 		} else if (Quarter.Q3.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q3.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 				SeriesObject value = new SeriesObject();
-				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+				val.setSeries(getSeriesResponse(obj, kpiProcessLine, value, series));
 				}
 			resultList.add(val);
 		} else if (Quarter.Q4.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q4.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			for(String kpiProcessLine: finalKpiProcessLines) {
 				SeriesObject value = new SeriesObject();
-				val.setSeries(KpiDashboardCategoryUtility.getSeriesResponse(obj, kpiProcessLine, value, series));
+				val.setSeries(getSeriesResponse(obj, kpiProcessLine, value, series));
 				}
 			resultList.add(val);
 		}
@@ -148,44 +148,29 @@ public class KpiDashboardCategoryUtility {
 	public static List<SeriesObject> getDailySeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
 	double value;
 	switch (kpiProcessLine) {
-	case DashboardConstant.PROCESS_LINE_FL1:
+	case DashboardConstant.PROCESS_LINE_PD1:
 		val.setName(kpiProcessLine);
 		value = parseProcessLineValue(obj[1].toString());
 		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 		break;
-	case DashboardConstant.PROCESS_LINE_FL2:
+	case DashboardConstant.PROCESS_LINE_PD2:
 		val.setName(kpiProcessLine);
 		value = parseProcessLineValue(obj[2].toString());
 		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 		break;
-	case DashboardConstant.PROCESS_LINE_FL3:
+	case DashboardConstant.PROCESS_LINE_PD3:
 		val.setName(kpiProcessLine);
 		value = parseProcessLineValue(obj[3].toString());
 		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 		break;
-	case DashboardConstant.PROCESS_LINE_PCD:
+	case DashboardConstant.PROCESS_LINE_PL11:
 		val.setName(kpiProcessLine);
 		value = parseProcessLineValue(obj[4].toString());
 		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 		break;
-	case DashboardConstant.PROCESS_LINE_PD1:
+	case DashboardConstant.PROCESS_LINE_PL12:
 		val.setName(kpiProcessLine);
 		value = parseProcessLineValue(obj[5].toString());
-		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-		break;
-	case DashboardConstant.PROCESS_LINE_PD2:
-		val.setName(kpiProcessLine);
-		value = parseProcessLineValue(obj[6].toString());
-		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-		break;
-	case DashboardConstant.PROCESS_LINE_PD3:
-		val.setName(kpiProcessLine);
-		value = parseProcessLineValue(obj[7].toString());
-		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-		break;
-	case DashboardConstant.PROCESS_LINE_PD4:
-		val.setName(kpiProcessLine);
-		value = parseProcessLineValue(obj[8].toString());
 		val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 		break;
 	default:
@@ -197,44 +182,29 @@ public class KpiDashboardCategoryUtility {
 	public static List<SeriesObject> getSeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
 		double value;
 		switch (kpiProcessLine) {
-		case DashboardConstant.PROCESS_LINE_FL1:
+		case DashboardConstant.PROCESS_LINE_PD1:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[1]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_FL2:
+		case DashboardConstant.PROCESS_LINE_PD2:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[2]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_FL3:
+		case DashboardConstant.PROCESS_LINE_PD3:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[3]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_PCD:
+		case DashboardConstant.PROCESS_LINE_PL11:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[4]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_PD1:
+		case DashboardConstant.PROCESS_LINE_PL12:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[5]);
-			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD2:
-			val.setName(kpiProcessLine);
-			value = parseProcessLineNullValue(obj[6]);
-			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD3:
-			val.setName(kpiProcessLine);
-			value = parseProcessLineNullValue(obj[7]);
-			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD4:
-			val.setName(kpiProcessLine);
-			value = parseProcessLineNullValue(obj[8]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
 		default:
@@ -243,6 +213,7 @@ public class KpiDashboardCategoryUtility {
 		return series;
 	}
 
+	
 	public static double parseProcessLineValue(String value) {
 		return !value.equalsIgnoreCase(DashboardConstant.NAN)?Double.valueOf(value):-1;
 	}
@@ -312,43 +283,28 @@ public class KpiDashboardCategoryUtility {
 		val.setName(kpiProcessLine);
 		val.setTarget(type.getTarget().get(kpiProcessLine));
 		switch (kpiProcessLine) {
-		case DashboardConstant.PROCESS_LINE_FL1:
+		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseProcessLineValue(Double.valueOf(obj[0].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_FL2:
+		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseProcessLineValue(Double.valueOf(obj[1].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_FL3:
+		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseProcessLineValue(Double.valueOf(obj[2].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_PCD:
+		case DashboardConstant.PROCESS_LINE_PL11:
 			value = parseProcessLineValue(Double.valueOf(obj[3].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
-		case DashboardConstant.PROCESS_LINE_PD1:
+		case DashboardConstant.PROCESS_LINE_PL12:
 			value = parseProcessLineValue(Double.valueOf(obj[4].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD2:
-			value = parseProcessLineValue(Double.valueOf(obj[5].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD3:
-			value = parseProcessLineValue(Double.valueOf(obj[6].toString()));
-			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
-			break;
-		case DashboardConstant.PROCESS_LINE_PD4:
-			value = parseProcessLineValue(Double.valueOf(obj[7].toString()));
 			val.setValue(value);
 			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
 			break;
