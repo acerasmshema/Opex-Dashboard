@@ -74,13 +74,23 @@ export class ConsumptionService {
     consumptionRequest.processLines = processLinesHeads;
 
     this.getDataforKpi(consumptionRequest).
-      subscribe((data: any) => {
+      subscribe((response: any) => {
         let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
         const consumptions = consumptionDetail.consumptions;
+        
         if (consumptions != undefined) {
           let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
+        
           if (consumption !== undefined) {
-            consumption.data = data;
+            let domains = [];
+            let processLines = this.statusService.common.processLines;
+            response[0].series.forEach(plData => {
+              let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+              domains.push(legendColor);
+            });      
+            consumption.colorScheme = { domain: domains };
+            
+            consumption.data = response;
           }
         }
       });
@@ -182,13 +192,14 @@ export class ConsumptionService {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
-    let processLines = this.statusService.common.processLines;
-    let domains = [];
     
+    let domains = []; 
+    let processLines = this.statusService.common.processLines;
     processLines.forEach(processLine => {
       domains.push(processLine.legendColor);
     });
     ccm.colorScheme = { domain: domains };
+    
     return ccm;
   }
 

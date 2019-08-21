@@ -37,6 +37,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   updateChartSubscription: Subscription;
   projectTargetSubscription: Subscription;
 
+  private annualChartRendered: boolean;
+  private monthlyChartRendered: boolean;
+  private productionChartRendered: boolean;
+
+
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
     private productionService: ProductionService,
@@ -149,6 +154,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.productionService.getProductionYTDTargetData(requestData).
           subscribe((targetData: any) => {
             this.annualChart.annualData = [...this.annualChart.annualData, targetData];
+            this.annualChartRendered = true;
+            this.enableTabs();
           });
         this.annualChart.annualData = [...this.annualChart.annualData, actualData];
       });
@@ -232,7 +239,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((processLines: any) => {
-
         this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
           subscribe((plTargetData: any) => {
             for (let index = 0; index < plTargetData.length; index++) {
@@ -240,6 +246,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
               prodLine.productionLineData.push(processLines[index]);
               prodLine.productionLineData.push(plTargetData[index]);
             }
+            this.monthlyChartRendered = true;
+            this.enableTabs();
           });
       });
   }
@@ -276,8 +284,18 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             this.prodLineChart.yAxisLabel = "";
             this.prodLineChart.xAxisLabel = "";
             this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
-            this.prodLineChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
+            
+            let domains = [];
+            let processLines = this.statusService.common.processLines;
+            response.forEach(plData => {
+              let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+              domains.push(legendColor);
+            });      
+            this.prodLineChart.colorScheme = { domain: domains };            
             this.prodLineChart.productionLineData = response;
+
+            this.productionChartRendered = true;
+            this.enableTabs();
           });
       });
     if (isGridRequest)
@@ -354,7 +372,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
       let frequency = this.productionEnquiryData.selectedValue['code'];
-      
+
       let processLines = [];
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
@@ -415,6 +433,14 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       dateTick = val;
     }
     return dateTick;
+  }
+
+  enableTabs() {
+    if (this.productionChartRendered && this.annualChartRendered && this.monthlyChartRendered) {
+      setTimeout(() => {
+        this.statusService.enableTabs.next(true);
+      }, 1000);
+    }
   }
 
   ngOnDestroy() {

@@ -12,6 +12,7 @@ export class StatusService {
     public updateChartSubject: Subject<string> = new Subject<string>();
     public changeMill: Subject<any> = new Subject<any>();
     public projectTargetSubject: Subject<any> = new Subject<any>();
+    public enableTabs: Subject<boolean> = new Subject<boolean>();
     
     public kpiCategoryMap: Map<string, any>= new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();

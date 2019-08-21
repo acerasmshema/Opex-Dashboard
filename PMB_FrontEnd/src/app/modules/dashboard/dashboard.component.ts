@@ -16,10 +16,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   disableTab: boolean = true;
   processUnitLegends: any[] = [];
   showTabs: boolean = false;
-  millSubscription: Subscription;
   cacheMap: Map<string, boolean>;
   selected: boolean = true;
 
+  millSubscription: Subscription;
+  tabsSubscription: Subscription;
+  
   constructor(private statusService: StatusService,
     private consumptionService: ConsumptionService,
     private dashboardService: DashboardService) {
@@ -33,6 +35,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.openDashboard();
+
+    this.tabsSubscription = this.statusService.enableTabs.
+      subscribe((isEnable: boolean) => {
+        if (isEnable)
+          this.disableTab = false;
+      });
 
     this.millSubscription = this.statusService.changeMill.
       subscribe(() => {
@@ -48,10 +56,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openDashboard() {
     this.processUnitLegends = this.getProcessUnitLegends(false);
     document.getElementById("select_mill").style.display = "block";
-
-    setTimeout(() => {
-      this.disableTab = false;
-    }, 5000);
   }
 
   openSidebar(event: any) {
@@ -103,10 +107,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (isMillChange) {
           setTimeout(() => {
             this.disableTab = true;
-            setTimeout(() => {
-              this.disableTab = false;
-            }, 5000);
- 
             document.getElementById("ui-tabpanel-0-label").click();
             this.selected = true;
           }, 200);
@@ -116,6 +116,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.millSubscription.unsubscribe();
+    this.tabsSubscription.unsubscribe();
   }
 }
 
