@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
-import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 import com.rgei.kpi.dashboard.service.KPICategoryService;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
