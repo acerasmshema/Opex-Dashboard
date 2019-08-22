@@ -56,7 +56,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
           }
           else {
-            this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            let kpiTypes = this.statusService.kpiCategoryMap.get("2-3-4");
+            if (kpiTypes === undefined || kpiTypes === null) {
+              let kpiCategoryIds = [2,3,4];
+              this.getKpiDetails(kpiCategoryIds);
+            }
+            else {
+              this.sidebarForm.kpiTypes = kpiTypes;
+              this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            }
+              
           }
           this.sidebarForm.type = sidebarRequestData.type;
         }
@@ -72,7 +81,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  getKpiDetails(kpiCategoryId: string) {
+  getKpiDetails(kpiCategoryId: any) {
     const requestData = {
       "kpiCategoryId": kpiCategoryId
     };

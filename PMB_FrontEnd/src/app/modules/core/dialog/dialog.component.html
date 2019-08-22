@@ -1,6 +1,6 @@
 <div *ngIf="dialogName === 'annotation'">
-    <p-dialog modal="true" header="Annotations for Production on {{annotationDialog.annotationDate}}" [responsive]="true"
-        [style]="{width: '800px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000"
+    <p-dialog modal="true" header="Annotations for Production on {{annotationDialog.annotationDate}}"
+        [responsive]="true" [style]="{width: '800px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000"
         [(visible)]="annotationDialog.displayAnnotations">
         <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
             (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
@@ -132,8 +132,7 @@
                 </div>
             </div>
         </p-panel>
-        <p-panel header="List of Maintenance Days " [collapsed]="!maintenanceDays.collapsed" [toggleable]="true"
-            (click)="viewMaintenanceDays();">
+        <p-panel header="List of Maintenance Days " [collapsed]="!maintenanceDays.collapsed" [toggleable]="true">
             <div class="container">
                 <div class="row" style="height: 260px;">
                     <div class="col-md-12">
@@ -151,7 +150,6 @@
                                         {{col.header}}
                                     </th>
                                 </tr>
-
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-ri="rowIndex"
                                 let-editing="editing">
@@ -177,7 +175,7 @@
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
-                                    <td style="text-align:center; min-width: 180px; ">
+                                    <!-- <td style="text-align:center; min-width: 180px; ">
                                         <button *ngIf="!maintenanceDays.editing" pButton type="button" pInitEditableRow
                                             icon="fa fa-pencil-square-o" label="Edit" class="ui-button-info"
                                             (click)="onRowEditInit(rowData)"></button>
@@ -187,7 +185,7 @@
                                         <button *ngIf="maintenanceDays.editing" pButton type="button" pCancelEditableRow
                                             icon=" fa fa-times" label="Cancel" class="ui-button-danger"
                                             (click)="onRowEditCancel(rowData, ri)"></button>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -204,4 +202,4 @@
 </div>
 
 
-<p-toast [style]="{marginTop: '20px'}"></p-toast>
+<p-toast [baseZIndex]="12000" [style]="{marginTop: '20px'}"></p-toast>

@@ -21,11 +21,11 @@
             <div class="card-body">
               <div *ngIf="annualChart !== undefined" class="row">
                 <div class="col-md-2">
-                  <h6>Annual Target :{{annualChart.annualTarget}}</h6>
+                  <h6>Annual Target : {{annualChart.annualTarget}}</h6>
                 </div>
                 <div class="col-md-4 text-center">
                   <h5>
-                    PRODUCTION ( <span class="prod-chart-header" style="color:#BA4A00;">Actual</span> vs.
+                    PRODUCTION (<span class="prod-chart-header" style="color:#BA4A00;">Actual</span> vs.
                     <span class="prod-chart-header" style="color:#2E8B57;">Target</span>) (ADt)
                   </h5>
                 </div>
@@ -33,7 +33,8 @@
                   <h6>Projected Daily Target in next {{annualChart.targetDays}} Days Till {{annualChart.targetEndDate}}
                     :
                     {{annualChart.targetValue}} (ADt)
-                    <span (click)="openSettingIcon()"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></span>
+                    <span class="m-l-5" (click)="openSettingIcon()"><i class="fa fa-cog fa-lg"
+                        aria-hidden="true"></i></span>
                   </h6>
                 </div>
               </div>
@@ -153,27 +154,30 @@
           <div class="card">
             <div class="card-body">
               <div *ngIf="producionLineForm !== undefined" class="row">
-                <div class="col-md-2">
-                  <ejs-daterangepicker class="daterangepicker" id='daterangepicker'
-                    [startDate]='producionLineForm.startDate' [endDate]='producionLineForm.endDate'
-                    [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
-                    placeholder="{{'Date Range'| translate }}">
-                  </ejs-daterangepicker>
-                </div>
-                <div class="col-md-2">
-                  <p-dropdown [options]="producionLineForm.frequencies"
-                    [(ngModel)]="productionEnquiryData.selectedValue" [ngModelOptions]="{standalone: true}"
-                    optionLabel="name">
-                  </p-dropdown>
-                </div>
-                <div class="col-md-3">
-                  <p-multiSelect [options]="producionLineForm.processLines" scrollHeight="150px"
-                    [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
-                    [style]="{'width':'60%'}" defaultLabel="Process Lines" optionLabel="processLineCode">
-                  </p-multiSelect>
-                </div>
-                <div class="col-md-2">
-                  <button pButton type="button" label="Search" (click)="searchData(true)" class="ui-button-primary"></button>
+                <div class="col-md-12" style="display: flex;">
+                  <div>
+                    <ejs-daterangepicker class="daterangepicker" id='daterangepicker'
+                      [startDate]='producionLineForm.startDate' [endDate]='producionLineForm.endDate'
+                      [(ngModel)]="productionEnquiryData.lineChartDate" [ngModelOptions]="{standalone: true}"
+                      placeholder="{{'Date Range'| translate }}">
+                    </ejs-daterangepicker>
+                  </div>
+                  <div class="m-l-20">
+                    <p-dropdown [options]="producionLineForm.frequencies"
+                      [(ngModel)]="productionEnquiryData.selectedValue" [ngModelOptions]="{standalone: true}"
+                      optionLabel="name">
+                    </p-dropdown>
+                  </div>
+                  <div class="m-l-20">
+                    <p-multiSelect [options]="producionLineForm.processLines" scrollHeight="150px"
+                      [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
+                       defaultLabel="Process Lines" optionLabel="processLineCode">
+                    </p-multiSelect>
+                  </div>
+                  <div class="m-l-20">
+                    <button pButton type="button" label="Search" (click)="searchData(true)"
+                      class="ui-button-primary"></button>
+                  </div>
                 </div>
               </div>
               <div class="row m-t-5">
@@ -202,7 +206,8 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <div *ngIf="productionLineView !== undefiend && productionLineView.productionLines.length > 0" class="row">
+              <div *ngIf="productionLineView !== undefiend && productionLineView.productionLines.length > 0"
+                class="row">
                 <div class="col-md-12">
                   <p-table #dtf [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"
                     [rows]="productionLineView.rows" [paginator]="productionLineView.paginator"

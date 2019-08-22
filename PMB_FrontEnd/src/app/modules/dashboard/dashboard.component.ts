@@ -18,10 +18,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showTabs: boolean = false;
   cacheMap: Map<string, boolean>;
   selected: boolean = true;
+  selectedMillName: string;
 
   millSubscription: Subscription;
   tabsSubscription: Subscription;
-  
+
   constructor(private statusService: StatusService,
     private consumptionService: ConsumptionService,
     private dashboardService: DashboardService) {
@@ -103,6 +104,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
+        
+        setTimeout(() => {
+          this.selectedMillName = this.statusService.common.selectedMill;
+        }, 200);
 
         if (isMillChange) {
           setTimeout(() => {

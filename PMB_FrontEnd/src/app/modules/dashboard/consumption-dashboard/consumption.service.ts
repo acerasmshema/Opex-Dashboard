@@ -32,7 +32,7 @@ export class ConsumptionService {
     let consumptions = [];
     searchKpiData.kpiTypes.forEach(kpiType => {
       kpiType.kpiList.forEach(kpi => {
-        let consumptionModel = this.createChart(kpi.kpiId, kpi.kpiName + "  " + kpi.unit);
+        let consumptionModel = this.createChart(kpi.kpiId, kpi.kpiName + " (" + kpi.unit + ")");
         consumptions.push(consumptionModel);
         searchKpiData.kpiId = kpi.kpiId;
         this.updateChart(searchKpiData, kpiCategoryId);
@@ -77,19 +77,19 @@ export class ConsumptionService {
       subscribe((response: any) => {
         let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
         const consumptions = consumptionDetail.consumptions;
-        
+
         if (consumptions != undefined) {
           let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
-        
+
           if (consumption !== undefined) {
             let domains = [];
             let processLines = this.statusService.common.processLines;
             response[0].series.forEach(plData => {
               let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
               domains.push(legendColor);
-            });      
+            });
             consumption.colorScheme = { domain: domains };
-            
+
             consumption.data = response;
           }
         }
@@ -144,7 +144,7 @@ export class ConsumptionService {
         gridsData.push(grid);
       });
       consumptionGridView.gridData = gridsData;
-      
+
       const data = {
         dialogName: "consumptionGridView",
         consumptionGridView: consumptionGridView
@@ -192,14 +192,14 @@ export class ConsumptionService {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
-    
-    let domains = []; 
+
+    let domains = [];
     let processLines = this.statusService.common.processLines;
     processLines.forEach(processLine => {
       domains.push(processLine.legendColor);
     });
     ccm.colorScheme = { domain: domains };
-    
+
     return ccm;
   }
 

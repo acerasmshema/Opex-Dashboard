@@ -439,7 +439,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     if (this.productionChartRendered && this.annualChartRendered && this.monthlyChartRendered) {
       setTimeout(() => {
         this.statusService.enableTabs.next(true);
-      }, 1000);
+      }, 500);
     }
   }
 

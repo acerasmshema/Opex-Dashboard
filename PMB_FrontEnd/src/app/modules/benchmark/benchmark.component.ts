@@ -76,13 +76,7 @@ export class BenchmarkComponent implements OnInit {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
-    let processLines = this.statusService.common.processLines;
-    let domains = [];
-    processLines.forEach(processLine => {
-      domains.push(processLine.legendColor);
-    });
-    ccm.colorScheme = { domain: domains };
-
+    ccm.colorScheme = { domain: ['blue','blue','blue','blue', 'red','red','red'] };
 
     this.consumptions.push(ccm);
   }
