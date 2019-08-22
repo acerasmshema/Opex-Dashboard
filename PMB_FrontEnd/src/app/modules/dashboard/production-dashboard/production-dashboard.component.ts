@@ -261,7 +261,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
-      subscribe((response: any) => {
+      subscribe((prodLineResponse: any) => {
+
         this.productionService.getAnnotationDates(productionRequest).
           subscribe((annotationsData: any) => {
             this.annotationDates = annotationsData['annotationDates'];
@@ -280,49 +281,51 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             this.prodLineChart.yAxisLabel = "";
             this.prodLineChart.xAxisLabel = "";
             this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
-    
+
             let domains = [];
             let processLines = this.statusService.common.processLines;
-            response.forEach(plData => {
+            prodLineResponse.forEach(plData => {
               let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
               domains.push(legendColor);
             });
             this.prodLineChart.colorScheme = { domain: domains };
-            this.prodLineChart.productionLineData = response;
-    
+            this.prodLineChart.productionLineData = prodLineResponse;
+
             this.productionChartRendered = true;
-            this.enableTabs();    
+            this.enableTabs();
           });
+
+        if (isGridRequest)
+          this.getProdGrid(prodLineResponse);
       });
-    if (isGridRequest)
-      this.getAllProductionLinesDateForGrid(productionRequest);
   }
 
-  public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest) {
+  public getProdGrid(prodLineResponse: any) {
     this.productionLineView.rows = 10;
     this.productionLineView.scrollable = true;
     this.productionLineView.paginator = true;
     this.productionLineView.productionLines = [];
-    let colNames = [];
+    this.productionLineView.columnNames = [];
 
-    colNames.push({ field: 'DATE', header: 'Date' });
-    if (productionRequest.processLines.length > 0) {
-      productionRequest.processLines.forEach(processLine => {
-        colNames.push({ header: processLine, field: processLine });
-      });
-    }
-    else {
-      let columnsNames = this.statusService.common.processLines;
-      columnsNames.forEach(columnName => {
-        colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
-      });
-    }
+    let columnNames = [];
+    columnNames.push({ header: "DATE", field: "DATE" });
+    prodLineResponse.forEach(prodLine => {
+      columnNames.push({ header: prodLine.name, field: prodLine.name });
+    });
+    this.productionLineView.columnNames = columnNames;
 
-    this.productionService.getAllProductionLinesDateForGrid(productionRequest).
-      subscribe((data: any) => {
-        this.productionLineView.columnNames = colNames;
-        this.productionLineView.productionLines = data[0];
+    let gridData = []
+    let totalGrids = prodLineResponse[0].series.length;
+    for (let index = 0; index < totalGrids; index++) {
+      let grid = {};      
+      prodLineResponse.forEach(prodLine => {
+       let processsLineName = prodLine.name;
+       grid["DATE"] = prodLine.series[index].name;
+       grid[processsLineName] = prodLine.series[index].value;
       });
+      gridData.push(grid);     
+    }
+    this.productionLineView.productionLines = gridData;
   }
 
   public changeMonthlyChartDuration(event: any) {
