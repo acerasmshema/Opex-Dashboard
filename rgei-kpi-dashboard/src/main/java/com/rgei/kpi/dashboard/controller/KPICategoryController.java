@@ -47,17 +47,24 @@ public class KPICategoryController {
 	@Resource
 	private KPICategoryService kpiCategoryService;
 	
-	@GetMapping(value = "/v1/kpi_category/get_kpi_type")
-	public ResponseEntity<List<KpiTypeResponse>> getRequestedKPIType(@RequestHeader(value="kpiCategoryId") String kpiCategoryId){
-		logger.info("Get kpi types by kpiCategoryId", kpiCategoryId);
-		List<KpiTypeResponse> response = kpiCategoryService.getKPICategory(DailyKpiPulpConverter.covertToInteger(kpiCategoryId));
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+//	@GetMapping(value = "/v1/kpi_category/get_kpi_type")
+//	public ResponseEntity<List<KpiTypeResponse>> getRequestedKPIType(@RequestHeader(value="kpiCategoryId") String kpiCategoryId){
+//		logger.info("Get kpi types by kpiCategoryId", kpiCategoryId);
+//		List<KpiTypeResponse> response = kpiCategoryService.getKPICategory(DailyKpiPulpConverter.covertToInteger(kpiCategoryId));
+//		return new ResponseEntity<>(response,HttpStatus.OK);
+//	}
 	
+	/*
+	 * Get all kpi types for list of kpi category ids
+	 * 
+	 * @param List<String> kpiCategoryId
+	 * 
+	 * @return List<KpiTypeExtendedResponse>
+	 */
 	@GetMapping(value = "/v2/kpi_category/get_kpi_type")
-	public ResponseEntity<List<KpiTypeExtendedResponse>> getKPITypeDetails(@RequestHeader(value="kpiCategoryId") String kpiCategoryId){
+	public ResponseEntity<List<KpiTypeExtendedResponse>> getKPITypeDetails(@RequestHeader(value="kpiCategoryId") List<String> kpiCategoryId){
 		logger.info("Get kpi type by kpiCategoryId", kpiCategoryId);
-		List<KpiTypeExtendedResponse> response = kpiCategoryService.getKPICategoryDetails(DailyKpiPulpConverter.covertToInteger(kpiCategoryId));
+		List<KpiTypeExtendedResponse> response = kpiCategoryService.getKPICategoryDetails(kpiCategoryId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
