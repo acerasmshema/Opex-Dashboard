@@ -131,14 +131,15 @@
                           </rg-gauge-chart>
                         </div>
                       </div>
-                      <div *ngIf="prod.productionLineData !== undefined && prod.productionLineData.length > 0"
-                        class="row">
-                        <div class="col md-12 p-0" style="height: 134px;">
-                          <ngx-charts-line-chart [scheme]="prod.colorScheme" [results]="prod.productionLineData"
-                            [gradient]="gradient" [xAxis]="prod.xAxis" [yAxis]="prod.yAxis" xScaleMin="prod.xScaleMin"
-                            [legend]="prod.legend" [showXAxisLabel]="prod.showXAxisLabel"
-                            [showYAxisLabel]="prod.showYAxisLabel" [xAxisLabel]="prod.xAxisLabel"
-                            [yAxisLabel]="prod.yAxisLabel"> </ngx-charts-line-chart>
+                      <div style="height: 134px;">
+                        <div *ngIf="prod.productionLineData.length > 0" class="row">
+                          <div class="col md-12 p-0">
+                            <ngx-charts-line-chart [scheme]="prod.colorScheme" [results]="prod.productionLineData"
+                              [gradient]="gradient" [xAxis]="prod.xAxis" [yAxis]="prod.yAxis" xScaleMin="prod.xScaleMin"
+                              [legend]="prod.legend" [showXAxisLabel]="prod.showXAxisLabel"
+                              [showYAxisLabel]="prod.showYAxisLabel" [xAxisLabel]="prod.xAxisLabel"
+                              [yAxisLabel]="prod.yAxisLabel"> </ngx-charts-line-chart>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -171,7 +172,7 @@
                   <div class="m-l-20">
                     <p-multiSelect [options]="producionLineForm.processLines" scrollHeight="150px"
                       [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
-                       defaultLabel="Process Lines" optionLabel="processLineCode">
+                      defaultLabel="Process Lines" optionLabel="processLineCode">
                     </p-multiSelect>
                   </div>
                   <div class="m-l-20">

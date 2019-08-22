@@ -85,7 +85,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getProductionYDayData();
     this.getAnnualTarget();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
-    this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
+    this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
   }
 
@@ -185,50 +185,54 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getAllProductionLinesYDayData(startDate: string, endDate: string, processLines: any) {
+  public getAllProdYestData(startDate: string, endDate: string, processLines: any) {
     const frequency = this.productionEnquiryData.selectedValue['code'];
     let productionRequest = this.getProductionRequest(startDate, endDate, [], frequency);
+
+    let processLinesNames = this.statusService.common.processLines;
+    for (let index = 0; index < processLinesNames.length; index++) {
+      let prodLine = new ProductionLine();
+      prodLine.productionLineData = [];
+      prodLine.xScaleMin = 0;
+      prodLine.yAxis = true;
+      prodLine.xAxis = false;
+      prodLine.legend = false;
+      prodLine.xAxis = false;
+      prodLine.showXAxisLabel = false;
+      prodLine.showYAxisLabel = false;
+      prodLine.yAxisLabel = "";
+      prodLine.xAxisLabel = "";
+      prodLine.processLineCode = processLinesNames[index].processLineCode + ' - Y\'day (ADt/d)';
+      prodLine.colorScheme = { domain: ['#2581c5', '#333333'] };
+      prodLine.canvasWidth = 200;
+      prodLine.fontSize = 15;
+
+      this.prodLines.push(prodLine);
+    }
 
     this.productionService.getAllproductionLinesYDayData(productionRequest).
       subscribe((data: any) => {
         if (data !== "e") {
-
-          let processLines = data.dailyKpiPulp;
-          let processLinesNames = this.statusService.common.processLines;
-          for (let index = 0; index < processLines.length; index++) {
-            const processLine = processLines[index];
-            let prodLine = new ProductionLine();
-            let totalAverageValuePL1 = processLine.value;
+          let gauges = data.dailyKpiPulp;
+          for (let index = 0; index < gauges.length; index++) {
+            const gauge = gauges[index];
+            let prodLine = this.prodLines[index]
+            let totalAverageValuePL1 = gauge.value;
             prodLine.productionYDayActualValue = "" + totalAverageValuePL1;
-            prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +processLine.max;
-            prodLine.options.rangeLabel.push("" + processLine.min);
-            prodLine.options.rangeLabel.push("" + processLine.max);
-            prodLine.canvasWidth = 200;
-            prodLine.fontSize = 15;
-            let value = processLine.range.split(',');
-            let color = processLine.colorRange.split(',');
+            prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +gauge.max;
+            prodLine.options.rangeLabel.push("" + gauge.min);
+            prodLine.options.rangeLabel.push("" + gauge.max);
+
+            let value = gauge.range.split(',');
+            let color = gauge.colorRange.split(',');
             value.filter(item => prodLine.options.arcDelimiters.push(+item));
             prodLine.options.arcColors.splice(0, prodLine.options.arcColors.length);
             color.filter(item => prodLine.options.arcColors.push((item)));
-
-            prodLine.productionLineData = [];
-            prodLine.xScaleMin = 0;
-            prodLine.yAxis = true;
-            prodLine.xAxis = false;
-            prodLine.legend = false;
-            prodLine.xAxis = false;
-            prodLine.showXAxisLabel = false;
-            prodLine.showYAxisLabel = false;
-            prodLine.yAxisLabel = "";
-            prodLine.xAxisLabel = "";
-            prodLine.processLineCode = processLinesNames[index].processLineCode + ' - Y\'day (ADt/d)';
-            prodLine.colorScheme = { domain: ['#2581c5', '#333333'] };
-            this.prodLines.push(prodLine);
           }
-
-          this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
         }
       });
+
+    this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
   }
 
   public getAllProductionLinesDateRangeData(startDate: string, endDate: string) {
@@ -246,6 +250,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
               prodLine.productionLineData.push(processLines[index]);
               prodLine.productionLineData.push(plTargetData[index]);
             }
+
             this.monthlyChartRendered = true;
             this.enableTabs();
           });
@@ -257,19 +262,10 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((response: any) => {
-
-        const requestData = {
-          millId: this.statusService.common.selectedMill.millId,
-          buTypeId: '1',
-          kpiId: '1',
-          startDate: startDate,
-          endDate: endDate
-        };
-        this.productionService.getAnnotationDates(requestData).
-          subscribe((data: any) => {
-            this.annotationDates = data['annotationDates'];
+        this.productionService.getAnnotationDates(productionRequest).
+          subscribe((annotationsData: any) => {
+            this.annotationDates = annotationsData['annotationDates'];
             this.producionLineForm.processLines = this.statusService.common.processLines;
-
             this.prodLineChart = new ProductionLine();
             this.prodLineChart.productionLineData = [];
             this.prodLineChart.xScaleMin = 0;
@@ -284,18 +280,18 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             this.prodLineChart.yAxisLabel = "";
             this.prodLineChart.xAxisLabel = "";
             this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
-            
+    
             let domains = [];
             let processLines = this.statusService.common.processLines;
             response.forEach(plData => {
               let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
               domains.push(legendColor);
-            });      
-            this.prodLineChart.colorScheme = { domain: domains };            
+            });
+            this.prodLineChart.colorScheme = { domain: domains };
             this.prodLineChart.productionLineData = response;
-
+    
             this.productionChartRendered = true;
-            this.enableTabs();
+            this.enableTabs();    
           });
       });
     if (isGridRequest)
@@ -439,7 +435,10 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     if (this.productionChartRendered && this.annualChartRendered && this.monthlyChartRendered) {
       setTimeout(() => {
         this.statusService.enableTabs.next(true);
-      }, 500);
+        this.productionChartRendered = false;
+        this.annualChartRendered = false;
+        this.monthlyChartRendered = false;
+      }, 100);
     }
   }
 
