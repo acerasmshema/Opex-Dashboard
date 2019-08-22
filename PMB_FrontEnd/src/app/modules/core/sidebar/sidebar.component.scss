@@ -192,6 +192,10 @@ $topnav-background-color: #32475a;
     width: max-content;
   }
 
+  .ui-dropdown {
+    max-height: 30px !important;
+    }
+    
 
   .ui-dropdown-panel {
     max-width: 0;
@@ -238,4 +242,5 @@ min-height: 37px;
     margin-top: 10px;
     margin-right:25px;
 }
+
 
