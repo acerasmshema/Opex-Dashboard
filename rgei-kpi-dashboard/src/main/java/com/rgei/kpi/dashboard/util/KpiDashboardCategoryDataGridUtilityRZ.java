@@ -21,54 +21,54 @@ import java.math.RoundingMode;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Objects;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
-public class ProcessLineFrequencyDataGridUtility {
-	
-	private ProcessLineFrequencyDataGridUtility() {
+public class KpiDashboardCategoryDataGridUtilityRZ {
+
+	//no-arg constructor
+	private KpiDashboardCategoryDataGridUtilityRZ() {
 	}
 
 	/*
 	 * Api is to get the result for download data grid
 	 */
-	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Map<String, Object>> downloadGridResponse) {
-		List<Map<String, Object>> transferList = new ArrayList<>();
-			downloadGridResponse.forEach(item -> {
-				Map<String, Object> transferMap = new TreeMap<>();
-				for(Map.Entry<String, Object> entry : item.entrySet()) {
-					if(entry.getKey().equalsIgnoreCase(DashboardConstant.DATE) || ((Double) entry.getValue()).isNaN()) {
-						transferMap.put(entry.getKey().toUpperCase(), entry.getValue());
-						continue;
-					}
-					for(String processLine: lineList) {
-					if(entry.getKey().equalsIgnoreCase(processLine)) {
-						
-					transferMap.put(entry.getKey(), (new BigDecimal(entry.getValue().toString()).setScale(0, RoundingMode.CEILING)));
-					}
-					}
+	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Object[]> downloadGridResponse) {
+		  List<Map<String, Object>> transferList = new ArrayList<>();
+		  for(Object[] obj: downloadGridResponse) {
+				Map<String, Object> transferMap = new HashMap<>();
+				transferMap.put(DashboardConstant.DATE, obj[0]);
+				for(String processLine: lineList) {
+				createResponseForDailyFrequency(obj, transferMap, processLine);
 				}
 				transferList.add(transferMap);
-			});
-		
-		return transferList;
+			}
+		  
+		  return transferList;
+		 
 	}
 	
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
-				Map<String, Object> transferMap = new TreeMap<>();
+				Map<String, Object> transferMap = new HashMap<>();
 				for(String processLine: lineList) {
+				
 				transferMap.put(DashboardConstant.DATE, Month.of(Integer.valueOf(String.valueOf(obj[0]).split("\\.")[0])).getDisplayName(TextStyle.SHORT, Locale.ENGLISH)+"-"+String.valueOf(obj[9]).split("\\.")[0]);
 				createResponse(obj, transferMap, processLine);
+				
+				
 				}
 				transferList.add(transferMap);
 			}
+		
+		
 		return transferList;
 	}
 	
@@ -76,7 +76,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new TreeMap<>();
+			Map<String, Object> transferMap = new HashMap<>();
 			for (String processLine : lineList) {
 				if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 					transferMap.put(DashboardConstant.DATE, Quarter.Q1.toString() + "/" + String.valueOf(obj[9]).split("\\.")[0]);
@@ -101,7 +101,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new TreeMap<>();
+			Map<String, Object> transferMap = new HashMap<>();
 			for (String processLine : lineList) {
 					transferMap.put(DashboardConstant.DATE, String.valueOf(obj[0]).split("\\.")[0]);
 					createResponse(obj, transferMap, processLine);
@@ -111,33 +111,70 @@ public class ProcessLineFrequencyDataGridUtility {
 		return transferList;
 	}
 	
-	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
+	private static void createResponseForDailyFrequency(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		String value = null;
 		switch(processLine) {
-		case DashboardConstant.PROCESS_LINE_FL1:
-			transferMap.put(processLine, new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_FL2:
-			transferMap.put(processLine, new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_FL3:
-			transferMap.put(processLine, new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PCD:
-			transferMap.put(processLine, new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
-			transferMap.put(processLine, new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			value = parseNaNValue(Double.valueOf(obj[1].toString()));
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
-			transferMap.put(processLine, new BigDecimal(obj[6].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			value = parseNaNValue(Double.valueOf(obj[2].toString()));
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
-			transferMap.put(processLine, new BigDecimal(obj[7].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			value = parseNaNValue(Double.valueOf(obj[3].toString()));
+			transferMap.put(processLine, value);
 			break;
-		case DashboardConstant.PROCESS_LINE_PD4:
-			transferMap.put(processLine, new BigDecimal(obj[8].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+		case DashboardConstant.PROCESS_LINE_PL11:
+			value = parseNaNValue(Double.valueOf(obj[4].toString()));
+			transferMap.put(processLine, value);
+			break;
+		case DashboardConstant.PROCESS_LINE_PL12:
+			value = parseNaNValue(Double.valueOf(obj[5].toString()));
+			transferMap.put(processLine, value);
 			break;
 		default:
 		}
+	}
+	
+	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		String value = null;
+		switch(processLine) {
+		case DashboardConstant.PROCESS_LINE_PD1:
+			value = parseProcessLineNullValue(obj[1]);
+			transferMap.put(processLine, value);
+			break;
+		case DashboardConstant.PROCESS_LINE_PD2:
+			value = parseProcessLineNullValue(obj[2]);
+			transferMap.put(processLine, value);
+			break;
+		case DashboardConstant.PROCESS_LINE_PD3:
+			value = parseProcessLineNullValue(obj[3]);
+			transferMap.put(processLine, value);
+			break;
+		case DashboardConstant.PROCESS_LINE_PL11:
+			value = parseProcessLineNullValue(obj[4]);
+			transferMap.put(processLine, value);
+			break;
+		case DashboardConstant.PROCESS_LINE_PL12:
+			value = parseProcessLineNullValue(obj[5]);
+			transferMap.put(processLine, value);
+			break;
+		default:
+		}
+	}
+	
+	public static String parseNaNValue(Double value) {
+		return value.isNaN()?DashboardConstant.NA: BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).toString();
+	}
+	
+	public static double parseProcessLineValue(String value) {
+		return !value.equalsIgnoreCase("NaN")?Double.valueOf(value):-1;
+	}
+	
+	public static String parseProcessLineNullValue(Object value) {
+		return !Objects.nonNull(value)?DashboardConstant.NA:BigDecimal.valueOf(Double.valueOf(value.toString())).setScale(2, RoundingMode.CEILING).toString();
+		
 	}
 }

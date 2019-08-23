@@ -38,9 +38,9 @@ import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
-public class ProcessLineUtility {
+public class ProcessLineUtilityRZ {
 	
-	private ProcessLineUtility() {
+	private ProcessLineUtilityRZ() {
 	}
 	
 	private static NumberFormat formatter = NumberFormat.getInstance();
@@ -53,22 +53,12 @@ public class ProcessLineUtility {
 		return processLines;
 	}
 	
-	public static List<String> fetchProcessLines(List<ProcessLine> processLines, List<String> lineList) {
+	public static List<String> getAllProcessLines(List<ProcessLine> processLines) {
 		List<String> processLinesList = new ArrayList<>();
-		List<String> finalKpiProcessLines = new ArrayList<>();
 		for(ProcessLine line : processLines) {
-			processLinesList.add(line.getProcessLineCode());
+		processLinesList.add(line.getProcessLineCode());
 		}
-		if (lineList.isEmpty()) {
-			return processLinesList;
-		}else {
-			for(String processLine : processLinesList) {
-				if(lineList.contains(processLine)) {
-					finalKpiProcessLines.add(processLine);
-				}
-			}
-		}
-		return finalKpiProcessLines;
+		return processLinesList;
 	}
 	
 	public static java.util.Date getYesterdayDate() {
@@ -198,23 +188,17 @@ public class ProcessLineUtility {
 		List<SeriesObject> processLine3=null;
 		List<SeriesObject> processLine4=null;
 		List<SeriesObject> processLine5=null;
-		List<SeriesObject> processLine6=null;
-		List<SeriesObject> processLine7=null;
-		List<SeriesObject> processLine8=null;
 		try {
 		processLine1 = dailyTargetResponse.get(0).getSeries();
 		processLine2 = dailyTargetResponse.get(1).getSeries();
 		processLine3 = dailyTargetResponse.get(2).getSeries();
 		processLine4 = dailyTargetResponse.get(3).getSeries();
 		processLine5 = dailyTargetResponse.get(4).getSeries();
-		processLine6 = dailyTargetResponse.get(5).getSeries();
-		processLine7 = dailyTargetResponse.get(6).getSeries();
-		processLine8 = dailyTargetResponse.get(7).getSeries();
 		}catch(ArrayIndexOutOfBoundsException e) {
 		
 		}
 		populateDailyLineTargetReponse(processLine, dailyKpiPulpEntities, processLine1, processLine2, processLine3,
-				processLine4, processLine5, processLine6, processLine7, processLine8);
+				processLine4, processLine5);
 		
 		return dailyTargetResponse;
 		
@@ -223,10 +207,9 @@ public class ProcessLineUtility {
 	public static void populateDailyLineTargetReponse(List<ProcessLine> processLine,
 			List<DailyKpiPulpEntity> dailyKpiPulpEntities, List<SeriesObject> processLine1,
 			List<SeriesObject> processLine2, List<SeriesObject> processLine3, List<SeriesObject> processLine4,
-			List<SeriesObject> processLine5, List<SeriesObject> processLine6, List<SeriesObject> processLine7,
-			List<SeriesObject> processLine8) {
+			List<SeriesObject> processLine5){
+		
 		dailyKpiPulpEntities.forEach(item -> {
-
 			processLine1.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
 					(processLine.get(0).getDailyLineTarget().doubleValue())));
 			processLine2.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
@@ -237,12 +220,6 @@ public class ProcessLineUtility {
 					(processLine.get(3).getDailyLineTarget().doubleValue())));
 			processLine5.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
 					(processLine.get(4).getDailyLineTarget().doubleValue())));
-			processLine6.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(5).getDailyLineTarget().doubleValue())));
-			processLine7.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(6).getDailyLineTarget().doubleValue())));
-			processLine8.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(7).getDailyLineTarget().doubleValue())));
 		});
 	}
 
@@ -273,7 +250,6 @@ public class ProcessLineUtility {
 				millObject.setMillId(millEntity.getMillId().toString());
 				millObject.setMillCode(millEntity.getMillCode());
 				millObject.setMillName(millEntity.getMillName());
-				millObject.setCountryId(millEntity.getCountry().getCountryId().toString());
 				response.add(millObject);
 			}
 		}
@@ -281,31 +257,18 @@ public class ProcessLineUtility {
 	}
 
 	public static List<BuTypeResponse> preareBUTypeResponse(List<BusinessUnitTypeEntity> businessUnitTypeEntityList) {
-		List<BuTypeResponse> buTypeList=new ArrayList<BuTypeResponse>();
+		List<BuTypeResponse> buTypeList=new ArrayList<>();
 		BuTypeResponse buTypeResponse=null;
 		if(buTypeList!=null) {
 			for(BusinessUnitTypeEntity businessUnitTypeEntity:businessUnitTypeEntityList) {
-				if(Boolean.TRUE.equals(businessUnitTypeEntity.getActive())) {
 				buTypeResponse= new BuTypeResponse();
 				buTypeResponse.setBuTypeId(businessUnitTypeEntity.getBusinessUnitTypeId());
 				buTypeResponse.setBuId(businessUnitTypeEntity.getBusinessUnit().getBusinessUnitId());
 				buTypeResponse.setBuTypeCode(businessUnitTypeEntity.getBusinessUnitTypeCode());
 				buTypeResponse.setBuTypeName(businessUnitTypeEntity.getBusinessUnitTypeName());
 				buTypeList.add(buTypeResponse);
-				sortBuTypeResponse(buTypeList);
-				}
 			}
 		}
 		return buTypeList;
-	}
-	
-	private static void sortBuTypeResponse(List<BuTypeResponse> buTypeList) {
-		Collections.sort(buTypeList, (o1, o2) -> {
-			int value1 = o1.getBuTypeId().compareTo(o2.getBuTypeId());
-			if (value1 == 0) {
-				return o1.getBuTypeId().compareTo(o2.getBuTypeId());
-			}
-			return value1;
-		});
 	}
 }
