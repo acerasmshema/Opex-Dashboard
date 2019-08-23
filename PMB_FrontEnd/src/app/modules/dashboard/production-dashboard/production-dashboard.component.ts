@@ -149,15 +149,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.annualChart.annualData = [];
 
     const requestData = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getProductionYTDData(requestData).
-      subscribe((actualData: any) => {
-        this.productionService.getProductionYTDTargetData(requestData).
-          subscribe((targetData: any) => {
-            this.annualChart.annualData = [...this.annualChart.annualData, targetData];
-            this.annualChartRendered = true;
-            this.enableTabs();
-          });
-        this.annualChart.annualData = [...this.annualChart.annualData, actualData];
+    this.productionService.getProductionYTDTargetData(requestData).
+      subscribe((targetData: any) => {
+        this.annualChart.annualData = targetData;
+        this.annualChartRendered = true;
+        this.enableTabs();
       });
   }
 

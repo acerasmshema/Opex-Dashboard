@@ -13,7 +13,6 @@ export class ProductionService {
   ydayAllProcessLines = AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
   kpiPulpArea = AppConstants.apiURLs.KPI_PULP_AREA_URL;
   kpiPulp = AppConstants.apiURLs.KPI_PULP_URL;
-  ytdProcessLine = AppConstants.apiURLs.YTD_PROCESS_LINE_URL;
   ytdProcessLineTarget = AppConstants.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
   drProcessLine = AppConstants.apiURLs.DR_ALL_PROCESS_LINES_URL;
   allProcessLinesTarget = AppConstants.apiURLs.ALL_PROCESS_LINES_TARGET_URL;
@@ -49,10 +48,6 @@ export class ProductionService {
 
   public getStackAreaChartData(data: any) {
     return this.apiCallService.callAPIwithData(this.kpiPulp, data);
-  }
-
-  public getProductionYTDData(data: any) {
-    return this.apiCallService.callGetAPIwithData(this.ytdProcessLine, data);
   }
 
   public getProductionYTDTargetData(data: any) {
