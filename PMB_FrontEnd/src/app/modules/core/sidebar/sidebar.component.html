@@ -50,7 +50,7 @@
                             <label class="labelClass"><i class="fa fa-fw fa-calendar"></i></label>
                             <ejs-daterangepicker [hidden]="sidebarForm.hide" class="daterangepicker"
                                 id='daterangepicker' [(ngModel)]="searchKpiData.date"
-                                [ngModelOptions]="{standalone: true}" placeholder="{{'Date Range' | translate }}">
+                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}">
                             </ejs-daterangepicker>
                         </div>
                         <div class="form-group">
@@ -83,10 +83,13 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-location-arrow"></i></label>
-                            <p-multiSelect [options]="sidebarForm.mills" [hidden]="sidebarForm.hide"
+                            <p-multiSelect [(ngModel)]="searchKpiData.mills" [ngModelOptions]="{standalone: true}"
+                            [class]="(!sidebarForm.millsError) ? '' : 'error'"
+                            [options]="sidebarForm.mills" [hidden]="sidebarForm.hide"
                                 [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" scrollHeight="250px"
                                 defaultLabel="Mill" optionLabel="millName">
                             </p-multiSelect>
+                            
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>
@@ -101,8 +104,10 @@
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-calendar"></i></label>
-                            <ejs-daterangepicker [hidden]="sidebarForm.hide" class="daterangepicker"
-                                id='daterangepicker' placeholder="{{ '    Date Range' | translate }}">
+                            <ejs-daterangepicker [hidden]="sidebarForm.hide"
+                                [class]="(!sidebarForm.dateError) ? 'daterangepicker' : 'daterangepicker error'"
+                                id='daterangepicker' [(ngModel)]="searchKpiData.date"
+                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}">
                             </ejs-daterangepicker>
                         </div>
                         <div class="form-group">
@@ -113,7 +118,7 @@
                         </div>
                         <div class="form-group">
                             <button pButton [hidden]="sidebarForm.hide" type="button" label="Apply"
-                                (click)="searchData('benchmark')" class="ui-button-primary"
+                                (click)="searchBenchmarkData()" class="ui-button-primary"
                                 style="background-color: #007ad9;height:30px;margin-top: 10px;margin-left: 70%"></button>
                         </div>
                     </div>

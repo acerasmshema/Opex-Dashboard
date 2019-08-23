@@ -17,7 +17,6 @@ export class ConsumptionService {
 
   consumptionKpiUrl = AppConstants.apiURLs.CONSUMPTION_API_URL;
   consumptionGridKpiUrl = AppConstants.apiURLs.CONSUMPTION_GRID_API_URL;
-  consumptionKpiGridUrl = AppConstants.apiURLs.CONSUMPTION_API_GRID_URL;
 
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,

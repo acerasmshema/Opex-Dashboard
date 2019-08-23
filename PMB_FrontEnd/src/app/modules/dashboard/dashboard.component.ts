@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       subscribe((isEnable: boolean) => {
         if (isEnable)
           this.disableTab = false;
+        console.log(new Date())
       });
 
     this.millSubscription = this.statusService.changeMill.
@@ -92,6 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getProcessUnitLegends(isMillChange: boolean): any {
+    console.log(new Date())
     let millId = this.statusService.common.selectedMill.millId;
     const requestData = {
       millId: millId
@@ -104,7 +106,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
-        
+
         setTimeout(() => {
           this.selectedMillName = this.statusService.common.selectedMill;
         }, 200);

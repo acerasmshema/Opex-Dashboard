@@ -186,7 +186,7 @@
                   <h5>{{ 'PRODUCTION' | translate }}</h5>
                 </div>
               </div>
-              <div *ngIf="prodLineChart !== undefined" class="row">
+              <div *ngIf="prodLineChart !== undefined && prodLineChart.productionLineData.length > 0" class="row">
                 <div class="col-md-12 p-0" style="height: 250px;">
                   <ngx-charts-line-chart [scheme]="prodLineChart.colorScheme"
                     [results]="prodLineChart.productionLineData" [gradient]="gradient" [xAxis]="prodLineChart.xAxis"
@@ -207,7 +207,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <div *ngIf="productionLineView !== undefiend && productionLineView.productionLines.length > 0"
+              <div *ngIf="productionLineView !== undefiend && productionLineView.productionLines !== undefiend"
                 class="row">
                 <div class="col-md-12">
                   <p-table #dtf [columns]="productionLineView.columnNames" [value]="productionLineView.productionLines"

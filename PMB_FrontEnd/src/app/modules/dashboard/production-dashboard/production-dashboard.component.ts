@@ -262,38 +262,43 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((prodLineResponse: any) => {
+        this.producionLineForm.processLines = this.statusService.common.processLines;
+        this.prodLineChart = new ProductionLine();
+        this.prodLineChart.productionLineData = [];
+        this.prodLineChart.xScaleMin = 0;
+        this.prodLineChart.yAxis = true;
+        this.prodLineChart.xAxis = true;
+        this.prodLineChart.animations = true;
+        this.prodLineChart.legend = false;
+        this.prodLineChart.showRefLines = false;
+        this.prodLineChart.showXAxisLabel = false;
+        this.prodLineChart.showYAxisLabel = false;
+        this.prodLineChart.showDataLabel = false;
+        this.prodLineChart.yAxisLabel = "";
+        this.prodLineChart.xAxisLabel = "";
+        this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
 
-        this.productionService.getAnnotationDates(productionRequest).
-          subscribe((annotationsData: any) => {
-            this.annotationDates = annotationsData['annotationDates'];
-            this.producionLineForm.processLines = this.statusService.common.processLines;
-            this.prodLineChart = new ProductionLine();
-            this.prodLineChart.productionLineData = [];
-            this.prodLineChart.xScaleMin = 0;
-            this.prodLineChart.yAxis = true;
-            this.prodLineChart.xAxis = true;
-            this.prodLineChart.animations = true;
-            this.prodLineChart.legend = false;
-            this.prodLineChart.showRefLines = false;
-            this.prodLineChart.showXAxisLabel = false;
-            this.prodLineChart.showYAxisLabel = false;
-            this.prodLineChart.showDataLabel = false;
-            this.prodLineChart.yAxisLabel = "";
-            this.prodLineChart.xAxisLabel = "";
-            this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
+        let domains = [];
+        let processLines = this.statusService.common.processLines;
+        prodLineResponse.forEach(plData => {
+          let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+          domains.push(legendColor);
+        });
+        this.prodLineChart.colorScheme = { domain: domains };
 
-            let domains = [];
-            let processLines = this.statusService.common.processLines;
-            prodLineResponse.forEach(plData => {
-              let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
-              domains.push(legendColor);
+        if (productionRequest.frequency === "0") {
+          this.productionService.getAnnotationDates(productionRequest).
+            subscribe((annotationsData: any) => {
+              this.annotationDates = annotationsData['annotationDates'];
+              this.prodLineChart.productionLineData = prodLineResponse;
+              this.productionChartRendered = true;
+              this.enableTabs();
             });
-            this.prodLineChart.colorScheme = { domain: domains };
-            this.prodLineChart.productionLineData = prodLineResponse;
-
-            this.productionChartRendered = true;
-            this.enableTabs();
-          });
+        } else {
+          this.prodLineChart.productionLineData = prodLineResponse;
+          this.productionChartRendered = true;
+          this.enableTabs();
+        }
 
         if (isGridRequest)
           this.getProdGrid(prodLineResponse);
@@ -317,13 +322,13 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     let gridData = []
     let totalGrids = prodLineResponse[0].series.length;
     for (let index = 0; index < totalGrids; index++) {
-      let grid = {};      
+      let grid = {};
       prodLineResponse.forEach(prodLine => {
-       let processsLineName = prodLine.name;
-       grid["DATE"] = prodLine.series[index].name;
-       grid[processsLineName] = prodLine.series[index].value;
+        let processsLineName = prodLine.name;
+        grid["DATE"] = prodLine.series[index].name;
+        grid[processsLineName] = prodLine.series[index].value;
       });
-      gridData.push(grid);     
+      gridData.push(grid);
     }
     this.productionLineView.productionLines = gridData;
   }
