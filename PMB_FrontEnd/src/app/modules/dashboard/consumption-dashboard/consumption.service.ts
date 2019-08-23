@@ -80,7 +80,7 @@ export class ConsumptionService {
         if (consumptions != undefined) {
           let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
 
-          if (consumption !== undefined) {
+          if (consumption !== undefined && response.length > 0) {
             let domains = [];
             let processLines = this.statusService.common.processLines;
             response[0].series.forEach(plData => {

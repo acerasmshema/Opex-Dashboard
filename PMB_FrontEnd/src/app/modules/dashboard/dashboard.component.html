@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <p-tabPanel header="Production" [selected]="selected" [cache]="cacheMap.get('1')">
+      <p-tabPanel header="Production" headerStyleClass="production-dashboard-id" [selected]="selected" [cache]="cacheMap.get('1')">
         <ng-template pTemplate="app-production-dashboard">
           <app-production-dashboard></app-production-dashboard>
         </ng-template>

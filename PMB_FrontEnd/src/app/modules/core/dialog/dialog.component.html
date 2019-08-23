@@ -2,8 +2,8 @@
     <p-dialog modal="true" header="Annotations for Production on {{annotationDialog.annotationDate}}"
         [responsive]="true" [style]="{width: '800px', minWidth: '200px'}" [minY]="70" [baseZIndex]="10000"
         [(visible)]="annotationDialog.displayAnnotations">
-        <p-panel header="Create Annotation" [collapsed]="!annotationDialog.createAnnotationCollapsed"
-            (onBeforeToggle)="createAnnotationBeforeToggle()" [toggleable]="true">
+        <p-panel header="Create Annotation" [collapsed]="!annotationDialog.collapsed" [toggleable]="true"
+            (onBeforeToggle)="annotationCollapse()">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -29,9 +29,8 @@
                 </div>
             </div>
         </p-panel>
-
-        <p-panel header="View Annotations" [collapsed]="annotationDialog.findAnnotationCollapsed"
-            (onBeforeToggle)="findAnnotationBeforeToggle()" [toggleable]="true">
+        <p-panel header="View Annotations" [collapsed]="annotationDialog.collapsed"
+            (onBeforeToggle)="annotationCollapse()" [toggleable]="true">
             <div class="card" style="height:320px;">
                 <div class="card-body">
                     <div class="row">
@@ -95,7 +94,8 @@
     <p-dialog modal="true" header="Maintenance Days" [responsive]="true"
         [style]="{width: '800px', minWidth: '300px', height: '500px'}" [minY]="70" [baseZIndex]="10000"
         [(visible)]="maintenanceDays.show">
-        <p-panel header="Maintenance Days Configurations" [collapsed]="maintenanceDays.collapsed" [toggleable]="true">
+        <p-panel header="Maintenance Days Configurations" [collapsed]="!maintenanceDays.collapsed" [toggleable]="true"
+            (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
                 <div class="card">
                     <div class="card-body">
@@ -132,7 +132,8 @@
                 </div>
             </div>
         </p-panel>
-        <p-panel header="List of Maintenance Days " [collapsed]="!maintenanceDays.collapsed" [toggleable]="true">
+        <p-panel header="List of Maintenance Days " [collapsed]="maintenanceDays.collapsed" [toggleable]="true"
+            (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
                 <div class="row" style="height: 260px;">
                     <div class="col-md-12">

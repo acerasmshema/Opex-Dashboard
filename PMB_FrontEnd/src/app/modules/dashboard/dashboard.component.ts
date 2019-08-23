@@ -114,7 +114,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (isMillChange) {
           setTimeout(() => {
             this.disableTab = true;
-            document.getElementById("ui-tabpanel-0-label").click();
+            const productionTab: any = document.getElementsByClassName("production-dashboard-id")[0];
+            const productionTabId = productionTab.childNodes[0].id;
+            document.getElementById(productionTabId).click();
             this.selected = true;
           }, 200);
         }

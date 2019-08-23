@@ -76,7 +76,7 @@ export class BenchmarkComponent implements OnInit {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
-    ccm.colorScheme = { domain: ['blue','blue','blue','blue', 'red','red','red'] };
+    ccm.colorScheme = { domain: ['#5e49d1','#5e49d1','#5e49d1','#5e49d1', '#dde034','#dde034','#dde034'] };
 
     this.consumptions.push(ccm);
   }
