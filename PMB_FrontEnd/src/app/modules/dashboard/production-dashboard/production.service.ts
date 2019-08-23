@@ -13,14 +13,11 @@ export class ProductionService {
   ydayAllProcessLines = AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
   kpiPulpArea = AppConstants.apiURLs.KPI_PULP_AREA_URL;
   kpiPulp = AppConstants.apiURLs.KPI_PULP_URL;
-  ytdProcessLine = AppConstants.apiURLs.YTD_PROCESS_LINE_URL;
   ytdProcessLineTarget = AppConstants.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
   drProcessLine = AppConstants.apiURLs.DR_ALL_PROCESS_LINES_URL;
   allProcessLinesTarget = AppConstants.apiURLs.ALL_PROCESS_LINES_TARGET_URL;
   drSelectedProcessLine = AppConstants.apiURLs.DR_SELECTED_PROCESS_LINES_URL;
-  kpiGrid = AppConstants.apiURLs.DOWNLOAD_DATA_GRID_URL;
   saveAnnotation = AppConstants.apiURLs.SAVE_ANNOTATION_URL;
-  findAnnotation = AppConstants.apiURLs.FIND_ANNOTATION_URL;
   getMaintenanceDay = AppConstants.apiURLs.GET_MAINTENANCE_DAYS_URL;
   saveMaintenanceDay = AppConstants.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
   deleteMaintenanceDay = AppConstants.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
@@ -53,10 +50,6 @@ export class ProductionService {
     return this.apiCallService.callAPIwithData(this.kpiPulp, data);
   }
 
-  public getProductionYTDData(data: any) {
-    return this.apiCallService.callGetAPIwithData(this.ytdProcessLine, data);
-  }
-
   public getProductionYTDTargetData(data: any) {
     return this.apiCallService.callGetAPIwithData(this.ytdProcessLineTarget, data);
   }
@@ -72,23 +65,7 @@ export class ProductionService {
     return this.apiCallService.callAPIwithData(this.drSelectedProcessLine, data);
   }
 
-  public getAllProductionLinesDateForGrid(data: any) {
-    return this.apiCallService.callAPIwithData(this.kpiGrid, data);
-  }
-
-  public createAnnotation(data: any) {
-    return this.apiCallService.callAPIwithData(this.saveAnnotation, data);
-  }
-
-  public fetchAnnotation(data: any) {
-    return this.apiCallService.callAPIwithData(this.findAnnotation, data);
-  }
-
-  public fetchMaintenanceData(data: any) {
-    return this.apiCallService.callGetAPIwithOutData(this.getMaintenanceDay);
-  }
   public getMaintenanceData(data: any) {
-
     return this.apiCallService.callGetAPIwithData(this.getMaintenanceDay, data);
   }
 
@@ -110,7 +87,6 @@ export class ProductionService {
 
   public errorMsgMaintenanceData(data: any) {
     return this.apiCallService.errorHandler(data);
-
   }
 
 

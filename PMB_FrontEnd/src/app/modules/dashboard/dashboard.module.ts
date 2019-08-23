@@ -11,7 +11,6 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { StorageServiceModule } from 'ngx-webstorage-service';
 import { ProductionDashboardComponent } from './production-dashboard/production-dashboard.component';
-import { KappaNumberPredictionComponent } from './kappa-number-prediction/kappa-number-prediction.component';
 import { CoreModule } from '../core/core.module';
 import { ConsumptionDashboardComponent } from './consumption-dashboard/consumption-dashboard.component';
 import { PrimeNgModule } from '../shared/primeng-modules';
@@ -21,7 +20,6 @@ import { PrimeNgModule } from '../shared/primeng-modules';
     DashboardComponent,
     ProductionDashboardComponent,
     ConsumptionDashboardComponent,
-    KappaNumberPredictionComponent,
   ],
   imports: [
     GaugeChartModule,

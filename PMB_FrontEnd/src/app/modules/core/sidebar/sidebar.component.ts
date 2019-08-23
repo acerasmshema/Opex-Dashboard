@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public showSidebar: boolean;
 
   sidebarSubscription: Subscription;
-  
+
   constructor(private router: Router,
     private sidebarService: SidebarService,
     private consumptionService: ConsumptionService,
@@ -57,7 +57,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
           else {
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            this.searchKpiData = new SearchKpiData();
+            this.getBenchmarkKpiDetail();
           }
+
           this.sidebarForm.type = sidebarRequestData.type;
         }
 
@@ -72,7 +75,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  getKpiDetails(kpiCategoryId: string) {
+  getBenchmarkKpiDetail() {
+    const requestData = {
+      "kpiCategoryId": ["2", "3", "4"]
+    };
+    this.sidebarService.getKpiTypes(requestData)
+      .subscribe((kpiTypes: any) => {
+        this.sidebarForm.kpiTypes = kpiTypes;
+      });
+  }
+
+  getKpiDetails(kpiCategoryId: any) {
     const requestData = {
       "kpiCategoryId": kpiCategoryId
     };
@@ -103,6 +116,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isToggled(): boolean {
     const dom: Element = document.querySelector('body');
     return dom.classList.contains(this.sidebarForm.pushRightClass);
+  }
+
+  searchBenchmarkData() {
+    if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
+      this.sidebarForm.dateError = true;
+    }
+    if (this.searchKpiData.mills === undefined || this.searchKpiData.mills.length < 2) {
+      this.sidebarForm.millsError = true;
+    }
+    if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
+      this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
+    }
+    if (this.searchKpiData.processLines === undefined || this.searchKpiData.processLines.length === 0) {
+      this.searchKpiData.processLines = [];
+    }
+
   }
 
   searchData(type: string) {

@@ -12,4 +12,6 @@ export class SidebarForm {
     pushRightClass: string;
     kpiCategoryId: string;
     selectedValue: any;
+    dateError: boolean;
+    millsError: boolean;
 }

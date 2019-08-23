@@ -1,8 +1,7 @@
 export class AnnotationDialog {
     displayAnnotations: boolean;
     processLinesForAnnotation: any[];
-    createAnnotationCollapsed: boolean;
-    findAnnotationCollapsed: boolean;
+    collapsed: boolean;
     annotationsLines: any[];
     annotationDate: any;
     annotationKpiId: string;

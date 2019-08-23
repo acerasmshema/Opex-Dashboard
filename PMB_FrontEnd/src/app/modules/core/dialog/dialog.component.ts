@@ -51,25 +51,23 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.annotationDialog.processLinesForAnnotation = this.statusService.common.processLines;
           this.getAnnotationData(this.annotationDialog.annotationKpiId);
           this.annotationDialog.displayAnnotations = true;
-          this.dialogName = dialogName;
         }
         else if (dialogName === 'consumptionGridView') {
           this.consumptionGridView = data.consumptionGridView;
-          this.dialogName = dialogName;
         }
         else if (dialogName === 'maintenanceDays') {
           this.openSettingIcon(data);
-          this.dialogName = dialogName;
         }
+        this.dialogName = dialogName;
       });
   }
 
-  createAnnotationBeforeToggle() {
-    this.annotationDialog.findAnnotationCollapsed = !this.annotationDialog.findAnnotationCollapsed;
+  annotationCollapse() {
+    this.annotationDialog.collapsed = !this.annotationDialog.collapsed;
   }
 
-  findAnnotationBeforeToggle() {
-    this.annotationDialog.createAnnotationCollapsed = !this.annotationDialog.createAnnotationCollapsed;
+  maintenanceCollapse() {
+    this.maintenanceDays.collapsed = !this.maintenanceDays.collapsed;
   }
 
   public getAnnotationData(kpiId) {
@@ -92,7 +90,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.showMessage("error", "Error Message", "Please select process lines.");
       return;
     }
-    if (this.annotationDialog.annotationDescription == "") {
+    if (this.annotationDialog.annotationDescription === undefined || this.annotationDialog.annotationDescription == "") {
       this.showMessage("error", "Error Message", "Please add description.");
       return;
     }
@@ -240,6 +238,7 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   public openSettingIcon(maintenanceData: any) {
     this.maintenanceDays = new MaintenanceDays();
+    this.viewMaintenanceDays();
     this.maintenanceDays.maintanenceDaysColumn = MasterData.maintanenceDaysColumn;
     this.maintenanceDays.targetDays = maintenanceData.targetDays;
     this.maintenanceDays.collapsed = false;
