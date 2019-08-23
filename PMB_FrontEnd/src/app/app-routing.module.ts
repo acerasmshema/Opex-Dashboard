@@ -32,6 +32,11 @@ const routes: Routes = [
         path: "benchmark",
         pathMatch: 'full',
         loadChildren: './modules/benchmark/benchmark.module#BenchmarkModule'
+      },
+      {
+        path: "kappaAnalytics",
+        pathMatch: 'full',
+        loadChildren: './modules/kappaAnalytics/kappaAnalytics.module#kappaAnalyticsModule'
       }
     ]
   },
