@@ -1,6 +1,6 @@
 export class ConsumptionRequest {
     countryId: string ;
-    millId: string;
+    millId: any;
     buId: string = "1";
     kpiCategoryId: string;
     kpiId: number;

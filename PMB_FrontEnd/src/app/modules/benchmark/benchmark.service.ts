@@ -4,20 +4,24 @@ import { SearchKpiData } from '../shared/models/search-kpi-data';
 import { DatePipe } from '@angular/common';
 import { StatusService } from '../shared/service/status.service';
 import { ApiCallService } from '../shared/service/APIService/ApiCall.service';
-import { LocalStorageService } from '../shared/service/localStorage/local-storage.service';
 import { ConsumptionRequest } from '../dashboard/consumption-dashboard/consumption-reqest';
 import { ConsumptionGridView } from '../dashboard/consumption-dashboard/consumption-grid-view';
+import { AppConstants } from 'src/app/app.constant';
 
 @Injectable()
 export class BenchmarkService {
 
+    benchmarkKpiUrl = AppConstants.apiURLs.BENCHMARK_FILTER_URL;
+    private searchKpiData: SearchKpiData;
+
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService,
-        private datePipe: DatePipe,
-        private localStorageService: LocalStorageService) { }
+        private datePipe: DatePipe) { }
 
 
     public filterCharts(searchKpiData: SearchKpiData) {
+        this.searchKpiData = searchKpiData;
+
         searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
         searchKpiData.endDate = this.datePipe.transform(searchKpiData.date[1], 'yyyy-MM-dd');
 
@@ -39,6 +43,7 @@ export class BenchmarkService {
         benchmark.yAxis = true;
         benchmark.showDataLabel = true;
         benchmark.xAxis = true;
+        benchmark.roundEdges = false;
         benchmark.checked = false;
         benchmark.legend = false;
         benchmark.barPadding = 1;
@@ -56,38 +61,66 @@ export class BenchmarkService {
     }
 
     updateChart(searchKpiData: SearchKpiData) {
-        let processLinesHeads = [];
-        searchKpiData.processLines.forEach(pl => {
-            processLinesHeads.push(pl["processLineCode"]);
+        let millIds = [];
+        searchKpiData.mills.forEach(mill => {
+            millIds.push(mill.millId);
         });
 
         let benchmarkRequest = new ConsumptionRequest();
         benchmarkRequest.startDate = searchKpiData.startDate;
         benchmarkRequest.endDate = searchKpiData.endDate;
         benchmarkRequest.kpiId = searchKpiData.kpiId;
-        benchmarkRequest.millId = this.statusService.common.selectedMill.millId;
-        benchmarkRequest.countryId = this.statusService.common.selectedMill.countryId;
+        benchmarkRequest.millId = millIds;
         benchmarkRequest.frequency = searchKpiData.frequency["code"];
-        benchmarkRequest.processLines = processLinesHeads;
 
-        if (this.statusService.benchmarkList.length > 0) {
-            let benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
-            benchmark.data = this.data1;
-            this.resetDataLabel(benchmark, benchmark.data.length);
-        }
+        this.getDataforBenchmart(benchmarkRequest).
+            subscribe((response: any) => {
+                let benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
+                benchmark.data = response.kpiData;
+                const section = benchmark.data.length;
 
-        // this.getDataforKpi(benchmarkRequest).
-        //     subscribe((response: any) => {
-        //         const benchmarkList = this.statusService.benchmarkList;
-
-        //         if (benchmarkList.length > 0) {
-        //             let consumption = benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
-        //             consumption.data = response;
-        //         }
-        //     });
+                if (section > 5) {
+                    let maxValue = 0;
+                    benchmark.data.forEach(kpiData => {
+                        kpiData.series.forEach(seriesData => {
+                            if (seriesData.value > maxValue)
+                                maxValue = seriesData.value;
+                        });
+                    });
+                    benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
+                }
+                this.resetDataLabel(benchmark, section);
+            });
     }
 
-    downloadBenchmarkData(kpiId: string, kpiName: string) {
+    downloadBenchmarkData(kpiId: number, kpiName: string, isDaily: boolean) {
+        if (!isDaily) {
+            const benchmarkData = this.statusService.benchmarkList.find((con) => con.kpiId === kpiId).data;
+            this.download(benchmarkData, kpiName);
+        }
+        else {
+            let millIds = [];
+            this.searchKpiData.mills.forEach(mill => {
+                millIds.push(mill.millId);
+            });
+
+            let benchmarkRequest = new ConsumptionRequest();
+            benchmarkRequest.startDate = this.searchKpiData.startDate;
+            benchmarkRequest.endDate = this.searchKpiData.endDate;
+            benchmarkRequest.kpiId = this.searchKpiData.kpiId;
+            benchmarkRequest.millId = millIds;
+            benchmarkRequest.frequency = "0";
+
+            this.getDataforBenchmart(benchmarkRequest).
+                subscribe((response: any) => {
+                    const kpiData = response.kpiData;
+                    this.download(kpiData, kpiName);
+                });
+        }
+
+    }
+
+    download(benchmarkData: any, kpiName: string) {
         let consumptionGridView = new ConsumptionGridView();
         consumptionGridView.show = true;
         consumptionGridView.paginator = true;
@@ -96,12 +129,12 @@ export class BenchmarkService {
         consumptionGridView.title = kpiName;
 
         consumptionGridView.columnNames.push({ header: "DATE", field: "DATE" });
-        this.data1[0].series.forEach(processLine => {
+        benchmarkData[0].series.forEach(processLine => {
             consumptionGridView.columnNames.push({ header: processLine.name, field: processLine.name });
         });
 
         let gridsData = [];
-        this.data1.forEach(processDetail => {
+        benchmarkData.forEach(processDetail => {
             let grid = {};
             grid["DATE"] = processDetail.name;
             processDetail.series.forEach(processline => {
@@ -116,28 +149,34 @@ export class BenchmarkService {
             consumptionGridView: consumptionGridView
         }
         this.statusService.dialogSubject.next(data);
+
     }
 
     refreshBenchmark() {
         if (this.statusService.benchmarkList.length > 0) {
             this.statusService.benchmarkList.forEach(benchmark => {
-                benchmark.chartType = "";
-                setTimeout(() => {
-                    benchmark.chartType = "bar";
-                    this.resetDataLabel(benchmark, benchmark.data.length);
-                }, 50);
+                if (benchmark.data !== undefined && benchmark.data.length > 0) {
+                    benchmark.chartType = "";
+                    setTimeout(() => {
+                        benchmark.chartType = "bar";
+                        this.resetDataLabel(benchmark, benchmark.data.length);
+                    }, 50);
+                }
             });
         }
     }
 
     resetDataLabel(benchmark: ConsumptionModel, section: number) {
-
         setTimeout(() => {
             let barCount: number = 0;
-            let processLines = ["FL1", "FL2", "FL3", "KRC", "PL11", "PL12", "RZ"];
-
             let benchmarkChart = document.getElementById("benchmark_" + benchmark.kpiId);
             if (benchmarkChart !== undefined && benchmarkChart !== null) {
+                const benchmarkData = benchmark.data;
+                let processLines = [];
+                benchmarkData[0].series.forEach(benchmark => {
+                    processLines.push(benchmark.name);
+                });
+
                 let nodes = benchmarkChart.getElementsByClassName("textDataLabel");
                 for (let index = 0; index < nodes.length; index++) {
                     const labelElement: any = nodes[index];
@@ -161,166 +200,170 @@ export class BenchmarkService {
                     barCount++;
                 }
             }
-        }, 500);
+        }, 1000);
     }
 
-    data1 = [
-        {
-            "name": "2017",
-            "series": [
-                { "name": "FL1", "value": 2.48 },
-                { "name": "FL2", "value": 1.84 },
-                { "name": "FL3", "value": 1.92 },
-                { "name": "KRC", "value": 1.91 },
-                { "name": "PL11", "value": 2.59 },
-                { "name": "PL12", "value": 1.63 },
-                { "name": "RZ", "value": 2.62 },
-            ]
-        },
-        {
-            "name": "2018-Jan",
-            "series": [
-                { "name": "FL1", "value": 2.81 },
-                { "name": "FL2", "value": 1.20 },
-                { "name": "FL3", "value": 1.02 },
-                { "name": "KRC", "value": 1.13 },
-                { "name": "PL11", "value": 1.59 },
-                { "name": "PL12", "value": 1.63 },
-                { "name": "RZ", "value": 1.72 },
-            ]
-        },
-        {
-            "name": "2018-Feb",
-            "series": [
-                { "name": "FL1", "value": 2.12 },
-                { "name": "FL2", "value": 1.40 },
-                { "name": "FL3", "value": 2.92 },
-                { "name": "KRC", "value": 1.13 },
-                { "name": "PL11", "value": 1.61 },
-                { "name": "PL12", "value": 1.31 },
-                { "name": "RZ", "value": 1.72 },
-            ]
-        },
-        {
-            "name": "2018-Mar",
-            "series": [
-                { "name": "FL1", "value": 1.48 },
-                { "name": "FL2", "value": 1.24 },
-                { "name": "FL3", "value": 2.92 },
-                { "name": "KRC", "value": 1.13 },
-                { "name": "PL11", "value": 1.69 },
-                { "name": "PL12", "value": 1.63 },
-                { "name": "RZ", "value": 1.67 },
-            ]
-        },
-        // {
-        //     "name": "2018-Apr",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-May",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Jun",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Jul",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Aug",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Sep",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Oct",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Nov",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-        // {
-        //     "name": "2018-Dec",
-        //     "series": [
-        //         { "name": "FL1", "value": 1.48 },
-        //         { "name": "FL2", "value": 1.24 },
-        //         { "name": "FL3", "value": 2.92 },
-        //         { "name": "KRC", "value": 1.13 },
-        //         { "name": "PL11", "value": 1.69 },
-        //         { "name": "PL12", "value": 1.63 },
-        //         { "name": "RZ", "value": 1.67 },
-        //     ]
-        // },
-    ];
+    getDataforBenchmart(benchmarkRequest: ConsumptionRequest) {
+        return this.apiCallService.callAPIwithData(this.benchmarkKpiUrl, benchmarkRequest);
+    }
+
+    // data1 = [
+    //     {
+    //         "name": "2017",
+    //         "series": [
+    //             { "name": "FL1", "value": 2.48 },
+    //             { "name": "FL2", "value": 1.84 },
+    //             { "name": "FL3", "value": 1.92 },
+    //             { "name": "KRC", "value": 1.91 },
+    //             { "name": "PL11", "value": 2.59 },
+    //             { "name": "PL12", "value": 1.63 },
+    //             { "name": "RZ", "value": 2.62 },
+    //         ]
+    //     },
+    //     {
+    //         "name": "2018-Jan",
+    //         "series": [
+    //             { "name": "FL1", "value": 2.81 },
+    //             { "name": "FL2", "value": 1.20 },
+    //             { "name": "FL3", "value": 1.02 },
+    //             { "name": "KRC", "value": 1.13 },
+    //             { "name": "PL11", "value": 1.59 },
+    //             { "name": "PL12", "value": 1.63 },
+    //             { "name": "RZ", "value": 1.72 },
+    //         ]
+    //     },
+    //     {
+    //         "name": "2018-Feb",
+    //         "series": [
+    //             { "name": "FL1", "value": 2.12 },
+    //             { "name": "FL2", "value": 1.40 },
+    //             { "name": "FL3", "value": 2.92 },
+    //             { "name": "KRC", "value": 1.13 },
+    //             { "name": "PL11", "value": 1.61 },
+    //             { "name": "PL12", "value": 1.31 },
+    //             { "name": "RZ", "value": 1.72 },
+    //         ]
+    //     },
+    //     {
+    //         "name": "2018-Mar",
+    //         "series": [
+    //             { "name": "FL1", "value": 1.48 },
+    //             { "name": "FL2", "value": 1.24 },
+    //             { "name": "FL3", "value": 2.92 },
+    //             { "name": "KRC", "value": 1.13 },
+    //             { "name": "PL11", "value": 1.69 },
+    //             { "name": "PL12", "value": 1.63 },
+    //             { "name": "RZ", "value": 1.67 },
+    //         ]
+    //     },
+    //     // {
+    //     //     "name": "2018-Apr",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-May",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Jun",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Jul",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Aug",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Sep",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Oct",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Nov",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    //     // {
+    //     //     "name": "2018-Dec",
+    //     //     "series": [
+    //     //         { "name": "FL1", "value": 1.48 },
+    //     //         { "name": "FL2", "value": 1.24 },
+    //     //         { "name": "FL3", "value": 2.92 },
+    //     //         { "name": "KRC", "value": 1.13 },
+    //     //         { "name": "PL11", "value": 1.69 },
+    //     //         { "name": "PL12", "value": 1.63 },
+    //     //         { "name": "RZ", "value": 1.67 },
+    //     //     ]
+    //     // },
+    // ];
 
 }
