@@ -70,6 +70,17 @@ public class ProcessLineEntity implements Serializable {
 	
 	@Column(name="daily_line_target")
 	private BigDecimal dailyLineTarget;
+	
+	@Column(name="process_line_order")
+	private Integer processLineOrder;
+
+	public Integer getProcessLineOrder() {
+		return processLineOrder;
+	}
+
+	public void setProcessLineOrder(Integer processLineOrder) {
+		this.processLineOrder = processLineOrder;
+	}
 
 	//bi-directional many-to-one association to KpiProcessLine
 	@OneToMany(mappedBy="processLine")

@@ -5,6 +5,7 @@ public class KpiTypeDetails {
 	private Integer kpiId;                                        
     private String kpiName;
     private String unit;
+    private Integer kpiOrder;
     
 	public Integer getKpiId() {
 		return kpiId;
@@ -24,4 +25,13 @@ public class KpiTypeDetails {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+	
+	public Integer getKpiOrder() {
+		return kpiOrder;
+	}
+
+	public void setKpiOrder(Integer kpiOrder) {
+		this.kpiOrder = kpiOrder;
+	}
+
 }

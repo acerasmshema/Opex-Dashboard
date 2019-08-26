@@ -4,26 +4,22 @@
         [(visible)]="annotationDialog.displayAnnotations">
         <p-panel header="Create Annotation" [collapsed]="!annotationDialog.collapsed" [toggleable]="true"
             (onBeforeToggle)="annotationCollapse()">
-            <div class="card">
+            <div class="card" style="height: 350px;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <p-multiSelect [options]="annotationDialog.processLinesForAnnotation" scrollHeight="80px"
+                            <p-multiSelect [options]="annotationDialog.processLinesForAnnotation" scrollHeight="250px"
                                 [(ngModel)]="annotationDialog.annotationProcessLines"
-                                [ngModelOptions]="{standalone: true}" [style]="{'width':'60%'}"
+                                [ngModelOptions]="{standalone: true}" [style]="{'width':'70%'}"
                                 defaultLabel="Process Lines" optionLabel="processLineCode">
                             </p-multiSelect>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <textarea placeholder="Description" rows="2" cols="25"
                                 [(ngModel)]="annotationDialog.annotationDescription" pInputTextarea></textarea>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="pull-right">
-                                <button pButton type="button" (click)="createAnnotation()" label="Save"></button>
-                            </span>
+                        <div class="col-md-4">
+                            <button class="save-button" pButton type="button" (click)="createAnnotation()" label="Save"></button>
                         </div>
                     </div>
                 </div>
@@ -96,7 +92,7 @@
         [(visible)]="maintenanceDays.show">
         <p-panel header="Maintenance Days Configurations" [collapsed]="!maintenanceDays.collapsed" [toggleable]="true"
             (onBeforeToggle)="maintenanceCollapse()">
-            <div class="container">
+            <div class="container" style="height: 400px;">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -139,7 +135,7 @@
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
-                            scrollHeight="200px" [rows]="5" [paginator]="true"
+                            scrollHeight="150px" [rows]="5" [paginator]="true"
                             [(selection)]="maintenanceDays.selectedMaintenanceDay" dataKey="id"
                             [tableStyle]="{'table-layout':'auto'}">
                             <ng-template pTemplate="header" let-columns>
@@ -158,11 +154,7 @@
                                     <td>
                                         <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
                                     </td>
-
-                                    <td class="">
-                                        {{rowData.id}}
-                                    </td>
-                                    <td class=".ng-invalid.ng-dirty" style="min-width: 100px">
+                                    <td class=".ng-invalid.ng-dirty text-center" style="width: 20%;">
                                         {{rowData.maintainceDates}}
                                     </td>
                                     <td>

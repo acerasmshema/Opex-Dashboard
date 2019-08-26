@@ -8,7 +8,6 @@ import { LocalStorageService } from '../../shared/service/localStorage/local-sto
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
-import { MasterData } from '../../shared/constant/MasterData';
 
 @Injectable({
   providedIn: 'root'
