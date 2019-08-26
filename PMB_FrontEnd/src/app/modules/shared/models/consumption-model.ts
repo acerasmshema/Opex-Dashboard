@@ -11,9 +11,11 @@ export class ConsumptionModel {
     showXAxisLabel: boolean;
     showYAxisLabel: boolean;
     showDataLabel: boolean;
+    roundEdges: boolean;
     checked: boolean;
     barPadding: number;
     groupPadding: number;
+    yScaleMax: number;
     xAxisLabel: string;
     yAxisLabel: string;
     chartType: string;
