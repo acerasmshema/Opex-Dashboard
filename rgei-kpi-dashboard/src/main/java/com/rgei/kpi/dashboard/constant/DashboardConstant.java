@@ -36,6 +36,8 @@ public class DashboardConstant {
 	public static final String TARGET_LINE="Target";
 	public static final String BLACK="black";
 	public static final String RED="red";
+	public static final String KRC_Avg = "KRC";
+	public static final String RZ_Avg = "RZ";
 	
 	public static final String DATE="DATE";
 	public static final String NAN = "NaN";

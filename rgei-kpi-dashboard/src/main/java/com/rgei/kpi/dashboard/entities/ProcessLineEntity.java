@@ -82,6 +82,9 @@ public class ProcessLineEntity implements Serializable {
 	
 	@Column(name="legend_color")
 	private String legendColor;
+	
+	@Column(name="is_benchmarking")
+	private Boolean isBenchmarking;
 
 	public Integer getProcessLineId() {
 		return this.processLineId;
@@ -223,5 +226,13 @@ public class ProcessLineEntity implements Serializable {
 
 	public void setLegendColor(String legendColor) {
 		this.legendColor = legendColor;
+	}
+
+	public Boolean getIsBenchmarking() {
+		return isBenchmarking;
+	}
+
+	public void setIsBenchmarking(Boolean isBenchmarking) {
+		this.isBenchmarking = isBenchmarking;
 	}
 }
