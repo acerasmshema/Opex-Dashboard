@@ -29,9 +29,9 @@ import java.util.TreeMap;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
-public class ProcessLineFrequencyDataGridUtility {
+public class ProcessLineFrequencyDataGridUtilityRZ {
 	
-	private ProcessLineFrequencyDataGridUtility() {
+	private ProcessLineFrequencyDataGridUtilityRZ() {
 	}
 
 	/*
@@ -113,29 +113,20 @@ public class ProcessLineFrequencyDataGridUtility {
 	
 	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
 		switch(processLine) {
-		case DashboardConstant.PROCESS_LINE_FL1:
+		case DashboardConstant.PROCESS_LINE_PD1:
 			transferMap.put(processLine, new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_FL2:
+		case DashboardConstant.PROCESS_LINE_PD2:
 			transferMap.put(processLine, new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_FL3:
+		case DashboardConstant.PROCESS_LINE_PD3:
 			transferMap.put(processLine, new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_PCD:
+		case DashboardConstant.PROCESS_LINE_PL11:
 			transferMap.put(processLine, new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.PROCESS_LINE_PD1:
+		case DashboardConstant.PROCESS_LINE_PL12:
 			transferMap.put(processLine, new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD2:
-			transferMap.put(processLine, new BigDecimal(obj[6].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD3:
-			transferMap.put(processLine, new BigDecimal(obj[7].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
-			break;
-		case DashboardConstant.PROCESS_LINE_PD4:
-			transferMap.put(processLine, new BigDecimal(obj[8].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		default:
 		}
