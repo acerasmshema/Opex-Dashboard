@@ -29,9 +29,9 @@
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>
                             <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
-                                [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" 
+                                [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}"
                                 [(ngModel)]="searchKpiData.kpiTypes" [ngModelOptions]="{standalone: true}"
-                                scrollHeight="250px" defaultLabel="KPI Type" optionLabel="kpiTypeName" >
+                                scrollHeight="250px" defaultLabel="KPI Type" optionLabel="kpiTypeName">
                             </p-multiSelect>
                         </div>
                         <div class="form-group">
@@ -78,22 +78,23 @@
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.buisnessUnits" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.businessUnit" [ngModelOptions]="{standalone: true}"
                                 optionLabel="buTypeName">
                             </p-dropdown>
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-location-arrow"></i></label>
                             <p-multiSelect [(ngModel)]="searchKpiData.mills" [ngModelOptions]="{standalone: true}"
-                            [class]="(!sidebarForm.millsError) ? '' : 'error'"
-                            [options]="sidebarForm.mills" [hidden]="sidebarForm.hide"
-                                [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" scrollHeight="250px"
-                                defaultLabel="Mill" optionLabel="millName">
+                                [class]="(!sidebarForm.millsError) ? '' : 'error'" [options]="sidebarForm.mills"
+                                [hidden]="sidebarForm.hide" [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}"
+                                scrollHeight="250px" defaultLabel="Mill" optionLabel="millName">
                             </p-multiSelect>
-                            
+
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-wrench"></i></label>
                             <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.kpiTypes" [ngModelOptions]="{standalone: true}"
                                 [panelStyle]="{minWidth:'12em'}" [style]="{width: '173px'}" scrollHeight="250px"
                                 defaultLabel="KPI Type" optionLabel="kpiTypeName">
                             </p-multiSelect>
@@ -113,6 +114,7 @@
                         <div class="form-group">
                             <label class="labelClass"><i class="fa fa-fw fa-tags"></i></label>
                             <p-dropdown [options]="sidebarForm.frequencies" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.frequency" [ngModelOptions]="{standalone: true}"
                                 optionLabel="name">
                             </p-dropdown>
                         </div>

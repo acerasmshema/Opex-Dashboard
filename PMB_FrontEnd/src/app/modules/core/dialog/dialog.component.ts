@@ -237,8 +237,9 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   public openSettingIcon(maintenanceData: any) {
-    this.maintenanceDays = new MaintenanceDays();
     this.viewMaintenanceDays();
+ 
+    this.maintenanceDays = new MaintenanceDays();
     this.maintenanceDays.maintanenceDaysColumn = MasterData.maintanenceDaysColumn;
     this.maintenanceDays.targetDays = maintenanceData.targetDays;
     this.maintenanceDays.collapsed = false;
