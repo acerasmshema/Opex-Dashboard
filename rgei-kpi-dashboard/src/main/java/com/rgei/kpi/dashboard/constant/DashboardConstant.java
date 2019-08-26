@@ -48,6 +48,7 @@ public class DashboardConstant {
 	public static final String DATE_FORMAT = "dd-MMM";
 	public static final String FREQ_DATE_FORMAT = "MMM-yyyy";
 	public static final String FORMAT = "yyyy-MM-dd";
+	public static final String DATE_TIME_FORMAT = "dd-MMM-yyyy hh:mm:ss";
 	public static final String EXTENDED_DATE_FORMAT = "dd-MMM-yyyy";
 	
 	public static final String KRC = "1";
