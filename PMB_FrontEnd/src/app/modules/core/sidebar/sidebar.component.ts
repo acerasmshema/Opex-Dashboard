@@ -9,12 +9,14 @@ import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { SidebarService } from './sidebar-service';
 import { ConsumptionService } from '../../dashboard/consumption-dashboard/consumption.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
+import { HeaderService } from '../header/header.service';
+import { BenchmarkService } from '../../benchmark/benchmark.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  providers: [SidebarService, ConsumptionService]
+  providers: [SidebarService, ConsumptionService, BenchmarkService, HeaderService]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
 
@@ -23,11 +25,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public showSidebar: boolean;
 
   sidebarSubscription: Subscription;
-  
+
   constructor(private router: Router,
     private sidebarService: SidebarService,
     private consumptionService: ConsumptionService,
+    private benchmarkService: BenchmarkService,
     private localStorageService: LocalStorageService,
+    private headerService: HeaderService,
     private statusService: StatusService) {
   }
 
@@ -56,8 +60,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
           }
           else {
+            this.onGetAllMills();
+            this.onGetAllBuType();
+            this.getBenchmarkKpiDetail();
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            this.searchKpiData = new SearchKpiData();
+            this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
           }
+
           this.sidebarForm.type = sidebarRequestData.type;
         }
 
@@ -72,7 +82,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  getKpiDetails(kpiCategoryId: string) {
+  getBenchmarkKpiDetail() {
+    const requestData = {
+      "kpiCategoryId": ["2", "3", "4"]
+    };
+    this.sidebarService.getKpiTypes(requestData)
+      .subscribe((kpiTypes: any) => {
+        this.sidebarForm.kpiTypes = kpiTypes;
+      });
+  }
+
+  getKpiDetails(kpiCategoryId: any) {
     const requestData = {
       "kpiCategoryId": kpiCategoryId
     };
@@ -98,11 +118,35 @@ export class SidebarComponent implements OnInit, OnDestroy {
         });
       }, 200);
     }
+    if (this.sidebarForm.type === 'benchmark') {
+      this.benchmarkService.refreshBenchmark();
+    }
   }
 
   isToggled(): boolean {
     const dom: Element = document.querySelector('body');
     return dom.classList.contains(this.sidebarForm.pushRightClass);
+  }
+
+  searchBenchmarkData() {
+    let flag = false;
+    if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
+      this.sidebarForm.dateError = true;
+      flag = true;
+    }
+    if (this.searchKpiData.mills === undefined || this.searchKpiData.mills.length < 2) {
+      this.sidebarForm.millsError = true;
+      flag = true;
+    }
+    if (!flag) {
+      if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
+        this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
+      }
+      if (this.searchKpiData.processLines === undefined || this.searchKpiData.processLines.length === 0) {
+        this.searchKpiData.processLines = [];
+      }
+      this.statusService.benchmarkSubject.next(this.searchKpiData);
+    }
   }
 
   searchData(type: string) {
@@ -120,6 +164,29 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const consumptionDetail = this.statusService.consumptionDetailMap.get(this.sidebarForm.kpiCategoryId);
       consumptionDetail.searchKpiData = this.searchKpiData;
       this.consumptionService.filterCharts(this.searchKpiData, this.sidebarForm.kpiCategoryId);
+    }
+  }
+
+  onGetAllBuType() {
+    if (this.statusService.common.buTypes.length === 0) {
+      this.headerService.getAllBuType().
+        subscribe((buTypes: any) => {
+          this.statusService.common.buTypes = buTypes;
+          this.sidebarForm.buisnessUnits = buTypes;
+        });
+    }
+  }
+
+  onGetAllMills() {
+    if (this.statusService.common.mills.length === 0) {
+      const requestData = {
+        countryIds: "1,2"
+      }
+      this.headerService.getAllMills(requestData).
+        subscribe((mills: any) => {
+          this.statusService.common.mills = mills;
+          this.sidebarForm.mills = mills;
+        });
     }
   }
 

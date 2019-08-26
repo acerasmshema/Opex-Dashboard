@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <p-tabPanel header="Production" [selected]="selected" [cache]="cacheMap.get('1')">
+      <p-tabPanel header="Production" headerStyleClass="production-dashboard-id" [selected]="selected" [cache]="cacheMap.get('1')">
         <ng-template pTemplate="app-production-dashboard">
           <app-production-dashboard></app-production-dashboard>
         </ng-template>
@@ -32,11 +32,6 @@
       <p-tabPanel header="Wood Consumption" [disabled]="disableTab" [cache]="cacheMap.get('4')">
         <ng-template pTemplate="app-wood-consumption-dashboard">
           <app-consumption-dashboard [kpiCategoryId]="'4'"></app-consumption-dashboard>
-        </ng-template>
-      </p-tabPanel>
-      <p-tabPanel header="Kappa Number Prediction" [disabled]="disableTab">
-        <ng-template pTemplate="app-conditional-monitoring">
-          <app-kappa-number-prediction></app-kappa-number-prediction>
         </ng-template>
       </p-tabPanel>
     </p-tabView>

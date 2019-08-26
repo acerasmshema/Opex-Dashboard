@@ -16,6 +16,7 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -142,12 +143,16 @@ public class ProcessLineController {
 	}
 	
 	@GetMapping(value = "/v2/yesterday/ytd_target_process_line")
-	public ResponseEntity<TargetProceessLine> getAnnualTargetProcessLineV2(@RequestHeader(value="millId") String millId,
-			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
-			@RequestHeader(value="kpiId") String kpiId) {
-		logger.info("Fetching annual target for process lines.");
-		TargetProceessLine response = processLinePulpKpiService.getAnnualTargetProcessLineV2(millId, buId, kpiCategoryId, kpiId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+	public ResponseEntity<List<TargetProceessLine>> getAnnualTargetProcessLineV2(@RequestHeader(value="millId") String millId,
+	@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
+	@RequestHeader(value="kpiId") String kpiId) {
+	logger.info("Fetching annual target process line data.");
+	List<TargetProceessLine> response=new ArrayList<TargetProceessLine>();
+	TargetProceessLine targetProductionResponse = processLinePulpKpiService.getAnnualTargetProcessLineV2(millId, buId, kpiCategoryId, kpiId);
+	TargetProceessLine actualProductionResponse = processLinePulpKpiService.getAnnualExtendedProcessLine(millId, buId, kpiCategoryId, kpiId);
+	response.add(actualProductionResponse);
+	response.add(targetProductionResponse);
+	return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/process_line/projected_target_details")

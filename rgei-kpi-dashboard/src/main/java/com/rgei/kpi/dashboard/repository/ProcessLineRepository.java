@@ -37,6 +37,6 @@ public interface ProcessLineRepository extends JpaRepository<ProcessLineEntity, 
 			+ "where KPL.kpi.kpiId = :kpiId and PL.active=:status and PL.mill.millId = :millId order by PL.processLineId")
 	List<ProcessLineEntity> findByKpiId(@Param("kpiId") Integer kpiId,@Param("status") Boolean status, @Param("millId") Integer millId);
 	
-	@Query("Select PL from  ProcessLineEntity PL where PL.mill.millId = :millId And PL.active = :status order by PL.processLineId")
+	@Query("Select PL from  ProcessLineEntity PL where PL.mill.millId = :millId And PL.active = :status order by PL.processLineOrder")
 	List<ProcessLineEntity> getPrcessLineByLocation(@Param("millId") Integer millId, @Param("status") Boolean status);
 }

@@ -13,10 +13,8 @@ export class MasterData {
   ];;
 
   static maintanenceDaysColumn = [
-    { field: 'id', header: 'Id' },
     { field: 'maintainceDates', header: 'Date' },
-    { field: 'remarks', header: 'Remarks' },
-    { field: ' User_Actions', header: 'User Actions' }
+    { field: 'remarks', header: 'Remarks' }
   ];
 
   static annotationsCols = [

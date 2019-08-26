@@ -16,9 +16,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   disableTab: boolean = true;
   processUnitLegends: any[] = [];
   showTabs: boolean = false;
-  millSubscription: Subscription;
   cacheMap: Map<string, boolean>;
   selected: boolean = true;
+  selectedMillName: string;
+
+  millSubscription: Subscription;
+  tabsSubscription: Subscription;
 
   constructor(private statusService: StatusService,
     private consumptionService: ConsumptionService,
@@ -34,6 +37,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.openDashboard();
 
+    this.tabsSubscription = this.statusService.enableTabs.
+      subscribe((isEnable: boolean) => {
+        if (isEnable)
+          this.disableTab = false;
+        console.log(new Date());
+      });
+
     this.millSubscription = this.statusService.changeMill.
       subscribe(() => {
         this.selected = false;
@@ -41,21 +51,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.cacheMap.set("2", false);
         this.cacheMap.set("3", false);
         this.cacheMap.set("4", false);
-        this.processUnitLegends = this.getProcessUnitLegends();
-        setTimeout(() => {
-          document.getElementById("ui-tabpanel-0-label").click();
-          this.selected = true;
-        }, 200);
+        this.processUnitLegends = this.getProcessUnitLegends(true);
       });
   }
 
   openDashboard() {
-    this.processUnitLegends = this.getProcessUnitLegends();
+    this.processUnitLegends = this.getProcessUnitLegends(false);
     document.getElementById("select_mill").style.display = "block";
-
-    setTimeout(() => {
-      this.disableTab = false;
-    }, 1000);
   }
 
   openSidebar(event: any) {
@@ -83,14 +85,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const consumptionDetailMap = this.statusService.consumptionDetailMap;
     if (consumptionDetailMap !== undefined) {
       const consumptionDetail = consumptionDetailMap.get(sidebarRequest.kpiCategoryId);
-      if (consumptionDetail !== undefined && consumptionDetail.isRefreshed) {
+      if (consumptionDetail !== undefined) {
         this.consumptionService.refreshDahboard(sidebarRequest.kpiCategoryId);
         consumptionDetail.isRefreshed = false;
       }
     }
   }
 
-  getProcessUnitLegends(): any {
+  getProcessUnitLegends(isMillChange: boolean): any {
+    console.log(new Date());
     let millId = this.statusService.common.selectedMill.millId;
     const requestData = {
       millId: millId
@@ -103,11 +106,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
+
+        setTimeout(() => {
+          this.selectedMillName = this.statusService.common.selectedMill;
+        }, 200);
+
+        if (isMillChange) {
+          setTimeout(() => {
+            this.disableTab = true;
+            const productionTab: any = document.getElementsByClassName("production-dashboard-id")[0];
+            const productionTabId = productionTab.childNodes[0].id;
+            document.getElementById(productionTabId).click();
+            this.selected = true;
+          }, 200);
+        }
       });
   }
 
   ngOnDestroy() {
     this.millSubscription.unsubscribe();
+    this.tabsSubscription.unsubscribe();
   }
 }
 

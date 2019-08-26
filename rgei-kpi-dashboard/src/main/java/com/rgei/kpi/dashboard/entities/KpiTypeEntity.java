@@ -54,7 +54,10 @@ public class KpiTypeEntity implements Serializable {
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
-
+	
+	@Column(name="kpi_order")
+	private Integer kpiOrder;
+	
 	//bi-directional many-to-one association to Kpi
 	@OneToMany(mappedBy="kpiType", fetch = FetchType.EAGER)
 	private List<KpiEntity> kpis;
@@ -126,6 +129,14 @@ public class KpiTypeEntity implements Serializable {
 
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+	
+	public Integer getKpiOrder() {
+		return kpiOrder;
+	}
+
+	public void setKpiOrder(Integer kpiOrder) {
+		this.kpiOrder = kpiOrder;
 	}
 
 	public List<KpiEntity> getKpis() {
