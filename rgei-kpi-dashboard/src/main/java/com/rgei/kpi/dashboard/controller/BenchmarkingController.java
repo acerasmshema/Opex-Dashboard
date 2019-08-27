@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.controller;
 
+import java.util.Calendar;
+
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.cl
 	private BenchmarkingService benchmarkingService;
 
 	@PostMapping(value = "/benchmarking/get_selected_data")
-	public ResponseEntity<BenchmarkingReponse> getMaintainanceDetails(
+	public ResponseEntity<BenchmarkingReponse> getBenchmarkingData(
 			@RequestBody BenchmarkingRequest benchmarkingRequest) {
 		logger.info("Inside Benchmarking controller to fetch benchmarking data");
 		BenchmarkingReponse response = benchmarkingService.getBenchmarkingData(benchmarkingRequest);

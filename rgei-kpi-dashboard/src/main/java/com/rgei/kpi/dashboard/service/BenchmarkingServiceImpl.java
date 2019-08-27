@@ -1,4 +1,3 @@
-
 package com.rgei.kpi.dashboard.service;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.Optional;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
@@ -39,6 +39,7 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 	BenchmarkingRepository benchmarkingRepository;
 
 	@Override
+	@Transactional
 	public BenchmarkingReponse getBenchmarkingData(BenchmarkingRequest benchmarkingRequest) {
 
 		logger.info("Getting benchmarking data for benchmarking dashboards", benchmarkingRequest);
@@ -95,11 +96,9 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 					Utility.stringToDateConvertor(benchmarkingRequest.getEndDate(), DashboardConstant.FORMAT), millId,
 					benchmarkingRequest.getKpiId());
 			if (DashboardConstant.KRC.equals(millId.toString())) {
-				logger.info("Fetching benchmarking daily data for KRC : ", millId);
 				benchmarkingDataKRC = BenchmarkingUtilityKRC.fetchBenchmarkingDailyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
-				logger.info("Fetching benchmarking daily data for RZ : ", millId);
 				benchmarkingDataRZ = BenchmarkingUtilityRZ.fetchBenchmarkingDailyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			}
@@ -121,11 +120,9 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 					Utility.stringToDateConvertor(benchmarkingRequest.getEndDate(), DashboardConstant.FORMAT), millId,
 					benchmarkingRequest.getKpiId());
 			if (DashboardConstant.KRC.equals(millId.toString())) {
-				logger.info("Fetching benchmarking yearly data for KRC : ", millId);
 				benchmarkingDataKRC = BenchmarkingUtilityKRC.fetchBenchmarkingYearlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
-				logger.info("Fetching benchmarking yearly data for RZ : ", millId);
 				benchmarkingDataRZ = BenchmarkingUtilityRZ.fetchBenchmarkingYearlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			}
@@ -148,11 +145,9 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 					Utility.stringToDateConvertor(benchmarkingRequest.getEndDate(), DashboardConstant.FORMAT), millId,
 					benchmarkingRequest.getKpiId());
 			if (DashboardConstant.KRC.equals(millId.toString())) {
-				logger.info("Fetching benchmarking quarterly data for KRC : ", millId);
 				benchmarkingDataKRC = BenchmarkingUtilityKRC.fetchBenchmarkingQuarterlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
-				logger.info("Fetching benchmarking quarterly data for RZ : ", millId);
 				benchmarkingDataRZ = BenchmarkingUtilityRZ.fetchBenchmarkingQuarterlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			}
@@ -175,11 +170,9 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 					Utility.stringToDateConvertor(benchmarkingRequest.getEndDate(), DashboardConstant.FORMAT), millId,
 					benchmarkingRequest.getKpiId());
 			if (DashboardConstant.KRC.equals(millId.toString())) {
-				logger.info("Fetching benchmarking monthly data for KRC : ", millId);
 				benchmarkingDataKRC = BenchmarkingUtilityKRC.fetchBenchmarkingMonthlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
-				logger.info("Fetching benchmarking monthly data for RZ : ", millId);
 				benchmarkingDataRZ = BenchmarkingUtilityRZ.fetchBenchmarkingMonthlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			}
@@ -189,7 +182,8 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 
 	private void getPreviousYearData(BenchmarkingRequest benchmarkingRequest,
 			Map<String, List<String>> finalBenchmarkingProcessLines, List<DateRangeResponse> resultList) {
-		logger.info("Creating previous year frequency benchmarking response for process lines", finalBenchmarkingProcessLines);
+		logger.info("Creating frequency data for previous year benchmarking response for process lines",
+				finalBenchmarkingProcessLines);
 		List<String> dates = BenchmarkingUtility.getPreviousYearDates(benchmarkingRequest.getStartDate(),
 				benchmarkingRequest.getEndDate());
 		List<DateRangeResponse> benchmarkingpreviousYearDataKRC = null;
@@ -200,11 +194,9 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 					Utility.stringToDateConvertor(dates.get(1), DashboardConstant.FORMAT), millId,
 					benchmarkingRequest.getKpiId());
 			if (DashboardConstant.KRC.equals(millId.toString())) {
-				logger.info("Fetching benchmarking previous year data for KRC : ", millId);
 				benchmarkingpreviousYearDataKRC = BenchmarkingUtilityKRC.fetchBenchmarkingYearlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
-				logger.info("Fetching benchmarking previous year data for RZ : ", millId);
 				benchmarkingpreviousYearDataRZ = BenchmarkingUtilityRZ.fetchBenchmarkingYearlyData(responseEntity,
 						finalBenchmarkingProcessLines);
 			}
