@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
@@ -29,6 +31,8 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
  */
 
 public class KpiDashboardCategoryUtility {
+	
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiDashboardCategoryUtility.class);
 
 	private KpiDashboardCategoryUtility() {
 	}
@@ -53,6 +57,7 @@ public class KpiDashboardCategoryUtility {
 	}
 
 	public static List<String> fetchProcessLines(Kpi kpi, List<String> lineList) {
+		logger.info("Fetch process lines for Kpi ", kpi.getKpiName());
 		List<String> finalKpiProcessLines;
 		if (lineList.isEmpty()) {
 			finalKpiProcessLines = kpi.getKpiProcessLines();
@@ -70,6 +75,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static void fetchConsumptionGridResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType,
 			List<Object[]> responseEntity) {
+		logger.info("Fetch consumption grid response");
 		int i = 0;
 		if (responseEntity.isEmpty()) {
 			for (; i < kpiType.size();) {
@@ -95,6 +101,7 @@ public class KpiDashboardCategoryUtility {
 	}
 
 	private static int fetchDefaultTableResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType, int i) {
+		logger.info("Fetch default table response");
 		KpiCategoryResponse val = new KpiCategoryResponse();
 		List<KpiCategorySeriesResponse> series = new ArrayList<>();
 		val.setKpiId(kpiType.get(i).getKpi().getKpiId());
@@ -112,6 +119,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static void populateQuarterlyData(List<DateRangeResponse> resultList, List<String> finalKpiProcessLines,
 			Object[] obj) {
+		logger.info("Populate quarterly data");
 		DateRangeResponse val = new DateRangeResponse();
 		List<SeriesObject> series = new ArrayList<>();
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
@@ -147,6 +155,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static List<SeriesObject> getDailySeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val,
 			List<SeriesObject> series) {
+		logger.info("Get daily series response");
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
@@ -197,6 +206,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static List<SeriesObject> getSeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val,
 			List<SeriesObject> series) {
+		logger.info("Get series response");
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
@@ -312,6 +322,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, String kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
+		logger.info("Get series object for process line ", kpiProcessLine);
 		String value = null;
 		val.setName(kpiProcessLine);
 		val.setTarget(type.getTarget().get(kpiProcessLine));
