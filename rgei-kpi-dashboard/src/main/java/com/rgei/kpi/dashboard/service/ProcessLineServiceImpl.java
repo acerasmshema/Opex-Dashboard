@@ -23,23 +23,24 @@ import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.ProcessLineUtility;
 
 @Service
-public class ProcessLineServiceImpl implements ProcessLineService{
-	
+public class ProcessLineServiceImpl implements ProcessLineService {
+
 	@Resource
 	ProcessLineRepository processLineRepository;
-	
+
 	@Resource
 	MillEntityRepository millEntityRepository;
-	
+
 	@Resource
 	BusinessUnitTypeRepository businessUnitTypeRepository;
-	
+
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiDashboardCategoryServiceImpl.class);
 
 	@Override
 	public List<ProcessLineDetailsResponse> getProcessLines(String millId) {
-		if(Objects.nonNull(millId)) {
-			List<ProcessLineEntity> processLine = processLineRepository.getPrcessLineByLocation(CommonFunction.covertToInteger(millId), Boolean.TRUE);
+		if (Objects.nonNull(millId)) {
+			List<ProcessLineEntity> processLine = processLineRepository
+					.getPrcessLineByLocation(CommonFunction.covertToInteger(millId), Boolean.TRUE);
 			return ProcessLineUtility.generateResponse(processLine);
 		}
 		return null;
@@ -47,28 +48,29 @@ public class ProcessLineServiceImpl implements ProcessLineService{
 
 	@Override
 	public List<MillsResponse> getMillDetails(List<String> countryIds) {
-		if(countryIds != null && !countryIds.isEmpty()) {
+		if (countryIds != null && !countryIds.isEmpty()) {
 			List<Integer> ids = new ArrayList<>();
-			for(String s:countryIds) {
+			for (String s : countryIds) {
 				ids.add(CommonFunction.covertToInteger(s));
 			}
-			return ProcessLineUtility.prePareMillResponse(millEntityRepository.findByCountry(ids,Boolean.TRUE));
-		}else {
+			return ProcessLineUtility.prePareMillResponse(millEntityRepository.findByCountry(ids, Boolean.TRUE));
+		} else {
 			return ProcessLineUtility.prePareMillResponse(millEntityRepository.findByActive(Boolean.TRUE));
 		}
 	}
 
 	@Override
 	public List<BuTypeResponse> getAllBuType() {
-		List<BuTypeResponse> buTypeResponse=null; 
-		try {
-			Optional<List<BusinessUnitTypeEntity>> businessUnitTypeEntity  = Optional.ofNullable(businessUnitTypeRepository.findAll());
-			if (businessUnitTypeEntity.isPresent()) {
-				List<BusinessUnitTypeEntity> businessUnitTypeEntityList = businessUnitTypeEntity.get();
-				buTypeResponse=ProcessLineUtility.preareBUTypeResponse(businessUnitTypeEntityList);
+		List<BuTypeResponse> buTypeResponse = null;
+		Optional<List<BusinessUnitTypeEntity>> businessUnitTypeEntity = Optional
+				.ofNullable(businessUnitTypeRepository.findAll());
+		if (businessUnitTypeEntity.isPresent()) {
+			List<BusinessUnitTypeEntity> businessUnitTypeEntityList = businessUnitTypeEntity.get();
+			try {
+				buTypeResponse = ProcessLineUtility.preareBUTypeResponse(businessUnitTypeEntityList);
+			} catch (Exception e) {
+				logger.info("error in fetching BU Types", e);
 			}
-		}catch(Exception e){
-			logger.info("error in fetching BU Types",e);
 		}
 		return buTypeResponse;
 	}

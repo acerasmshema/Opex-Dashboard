@@ -16,7 +16,7 @@ export class AppConstants {
         KPI_PULP_AREA_URL: AppConstants.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp_area',
         KPI_PULP_URL: AppConstants.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp',
         YTD_PROCESS_LINE_URL: AppConstants.BASE_API_URL_v2 + '/yesterday/ytd_process_line',
-        YTD_PROCESS_LINE_TARGET_URL: AppConstants.BASE_API_URL_v2 + '/yesterday/ytd_target_process_line',
+        YTD_PROCESS_LINE_TARGET_URL: AppConstants.BASE_API_URL_v1 + '/yesterday/ytd_target_process_line',
         DR_ALL_PROCESS_LINES_URL: AppConstants.BASE_API_URL_v1 + '/date_range/all_process_lines',
         ALL_PROCESS_LINES_TARGET_URL: AppConstants.BASE_API_URL_v1 + '/date_range/all_process_lines_target',
         DR_SELECTED_PROCESS_LINES_URL: AppConstants.BASE_API_URL_v1 + '/date_range/selected_process_lines',
@@ -24,7 +24,7 @@ export class AppConstants {
         LOGIN_URL: AppConstants.BASE_API_URL_v1 + '/user_info/login',
         PROCESS_LINES_BY_KPI_ID_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/get_process_lines',
         LOGOUT_URL: AppConstants.BASE_API_URL_v1 + '/user_info/logout',
-        KPI_TYPE_URL: AppConstants.BASE_API_URL_v2 + '/kpi_category/get_kpi_type',
+        KPI_TYPE_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/get_kpi_type',
         CONSUMPTION_API_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/selected_kpi_process_lines',
         CONSUMPTION_GRID_API_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data',
 

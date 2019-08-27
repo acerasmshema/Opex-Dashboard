@@ -69,7 +69,7 @@ public class KPICategoryConverter {
 		KpiTypeDetails KpiDetails = null;
 		KpiTypeExtendedResponse response = null;
 		List<KpiTypeDetails> kpiTypeList = null;
-		sortResponse(kpiTypeEntities);
+		//sortResponse(kpiTypeEntities);
 		List<KpiTypeExtendedResponse>  responses = new ArrayList<KpiTypeExtendedResponse>();
 		if(kpiTypeEntities != null && !kpiTypeEntities.isEmpty()) {
 			List<KpiEntity> kpiEntityList = null;

@@ -42,7 +42,7 @@ import com.rgei.kpi.dashboard.service.MaintenanceDaysService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class MaintenanceDaysController {
 	
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(MaintenanceDaysController.class);
@@ -50,7 +50,7 @@ public class MaintenanceDaysController {
 	@Resource
 	private MaintenanceDaysService maintenanceDaysService;
 	
-	@GetMapping(value = "/maintenance_days/get_maintenance_days")
+	@GetMapping(value = "/v1/maintenance_days/get_maintenance_days")
 	public ResponseEntity<List<MaintenanceDaysResponse>> getMaintainanceDetails(@RequestHeader(value="millId") String millId,
 			@RequestHeader(value="buId") String buId) {
 		logger.info("Inside MaintenanceDaysController to fetch maintenance days");
@@ -58,7 +58,7 @@ public class MaintenanceDaysController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/maintenance_days/save_maintenance_days")
+	@PostMapping(value = "/v1/maintenance_days/save_maintenance_days")
 	public ResponseEntity<HttpStatus> saveMaintainanceRequest(
 			@RequestBody MaintenanceDaysRequest maintenanceDaysRequest) {
 		logger.info("Inside MaintenanceDaysController to save maintenance days");
@@ -66,21 +66,21 @@ public class MaintenanceDaysController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/maintenance_days/update_maintenance_days")
+	@PostMapping(value = "/v1/maintenance_days/update_maintenance_days")
 	public ResponseEntity<HttpStatus> updateMaintainanceRequest(
 			@RequestBody MaintenanceDaysRequest maintenanceDaysRequest) {
 		logger.info("Inside MaintenanceDaysController to update maintenance days");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/maintenance_days/delete_maintenance_days")
+	@PostMapping(value = "/v1/maintenance_days/delete_maintenance_days")
 	public ResponseEntity<HttpStatus> deleteMaintainanceDetails(@RequestBody DeleteRequest request) {
 		logger.info("Inside MaintenanceDaysController to delete maintenance days");
 		maintenanceDaysService.deleteMaintainanceDayDetails(request);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/maintenance_days/update_maintenance_days_remarks")
+	@PutMapping(value = "/v1/maintenance_days/update_maintenance_days_remarks")
 	public ResponseEntity<HttpStatus> updateMaintainanceRemarksRequest(@RequestBody UpdateRemarksRequest request) {
 		logger.info("Inside MaintenanceDaysController to update maintenance days remarks");
 		maintenanceDaysService.updateMaintainanceDayRemarks(request);

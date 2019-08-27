@@ -38,7 +38,7 @@ import com.rgei.kpi.dashboard.service.MillBuKpiCategoryService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class MillBuKpiCategoryController {
 	
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(MillBuKpiCategoryController.class);
@@ -46,7 +46,7 @@ public class MillBuKpiCategoryController {
 	@Resource
 	private MillBuKpiCategoryService millBuKpiCategoryService;
 	
-	@GetMapping(value = "/yesterday/total_process_line")
+	@GetMapping(value = "/v1/yesterday/total_process_line")
 	public ResponseEntity<ProcessLineResponse> getYesterdayProcessLineSum(@RequestHeader(value="millId") String millId,
 			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
 			@RequestHeader(value="kpiId") String kpiId) {
@@ -55,14 +55,14 @@ public class MillBuKpiCategoryController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}	
 	
-	@PostMapping(value = "/kpi_category/save_target_days")
+	@PostMapping(value = "/v1/kpi_category/save_target_days")
 	public ResponseEntity<HttpStatus> getDailyKpiPulpDataForAreaChart(@RequestBody KpiCategoryTargetDaysRequest kpiCategoryTargetDaysRequest) {
 		logger.info("Fetching daily kpi pulp data for area chart", kpiCategoryTargetDaysRequest);
 		millBuKpiCategoryService.saveKpiCategoryTargetDaysRequest(kpiCategoryTargetDaysRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/process_line/get_daily_target")
+	@GetMapping(value = "/v1/process_line/get_daily_target")
 	public ResponseEntity<ProcessLineDailyTargetResponse> getProcessLineDailyTarget(@RequestHeader(value="millId") String millId, @RequestHeader(value="buId") String buId,
 			@RequestHeader(value="kpiCategoryId") String kpiCategoryId) {
 		logger.info("Fetching process line daily target");
