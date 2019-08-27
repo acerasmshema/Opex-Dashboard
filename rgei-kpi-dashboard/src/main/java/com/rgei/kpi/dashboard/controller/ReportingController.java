@@ -27,14 +27,14 @@ public class ReportingController {
 	@Resource
 	ReportingService userReportService;
 	
-	@GetMapping(value = "/login_report/get_all")
+	@GetMapping(value = "/v1/login_report/get_all")
 	public ResponseEntity<List<LoginDetailResponse>> getAllUserLoginDetails(@RequestHeader(value = "startDate") String startDate, @RequestHeader(value = "endDate") String endDate, @RequestHeader(value="millId") String millId){
 		logger.info("Entering into the get datewise login details by startDate:{}",startDate);
 		List<LoginDetailResponse> loginDetailResponse = userReportService.getAllUserLoginDetails(startDate, endDate, millId);
 		return new ResponseEntity<>(loginDetailResponse, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/login_report/get_distinct")
+	@GetMapping(value = "/v1/login_report/get_distinct")
 	public ResponseEntity<List<LoginDetailResponse>> getDistinctDatewiseLoginDetails(@RequestHeader(value = "startDate") String startDate, @RequestHeader(value = "endDate") String endDate, @RequestHeader(value="millId") String millId){
 		logger.info("Entering into the get datewise login details by startDate:{}",startDate);
 		List<LoginDetailResponse> loginDetailResponse = userReportService.getDistinctUserLoginDetails(startDate, endDate, millId);

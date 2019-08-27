@@ -21,8 +21,6 @@ import java.util.Collections;
 
 import java.util.List;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
@@ -32,20 +30,17 @@ import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 
 public class KPICategoryConverter {
-	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KPICategoryConverter.class);
-	
-	//no-arg construtor
+
+	// no-arg construtor
 	private KPICategoryConverter() {
 	}
-	
+
 	public static List<KpiTypeResponse> covertToResponse(List<KpiTypeEntity> kpiTypeEntities) {
-		logger.info("Creating KpiTypeResponse");
 		List<KpiTypeResponse> kpiTypeResponseList = null;
 		KpiTypeResponse kpiTypeResponse = null;
-		if(!kpiTypeEntities.isEmpty()) {
+		if (!kpiTypeEntities.isEmpty()) {
 			kpiTypeResponseList = new ArrayList<>();
-			for(KpiTypeEntity entity:kpiTypeEntities) {
+			for (KpiTypeEntity entity : kpiTypeEntities) {
 				kpiTypeResponse = new KpiTypeResponse();
 				kpiTypeResponse.setKpiTypeId(entity.getKpiTypeId());
 				kpiTypeResponse.setKpiTypeName(entity.getKpiTypeName());
@@ -54,14 +49,13 @@ public class KPICategoryConverter {
 		}
 		return kpiTypeResponseList;
 	}
-	
+
 	public static List<ProcessLinesResponse> covertToProcessLineResponse(List<ProcessLineEntity> processLinesEntities) {
-		logger.info("Creating ProcessLinesReponse");
 		List<ProcessLinesResponse> processLines = null;
 		ProcessLinesResponse processLinesResponse = null;
-		if(!processLinesEntities.isEmpty()) {
+		if (!processLinesEntities.isEmpty()) {
 			processLines = new ArrayList<>();
-			for(ProcessLineEntity entity:processLinesEntities) {
+			for (ProcessLineEntity entity : processLinesEntities) {
 				processLinesResponse = new ProcessLinesResponse();
 				processLinesResponse.setProcessLineId(entity.getProcessLineId());
 				processLinesResponse.setProcessLineName(entity.getProcessLineCode());
@@ -72,22 +66,22 @@ public class KPICategoryConverter {
 	}
 
 	public static List<KpiTypeExtendedResponse> convertToResponse(List<KpiTypeEntity> kpiTypeEntities) {
-		logger.info("Creating KpiTypeExtendedResponse");
 		KpiTypeDetails KpiDetails = null;
 		KpiTypeExtendedResponse response = null;
 		List<KpiTypeDetails> kpiTypeList = null;
-		sortResponse(kpiTypeEntities);
-		List<KpiTypeExtendedResponse>  responses = new ArrayList<KpiTypeExtendedResponse>();
-		if(kpiTypeEntities != null && !kpiTypeEntities.isEmpty()) {
+		// sortResponse(kpiTypeEntities);
+		List<KpiTypeExtendedResponse> responses = new ArrayList<KpiTypeExtendedResponse>();
+		if (kpiTypeEntities != null && !kpiTypeEntities.isEmpty()) {
 			List<KpiEntity> kpiEntityList = null;
-			for(KpiTypeEntity entity:kpiTypeEntities) {
+			for (KpiTypeEntity entity : kpiTypeEntities) {
 				response = new KpiTypeExtendedResponse();
 				response.setKpiTypeId(entity.getKpiTypeId());
 				response.setKpiTypeName(entity.getKpiTypeName());
 				kpiTypeList = new ArrayList<>();
 				kpiEntityList = entity.getKpis();
-				for(KpiEntity kpi:kpiEntityList) {
-					if(entity.getKpiTypeId()==kpi.getKpiType().getKpiTypeId() && kpi.getActive().equals(Boolean.TRUE)) {
+				for (KpiEntity kpi : kpiEntityList) {
+					if (entity.getKpiTypeId() == kpi.getKpiType().getKpiTypeId()
+							&& kpi.getActive().equals(Boolean.TRUE)) {
 						KpiDetails = new KpiTypeDetails();
 						KpiDetails.setKpiId(kpi.getKpiId());
 						KpiDetails.setKpiName(kpi.getKpiName());
@@ -101,16 +95,15 @@ public class KPICategoryConverter {
 		}
 		return responses;
 	}
-	
-	 private static void sortResponse(List<KpiTypeEntity> kpiTypeEntities) {
-		              Collections.sort(kpiTypeEntities, (o1, o2) -> {
-		                      int value1 = o1.getKpiOrder().compareTo(o2.getKpiOrder());
-		                       if (value1 == 0) {
-		                              return o1.getKpiOrder().compareTo(o2.getKpiOrder());
-		                      }
-		                      return value1;
-		              });
-		       }
 
+	private static void sortResponse(List<KpiTypeEntity> kpiTypeEntities) {
+		Collections.sort(kpiTypeEntities, (o1, o2) -> {
+			int value1 = o1.getKpiOrder().compareTo(o2.getKpiOrder());
+			if (value1 == 0) {
+				return o1.getKpiOrder().compareTo(o2.getKpiOrder());
+			}
+			return value1;
+		});
+	}
 
 }

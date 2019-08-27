@@ -60,7 +60,7 @@ public class KPICategoryController {
 	 * 
 	 * @return List<KpiTypeExtendedResponse>
 	 */
-	@GetMapping(value = "/v2/kpi_category/get_kpi_type")
+	@GetMapping(value = "/v1/kpi_category/get_kpi_type")
 	public ResponseEntity<List<KpiTypeExtendedResponse>> getKPITypeDetails(@RequestHeader(value="kpiCategoryId") List<String> kpiCategoryId){
 		logger.info("Get kpi type by kpiCategoryId", kpiCategoryId);
 		List<KpiTypeExtendedResponse> response = kpiCategoryService.getKPICategoryDetails(kpiCategoryId);
