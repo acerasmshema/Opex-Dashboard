@@ -18,6 +18,9 @@ package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -56,6 +59,7 @@ public class BusinessUnitEntity implements Serializable {
 	private Timestamp updatedDate;
 
 	//bi-directional many-to-one association to BusinessUnitType
+	@JsonIgnore
 	@OneToMany(mappedBy="businessUnit")
 	private List<BusinessUnitTypeEntity> businessUnitTypes;
 

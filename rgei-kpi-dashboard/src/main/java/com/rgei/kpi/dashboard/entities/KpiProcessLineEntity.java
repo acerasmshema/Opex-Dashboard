@@ -18,6 +18,9 @@ package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 
 
@@ -52,16 +55,19 @@ public class KpiProcessLineEntity implements Serializable {
 	private String target;
 	
 	// bi-directional many-to-one association to Mill
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "mill_id")
 	private MillEntity mill;
 	
 	//bi-directional many-to-one association to Kpi
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="kpi_id")
 	private KpiEntity kpi;
 
 	//bi-directional many-to-one association to ProcessLine
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="process_line_id")
 	private ProcessLineEntity processLine;
