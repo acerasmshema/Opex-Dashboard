@@ -29,5 +29,5 @@ public interface KPICategoryService {
 
 	public List<ProcessLinesResponse> getProcessLines(Integer kpiId, Integer millId);
 
-	public List<KpiTypeExtendedResponse> getKPICategoryDetails(Integer kpiCategoryId);
+	public List<KpiTypeExtendedResponse> getKPICategoryDetails(List<String> kpiCategoryId);
 }

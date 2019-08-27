@@ -88,4 +88,22 @@ public interface ProcessLineFrequencyRepository extends JpaRepository<DailyKpiPu
 			@Param("kpiCategoryId")Integer kpiCategoryId,
 			@Param("kpiId")Integer kpiId);
 	
+	@Query(value = "SELECT cast(u.datetime as date) as date, u.processLine1 as PD1, "
+			+ "u.processLine2 as PD2, u.processLine3 as PD3, "
+			+ "u.processLine4 as PL11, u.processLine5 as PL12 "
+			+ "FROM DailyKpiPulpEntity u WHERE "
+			+ "u.businessUnitType.businessUnitTypeId = :buId "
+			+ "and u.mill.millId = :millId "
+			+ "and u.businessUnitType.businessUnitTypeId = :buTypeId "
+			+ "and u.kpi.kpiId = :kpiId "
+			+ "and u.kpiCategory.kpiCategoryId = :kpiCategoryId "
+			+ "and date(u.datetime) between :startDate and :endDate "
+			+ "order by date(u.datetime) asc")
+	public List<Map<String, Object>> findByDateForDataGridRZ(@Param("startDate")Date startDate, @Param("endDate")Date endDate,
+			@Param("millId")Integer millId,
+			@Param("buId")Integer buId,
+			@Param("buTypeId")Integer buTypeId,
+			@Param("kpiCategoryId")Integer kpiCategoryId,
+			@Param("kpiId")Integer kpiId);
+	
 }

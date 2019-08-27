@@ -37,6 +37,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   updateChartSubscription: Subscription;
   projectTargetSubscription: Subscription;
 
+  private annualChartRendered: boolean;
+  private monthlyChartRendered: boolean;
+  private productionChartRendered: boolean;
+
+
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
     private productionService: ProductionService,
@@ -80,7 +85,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getProductionYDayData();
     this.getAnnualTarget();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
-    this.getAllProductionLinesYDayData(this.startDate, this.endDate, []);
+    this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
   }
 
@@ -144,13 +149,11 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.annualChart.annualData = [];
 
     const requestData = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getProductionYTDData(requestData).
-      subscribe((actualData: any) => {
-        this.productionService.getProductionYTDTargetData(requestData).
-          subscribe((targetData: any) => {
-            this.annualChart.annualData = [...this.annualChart.annualData, targetData];
-          });
-        this.annualChart.annualData = [...this.annualChart.annualData, actualData];
+    this.productionService.getProductionYTDTargetData(requestData).
+      subscribe((targetData: any) => {
+        this.annualChart.annualData = targetData;
+        this.annualChartRendered = true;
+        this.enableTabs();
       });
   }
 
@@ -178,50 +181,54 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getAllProductionLinesYDayData(startDate: string, endDate: string, processLines: any) {
+  public getAllProdYestData(startDate: string, endDate: string, processLines: any) {
     const frequency = this.productionEnquiryData.selectedValue['code'];
     let productionRequest = this.getProductionRequest(startDate, endDate, [], frequency);
+
+    let processLinesNames = this.statusService.common.processLines;
+    for (let index = 0; index < processLinesNames.length; index++) {
+      let prodLine = new ProductionLine();
+      prodLine.productionLineData = [];
+      prodLine.xScaleMin = 0;
+      prodLine.yAxis = true;
+      prodLine.xAxis = false;
+      prodLine.legend = false;
+      prodLine.xAxis = false;
+      prodLine.showXAxisLabel = false;
+      prodLine.showYAxisLabel = false;
+      prodLine.yAxisLabel = "";
+      prodLine.xAxisLabel = "";
+      prodLine.processLineCode = processLinesNames[index].processLineCode + ' - Y\'day (ADt/d)';
+      prodLine.colorScheme = { domain: ['#2581c5', '#333333'] };
+      prodLine.canvasWidth = 200;
+      prodLine.fontSize = 15;
+
+      this.prodLines.push(prodLine);
+    }
 
     this.productionService.getAllproductionLinesYDayData(productionRequest).
       subscribe((data: any) => {
         if (data !== "e") {
-
-          let processLines = data.dailyKpiPulp;
-          let processLinesNames = this.statusService.common.processLines;
-          for (let index = 0; index < processLines.length; index++) {
-            const processLine = processLines[index];
-            let prodLine = new ProductionLine();
-            let totalAverageValuePL1 = processLine.value;
+          let gauges = data.dailyKpiPulp;
+          for (let index = 0; index < gauges.length; index++) {
+            const gauge = gauges[index];
+            let prodLine = this.prodLines[index]
+            let totalAverageValuePL1 = gauge.value;
             prodLine.productionYDayActualValue = "" + totalAverageValuePL1;
-            prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +processLine.max;
-            prodLine.options.rangeLabel.push("" + processLine.min);
-            prodLine.options.rangeLabel.push("" + processLine.max);
-            prodLine.canvasWidth = 200;
-            prodLine.fontSize = 15;
-            let value = processLine.range.split(',');
-            let color = processLine.colorRange.split(',');
+            prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +gauge.max;
+            prodLine.options.rangeLabel.push("" + gauge.min);
+            prodLine.options.rangeLabel.push("" + gauge.max);
+
+            let value = gauge.range.split(',');
+            let color = gauge.colorRange.split(',');
             value.filter(item => prodLine.options.arcDelimiters.push(+item));
             prodLine.options.arcColors.splice(0, prodLine.options.arcColors.length);
             color.filter(item => prodLine.options.arcColors.push((item)));
-
-            prodLine.productionLineData = [];
-            prodLine.xScaleMin = 0;
-            prodLine.yAxis = true;
-            prodLine.xAxis = false;
-            prodLine.legend = false;
-            prodLine.xAxis = false;
-            prodLine.showXAxisLabel = false;
-            prodLine.showYAxisLabel = false;
-            prodLine.yAxisLabel = "";
-            prodLine.xAxisLabel = "";
-            prodLine.processLineCode = processLinesNames[index].processLineCode + ' - Y\'day (ADt/d)';
-            prodLine.colorScheme = { domain: ['#2581c5', '#333333'] };
-            this.prodLines.push(prodLine);
           }
-
-          this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
         }
       });
+
+    this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
   }
 
   public getAllProductionLinesDateRangeData(startDate: string, endDate: string) {
@@ -232,7 +239,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((processLines: any) => {
-
         this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
           subscribe((plTargetData: any) => {
             for (let index = 0; index < plTargetData.length; index++) {
@@ -240,6 +246,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
               prodLine.productionLineData.push(processLines[index]);
               prodLine.productionLineData.push(plTargetData[index]);
             }
+
+            this.monthlyChartRendered = true;
+            this.enableTabs();
           });
       });
   }
@@ -248,67 +257,76 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
     this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
-      subscribe((response: any) => {
+      subscribe((prodLineResponse: any) => {
+        this.producionLineForm.processLines = this.statusService.common.processLines;
+        this.prodLineChart = new ProductionLine();
+        this.prodLineChart.productionLineData = [];
+        this.prodLineChart.xScaleMin = 0;
+        this.prodLineChart.yAxis = true;
+        this.prodLineChart.xAxis = true;
+        this.prodLineChart.animations = true;
+        this.prodLineChart.legend = false;
+        this.prodLineChart.showRefLines = false;
+        this.prodLineChart.showXAxisLabel = false;
+        this.prodLineChart.showYAxisLabel = false;
+        this.prodLineChart.showDataLabel = false;
+        this.prodLineChart.yAxisLabel = "";
+        this.prodLineChart.xAxisLabel = "";
+        this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
 
-        const requestData = {
-          millId: this.statusService.common.selectedMill.millId,
-          buTypeId: '1',
-          kpiId: '1',
-          startDate: startDate,
-          endDate: endDate
-        };
-        this.productionService.getAnnotationDates(requestData).
-          subscribe((data: any) => {
-            this.annotationDates = data['annotationDates'];
-            this.producionLineForm.processLines = this.statusService.common.processLines;
+        let domains = [];
+        let processLines = this.statusService.common.processLines;
+        prodLineResponse.forEach(plData => {
+          let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+          domains.push(legendColor);
+        });
+        this.prodLineChart.colorScheme = { domain: domains };
 
-            this.prodLineChart = new ProductionLine();
-            this.prodLineChart.productionLineData = [];
-            this.prodLineChart.xScaleMin = 0;
-            this.prodLineChart.yAxis = true;
-            this.prodLineChart.xAxis = true;
-            this.prodLineChart.animations = true;
-            this.prodLineChart.legend = false;
-            this.prodLineChart.showRefLines = false;
-            this.prodLineChart.showXAxisLabel = false;
-            this.prodLineChart.showYAxisLabel = false;
-            this.prodLineChart.showDataLabel = false;
-            this.prodLineChart.yAxisLabel = "";
-            this.prodLineChart.xAxisLabel = "";
-            this.prodLineChart.lineChartLineInterpolation = shape.curveMonotoneX;
-            this.prodLineChart.colorScheme = { domain: ['#2581c5', '#48D358', '#F7C31A', '#660000', '#9933FF', '#99FF99', '#FFFF99', '#FF9999'] };
-            this.prodLineChart.productionLineData = response;
-          });
+        if (productionRequest.frequency === "0") {
+          this.productionService.getAnnotationDates(productionRequest).
+            subscribe((annotationsData: any) => {
+              this.annotationDates = annotationsData['annotationDates'];
+              this.prodLineChart.productionLineData = prodLineResponse;
+              this.productionChartRendered = true;
+              this.enableTabs();
+            });
+        } else {
+          this.prodLineChart.productionLineData = prodLineResponse;
+          this.productionChartRendered = true;
+          this.enableTabs();
+        }
+
+        if (isGridRequest)
+          this.getProdGrid(prodLineResponse);
       });
-    if (isGridRequest)
-      this.getAllProductionLinesDateForGrid(productionRequest);
   }
 
-  public getAllProductionLinesDateForGrid(productionRequest: ProductionRequest) {
+  public getProdGrid(prodLineResponse: any) {
     this.productionLineView.rows = 10;
     this.productionLineView.scrollable = true;
     this.productionLineView.paginator = true;
     this.productionLineView.productionLines = [];
-    let colNames = [];
+    this.productionLineView.columnNames = [];
 
-    colNames.push({ field: 'DATE', header: 'Date' });
-    if (productionRequest.processLines.length > 0) {
-      productionRequest.processLines.forEach(processLine => {
-        colNames.push({ header: processLine, field: processLine });
-      });
-    }
-    else {
-      let columnsNames = this.statusService.common.processLines;
-      columnsNames.forEach(columnName => {
-        colNames.push({ header: columnName.processLineCode, field: columnName.processLineCode })
-      });
-    }
+    let columnNames = [];
+    columnNames.push({ header: "DATE", field: "DATE" });
+    prodLineResponse.forEach(prodLine => {
+      columnNames.push({ header: prodLine.name, field: prodLine.name });
+    });
+    this.productionLineView.columnNames = columnNames;
 
-    this.productionService.getAllProductionLinesDateForGrid(productionRequest).
-      subscribe((data: any) => {
-        this.productionLineView.columnNames = colNames;
-        this.productionLineView.productionLines = data[0];
+    let gridData = []
+    let totalGrids = prodLineResponse[0].series.length;
+    for (let index = 0; index < totalGrids; index++) {
+      let grid = {};
+      prodLineResponse.forEach(prodLine => {
+        let processsLineName = prodLine.name;
+        grid["DATE"] = prodLine.series[index].name;
+        grid[processsLineName] = prodLine.series[index].value;
       });
+      gridData.push(grid);
+    }
+    this.productionLineView.productionLines = gridData;
   }
 
   public changeMonthlyChartDuration(event: any) {
@@ -354,7 +372,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
       let frequency = this.productionEnquiryData.selectedValue['code'];
-      
+
       let processLines = [];
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
@@ -409,12 +427,23 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     $("g.tick.ng-star-inserted text:contains('*')").css("fill", "red");
     $("g.tick.ng-star-inserted text:contains('*')").css("font-weight", "bold");
     var dateTick;
-    if (this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
+    if (this.annotationDates !== null && this.annotationDates.length > 0 && this.annotationDates.includes(val)) {
       dateTick = "*" + val;
     } else {
       dateTick = val;
     }
     return dateTick;
+  }
+
+  enableTabs() {
+    if (this.productionChartRendered && this.annualChartRendered && this.monthlyChartRendered) {
+      setTimeout(() => {
+        this.statusService.enableTabs.next(true);
+        this.productionChartRendered = false;
+        this.annualChartRendered = false;
+        this.monthlyChartRendered = false;
+      }, 100);
+    }
   }
 
   ngOnDestroy() {

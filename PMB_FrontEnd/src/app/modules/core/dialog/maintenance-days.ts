@@ -1,5 +1,5 @@
 export class MaintenanceDays {
-     show: boolean;
+    show: boolean;
     collapsed: boolean;
     dateValue: any;
     maintenance: string;

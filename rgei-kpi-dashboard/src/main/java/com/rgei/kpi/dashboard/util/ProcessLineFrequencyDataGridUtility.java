@@ -21,10 +21,10 @@ import java.math.RoundingMode;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
@@ -40,7 +40,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Map<String, Object>> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			downloadGridResponse.forEach(item -> {
-				Map<String, Object> transferMap = new HashMap<>();
+				Map<String, Object> transferMap = new TreeMap<>();
 				for(Map.Entry<String, Object> entry : item.entrySet()) {
 					if(entry.getKey().equalsIgnoreCase(DashboardConstant.DATE) || ((Double) entry.getValue()).isNaN()) {
 						transferMap.put(entry.getKey().toUpperCase(), entry.getValue());
@@ -62,7 +62,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
-				Map<String, Object> transferMap = new HashMap<>();
+				Map<String, Object> transferMap = new TreeMap<>();
 				for(String processLine: lineList) {
 				transferMap.put(DashboardConstant.DATE, Month.of(Integer.valueOf(String.valueOf(obj[0]).split("\\.")[0])).getDisplayName(TextStyle.SHORT, Locale.ENGLISH)+"-"+String.valueOf(obj[9]).split("\\.")[0]);
 				createResponse(obj, transferMap, processLine);
@@ -76,7 +76,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new HashMap<>();
+			Map<String, Object> transferMap = new TreeMap<>();
 			for (String processLine : lineList) {
 				if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 					transferMap.put(DashboardConstant.DATE, Quarter.Q1.toString() + "/" + String.valueOf(obj[9]).split("\\.")[0]);
@@ -101,7 +101,7 @@ public class ProcessLineFrequencyDataGridUtility {
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new HashMap<>();
+			Map<String, Object> transferMap = new TreeMap<>();
 			for (String processLine : lineList) {
 					transferMap.put(DashboardConstant.DATE, String.valueOf(obj[0]).split("\\.")[0]);
 					createResponse(obj, transferMap, processLine);

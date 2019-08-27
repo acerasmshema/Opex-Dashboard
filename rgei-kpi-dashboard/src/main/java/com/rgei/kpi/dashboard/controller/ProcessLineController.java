@@ -16,6 +16,7 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -142,12 +143,16 @@ public class ProcessLineController {
 	}
 	
 	@GetMapping(value = "/v2/yesterday/ytd_target_process_line")
-	public ResponseEntity<TargetProceessLine> getAnnualTargetProcessLineV2(@RequestHeader(value="millId") String millId,
-			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
-			@RequestHeader(value="kpiId") String kpiId) {
-		logger.info("Fetching annual target for process lines.");
-		TargetProceessLine response = processLinePulpKpiService.getAnnualTargetProcessLineV2(millId, buId, kpiCategoryId, kpiId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+	public ResponseEntity<List<TargetProceessLine>> getAnnualTargetProcessLineV2(@RequestHeader(value="millId") String millId,
+	@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
+	@RequestHeader(value="kpiId") String kpiId) {
+	logger.info("Fetching annual target process line data.");
+	List<TargetProceessLine> response=new ArrayList<TargetProceessLine>();
+	TargetProceessLine targetProductionResponse = processLinePulpKpiService.getAnnualTargetProcessLineV2(millId, buId, kpiCategoryId, kpiId);
+	TargetProceessLine actualProductionResponse = processLinePulpKpiService.getAnnualExtendedProcessLine(millId, buId, kpiCategoryId, kpiId);
+	response.add(actualProductionResponse);
+	response.add(targetProductionResponse);
+	return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/process_line/projected_target_details")
@@ -179,21 +184,21 @@ public class ProcessLineController {
 	public ResponseEntity<List<ProcessLineDetailsResponse>> getProcessLineResponse(@RequestHeader(value="millId") String millId){
 		logger.info("Fetching process line data against the requested location id.", millId);
 		List<ProcessLineDetailsResponse> response = processLineService.getProcessLines(millId);
-		return new ResponseEntity<List<ProcessLineDetailsResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/location/all_mills")
 	public ResponseEntity<List<MillsResponse>> getMills(@RequestHeader(value="countryIds") List<String> countryIds){
 		logger.info("Fetching mills against the requested country ids.", countryIds);
 		List<MillsResponse> response = processLineService.getMillDetails(countryIds);
-		return new ResponseEntity<List<MillsResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/v1/location/get_all_bu_type")
 	public ResponseEntity<List<BuTypeResponse>> getAllBuType(){
 		logger.info("Fetching All BU Types");
 		List<BuTypeResponse> response = processLineService.getAllBuType();
-		return new ResponseEntity<List<BuTypeResponse>>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	

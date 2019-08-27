@@ -31,9 +31,13 @@ public class DashboardConstant {
 	public static final String PROCESS_LINE_PD2="PD2";
 	public static final String PROCESS_LINE_PD3="PD3";
 	public static final String PROCESS_LINE_PD4="PD4";
+	public static final String PROCESS_LINE_PL11="PL11";
+	public static final String PROCESS_LINE_PL12="PL12";
 	public static final String TARGET_LINE="Target";
 	public static final String BLACK="black";
 	public static final String RED="red";
+	public static final String KRC_Avg = "KRC";
+	public static final String RZ_Avg = "RZ";
 	
 	public static final String DATE="DATE";
 	public static final String NAN = "NaN";
@@ -44,6 +48,10 @@ public class DashboardConstant {
 	public static final String DATE_FORMAT = "dd-MMM";
 	public static final String FREQ_DATE_FORMAT = "MMM-yyyy";
 	public static final String FORMAT = "yyyy-MM-dd";
+	public static final String DATE_TIME_FORMAT = "dd-MMM-yyyy hh:mm:ss";
 	public static final String EXTENDED_DATE_FORMAT = "dd-MMM-yyyy";
+	
+	public static final String KRC = "1";
+	public static final String RZ = "3";
 
 }

@@ -54,6 +54,9 @@ public class KpiEntity implements Serializable {
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
+	
+	
+
 
 	//bi-directional many-to-one association to DailyKpiPulp
 	@OneToMany(mappedBy="kpi")
@@ -135,6 +138,9 @@ public class KpiEntity implements Serializable {
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+	
+
+
 
 	public List<DailyKpiPulpEntity> getDailyKpiPulps() {
 		return this.dailyKpiPulps;

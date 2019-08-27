@@ -18,7 +18,8 @@ export class HeaderComponent implements OnInit {
   user: any;
   loginId: any;
   mills: any = [];
-
+  selectedMillName: string;
+  
   constructor(private router: Router,
     private loginService: LoginService,
     private headerService: HeaderService,
@@ -52,6 +53,7 @@ export class HeaderComponent implements OnInit {
       this.statusService.kpiCategoryMap = new Map<string, any>();
       this.statusService.consumptionDetailMap = new Map<string, ConsumptionDetiail>();
       this.statusService.common.selectedMill = this.statusService.common.mills.find((mill) => mill.millId === millId);
+      this.selectedMillName = this.statusService.common.selectedMill.millName;
       this.statusService.changeMill.next();
     }
   }
@@ -72,6 +74,7 @@ export class HeaderComponent implements OnInit {
         this.statusService.common.mills = mills;
         this.mills = this.statusService.common.mills;
       });
-    this.statusService.common.selectedMill = { millId: "1", millName: 'Kerinci' }
+    this.statusService.common.selectedMill = { millId: "1", millName: 'Kerinci', countryId: "1" }
+    this.selectedMillName = this.statusService.common.selectedMill.millName;
   }
 }

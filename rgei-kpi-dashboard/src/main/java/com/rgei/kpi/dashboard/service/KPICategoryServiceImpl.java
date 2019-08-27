@@ -16,6 +16,8 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -31,6 +33,7 @@ import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
+import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
 import com.rgei.kpi.dashboard.util.KPICategoryConverter;
 
 @Service
@@ -60,8 +63,14 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 	}
 
 	@Override
-	public List<KpiTypeExtendedResponse> getKPICategoryDetails(Integer kpiCategoryId) {
-		logger.info("Fetching KPI Category for id", kpiCategoryId);
-		return KPICategoryConverter.convertToResponse(kpiCategoryEntityRepository.findByKpiCategoryId(kpiCategoryId));
+	public List<KpiTypeExtendedResponse> getKPICategoryDetails(List<String> kpiCategoryId) {
+		logger.info("Fetching KPI Category for ids", kpiCategoryId);
+		List<KpiTypeEntity> kpiTypes = new ArrayList<>();
+		Collections.sort(kpiCategoryId);
+		for(String categoryId: kpiCategoryId) {
+		List<KpiTypeEntity> findByKpiCategoryId = kpiCategoryEntityRepository.findByKpiCategoryId(DailyKpiPulpConverter.covertToInteger(categoryId));
+		kpiTypes.addAll(findByKpiCategoryId);
+		}
+		return KPICategoryConverter.convertToResponse(kpiTypes);
 	}
 }
