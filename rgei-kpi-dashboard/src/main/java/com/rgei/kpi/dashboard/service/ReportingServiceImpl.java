@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,6 @@ public class ReportingServiceImpl implements ReportingService {
 	}
 
 	@Override
-	@Transactional
 	public List<LoginDetailResponse> getDistinctUserLoginDetails(String startDate, String endDate, String millId) {
 		logger.info("Inside get distinct login details by MillId :{}", millId);
 		if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {

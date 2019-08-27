@@ -11,8 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
@@ -20,14 +18,11 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class BenchmarkingUtilityKRC {
 	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingUtilityKRC.class);
-	
 	private BenchmarkingUtilityKRC() {
 		
 	}
 	
 	public static List<SeriesObject> getKRCDailyResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
-		logger.info("Get KRC daily response for process line ", kpiProcessLine);
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
@@ -82,7 +77,6 @@ public class BenchmarkingUtilityKRC {
 	}
 	
 	public static List<SeriesObject> getKRCSeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
-		logger.info("Get KRC series response for process line ", kpiProcessLine);
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
@@ -145,7 +139,6 @@ public class BenchmarkingUtilityKRC {
 	}
 
 	public static List<DateRangeResponse> fetchBenchmarkingMonthlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch KRC benchmarking monthly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> krcData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -161,7 +154,6 @@ public class BenchmarkingUtilityKRC {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingQuarterlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch KRC benchmarking quarterly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> krcData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -200,7 +192,6 @@ public class BenchmarkingUtilityKRC {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingYearlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch KRC benchmarking yearly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> krcData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -216,7 +207,6 @@ public class BenchmarkingUtilityKRC {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingDailyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch KRC benchmarking daily data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> krcData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();

@@ -25,21 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineFrequencyUtility {
 	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineFrequencyUtility.class);
-	
 	private ProcessLineFrequencyUtility() {
 	}
 
 	public static List<SeriesObject> getDailySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get daily series response for process line ", processLine);
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
 			SeriesObject val = new SeriesObject();
@@ -85,7 +80,6 @@ public class ProcessLineFrequencyUtility {
 }
 	
 	public static List<SeriesObject> getQuarterlySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get quarterly series response for process line ", processLine);
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
 			SeriesObject val = new SeriesObject();
@@ -122,7 +116,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processPD4(Object[] obj, SeriesObject val) {
-		logger.info("Process PD4");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[8].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -139,7 +132,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processPD3(Object[] obj, SeriesObject val) {
-		logger.info("Process PD3");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[7].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -156,7 +148,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processPD2(Object[] obj, SeriesObject val) {
-		logger.info("Process PD2");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[6].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -173,7 +164,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processPD1(Object[] obj, SeriesObject val) {
-		logger.info("Process PD1");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -190,7 +180,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processPCD(Object[] obj, SeriesObject val) {
-		logger.info("Process PCD");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -207,7 +196,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processFL3(Object[] obj, SeriesObject val) {
-		logger.info("Process FL3");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -224,7 +212,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processFL2(Object[] obj, SeriesObject val) {
-		logger.info("Process FL2");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -241,7 +228,6 @@ public class ProcessLineFrequencyUtility {
 	}
 
 	private static void processFL1(Object[] obj, SeriesObject val) {
-		logger.info("Process FL1");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -258,7 +244,6 @@ public class ProcessLineFrequencyUtility {
 	}
 		
 		public static List<SeriesObject> getMonthlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get monthly series response for process line ", processLine);
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
 				SeriesObject val = new SeriesObject();
@@ -304,7 +289,6 @@ public class ProcessLineFrequencyUtility {
 	}
 		
 		public static List<SeriesObject> getYearlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get yearly series response for process line ", processLine);
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
 				SeriesObject val = new SeriesObject();

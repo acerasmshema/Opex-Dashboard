@@ -32,7 +32,6 @@ public class RgeUserServiceImpl implements RgeUserService{
 
 	@Override
 	public RgeUserResponse getUserById(Long userId) {
-		logger.info("Get user by userId ", userId);
 		Optional<RgeUserEntity> userObject = rgeUserEntityRepository.findById(userId);
 		RgeUserResponse response = null;
 		if(userObject.isPresent()) {
@@ -43,13 +42,11 @@ public class RgeUserServiceImpl implements RgeUserService{
 
 	@Override
 	public RgeUserResponse getUserByName(String name) {
-		logger.info("Get user by name ", name);
 		return UserConverter.convertToResponse(rgeUserEntityRepository.findByLoginId(name.trim()));
 	}
 
 	@Override
 	public RgeUserResponse getUserByEmail(String email) {
-		logger.info("Get user by email ", email);
 		RgeUserEntity userObject = rgeUserEntityRepository.findByEmail(email);
 		return  UserConverter.convertToResponse(userObject);
 	}
@@ -72,7 +69,6 @@ public class RgeUserServiceImpl implements RgeUserService{
 	}
 
 	private void populateLoginDetails(RgeUserEntity entity) {
-		logger.info("Populate login details", entity);
 		if(entity != null) {
 			List<LoginDetailEntity> loginDetails = loginDetailEntityRepository.findByRgeUserEntity_UserIdAndStatus(entity.getUserId(), Boolean.TRUE);
 			if(!loginDetails.isEmpty()) {

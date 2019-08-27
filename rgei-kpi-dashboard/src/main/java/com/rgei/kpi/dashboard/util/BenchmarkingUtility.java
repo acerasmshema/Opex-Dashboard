@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiProcessLineEntity;
@@ -20,14 +18,11 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class BenchmarkingUtility {
 	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingUtility.class);
-	
 	private BenchmarkingUtility() {
 		
 	}
 	
 	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
-		logger.info("Convert Kpi Entity to Kpi Object", entity, millId);
 		Kpi kpiObject = new Kpi();
 		if(Boolean.TRUE.equals(entity.getActive())) {
 		List<String> kpiProcessLines = new ArrayList<>();
@@ -57,7 +52,6 @@ public class BenchmarkingUtility {
 	}
 
 	public static Map<String, List<String>> fetchProcessLines(List<Kpi> kpiList) {
-		logger.info("Fetching process lines for Kpi List ", kpiList);
 		Map<String, List<String>> linesList = new TreeMap<>();
 		List<String> krcProcessLines = new ArrayList<>();
 		List<String> rzProcessLines = new ArrayList<>();
@@ -72,7 +66,6 @@ public class BenchmarkingUtility {
 
 	public static void getMergedResponse(List<DateRangeResponse> benchmarkingDataKRC,
 			List<DateRangeResponse> benchmarkingDataRZ, List<DateRangeResponse> resultList) {
-		logger.info("Fetching merged response");
 		DateRangeResponse obj = null;
 		for(int i=0;i<benchmarkingDataKRC.size();i++) {
 			obj = benchmarkingDataKRC.get(i);

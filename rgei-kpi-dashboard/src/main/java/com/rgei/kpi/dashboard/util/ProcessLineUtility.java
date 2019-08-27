@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
@@ -41,8 +39,6 @@ import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineUtility {
-	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineUtility.class);
 	
 	private ProcessLineUtility() {
 	}
@@ -58,7 +54,6 @@ public class ProcessLineUtility {
 	}
 	
 	public static List<String> fetchProcessLines(List<ProcessLine> processLines, List<String> lineList) {
-		logger.info("Fetch process lines");
 		List<String> processLinesList = new ArrayList<>();
 		List<String> finalKpiProcessLines = new ArrayList<>();
 		for(ProcessLine line : processLines) {

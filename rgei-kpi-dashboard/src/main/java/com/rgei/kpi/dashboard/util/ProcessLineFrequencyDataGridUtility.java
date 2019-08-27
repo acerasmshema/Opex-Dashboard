@@ -26,13 +26,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
 public class ProcessLineFrequencyDataGridUtility {
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineFrequencyDataGridUtility.class);
 	
 	private ProcessLineFrequencyDataGridUtility() {
 	}
@@ -41,7 +38,6 @@ public class ProcessLineFrequencyDataGridUtility {
 	 * Api is to get the result for download data grid
 	 */
 	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Map<String, Object>> downloadGridResponse) {
-		logger.info("Get grid data daily response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			downloadGridResponse.forEach(item -> {
 				Map<String, Object> transferMap = new TreeMap<>();
@@ -64,7 +60,6 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 	
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
-		logger.info("Get grid data monthly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
 				Map<String, Object> transferMap = new TreeMap<>();
@@ -79,7 +74,6 @@ public class ProcessLineFrequencyDataGridUtility {
 	
 	
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
-		logger.info("Get grid data quarterly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new TreeMap<>();
@@ -105,7 +99,6 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
-		logger.info("Get grid data yearly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new TreeMap<>();
@@ -119,7 +112,6 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 	
 	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
-		logger.info("Create response for process line ", processLine);
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			transferMap.put(processLine, new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());

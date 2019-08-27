@@ -38,7 +38,6 @@ public class ProcessLineServiceImpl implements ProcessLineService{
 
 	@Override
 	public List<ProcessLineDetailsResponse> getProcessLines(String millId) {
-		logger.info("Get process lines for millId ", millId);
 		if(Objects.nonNull(millId)) {
 			List<ProcessLineEntity> processLine = processLineRepository.getPrcessLineByLocation(CommonFunction.covertToInteger(millId), Boolean.TRUE);
 			return ProcessLineUtility.generateResponse(processLine);
@@ -48,7 +47,6 @@ public class ProcessLineServiceImpl implements ProcessLineService{
 
 	@Override
 	public List<MillsResponse> getMillDetails(List<String> countryIds) {
-		logger.info("Get mill details for country ids ", countryIds);
 		if(countryIds != null && !countryIds.isEmpty()) {
 			List<Integer> ids = new ArrayList<>();
 			for(String s:countryIds) {
@@ -62,7 +60,6 @@ public class ProcessLineServiceImpl implements ProcessLineService{
 
 	@Override
 	public List<BuTypeResponse> getAllBuType() {
-		logger.info("Fetch all BU Types");
 		List<BuTypeResponse> buTypeResponse=null; 
 		try {
 			Optional<List<BusinessUnitTypeEntity>> businessUnitTypeEntity  = Optional.ofNullable(businessUnitTypeRepository.findAll());

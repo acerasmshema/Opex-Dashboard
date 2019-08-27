@@ -11,22 +11,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class BenchmarkingUtilityRZ {
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingUtilityRZ.class);
 	
 	private BenchmarkingUtilityRZ() {
 		
 	}
 	
 	public static List<SeriesObject> getRZDailyResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
-		logger.info("Get RZ daily response for process line ", kpiProcessLine);
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_PD1:
@@ -66,7 +62,6 @@ public class BenchmarkingUtilityRZ {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingMonthlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch RZ benchmarking monthly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> rzData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -82,7 +77,6 @@ public class BenchmarkingUtilityRZ {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingQuarterlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch RZ benchmarking quarterly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> rzData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -121,7 +115,6 @@ public class BenchmarkingUtilityRZ {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingDailyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch RZ benchmarking daily data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> rzData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -137,7 +130,6 @@ public class BenchmarkingUtilityRZ {
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingYearlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
-		logger.info("Fetch RZ benchmarking yearly data for process lines ", finalBenchmarkingProcessLines);
 		List<DateRangeResponse> rzData = new ArrayList<>();
 		for(Object[] obj:responseEntity) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -153,7 +145,6 @@ public class BenchmarkingUtilityRZ {
 	}
 	
 	public static List<SeriesObject> getRZSeriesResponse(Object[] obj, String kpiProcessLine, SeriesObject val, List<SeriesObject> series) {
-		logger.info("Get RZ series response for process line ", kpiProcessLine);
 		double value;
 		switch (kpiProcessLine) {
 		case DashboardConstant.PROCESS_LINE_PD1:

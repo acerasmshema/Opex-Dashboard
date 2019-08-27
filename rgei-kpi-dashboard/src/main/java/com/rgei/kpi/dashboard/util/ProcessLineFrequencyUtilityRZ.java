@@ -25,21 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineFrequencyUtilityRZ {
 	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineFrequencyUtilityRZ.class);
-	
 	private ProcessLineFrequencyUtilityRZ() {
 	}
 
 	public static List<SeriesObject> getDailySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get daily series of RZ response for process line ", processLine);
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
 			SeriesObject val = new SeriesObject();
@@ -73,7 +68,6 @@ public class ProcessLineFrequencyUtilityRZ {
 }
 	
 	public static List<SeriesObject> getQuarterlySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get quarterly series of RZ response for process line ", processLine);
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
 			SeriesObject val = new SeriesObject();
@@ -101,7 +95,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 
 	private static void processPL12(Object[] obj, SeriesObject val) {
-		logger.info("Process PL12");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -118,7 +111,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 
 	private static void processPL11(Object[] obj, SeriesObject val) {
-		logger.info("Process PL11");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -135,7 +127,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 
 	private static void processPD3(Object[] obj, SeriesObject val) {
-		logger.info("Process PD3");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -152,7 +143,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 
 	private static void processPD2(Object[] obj, SeriesObject val) {
-		logger.info("Process PD2");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -169,7 +159,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 
 	private static void processPD1(Object[] obj, SeriesObject val) {
-		logger.info("Process PD1");
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
 			val.setValue(new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
@@ -186,7 +175,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 		
 		public static List<SeriesObject> getMonthlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get monthly series response for process line ", processLine);
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
 				SeriesObject val = new SeriesObject();
@@ -220,7 +208,6 @@ public class ProcessLineFrequencyUtilityRZ {
 	}
 		
 		public static List<SeriesObject> getYearlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get yearly series response for process line ", processLine);
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
 				SeriesObject val = new SeriesObject();

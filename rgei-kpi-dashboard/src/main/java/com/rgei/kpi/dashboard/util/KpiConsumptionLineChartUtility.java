@@ -26,21 +26,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import com.rgei.crosscutting.logger.RgeiLoggerFactory;
-import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class KpiConsumptionLineChartUtility {
 	
-	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiConsumptionLineChartUtility.class);
-	
 	private KpiConsumptionLineChartUtility() {
 	}
 
 	public static List<SeriesObject> getDailySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get daily series response for process line ", processLine);
 		double value;
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
@@ -88,7 +83,6 @@ public class KpiConsumptionLineChartUtility {
 }
 	
 	public static List<SeriesObject> getQuarterlySeriesResponse(String processLine, List<Object[]> values) {
-		logger.info("Get quarterly series response for process line ", processLine);
 		ArrayList<SeriesObject> series = new ArrayList<>();
 		for(Object[] obj: values) {
 			SeriesObject val = new SeriesObject();
@@ -125,7 +119,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processPD4(Object[] obj, SeriesObject val) {
-		logger.info("Process PD4");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -147,7 +140,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processPD3(Object[] obj, SeriesObject val) {
-		logger.info("Process PD3");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -169,7 +161,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processPD2(Object[] obj, SeriesObject val) {
-		logger.info("Process PD2");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -191,7 +182,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processPD1(Object[] obj, SeriesObject val) {
-		logger.info("Process PD1");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -213,7 +203,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processPCD(Object[] obj, SeriesObject val) {
-		logger.info("Process PCD");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -235,7 +224,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processFL3(Object[] obj, SeriesObject val) {
-		logger.info("Process FL3");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -257,7 +245,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processFL2(Object[] obj, SeriesObject val) {
-		logger.info("Process FL2");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -279,7 +266,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 
 	private static void processFL1(Object[] obj, SeriesObject val) {
-		logger.info("Process FL1");
 		double value;
 		if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 			val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[9]).split("\\.")[0]);
@@ -301,7 +287,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 		
 		public static List<SeriesObject> getMonthlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get monthly series response for process line ", processLine);
 			double value;
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
@@ -349,7 +334,6 @@ public class KpiConsumptionLineChartUtility {
 	}
 		
 		public static List<SeriesObject> getYearlySeriesResponse(String processLine, List<Object[]> values) {
-			logger.info("Get yearly series response for process line ", processLine);
 			double value;
 			ArrayList<SeriesObject> series = new ArrayList<>();
 			for(Object[] obj: values) {
