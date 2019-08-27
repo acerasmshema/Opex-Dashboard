@@ -30,7 +30,7 @@ CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.cl
 	private BenchmarkingService benchmarkingService;
 
 	@PostMapping(value = "/v1/benchmarking/get_selected_data")
-	public ResponseEntity<BenchmarkingReponse> getMaintainanceDetails(
+	public ResponseEntity<BenchmarkingReponse> getBenchmarkingData(
 			@RequestBody BenchmarkingRequest benchmarkingRequest) {
 		logger.info("Inside Benchmarking controller to fetch benchmarking data");
 		BenchmarkingReponse response = benchmarkingService.getBenchmarkingData(benchmarkingRequest);
