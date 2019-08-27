@@ -82,7 +82,7 @@ public class RgeUserEntity implements Serializable {
 	@ManyToMany(mappedBy="rgeUsers", fetch = FetchType.EAGER)
 	private List<UserRoleEntity> userRoles;
 	
-	@OneToMany(mappedBy="rgeUserEntity")
+	@OneToMany(mappedBy="rgeUserEntity", fetch = FetchType.LAZY)
 	private List<LoginDetailEntity> loginDetails;
 	
 	@OneToMany(mappedBy="user", fetch = FetchType.EAGER)

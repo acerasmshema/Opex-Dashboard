@@ -21,6 +21,8 @@ import java.util.Collections;
 
 import java.util.List;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
@@ -31,11 +33,14 @@ import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 
 public class KPICategoryConverter {
 	
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KPICategoryConverter.class);
+	
 	//no-arg construtor
 	private KPICategoryConverter() {
 	}
 	
 	public static List<KpiTypeResponse> covertToResponse(List<KpiTypeEntity> kpiTypeEntities) {
+		logger.info("Creating KpiTypeResponse");
 		List<KpiTypeResponse> kpiTypeResponseList = null;
 		KpiTypeResponse kpiTypeResponse = null;
 		if(!kpiTypeEntities.isEmpty()) {
@@ -51,6 +56,7 @@ public class KPICategoryConverter {
 	}
 	
 	public static List<ProcessLinesResponse> covertToProcessLineResponse(List<ProcessLineEntity> processLinesEntities) {
+		logger.info("Creating ProcessLinesReponse");
 		List<ProcessLinesResponse> processLines = null;
 		ProcessLinesResponse processLinesResponse = null;
 		if(!processLinesEntities.isEmpty()) {
@@ -66,6 +72,7 @@ public class KPICategoryConverter {
 	}
 
 	public static List<KpiTypeExtendedResponse> convertToResponse(List<KpiTypeEntity> kpiTypeEntities) {
+		logger.info("Creating KpiTypeExtendedResponse");
 		KpiTypeDetails KpiDetails = null;
 		KpiTypeExtendedResponse response = null;
 		List<KpiTypeDetails> kpiTypeList = null;
