@@ -366,6 +366,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getYearlyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
+		logger.info("Creating yearly frequency response for process line request ", processLineRequest);
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
@@ -386,6 +387,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getQuarterlyFrequencyResponse(ProcessLineRequest processLineRequest,
 			List<DateRangeResponse> resultList, List<String> lineList) {
+		logger.info("Creating quarterly frequency response for process line request ", processLineRequest);
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
@@ -406,6 +408,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getMonthlyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
+		logger.info("Creating monthly frequency response for process line request ", processLineRequest);
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
@@ -425,6 +428,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getDailyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
+		logger.info("Creating daily frequency response for process line request ", processLineRequest);
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesDailyTotal(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
 				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
@@ -444,6 +448,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	
 	private void getYearlyFrequencyGridData(ProcessLineRequest processLineRequest, List<String> lineList,
 			List<List<Map<String, Object>>> responseData) {
+		logger.info("Creating yearly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
@@ -460,6 +465,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getQuarterlyFrequencyGridData(ProcessLineRequest processLineRequest, List<String> lineList,
 			List<List<Map<String, Object>>> responseData) {
+		logger.info("Creating quarterly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
@@ -476,6 +482,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getMonthlyFrequencyGridData(ProcessLineRequest processLineRequest, List<String> lineList,
 			List<List<Map<String, Object>>> responseData) {
+		logger.info("Creating monthly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
 		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
 				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
@@ -492,6 +499,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 
 	private void getDailyFrequencyGridData(ProcessLineRequest processLineRequest, List<String> lineList,
 			List<List<Map<String, Object>>> responseData) {
+		logger.info("Creating daily frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response= null;
 		if (DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())) {
 			List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGrid(

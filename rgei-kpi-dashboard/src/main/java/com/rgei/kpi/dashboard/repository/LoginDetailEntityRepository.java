@@ -38,6 +38,6 @@ public interface LoginDetailEntityRepository extends CrudRepository<LoginDetailE
 	@Query("Select l from LoginDetailEntity l where date(l.loginTime) between :startDate and :endDate order by date(l.loginTime) asc")
 	public List<LoginDetailEntity> findAllLoginDetailsByLoginTime(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 	
-	@Query("Select distinct l.rgeUserEntity from LoginDetailEntity l where date(l.loginTime) between :startDate and :endDate")
+	@Query("Select distinct l.rgeUserEntity from LoginDetailEntity l inner join RgeUserEntity ru on l.rgeUserEntity.userId = ru.userId where date(l.loginTime) between :startDate and :endDate")
 	public List<RgeUserEntity> findDistinctLoginDetailsByLoginTime(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }
