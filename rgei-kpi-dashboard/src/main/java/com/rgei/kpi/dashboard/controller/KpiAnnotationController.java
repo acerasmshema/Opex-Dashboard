@@ -43,7 +43,7 @@ import com.rgei.kpi.dashboard.service.KpiAnnotationService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class KpiAnnotationController {
 	
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiAnnotationController.class);
@@ -52,7 +52,7 @@ public class KpiAnnotationController {
 	private KpiAnnotationService kpiAnnotationService;
 
 
-	@PostMapping(value = "/kpi_annotation/save_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/save_annotation")
 	public ResponseEntity<HttpStatus> saveAnnotationRequest(
 			@RequestBody KpiAnnotationRequest kpiAnnotationRequest) {
 		logger.info("Save annotation request", kpiAnnotationRequest);
@@ -60,7 +60,7 @@ public class KpiAnnotationController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/kpi_annotation/get_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/get_annotation")
 	public ResponseEntity<List<KpiAnnotationResponse>> getAnnotationRequest(
 			@RequestBody KpiAnnotationSearchRequest kpiAnnotationSearchRequest) {
 		logger.info("Get annotation request", kpiAnnotationSearchRequest);
@@ -68,7 +68,7 @@ public class KpiAnnotationController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/kpi_annotation/get_annotation_date")
+	@PostMapping(value = "/v1/kpi_annotation/get_annotation_date")
 	public ResponseEntity<KpiAnnotationDateSerachRes> getAnnotationByDate(
 			@RequestBody KpiAnnotationDateRangeSerach kpiAnnotationDateRangeSerach) {
 		logger.info("Get annotation by date", kpiAnnotationDateRangeSerach);
@@ -76,7 +76,7 @@ public class KpiAnnotationController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@DeleteMapping(value = "/kpi_annotation/delete_annotation")
+	@DeleteMapping(value = "/v1/kpi_annotation/delete_annotation")
 	public ResponseEntity<HttpStatus> deleteAnnotation(
 			@RequestBody List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
 		logger.info("delete annotation", kpiAnnotationDeleteRequest);

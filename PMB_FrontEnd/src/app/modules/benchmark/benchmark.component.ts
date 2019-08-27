@@ -40,8 +40,8 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  public showGridDialog(kpiId: string, kpiName: string) {
-    this.becnhmarkService.downloadBenchmarkData(kpiId, kpiName);
+  public showGridDialog(kpiId: string, kpiName: string, isDaily: boolean) {
+    this.becnhmarkService.downloadBenchmarkData(+kpiId, kpiName, isDaily);
   }
 
   ngOnDestroy() {

@@ -261,7 +261,7 @@ public class KpiDashboardCategoryUtility {
 				for (KpiEntity kpi : value.getKpis()) {
 					populateKPITypeDTO(kpiType, value, kpi, millId);
 				}
-				sortResponse(kpiType);
+			//	sortResponse(kpiType);
 			}
 		}
 		return kpiType;
