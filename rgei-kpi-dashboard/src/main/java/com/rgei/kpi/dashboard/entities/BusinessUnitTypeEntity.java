@@ -18,6 +18,9 @@ package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -56,15 +59,18 @@ public class BusinessUnitTypeEntity implements Serializable {
 	private Timestamp updatedDate;
 
 	//bi-directional many-to-one association to BusinessUnit
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="business_unit_id")
 	private BusinessUnitEntity businessUnit;
 
 	//bi-directional many-to-one association to DailyKpiPulp
+	@JsonIgnore
 	@OneToMany(mappedBy="businessUnitType")
 	private List<DailyKpiPulpEntity> dailyKpiPulps;
 
 	//bi-directional many-to-one association to KpiAnnotation
+	@JsonIgnore
 	@OneToMany(mappedBy="businessUnitType")
 	private List<KpiAnnotationEntity> kpiAnnotations;
 
