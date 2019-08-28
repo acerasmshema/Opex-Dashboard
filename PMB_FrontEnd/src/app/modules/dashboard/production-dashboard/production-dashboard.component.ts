@@ -89,6 +89,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
   }
 
+
+
   setProductionLineForm() {
     this.producionLineForm = new ProducionLineForm();
     this.producionLineForm.frequencies = MasterData.dashboardFrequencies;
@@ -96,9 +98,13 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.producionLineForm.endDate = this.endDate;
   }
 
+
+
   public changeMonthlyChartType() {
     this.monthlyChart.chartType = (this.monthlyChart.chartType === 'stack-bar') ? 'stack-area' : 'stack-bar';
   }
+
+
 
   public getProductionYDayData() {
     this.yesterdayProductionData = new ProductionLine();
@@ -450,4 +456,104 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.updateChartSubscription.unsubscribe();
     this.projectTargetSubscription.unsubscribe();
   }
+
+  
+sroItem: any[] = [];
+productionRequestHD:any;
+
+ getDataForProductionGrid(startDate: string, endDate: string, frequancy: any) {
+    let productionRequest = new ProductionRequest();
+    // console.log("productionRequest : ",productionRequest);
+    this.productionRequestHD = this.getProductionRequest(startDate,endDate,[],frequancy);
+    // console.log("productionRequest2  ",this.productionRequestHD);
+    const newWork = this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequestHD).subscribe((data: any) => {
+      console.log("this the data ",data);
+      data.map(ob => {
+        ob.map(newdata => {
+          for (let each in newdata) {
+            if (newdata.hasOwnProperty(each)) {
+              this.getSroValues(each.toUpperCase(), newdata[each])
+            }
+          }
+        });
+      })
+    });
+  }
+
+
+
+  getSroValues(newDataKeys, newDataValues) {
+    const requestData = { kpiCategoryId: '1' };
+    this.productionService.getkpiCatForYDayAllProcessLineData(this.productionRequestHD)
+      .subscribe((data: any) => {
+        data.map(ob => {
+          ob.series.map(sro => {
+            sro['id'] = newDataKeys;
+            if (sro['value'] != null || sro['value'] != "N/A") {
+              if (sro['name'] === sro['id']) {
+                sro['value'] = newDataValues;
+                this.parseAndGetColor(sro);
+                // console.log('this parseAndGetColor ',sro);
+                sro['color'] = this.parseAndGetColor(sro);
+                this.sroItem.push(sro);
+              }
+            }
+          })
+        });
+      });
+  }
+
+  parseAndGetColor(sro) {
+    let prev = 0;
+    let ar = sro.target.split(",");
+    let blackValue, redValue: number;
+
+    if (sro.value === "N/A" || sro.value === null) {
+      return 'red';
+    } else {
+      for (let v1 of ar) {
+        let ix = v1.split(":");
+        if (ix[0].trim() === "black") {
+          blackValue = parseInt(ix[1].trim());
+        } else if (ix[0].trim() === "red") {
+          redValue = parseInt(ix[1].trim());
+        }
+      }
+      if (sro.value <= blackValue && sro.value <= redValue) {
+        return 'red';
+      } else if (sro.value <= blackValue && sro.value >= redValue) {
+        return 'black'
+      } else if (sro.value >= blackValue && sro.value >= redValue) {
+        return 'black';
+      }
+    }
+  }
+
+ 
+
+
+  
+ checkSroColor(data_header, data_value) {
+ 
+  //  console.log('This the data header', data_header);
+  //  console.log('This the data value', data_value);
+    if (this.sroItem.length > 0) {
+      // debugger;
+      console.log("The sroItem above 0" , this.sroItem);
+      for (let eachLineofSroItem of this.sroItem) {
+        if (eachLineofSroItem.value == data_value) {
+          // console.log("eachLineofSroItem.color ",eachLineofSroItem.color);
+          // return 'red';
+          return eachLineofSroItem.color;
+        }
+      }
+    }
+    // console.log("SroInfo", this.sroItem);
+
+
+
+  }
+
+
+
 }

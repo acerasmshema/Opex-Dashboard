@@ -11,6 +11,7 @@ export class ProductionService {
   annualTarget = AppConstants.apiURLs.ANNUAL_TARGET_URL;
   projectedData = AppConstants.apiURLs.PROJECTED_DATA_URL;
   ydayAllProcessLines = AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
+  kpiCatForYDayAllProcessLineData = AppConstants.apiURLs.KPI_CAT_YDAY_ALL_PROCESS_LINE_URL;
   kpiPulpArea = AppConstants.apiURLs.KPI_PULP_AREA_URL;
   kpiPulp = AppConstants.apiURLs.KPI_PULP_URL;
   ytdProcessLineTarget = AppConstants.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
@@ -29,6 +30,12 @@ export class ProductionService {
   public getProductionYDayData(data: object) {
     return this.apiCallService.callGetAPIwithData(this.ydayProcessLines, data);
   }
+
+  
+  public getkpiCatForYDayAllProcessLineData(data:object){
+    return this.apiCallService.callGetAPIwithData(this.kpiCatForYDayAllProcessLineData,data);
+  }
+
 
   public getAnnualTarget(data: object) {
     return this.apiCallService.callGetAPIwithData(this.annualTarget, data);
