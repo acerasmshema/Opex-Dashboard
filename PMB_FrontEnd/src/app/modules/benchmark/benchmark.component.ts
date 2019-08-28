@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
   providers: [BenchmarkService]
 })
 export class BenchmarkComponent implements OnInit, OnDestroy {
+  public isShowBenchmark: boolean = false;
   public benchmarkList: ConsumptionModel[] = [];
   benchmarkSubscription: Subscription;
 
@@ -32,6 +33,7 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
         this.statusService.benchmarkList = [];
         this.benchmarkList = this.statusService.benchmarkList;
         this.becnhmarkService.filterCharts(searchKpiData);
+        this.isShowBenchmark = true;
       })
   }
 

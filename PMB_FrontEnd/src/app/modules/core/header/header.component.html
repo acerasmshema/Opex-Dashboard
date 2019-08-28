@@ -22,7 +22,7 @@
                   class="fa fa-dot-circle-o"></i><span class="header-size">
                   {{ 'Benchmark' | translate }}</span></a>
             </li>  
-            <li class="nav-item ">
+            <li *ngIf="selectedMillName === 'Kerinci'" class="nav-item ">
               <a class="nav-link" routerLink='/home/kappaAnalytics' style="color:white;"><i class="fa fa-users"></i><span class="header-size">
                   {{ 'Digester Kappa Analytics' | translate }}</span></a>
             </li>

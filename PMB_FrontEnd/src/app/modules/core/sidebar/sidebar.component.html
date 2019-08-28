@@ -12,7 +12,7 @@
                             </p-dropdown>
                         </div>
                         <div class="form-group">
-                            <label class="labelClass"><i
+                            <label class="labelClass"><if
                                     class="fa fa-fw fa-location-arrow"></i></label>
                             <p-dropdown [options]="sidebarForm.mills" [(ngModel)]="searchKpiData.mill"
                                 [ngModelOptions]="{standalone: true}" [hidden]="sidebarForm.hide"
@@ -51,7 +51,8 @@
                             <ejs-daterangepicker [hidden]="sidebarForm.hide"
                                 [class]="(!sidebarForm.dateError) ? 'daterangepicker' : 'daterangepicker error'"
                                 id='daterangepicker' [(ngModel)]="searchKpiData.date"
-                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}">
+                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}"
+                                (change)="onDateValidation()">
                             </ejs-daterangepicker>
                         </div>
                         <div *ngIf="sidebarForm.dateError">
@@ -92,7 +93,7 @@
                                 [class]="(!sidebarForm.millsError) ? '' : 'error'" [options]="sidebarForm.mills"
                                 [hidden]="sidebarForm.hide" [panelStyle]="{minWidth:'12em'}"
                                 [style]="{width: '173px', height: '35px'}" scrollHeight="250px" defaultLabel="Mill"
-                                optionLabel="millName">
+                                optionLabel="millName" (click)="onMillValidation()">
                             </p-multiSelect>
                         </div>
                         <div *ngIf="sidebarForm.millsError">
@@ -115,7 +116,8 @@
                             <ejs-daterangepicker [hidden]="sidebarForm.hide"
                                 [class]="(!sidebarForm.dateError) ? 'daterangepicker' : 'daterangepicker error'"
                                 id='daterangepicker' [(ngModel)]="searchKpiData.date"
-                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}">
+                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}"
+                                (change)="onDateValidation()">
                             </ejs-daterangepicker>
                         </div>
                         <div *ngIf="sidebarForm.dateError">
