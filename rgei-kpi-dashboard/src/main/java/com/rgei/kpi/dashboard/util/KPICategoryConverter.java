@@ -18,7 +18,6 @@ package com.rgei.kpi.dashboard.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import java.util.List;
 
 import com.rgei.kpi.dashboard.entities.KpiEntity;
@@ -69,7 +68,7 @@ public class KPICategoryConverter {
 		KpiTypeDetails KpiDetails = null;
 		KpiTypeExtendedResponse response = null;
 		List<KpiTypeDetails> kpiTypeList = null;
-		// sortResponse(kpiTypeEntities);
+		sortResponse(kpiTypeEntities);
 		List<KpiTypeExtendedResponse> responses = new ArrayList<KpiTypeExtendedResponse>();
 		if (kpiTypeEntities != null && !kpiTypeEntities.isEmpty()) {
 			List<KpiEntity> kpiEntityList = null;
