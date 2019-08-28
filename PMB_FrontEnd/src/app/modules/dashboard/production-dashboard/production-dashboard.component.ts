@@ -62,6 +62,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe(() => {
         this.getProjectedTarget();
       });
+      
   }
 
   openProductionDashboard() {
@@ -87,6 +88,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
+    this.getDataForProductionGrid(this.startDate, this.endDate, frequency);
   }
 
 
@@ -462,14 +464,13 @@ sroItem: any[] = [];
 productionRequestHD:any;
 
  getDataForProductionGrid(startDate: string, endDate: string, frequancy: any) {
-    let productionRequest = new ProductionRequest();
-    // console.log("productionRequest : ",productionRequest);
     this.productionRequestHD = this.getProductionRequest(startDate,endDate,[],frequancy);
-    // console.log("productionRequest2  ",this.productionRequestHD);
-    const newWork = this.productionService.getSelectedProductionLinesDateRangeData(this.productionRequestHD).subscribe((data: any) => {
+    const newWork = this.productionService.getAllProductionLinesDateForGrid(this.productionRequestHD).subscribe((data: any) => {
       console.log("this the data ",data);
       data.map(ob => {
+        console.log("OB: ",ob);
         ob.map(newdata => {
+          console.log("newdata: ",newdata);
           for (let each in newdata) {
             if (newdata.hasOwnProperty(each)) {
               this.getSroValues(each.toUpperCase(), newdata[each])
@@ -483,7 +484,7 @@ productionRequestHD:any;
 
 
   getSroValues(newDataKeys, newDataValues) {
-    const requestData = { kpiCategoryId: '1' };
+    // const requestData = { kpiCategoryId: '1' };
     this.productionService.getkpiCatForYDayAllProcessLineData(this.productionRequestHD)
       .subscribe((data: any) => {
         data.map(ob => {
@@ -493,7 +494,7 @@ productionRequestHD:any;
               if (sro['name'] === sro['id']) {
                 sro['value'] = newDataValues;
                 this.parseAndGetColor(sro);
-                // console.log('this parseAndGetColor ',sro);
+                console.log('this parseAndGetColor ',sro);
                 sro['color'] = this.parseAndGetColor(sro);
                 this.sroItem.push(sro);
               }
@@ -529,29 +530,17 @@ productionRequestHD:any;
     }
   }
 
- 
 
 
-  
  checkSroColor(data_header, data_value) {
- 
-  //  console.log('This the data header', data_header);
-  //  console.log('This the data value', data_value);
-    if (this.sroItem.length > 0) {
-      // debugger;
-      console.log("The sroItem above 0" , this.sroItem);
+     if (this.sroItem.length > 0) {
       for (let eachLineofSroItem of this.sroItem) {
         if (eachLineofSroItem.value == data_value) {
-          // console.log("eachLineofSroItem.color ",eachLineofSroItem.color);
-          // return 'red';
           return eachLineofSroItem.color;
         }
       }
     }
-    // console.log("SroInfo", this.sroItem);
-
-
-
+ 
   }
 
 
