@@ -10,14 +10,16 @@
                                     <h4 style="padding-left: 36%">{{benchmark.kpiName}}</h4>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="m-l-5" (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName)">
+                                    <div class="m-l-5"
+                                        (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName, true)">
                                         <i class="fa fa-download fa-2x"></i>
                                         <span class="daily-download">Daily</span>
                                     </div>
                                     <label for=""></label>
                                 </div>
                                 <div class="col-md-1">
-                                    <span class="m-l-5" (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName)">
+                                    <span class="m-l-5"
+                                        (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName, false)">
                                         <i class="fa fa-download fa-2x"></i>
                                     </span>
                                 </div>
@@ -30,10 +32,11 @@
                                             [yAxis]="benchmark.yAxis" [legend]="benchmark.legend"
                                             [showXAxisLabel]="benchmark.showXAxisLabel"
                                             [showYAxisLabel]="benchmark.showYAxisLabel"
-                                            [barPadding]="benchmark.barPadding" [yScaleMax]="4.0"
+                                            [barPadding]="benchmark.barPadding" [yScaleMax]="benchmark.yScaleMax"
                                             [groupPadding]="benchmark.groupPadding"
                                             [showDataLabel]="benchmark.showDataLabel"
-                                            [xAxisLabel]="benchmark.xAxisLabel" [yAxisLabel]="benchmark.yAxisLabel"
+                                            [roundEdges]="benchmark.roundEdges" [xAxisLabel]="benchmark.xAxisLabel"
+                                            [yAxisLabel]="benchmark.yAxisLabel"
                                             [dataLabelFormatting]="boundFormatDataLabel">
                                         </ngx-charts-bar-vertical-2d>
                                     </div>

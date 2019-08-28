@@ -69,6 +69,7 @@ public class DailyKpiPulpConverterRZ {
 
 	public static ProcessLineResponse prePareResponse(List<ProcessLineEntity> processLineEntites,
 			List<DailyKpiPulpEntity> dailyKpiPulpEntities,MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
+		logger.info("Prepare process line response for RZ");
 		ProcessLineResponse response = new ProcessLineResponse();
 		Double allProcessSum =0.0D;
 		if(!dailyKpiPulpEntities.isEmpty()) {
@@ -125,6 +126,7 @@ public class DailyKpiPulpConverterRZ {
 	
 	public static ProcessLineAnnualResponse prePareResponse(MillBuKpiCategoryEntity millBuKpiCategoryEntity,
 			List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+		logger.info("Prepare process line annual response for RZ");
 		ProcessLineAnnualResponse response = new ProcessLineAnnualResponse();
 		Double allProcessSum =0.0D; 
 		if(!dailyKpiPulpEntities.isEmpty()) {
@@ -146,6 +148,7 @@ public class DailyKpiPulpConverterRZ {
 
 	
 	public static List<ProcessLineSeries> prePareDailyTargetResponse(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+		logger.info("Prepare daily target response for RZ");
 		List<ProcessLineSeries> seriesList = new ArrayList<>();
 		ProcessLineSeries series = null;
 		Double processSum = 0.0D;
@@ -246,6 +249,7 @@ public class DailyKpiPulpConverterRZ {
 	}
 	
 	public static List<DateRangeResponse> createDailyKpiPulpResponseForBarChart(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+		logger.info("Create daily Kpi Pulp response for Bar Chart - RZ");
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<String> lineList = getRequestedProcessLines();
 		lineList.forEach(item -> 
@@ -269,6 +273,7 @@ public class DailyKpiPulpConverterRZ {
 	}
 
 	public static List<DateRangeResponse> createDailyKpiPulpResponseForAreaChart(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+		logger.info("Create daily Kpi Pulp response for Area Chart - RZ");
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<String> lineList = getRequestedProcessLines();
 		

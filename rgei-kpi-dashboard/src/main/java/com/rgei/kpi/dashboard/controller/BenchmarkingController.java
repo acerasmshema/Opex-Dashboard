@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.controller;
 
+import java.util.Calendar;
+
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,7 @@ import com.rgei.kpi.dashboard.service.BenchmarkingService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class BenchmarkingController {
 	
 CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.class);
@@ -27,8 +29,8 @@ CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.cl
 	@Resource
 	private BenchmarkingService benchmarkingService;
 
-	@PostMapping(value = "/benchmarking/get_selected_data")
-	public ResponseEntity<BenchmarkingReponse> getMaintainanceDetails(
+	@PostMapping(value = "/v1/benchmarking/get_selected_data")
+	public ResponseEntity<BenchmarkingReponse> getBenchmarkingData(
 			@RequestBody BenchmarkingRequest benchmarkingRequest) {
 		logger.info("Inside Benchmarking controller to fetch benchmarking data");
 		BenchmarkingReponse response = benchmarkingService.getBenchmarkingData(benchmarkingRequest);

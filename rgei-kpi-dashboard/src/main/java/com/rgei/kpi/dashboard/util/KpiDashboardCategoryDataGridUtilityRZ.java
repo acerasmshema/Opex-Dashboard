@@ -27,10 +27,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
 public class KpiDashboardCategoryDataGridUtilityRZ {
+	
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiDashboardCategoryDataGridUtilityRZ.class);
 
 	//no-arg constructor
 	private KpiDashboardCategoryDataGridUtilityRZ() {
@@ -40,6 +44,7 @@ public class KpiDashboardCategoryDataGridUtilityRZ {
 	 * Api is to get the result for download data grid
 	 */
 	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data daily response for RZ");
 		  List<Map<String, Object>> transferList = new ArrayList<>();
 		  for(Object[] obj: downloadGridResponse) {
 				Map<String, Object> transferMap = new HashMap<>();
@@ -55,6 +60,7 @@ public class KpiDashboardCategoryDataGridUtilityRZ {
 	}
 	
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data monthly response for RZ");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
 				Map<String, Object> transferMap = new HashMap<>();
@@ -74,6 +80,7 @@ public class KpiDashboardCategoryDataGridUtilityRZ {
 	
 	
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data quarterly response for RZ");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new HashMap<>();
@@ -99,6 +106,7 @@ public class KpiDashboardCategoryDataGridUtilityRZ {
 	}
 
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data yearly response for RZ");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new HashMap<>();
@@ -112,6 +120,7 @@ public class KpiDashboardCategoryDataGridUtilityRZ {
 	}
 	
 	private static void createResponseForDailyFrequency(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		logger.info("Create response for daily frequency for process line ", processLine);
 		String value = null;
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_PD1:

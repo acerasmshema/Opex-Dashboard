@@ -18,6 +18,9 @@ package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 
 
@@ -82,31 +85,37 @@ public class DailyKpiPulpEntity implements Serializable {
 	private double processLine9;
 
 	//bi-directional many-to-one association to BusinessUnit
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="bu_id")
 	private BusinessUnitEntity businessUnit;
 
 	//bi-directional many-to-one association to BusinessUnitType
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="bu_type_id")
 	private BusinessUnitTypeEntity businessUnitType;
 
 	//bi-directional many-to-one association to Country
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="country_id")
 	private CountryEntity country;
 
 	//bi-directional many-to-one association to Kpi
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="kpi_id")
 	private KpiEntity kpi;
 
 	//bi-directional many-to-one association to KpiCategory
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="kpi_category_id")
 	private KpiCategoryEntity kpiCategory;
 
 	//bi-directional many-to-one association to Mill
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="mill_id")
 	private MillEntity mill;

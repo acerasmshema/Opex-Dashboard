@@ -23,7 +23,7 @@ import com.rgei.kpi.dashboard.util.CommonFunction;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class RgeUserController {
 	
 	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(RgeUserController.class);
@@ -31,35 +31,35 @@ public class RgeUserController {
 	@Resource
 	RgeUserService rgeUserService;
 
-	@GetMapping(value = "/user_info/get_by_id")
+	@GetMapping(value = "/v1/user_info/get_by_id")
 	public ResponseEntity<RgeUserResponse> getUserById(@RequestHeader(value = "userId") String userId) {
 		logger.info("Entering into the find user by Id:{}",userId);
 		RgeUserResponse response = rgeUserService.getUserById(CommonFunction.covertToLong(userId));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/user_info/get_by_email")
+	@GetMapping(value = "/v1/user_info/get_by_email")
 	public ResponseEntity<RgeUserResponse> getUserByEmail(@RequestHeader(value = "emailId") String emailId) {
 		logger.info("Entering into the find user by Email:{}",emailId);
 		RgeUserResponse response = rgeUserService.getUserByEmail(emailId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/user_info/get_by_name")
+	@GetMapping(value = "/v1/user_info/get_by_name")
 	public ResponseEntity<RgeUserResponse> getUserByName(@RequestHeader(value = "userName") String userName) {
 		logger.info("Entering into the find user by user name:{}",userName);
 		RgeUserResponse response = rgeUserService.getUserByName(userName);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/user_info/login")
+	@PostMapping(value = "/v1/user_info/login")
 	public ResponseEntity<RgeUserResponse> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) {
 		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getLoginId());
 		RgeUserResponse response = rgeUserService.loginProcess(rgeUserLoginRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/user_info/logout")
+	@PutMapping(value = "/v1/user_info/logout")
 	public ResponseEntity<HttpStatus> logout(@RequestBody RgeUserLogoutRequest rgeUserLogoutRequest) {
 		logger.info("Entering into the logout process by the requsted id", rgeUserLogoutRequest.getLoginId());
 		rgeUserService.logoutProcess(rgeUserLogoutRequest);

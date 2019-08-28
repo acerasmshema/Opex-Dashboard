@@ -124,25 +124,36 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/v2/yesterday/ytd_process_line")
-	public ResponseEntity<TargetProceessLine> getAnnualProcessLineV2(@RequestHeader(value="millId") String millId,
-			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
-			@RequestHeader(value="kpiId") String kpiId) {
-		logger.info("Fetching process line annual value.");
-		TargetProceessLine response = processLinePulpKpiService.getAnnualExtendedProcessLine(millId, buId, kpiCategoryId, kpiId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+	/*
+	 * @GetMapping(value = "/v2/yesterday/ytd_process_line") public
+	 * ResponseEntity<TargetProceessLine>
+	 * getAnnualProcessLineV2(@RequestHeader(value="millId") String millId,
+	 * 
+	 * @RequestHeader(value="buId") String
+	 * buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
+	 * 
+	 * @RequestHeader(value="kpiId") String kpiId) {
+	 * logger.info("Fetching process line annual value."); TargetProceessLine
+	 * response = processLinePulpKpiService.getAnnualExtendedProcessLine(millId,
+	 * buId, kpiCategoryId, kpiId); return new
+	 * ResponseEntity<>(response,HttpStatus.OK); }
+	 */
+	
+	/*
+	 * @GetMapping(value = "/v1/yesterday/ytd_target_process_line") public
+	 * ResponseEntity<TargetProceessLine>
+	 * getAnnualTargetProcessLine(@RequestHeader(value="millId") String millId,
+	 * 
+	 * @RequestHeader(value="buId") String
+	 * buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
+	 * 
+	 * @RequestHeader(value="kpiId") String kpiId) {
+	 * logger.info("Fetching annual target process line data."); TargetProceessLine
+	 * response = processLinePulpKpiService.getAnnualTargetProcessLine(millId, buId,
+	 * kpiCategoryId, kpiId); return new ResponseEntity<>(response,HttpStatus.OK); }
+	 */
 	
 	@GetMapping(value = "/v1/yesterday/ytd_target_process_line")
-	public ResponseEntity<TargetProceessLine> getAnnualTargetProcessLine(@RequestHeader(value="millId") String millId,
-			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
-			@RequestHeader(value="kpiId") String kpiId) {
-		logger.info("Fetching annual target process line data.");
-		TargetProceessLine response = processLinePulpKpiService.getAnnualTargetProcessLine(millId, buId, kpiCategoryId, kpiId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
-	
-	@GetMapping(value = "/v2/yesterday/ytd_target_process_line")
 	public ResponseEntity<List<TargetProceessLine>> getAnnualTargetProcessLineV2(@RequestHeader(value="millId") String millId,
 	@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
 	@RequestHeader(value="kpiId") String kpiId) {
@@ -203,3 +214,4 @@ public class ProcessLineController {
 	
 	
 }
+
