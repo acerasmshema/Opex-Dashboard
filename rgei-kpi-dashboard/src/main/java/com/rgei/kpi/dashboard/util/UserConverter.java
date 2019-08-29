@@ -88,34 +88,40 @@ public class UserConverter {
 	
 	public static List<LoginDetailResponse> convertToLoginDetailResponseFromRgeUserEntity(List<RgeUserEntity> rgeUserEntityList,
 			Integer millId) {
-		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<LoginDetailResponse>();
+		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<>();
 		LoginDetailResponse response = null;
 		for (RgeUserEntity entity : rgeUserEntityList) {
 			List<UserRoleMillEntity> rolesMillList = entity.getUserRoleMills();
 			for (UserRoleMillEntity e : rolesMillList) {
-				if (e.getMillId() == millId) {
-					response = new LoginDetailResponse();
-					response.setFirstName(entity.getFirstName());
-					response.setLastName(entity.getLastName());
-					response.setLoginId(entity.getLoginId());
-
-					for(UserRoleEntity roleEntity : entity.getUserRoles()) {
-						if(roleEntity.getRoleId() == e.getRoleId()) {
-							response.setRoleName(roleEntity.getRoleName());
-							break;
-						}
-					}
-					for(LoginDetailEntity loginEntity : entity.getLoginDetails()) {
-						if(loginEntity.getRgeUserEntity().getUserId() == entity.getUserId()) {
-							response.setLoginTime(Utility.dateToStringConvertor(loginEntity.getLoginTime(), DashboardConstant.FORMAT));
-							break;
-						}
-					}
-					loginDetailResponseList.add(response);
-				}
+				fetchResponse(millId, loginDetailResponseList, entity, e);
 			}
 		}
 		return loginDetailResponseList;
+	}
+
+	private static void fetchResponse(Integer millId, List<LoginDetailResponse> loginDetailResponseList,
+			RgeUserEntity entity, UserRoleMillEntity e) {
+		LoginDetailResponse response;
+		if (e.getMillId().equals(millId)) {
+			response = new LoginDetailResponse();
+			response.setFirstName(entity.getFirstName());
+			response.setLastName(entity.getLastName());
+			response.setLoginId(entity.getLoginId());
+
+			for(UserRoleEntity roleEntity : entity.getUserRoles()) {
+				if(roleEntity.getRoleId() == e.getRoleId()) {
+					response.setRoleName(roleEntity.getRoleName());
+					break;
+				}
+			}
+			for(LoginDetailEntity loginEntity : entity.getLoginDetails()) {
+				if(loginEntity.getRgeUserEntity().getUserId().equals(entity.getUserId())) {
+					response.setLoginTime(Utility.dateToStringConvertor(loginEntity.getLoginTime(), DashboardConstant.FORMAT));
+					break;
+				}
+			}
+			loginDetailResponseList.add(response);
+		}
 	}
 	
 	public static Date getCurrentDate() {
