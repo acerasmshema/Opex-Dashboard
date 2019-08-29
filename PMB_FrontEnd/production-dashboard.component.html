@@ -228,10 +228,9 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                       <tr>
-                        <td *ngFor="let col of columns" 
-                        
-                        [ngStyle]="{'color':col.field == 'DATE' ? 'black':checkSroColor(col.field, rowData[col.field])}"
-                        [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
+                        <td *ngFor="let col of columns"
+                         [ngStyle]="{'color':col.field == 'DATE' ? 'black':checkSroColor(col.field, rowData[col.field])}"
+                         [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
                           {{rowData[col.field]}}
                         </td>
                       </tr>
