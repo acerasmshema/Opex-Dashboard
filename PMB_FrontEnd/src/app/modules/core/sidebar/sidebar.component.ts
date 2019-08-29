@@ -139,6 +139,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       flag = true;
     }
     if (!flag) {
+      this.sidebarForm.dateError = false;
+      this.sidebarForm.millsError = false;
+
       if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
         this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
       }
@@ -151,9 +154,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   searchData(type: string) {
     if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
-      alert("Please select date range");
+      this.sidebarForm.dateError = true;
     }
     else {
+      this.sidebarForm.dateError = false;
+      
       if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
         this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
       }
