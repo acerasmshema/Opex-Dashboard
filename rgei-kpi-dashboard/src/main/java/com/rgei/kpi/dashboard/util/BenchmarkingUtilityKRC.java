@@ -70,7 +70,7 @@ public class BenchmarkingUtilityKRC {
 			value = parseProcessLineValue(obj[8].toString());
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.KRC_Avg:
+		case DashboardConstant.KRC_AVG:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(obj[9].toString());
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
@@ -125,7 +125,7 @@ public class BenchmarkingUtilityKRC {
 			value = parseProcessLineNullValue(obj[8]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.KRC_Avg:
+		case DashboardConstant.KRC_AVG:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[9]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
@@ -167,36 +167,56 @@ public class BenchmarkingUtilityKRC {
 			DateRangeResponse val = new DateRangeResponse();
 			List<SeriesObject> series = new ArrayList<>();
 			if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				krcData.add(val);
+				getQuarter1Data(finalBenchmarkingProcessLines, krcData, obj, val, series);
 			} else if (Quarter.Q2.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q2.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				krcData.add(val);
+				getQuarter2Data(finalBenchmarkingProcessLines, krcData, obj, val, series);
 			} else if (Quarter.Q3.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q3.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				krcData.add(val);
+				getQuarter3Data(finalBenchmarkingProcessLines, krcData, obj, val, series);
 			} else if (Quarter.Q4.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q4.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				krcData.add(val);
+				getQuarter4Data(finalBenchmarkingProcessLines, krcData, obj, val, series);
 			}
 		}
 		return krcData;
+	}
+
+	private static void getQuarter4Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> krcData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q4.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		krcData.add(val);
+	}
+
+	private static void getQuarter3Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> krcData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q3.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		krcData.add(val);
+	}
+
+	private static void getQuarter2Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> krcData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q2.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		krcData.add(val);
+	}
+
+	private static void getQuarter1Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> krcData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.KRC)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getKRCSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		krcData.add(val);
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingYearlyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
