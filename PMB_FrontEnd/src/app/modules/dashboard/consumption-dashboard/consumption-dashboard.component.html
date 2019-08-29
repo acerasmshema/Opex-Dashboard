@@ -18,7 +18,7 @@
                     </div>
                   </div>
                   <div class="row m-t-5">
-                    <div *ngFor="let processLine of ct.series | orderBy:'name'" [style.width.%]="100/ct.series.length"
+                    <div *ngFor="let processLine of ct.series" [style.width.%]="100/ct.series.length"
                       class="chemicalcell text-center">
                       <h6> {{processLine.name}}</h6>
                       <h6 [style.color]="processLine.color">{{processLine.value}}</h6>
