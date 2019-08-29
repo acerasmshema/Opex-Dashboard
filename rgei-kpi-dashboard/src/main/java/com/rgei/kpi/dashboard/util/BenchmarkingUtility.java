@@ -62,10 +62,10 @@ public class BenchmarkingUtility {
 		List<String> krcProcessLines = new ArrayList<>();
 		List<String> rzProcessLines = new ArrayList<>();
 		krcProcessLines.addAll(kpiList.get(0).getKpiProcessLines());
-		krcProcessLines.add(DashboardConstant.KRC_Avg);
+		krcProcessLines.add(DashboardConstant.KRC_AVG);
 		linesList.put(DashboardConstant.KRC, krcProcessLines);
 		rzProcessLines.addAll(kpiList.get(1).getKpiProcessLines());
-		rzProcessLines.add(DashboardConstant.RZ_Avg);
+		rzProcessLines.add(DashboardConstant.RZ_AVG);
 		linesList.put(DashboardConstant.RZ, rzProcessLines);
 		return linesList;
 	}

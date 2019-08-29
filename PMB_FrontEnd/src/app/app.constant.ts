@@ -13,6 +13,7 @@ export class AppConstants {
         ANNUAL_TARGET_URL: AppConstants.BASE_API_URL_v1 + '/yesterday/ytd_process_line',
         PROJECTED_DATA_URL: AppConstants.BASE_API_URL_v1 + '/process_line/projected_target_details',
         YTD_ALL_PROCESS_LINES_URL: AppConstants.BASE_API_URL_v1 + '/yesterday/all_process_lines',
+        KPI_CAT_YDAY_ALL_PROCESS_LINE_URL:AppConstants.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data',
         KPI_PULP_AREA_URL: AppConstants.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp_area',
         KPI_PULP_URL: AppConstants.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp',
         YTD_PROCESS_LINE_URL: AppConstants.BASE_API_URL_v2 + '/yesterday/ytd_process_line',
@@ -31,6 +32,7 @@ export class AppConstants {
         CONSUMPTION_API_GRID_URL: AppConstants.BASE_API_URL_v1 + '/kpi_category/selected_kpi_grid_data',
         SAVE_ANNOTATION_URL: AppConstants.BASE_API_URL_v1 + '/kpi_annotation/save_annotation',
         FIND_ANNOTATION_URL: AppConstants.BASE_API_URL_v1 + '/kpi_annotation/get_annotation',
+        DEL_ANNOTATION_URL: AppConstants.BASE_API_URL_v1 + '/kpi_annotation/delete_annotation',
 
         GET_MAINTENANCE_DAYS_URL: AppConstants.BASE_API_URL_v1 + '/maintenance_days/get_maintenance_days',
         SAVE_MAINTENANCE_DAYS_URL: AppConstants.BASE_API_URL_v1 + '/maintenance_days/save_maintenance_days',

@@ -54,7 +54,7 @@ public class BenchmarkingUtilityRZ {
 			value = parseProcessLineValue(obj[5].toString());
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.RZ_Avg:
+		case DashboardConstant.RZ_AVG:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineValue(obj[9].toString());
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
@@ -88,36 +88,56 @@ public class BenchmarkingUtilityRZ {
 			DateRangeResponse val = new DateRangeResponse();
 			List<SeriesObject> series = new ArrayList<>();
 			if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				rzData.add(val);
+				getQuarter1Data(finalBenchmarkingProcessLines, rzData, obj, val, series);
 			} else if (Quarter.Q2.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q2.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				rzData.add(val);
+				getQuarter2Data(finalBenchmarkingProcessLines, rzData, obj, val, series);
 			} else if (Quarter.Q3.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q3.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				rzData.add(val);
+				getQuarter3Data(finalBenchmarkingProcessLines, rzData, obj, val, series);
 			} else if (Quarter.Q4.getValue().equalsIgnoreCase(obj[0].toString())) {
-				val.setName(Quarter.Q4.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
-				for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
-					SeriesObject value = new SeriesObject();
-					val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
-					}
-				rzData.add(val);
+				getQuarter4Data(finalBenchmarkingProcessLines, rzData, obj, val, series);
 			}
 		}
 		return rzData;
+	}
+
+	private static void getQuarter4Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> rzData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q4.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		rzData.add(val);
+	}
+
+	private static void getQuarter3Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> rzData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q3.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		rzData.add(val);
+	}
+
+	private static void getQuarter2Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> rzData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q2.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		rzData.add(val);
+	}
+
+	private static void getQuarter1Data(Map<String, List<String>> finalBenchmarkingProcessLines,
+			List<DateRangeResponse> rzData, Object[] obj, DateRangeResponse val, List<SeriesObject> series) {
+		val.setName(Quarter.Q1.toString()+"/"+ String.valueOf(obj[10]).split("\\.")[0]);
+		for(String kpiProcessLine: finalBenchmarkingProcessLines.get(DashboardConstant.RZ)) {
+			SeriesObject value = new SeriesObject();
+			val.setSeries(getRZSeriesResponse(obj, kpiProcessLine, value, series));
+			}
+		rzData.add(val);
 	}
 	
 	public static List<DateRangeResponse> fetchBenchmarkingDailyData(List<Object[]> responseEntity, Map<String, List<String>> finalBenchmarkingProcessLines) {
@@ -181,7 +201,7 @@ public class BenchmarkingUtilityRZ {
 			value = parseProcessLineNullValue(obj[5]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());
 			break;
-		case DashboardConstant.RZ_Avg:
+		case DashboardConstant.RZ_AVG:
 			val.setName(kpiProcessLine);
 			value = parseProcessLineNullValue(obj[9]);
 			val.setValue(BigDecimal.valueOf(value).setScale(2, RoundingMode.CEILING).doubleValue());

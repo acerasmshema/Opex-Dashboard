@@ -33,8 +33,8 @@
                   <h6>Projected Daily Target in next {{annualChart.targetDays}} Days Till {{annualChart.targetEndDate}}
                     :
                     {{annualChart.targetValue}} (ADt)
-                    <span class="m-l-5" (click)="openSettingIcon()"><em class="fa fa-cog fa-lg"
-                        aria-hidden="true"></em></span>
+                    <span class="m-l-5" (click)="openSettingIcon()"><i class="fa fa-cog fa-lg"
+                        aria-hidden="true"></i></span>
                   </h6>
                 </div>
               </div>
@@ -172,7 +172,7 @@
                   <div class="m-l-20">
                     <p-multiSelect [options]="producionLineForm.processLines" scrollHeight="150px"
                       [(ngModel)]="productionEnquiryData.lineChartPLines" [ngModelOptions]="{standalone: true}"
-                      [style]="{width: '153px'}" defaultLabel="Process Lines" optionLabel="processLineCode">
+                      [style]="{width: '153px'}"defaultLabel="Process Lines" optionLabel="processLineCode">
                     </p-multiSelect>
                   </div>
                   <div class="m-l-20">
@@ -228,10 +228,9 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                       <tr>
-                        <td *ngFor="let col of columns" 
-                        
-                        [ngStyle]="{'color':col.field == 'DATE' ? 'black':checkSroColor(col.field, rowData[col.field])}"
-                        [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
+                        <td *ngFor="let col of columns"
+                         [ngStyle]="{'color':col.field == 'DATE' ? 'black':checkSroColor(col.field, rowData[col.field])}"
+                         [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
                           {{rowData[col.field]}}
                         </td>
                       </tr>
