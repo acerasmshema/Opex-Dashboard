@@ -11,12 +11,14 @@ export class ProductionService {
   annualTarget = AppConstants.apiURLs.ANNUAL_TARGET_URL;
   projectedData = AppConstants.apiURLs.PROJECTED_DATA_URL;
   ydayAllProcessLines = AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
+  kpiCatForYDayAllProcessLineData = AppConstants.apiURLs.KPI_CAT_YDAY_ALL_PROCESS_LINE_URL;
   kpiPulpArea = AppConstants.apiURLs.KPI_PULP_AREA_URL;
   kpiPulp = AppConstants.apiURLs.KPI_PULP_URL;
   ytdProcessLineTarget = AppConstants.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
   drProcessLine = AppConstants.apiURLs.DR_ALL_PROCESS_LINES_URL;
   allProcessLinesTarget = AppConstants.apiURLs.ALL_PROCESS_LINES_TARGET_URL;
   drSelectedProcessLine = AppConstants.apiURLs.DR_SELECTED_PROCESS_LINES_URL;
+  kpiGrid=AppConstants.apiURLs.DOWNLOAD_DATA_GRID_URL;
   saveAnnotation = AppConstants.apiURLs.SAVE_ANNOTATION_URL;
   getMaintenanceDay = AppConstants.apiURLs.GET_MAINTENANCE_DAYS_URL;
   saveMaintenanceDay = AppConstants.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
@@ -29,6 +31,12 @@ export class ProductionService {
   public getProductionYDayData(data: object) {
     return this.apiCallService.callGetAPIwithData(this.ydayProcessLines, data);
   }
+
+  
+  public getkpiCatForYDayAllProcessLineData(data:object){
+    return this.apiCallService.callGetAPIwithData(this.kpiCatForYDayAllProcessLineData,data);
+  }
+
 
   public getAnnualTarget(data: object) {
     return this.apiCallService.callGetAPIwithData(this.annualTarget, data);
@@ -65,6 +73,12 @@ export class ProductionService {
     return this.apiCallService.callAPIwithData(this.drSelectedProcessLine, data);
   }
 
+
+  public getAllProductionLinesDateForGrid(data:any){
+    return this.apiCallService.callAPIwithData(this.kpiGrid,data);
+  }
+
+
   public getMaintenanceData(data: any) {
     return this.apiCallService.callGetAPIwithData(this.getMaintenanceDay, data);
   }
@@ -81,6 +95,7 @@ export class ProductionService {
     return this.apiCallService.callAPIwithData(this.saveTargetDay, data)
   }
 
+  
   public getAnnotationDates(data: object) {
     return this.apiCallService.callAPIwithData(this.annotationDates, data)
   }

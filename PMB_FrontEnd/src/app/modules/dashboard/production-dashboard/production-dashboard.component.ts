@@ -62,6 +62,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe(() => {
         this.getProjectedTarget();
       });
+      
   }
 
   openProductionDashboard() {
@@ -87,7 +88,10 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
+    this.getDataForProductionGrid(this.startDate, this.endDate, frequency);
   }
+
+
 
   setProductionLineForm() {
     this.producionLineForm = new ProducionLineForm();
@@ -96,9 +100,13 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.producionLineForm.endDate = this.endDate;
   }
 
+
+
   public changeMonthlyChartType() {
     this.monthlyChart.chartType = (this.monthlyChart.chartType === 'stack-bar') ? 'stack-area' : 'stack-bar';
   }
+
+
 
   public getProductionYDayData() {
     this.yesterdayProductionData = new ProductionLine();
@@ -450,4 +458,91 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.updateChartSubscription.unsubscribe();
     this.projectTargetSubscription.unsubscribe();
   }
+
+  
+sroItem: any[] = [];
+productionRequestHD:any;
+
+ getDataForProductionGrid(startDate: string, endDate: string, frequancy: any) {
+    this.productionRequestHD = this.getProductionRequest(startDate,endDate,[],frequancy);
+    const newWork = this.productionService.getAllProductionLinesDateForGrid(this.productionRequestHD).subscribe((data: any) => {
+      console.log("this the data ",data);
+      data.map(ob => {
+        console.log("OB: ",ob);
+        ob.map(newdata => {
+          console.log("newdata: ",newdata);
+          for (let each in newdata) {
+            if (newdata.hasOwnProperty(each)) {
+              this.getSroValues(each.toUpperCase(), newdata[each])
+            }
+          }
+        });
+      })
+    });
+  }
+
+
+
+  getSroValues(newDataKeys, newDataValues) {
+    // const requestData = { kpiCategoryId: '1' };
+    this.productionService.getkpiCatForYDayAllProcessLineData(this.productionRequestHD)
+      .subscribe((data: any) => {
+        data.map(ob => {
+          ob.series.map(sro => {
+            sro['id'] = newDataKeys;
+            if (sro['value'] != null || sro['value'] != "N/A") {
+              if (sro['name'] === sro['id']) {
+                sro['value'] = newDataValues;
+                this.parseAndGetColor(sro);
+                console.log('this parseAndGetColor ',sro);
+                sro['color'] = this.parseAndGetColor(sro);
+                this.sroItem.push(sro);
+              }
+            }
+          })
+        });
+      });
+  }
+
+  parseAndGetColor(sro) {
+    let prev = 0;
+    let ar = sro.target.split(",");
+    let blackValue, redValue: number;
+
+    if (sro.value === "N/A" || sro.value === null) {
+      return 'red';
+    } else {
+      for (let v1 of ar) {
+        let ix = v1.split(":");
+        if (ix[0].trim() === "black") {
+          blackValue = parseInt(ix[1].trim());
+        } else if (ix[0].trim() === "red") {
+          redValue = parseInt(ix[1].trim());
+        }
+      }
+      if (sro.value <= blackValue && sro.value <= redValue) {
+        return 'red';
+      } else if (sro.value <= blackValue && sro.value >= redValue) {
+        return 'black'
+      } else if (sro.value >= blackValue && sro.value >= redValue) {
+        return 'black';
+      }
+    }
+  }
+
+
+
+ checkSroColor(data_header, data_value) {
+     if (this.sroItem.length > 0) {
+      for (let eachLineofSroItem of this.sroItem) {
+        if (eachLineofSroItem.value == data_value) {
+          return eachLineofSroItem.color;
+        }
+      }
+    }
+ 
+  }
+
+
+
 }
