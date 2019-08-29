@@ -195,7 +195,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       prodLine.yAxis = true;
       prodLine.xAxis = false;
       prodLine.legend = false;
-      prodLine.xAxis = false;
       prodLine.showXAxisLabel = false;
       prodLine.showYAxisLabel = false;
       prodLine.yAxisLabel = "";

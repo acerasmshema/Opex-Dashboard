@@ -178,7 +178,6 @@ export class ConsumptionService {
     ccm.xAxis = true;
     ccm.yAxis = true;
     ccm.showDataLabel = false;
-    ccm.xAxis = true;
     ccm.checked = false;
     ccm.legend = false;
     ccm.barPadding = 2;

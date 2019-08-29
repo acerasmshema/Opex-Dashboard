@@ -42,7 +42,6 @@ export class BenchmarkService {
         benchmark.xAxis = true;
         benchmark.yAxis = true;
         benchmark.showDataLabel = true;
-        benchmark.xAxis = true;
         benchmark.roundEdges = false;
         benchmark.checked = false;
         benchmark.legend = false;

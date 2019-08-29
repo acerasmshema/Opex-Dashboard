@@ -58,14 +58,8 @@ export class ApiCallService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-      return "e";
-    } else {
       console.error(error.error.message);
       return "e";
-    }
-
   }
 
 }
