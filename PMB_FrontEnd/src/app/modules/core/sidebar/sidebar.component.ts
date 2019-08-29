@@ -112,6 +112,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarForm.hide = !this.sidebarForm.hide;
     this.statusService.sidebarSizeSubject.next(sidebarSize);
 
+    if(this.sidebarForm.collapsed) {
+      this.sidebarForm.dateError = false;
+      this.sidebarForm.millsError = false;
+    }
+
     if (this.sidebarForm.type === 'dashboard') {
       setTimeout(() => {
         this.consumptionService.refreshDahboard(this.sidebarForm.kpiCategoryId);
@@ -121,7 +126,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         });
       }, 200);
     }
-    if (this.sidebarForm.type === 'benchmark') {
+    else if (this.sidebarForm.type === 'benchmark') {
       this.benchmarkService.refreshBenchmark();
     }
   }
