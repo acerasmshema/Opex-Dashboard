@@ -112,11 +112,13 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         this.yesterdayProductionData.productionYDayActualValue = parseFloat(totalAverageValue).toString();
         this.yesterdayProductionData.productionYDayNeedleValue = (totalAverageValue * 100) / Number(data['maxValue']);
+        this.yesterdayProductionData.canvasWidth = 275;
+        this.yesterdayProductionData.options.needleColor = '#292823';
         this.yesterdayProductionData.options.rangeLabel.push(data['minValue'].toString());
         this.yesterdayProductionData.options.rangeLabel.push(data['maxValue'].toString());
         valueArr.filter(item => this.yesterdayProductionData.options.arcDelimiters.push(Number(item)));
         this.yesterdayProductionData.options.arcColors.splice(0, this.yesterdayProductionData.options.arcColors.length);
-        this.yesterdayProductionData.canvasWidth = 275;
+
         colorArr.filter(item => this.yesterdayProductionData.options.arcColors.push((item)));
         this.yesterdayProductionData.show = true;
       });
@@ -218,6 +220,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +gauge.max;
             prodLine.options.rangeLabel.push("" + gauge.min);
             prodLine.options.rangeLabel.push("" + gauge.max);
+            prodLine.options.needleColor = '#292823';
 
             let value = gauge.range.split(',');
             let color = gauge.colorRange.split(',');
