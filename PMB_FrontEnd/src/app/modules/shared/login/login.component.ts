@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.loginService.validateUser(data).subscribe((data: any) => {
 
       if (data == "e") {
-        this.messageService.add({ severity: 'error', summary: '', detail: 'Incorrect user credentials' });
+        this.messageService.add({ severity: 'error', summary: '', detail: 'Invalid user credentials' });
         return null;
       } else {
         this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);

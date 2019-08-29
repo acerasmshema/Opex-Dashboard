@@ -42,7 +42,6 @@ export class BenchmarkService {
         benchmark.xAxis = true;
         benchmark.yAxis = true;
         benchmark.showDataLabel = true;
-        benchmark.xAxis = true;
         benchmark.roundEdges = false;
         benchmark.checked = false;
         benchmark.legend = false;
@@ -77,19 +76,15 @@ export class BenchmarkService {
             subscribe((response: any) => {
                 let benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
                 benchmark.data = response.kpiData;
-                const section = benchmark.data.length;
-
-                if (section > 5) {
-                    let maxValue = 0;
-                    benchmark.data.forEach(kpiData => {
-                        kpiData.series.forEach(seriesData => {
-                            if (seriesData.value > maxValue)
-                                maxValue = seriesData.value;
-                        });
+                let maxValue = 0;
+                benchmark.data.forEach(kpiData => {
+                    kpiData.series.forEach(seriesData => {
+                        if (seriesData.value > maxValue)
+                            maxValue = seriesData.value;
                     });
-                    benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
-                }
-                this.resetDataLabel(benchmark, section);
+                });
+                benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
+                this.resetDataLabel(benchmark, benchmark.data.length);
             });
     }
 
@@ -117,7 +112,6 @@ export class BenchmarkService {
                     this.download(kpiData, kpiName);
                 });
         }
-
     }
 
     download(benchmarkData: any, kpiName: string) {

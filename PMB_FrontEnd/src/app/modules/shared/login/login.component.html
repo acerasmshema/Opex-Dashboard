@@ -12,14 +12,14 @@
                 <form [formGroup]="loginForm" (ngSubmit)="validateUser(loginForm.value)">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-user-o"></i></span>
+                            <span class="input-group-text"><em  class="fa fa-user-o"></em> </span>
                         </div>
                         <input type="text" formControlName="loginId" class="form-control" placeholder="Username">
                     </div>
 
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-key"></i></span>
+                            <span class="input-group-text"><em  class="fa fa-key"></em> </span>
                         </div>
                         <input type="password" formControlName="userPassword" class="form-control"
                             placeholder="Password">

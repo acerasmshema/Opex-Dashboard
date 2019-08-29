@@ -14,22 +14,19 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item ">
               <a routerLink='/home/dashboard' class="nav-link" style="color:white;">
-                <i class="fa fa-home"></i><span class="header-size">
+                <em class="fa fa-home"></em><span class="header-size">
                   {{ 'Home' | translate }}</span></a>
             </li>
             <li class="nav-item ">
-              <a routerLink='/home/benchmark' class="nav-link" style="color:white;"><i
-                  class="fa fa-dot-circle-o"></i><span class="header-size">
+              <a routerLink='/home/benchmark' class="nav-link" style="color:white;"><em
+                  class="fa fa-dot-circle-o"></em><span class="header-size">
                   {{ 'Benchmark' | translate }}</span></a>
-            </li>  
-            <li class="nav-item ">
-              <a class="nav-link" routerLink='/home/kappaAnalytics' style="color:white;"><i class="fa fa-users"></i><span class="header-size">
+            </li>
+            <li *ngIf="selectedMillName === 'Kerinci'" class="nav-item ">
+              <a class="nav-link" routerLink='/home/kappaAnalytics' style="color:white;"><em
+                  class="fa fa-users"></em><span class="header-size">
                   {{ 'Digester Kappa Analytics' | translate }}</span></a>
             </li>
-            <!-- <li class="nav-item ">
-              <a class="nav-link" style="color:white;"><i class="fa fa-empire"></i><span class="header-size">
-                  {{ 'Setup' | translate }}</span></a>
-            </li>  -->
           </ul>
           <div class="pull-right">
             <ul class="nav pull-right">
@@ -37,24 +34,14 @@
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;border: 1px solid white">{{ selectedMillName | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li *ngFor="let mill of mills"><a class="dropdown-item" style="font-size: 11pt;" (click)="onChangeMill(mill.millId)">{{mill.millName}}</a></li>
+                  <li *ngFor="let mill of mills"><a class="dropdown-item" style="font-size: 11pt;"
+                      (click)="onChangeMill(mill.millId)">{{mill.millName}}</a></li>
                 </ul>
-              </li> 
-               <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                  style="color:white;font-size: 11pt;">{{ 'English' | translate }}</a>
-                <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li><a (click)="setLang('en')" class="dropdown-item">English</a></li>
-                  <li><a (click)="setLang('ch')" class="dropdown-item">简体中文</a></li>
-                </ul>
-              </li>  -->
+              </li>
               <li class="nav-item dropdown">
                 <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;"> {{ user }} <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <!-- <li><a class="dropdown-item"> {{ 'Preferences' | translate }}</a></li>
-                  <li><a class="dropdown-item"> {{ 'Contact Support' | translate }}</a></li> -->
-                  <!-- <li class="divider"></li> -->
                   <li (click)="logOut()"><a class="dropdown-item"> {{ 'Logout' | translate }}</a></li>
                 </ul>
               </li>

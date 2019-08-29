@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   loginId: any;
   mills: any = [];
   selectedMillName: string;
-  
+
   constructor(private router: Router,
     private loginService: LoginService,
     private headerService: HeaderService,
@@ -42,9 +42,10 @@ export class HeaderComponent implements OnInit {
     var data = {
       loginId: this.loginId
     }
-    this.loginService.logOut(data).subscribe((data: any) => {
-      console.log("Log Out");
-    });
+    this.loginService.logOut(data).
+      subscribe((data: any) => {
+       this.localStorageService.removeUserDetail();
+      });
     this.router.navigateByUrl('login');
   }
 
@@ -63,7 +64,8 @@ export class HeaderComponent implements OnInit {
       subscribe((buTypes: any) => {
         this.statusService.common.buTypes = buTypes;
       });
-  }
+
+    }
 
   onGetAllMills() {
     const requestData = {

@@ -66,8 +66,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
             this.searchKpiData = new SearchKpiData();
             this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
-          }
 
+            setTimeout(() => {
+              this.toggleCollapsed();
+            }, 20);
+          }
           this.sidebarForm.type = sidebarRequestData.type;
         }
 
@@ -109,6 +112,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarForm.hide = !this.sidebarForm.hide;
     this.statusService.sidebarSizeSubject.next(sidebarSize);
 
+    if(this.sidebarForm.collapsed) {
+      this.sidebarForm.dateError = false;
+      this.sidebarForm.millsError = false;
+    }
+
     if (this.sidebarForm.type === 'dashboard') {
       setTimeout(() => {
         this.consumptionService.refreshDahboard(this.sidebarForm.kpiCategoryId);
@@ -118,7 +126,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         });
       }, 200);
     }
-    if (this.sidebarForm.type === 'benchmark') {
+    else if (this.sidebarForm.type === 'benchmark') {
       this.benchmarkService.refreshBenchmark();
     }
   }
@@ -158,7 +166,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
     else {
       this.sidebarForm.dateError = false;
-      
+
       if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
         this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
       }
@@ -192,6 +200,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.statusService.common.mills = mills;
           this.sidebarForm.mills = mills;
         });
+    }
+  }
+
+  onMillValidation() {
+    let mills = this.searchKpiData.mills;
+    if (mills !== undefined) {
+      if (mills.length < 2 && !this.sidebarForm.millsError) {
+        this.sidebarForm.millsError = true;
+      } else {
+        this.sidebarForm.millsError = false;
+      }
+    }
+  }
+
+  onDateValidation() {
+    const datePicker: any = document.getElementById("daterangepicker_input");
+    if (datePicker !== null && datePicker.value !== "" && this.sidebarForm.dateError) {
+      this.sidebarForm.dateError = false
     }
   }
 

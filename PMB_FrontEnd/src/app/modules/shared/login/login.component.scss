@@ -1,9 +1,12 @@
 body {
     background: #000 !important;
 }
+
 .card {
     border: 1px solid white;
+    float:center;
 }
+
 .card-login {
     margin-top:6%;
     padding: 13px;
@@ -91,7 +94,3 @@ input:focus{
     background: whitesmoke;
     float:left
   }
-
-.card{
-    float:center;
-}

@@ -18,7 +18,7 @@
                     </div>
                   </div>
                   <div class="row m-t-5">
-                    <div *ngFor="let processLine of ct.series | orderBy:'name'" [style.width.%]="100/ct.series.length"
+                    <div *ngFor="let processLine of ct.series" [style.width.%]="100/ct.series.length"
                       class="chemicalcell text-center">
                       <h6> {{processLine.name}}</h6>
                       <h6 [style.color]="processLine.color">{{processLine.value}}</h6>
@@ -54,7 +54,7 @@
                           </div>
                           <h6 class="m-l-5">Stack</h6>
                           <span class="m-l-5" (click)="showGridDialog(ccm.kpiId, ccm.kpiName)">
-                            <i class="fa fa-download fa-2x"></i>
+                            <em class="fa fa-download fa-2x"></em>
                           </span>
                         </div>
                       </div>
@@ -103,7 +103,7 @@
                           <h6 class="m-l-5">Stack</h6>
                           <span class="m-l-5"
                             (click)="showGridDialog(cMap.value.consumptions[i +1].kpiId, cMap.value.consumptions[i +1].kpiName)">
-                            <i class="fa fa-download fa-2x"></i>
+                            <em class="fa fa-download fa-2x"></em>
                           </span>
                         </div>
                       </div>

@@ -7,9 +7,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
@@ -36,16 +40,23 @@ public class KpiDashboardCategoryUtility {
 	public static Kpi convertToKpiDTO(KpiEntity entity, Integer millId) {
 		Kpi kpiObject = new Kpi();
 		if (Boolean.TRUE.equals(entity.getActive())) {
+			Map<Integer, String> prcoessLineMap = new TreeMap<>();
 			List<String> kpiProcessLines = new ArrayList<>();
 			kpiObject.setKpiId(entity.getKpiId());
 			kpiObject.setKpiName(entity.getKpiName());
 			kpiObject.setKpiTypeId(entity.getKpiType().getKpiTypeId());
 			kpiObject.setKpiUnit(entity.getKpiUnit());
-			for (KpiProcessLineEntity value : entity.getKpiProcessLines()) {
-				if (Boolean.TRUE.equals(value.getActive()) && millId.equals(value.getMill().getMillId())) {
-					kpiProcessLines.add(value.getProcessLine().getProcessLineCode());
-					Collections.sort(kpiProcessLines);
+
+			for (KpiProcessLineEntity line : entity.getKpiProcessLines()) {
+				if (Boolean.TRUE.equals(line.getActive()) && millId.equals(line.getMill().getMillId())) {
+					prcoessLineMap.put(line.getProcessLine().getProcessLineOrder(),
+							line.getProcessLine().getProcessLineCode());
 				}
+			}
+
+			Set<Integer> processLineKeys = prcoessLineMap.keySet();
+			for (Integer key : processLineKeys) {
+				kpiProcessLines.add(prcoessLineMap.get(key));
 			}
 			kpiObject.setKpiProcessLines(kpiProcessLines);
 		}
@@ -261,7 +272,7 @@ public class KpiDashboardCategoryUtility {
 				for (KpiEntity kpi : value.getKpis()) {
 					populateKPITypeDTO(kpiType, value, kpi, millId);
 				}
-			//	sortResponse(kpiType);
+				// sortResponse(kpiType);
 			}
 		}
 		return kpiType;
@@ -271,8 +282,9 @@ public class KpiDashboardCategoryUtility {
 		KpiType kpiTypeObject;
 		if (Boolean.TRUE.equals(kpi.getActive())) {
 			kpiTypeObject = new KpiType();
-			List<String> processLines = new ArrayList<>();
+			List<String> processLines = new LinkedList<String>();
 			Map<String, String> target = new HashMap<>();
+			Map<Integer, String> prcoessLineMap = new TreeMap<>();
 			if (Boolean.TRUE.equals(value.getActive())) {
 				kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
 				kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
@@ -284,11 +296,16 @@ public class KpiDashboardCategoryUtility {
 				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
 					if (millId.equals(line.getMill().getMillId())) {
 						target.put(line.getProcessLine().getProcessLineCode(), line.getTarget());
-						processLines.add(line.getProcessLine().getProcessLineCode());
-						Collections.sort(processLines);
+						prcoessLineMap.put(line.getProcessLine().getProcessLineOrder(),
+								line.getProcessLine().getProcessLineCode());
 					}
 				}
 			}
+			Set<Integer> processLineKeys = prcoessLineMap.keySet();
+			for (Integer key : processLineKeys) {
+				processLines.add(prcoessLineMap.get(key));
+			}
+
 			kpiTypeObject.setProcessLines(processLines);
 			kpiTypeObject.setTarget(target);
 			kpiType.add(kpiTypeObject);
