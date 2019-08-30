@@ -88,7 +88,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
-    this.getDataForProductionGrid(this.startDate, this.endDate, frequency);
+    
   }
 
 
@@ -308,8 +308,89 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         if (isGridRequest)
           this.getProdGrid(prodLineResponse);
+          this.checkProdlineRequest(startDate, endDate, processLines, frequency, prodLineResponse);
+
       });
   }
+
+
+  /* 
+  
+  Calculation for the production color 
+
+  */
+ sroItem: any[] = [];
+ 
+  public checkProdlineRequest(startDate, endDate, processLines, frequency,prodLineResponse: any){
+   var newDataKeys, newDataValues;
+    for (let each of prodLineResponse){
+      newDataKeys = each.name;
+      for (let eachOne of each.series){
+        newDataValues = eachOne.value;
+        this.getSroValues(startDate, endDate, processLines, frequency,newDataKeys,newDataValues);
+      }
+    }
+  }
+
+  public getSroValues(startDate, endDate, processLines, frequency,newDataKeys,newDataValues){
+    let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
+    this.productionService.getkpiCatForYDayAllProcessLineData(productionRequest)
+    .subscribe((data: any) => {
+      data.map(ob => {
+        ob.series.map(sro => {
+          sro['id'] = newDataKeys;
+          if (sro['value'] != null || sro['value'] != "N/A") {
+            if (sro['name'] === sro['id']) {
+              sro['value'] = newDataValues;
+              this.parseAndGetColor(sro);
+              sro['color'] = this.parseAndGetColor(sro);
+              this.sroItem.push(sro);
+            }
+          }
+        })
+      });
+    });
+  }
+
+  
+
+
+  parseAndGetColor(sro) {
+    let prev = 0;
+    let ar = sro.target.split(",");
+    let blackValue, redValue: number;
+
+    if (sro.value === "N/A" || sro.value === null) {
+      return 'red';
+    } else {
+      for (let v1 of ar) {
+        let ix = v1.split(":");
+        if (ix[0].trim() === "black") {
+          blackValue = parseInt(ix[1].trim());
+        } else if (ix[0].trim() === "red") {
+          redValue = parseInt(ix[1].trim());
+        }
+      }
+      if (sro.value <= blackValue && sro.value <= redValue) {
+        return 'red';
+      } else if (sro.value <= blackValue && sro.value >= redValue) {
+        return 'black'
+      } else if (sro.value >= blackValue && sro.value >= redValue) {
+        return 'black';
+      }
+    }
+  }
+
+  checkSroColor(data_header,data_value) {
+       if (this.sroItem.length > 0) {
+        for (let eachLineofSroItem of this.sroItem) {
+          if (eachLineofSroItem.value == data_value && eachLineofSroItem.name == data_header) {
+            return eachLineofSroItem.color;
+          }
+        }
+      }
+    }
+
 
   public getProdGrid(prodLineResponse: any) {
     this.productionLineView.rows = 10;
@@ -378,6 +459,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public searchData(isGridRequest: boolean) {
+
+
     if (this.productionEnquiryData.lineChartDate !== null) {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
@@ -387,6 +470,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
           processLines.push(processLine['processLineCode']);
+     
         });
       }
       this.getSelectedProductionLinesDateRangeData(startDate, endDate, processLines, frequency, isGridRequest);
@@ -460,91 +544,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.updateChartSubscription.unsubscribe();
     this.projectTargetSubscription.unsubscribe();
   }
-
-  
-sroItem: any[] = [];
-productionRequestHD:any;
-
- getDataForProductionGrid(startDate: string, endDate: string, frequancy: any) {
-    this.productionRequestHD = this.getProductionRequest(startDate,endDate,[],frequancy);
-    const newWork = this.productionService.getAllProductionLinesDateForGrid(this.productionRequestHD).subscribe((data: any) => {
-      console.log("this the data ",data);
-      data.map(ob => {
-        console.log("OB: ",ob);
-        ob.map(newdata => {
-          console.log("newdata: ",newdata);
-          for (let each in newdata) {
-            if (newdata.hasOwnProperty(each)) {
-              this.getSroValues(each.toUpperCase(), newdata[each])
-            }
-          }
-        });
-      })
-    });
-  }
-
-
-
-  getSroValues(newDataKeys, newDataValues) {
-    // const requestData = { kpiCategoryId: '1' };
-    this.productionService.getkpiCatForYDayAllProcessLineData(this.productionRequestHD)
-      .subscribe((data: any) => {
-        data.map(ob => {
-          ob.series.map(sro => {
-            sro['id'] = newDataKeys;
-            if (sro['value'] != null || sro['value'] != "N/A") {
-              if (sro['name'] === sro['id']) {
-                sro['value'] = newDataValues;
-                this.parseAndGetColor(sro);
-                console.log('this parseAndGetColor ',sro);
-                sro['color'] = this.parseAndGetColor(sro);
-                this.sroItem.push(sro);
-              }
-            }
-          })
-        });
-      });
-  }
-
-  parseAndGetColor(sro) {
-    let prev = 0;
-    let ar = sro.target.split(",");
-    let blackValue, redValue: number;
-
-    if (sro.value === "N/A" || sro.value === null) {
-      return 'red';
-    } else {
-      for (let v1 of ar) {
-        let ix = v1.split(":");
-        if (ix[0].trim() === "black") {
-          blackValue = parseInt(ix[1].trim());
-        } else if (ix[0].trim() === "red") {
-          redValue = parseInt(ix[1].trim());
-        }
-      }
-      if (sro.value <= blackValue && sro.value <= redValue) {
-        return 'red';
-      } else if (sro.value <= blackValue && sro.value >= redValue) {
-        return 'black'
-      } else if (sro.value >= blackValue && sro.value >= redValue) {
-        return 'black';
-      }
-    }
-  }
-
-
-
- checkSroColor(data_header, data_value) {
-     if (this.sroItem.length > 0) {
-      for (let eachLineofSroItem of this.sroItem) {
-        if (eachLineofSroItem.value == data_value) {
-          return eachLineofSroItem.color;
-        }
-      }
-    }
- 
-  }
-
 
 
 }

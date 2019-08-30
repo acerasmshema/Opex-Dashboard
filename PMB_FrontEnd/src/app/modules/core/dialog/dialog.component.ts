@@ -208,6 +208,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.productionService.getMaintenanceData(requestData).
       subscribe(
         (response: any) => {
+          console.log("Response: ", response);
           this.maintenanceDays.maintanenceDayModel = response;
         }
       )
@@ -254,6 +255,41 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.statusService.projectTargetSubject.next();
           }
         });
+  }
+
+  public onRowEditInit(rowData){  
+    return rowData.remarks;
+  }
+
+  public onRowEditSave(rowData){
+    console.log("This are onRowEditSave", rowData);
+    let rowData_ID =[];
+    let  rowDataIds = rowData.id.toString();
+    rowData_ID.push(rowDataIds);
+
+    const datas ={
+     "ids":rowData_ID,
+     "remarks":rowData.remarks,
+     "updatedBy":1
+   }
+
+   console.log("The data is : ",datas);
+    this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
+      console.log("The data nw onRowEditSave ",datas);
+      
+    });
+    console.log(this.viewMaintenanceDays());
+
+  }
+// make changes on this file
+  public onRowEditCancel(rowData,ri){
+    console.log("This are onRowEditCancel remarks", rowData.remarks);
+    console.log("This are ri ",ri);    
+    let cancelData = rowData;
+    let cancelPerm = ""
+    this.viewMaintenanceDays();
+
+
   }
 
   public showError(severity: string, summary: string, detail: string) {
