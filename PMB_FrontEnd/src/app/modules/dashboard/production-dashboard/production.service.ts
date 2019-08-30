@@ -22,6 +22,7 @@ export class ProductionService {
   getMaintenanceDay = AppConstants.apiURLs.GET_MAINTENANCE_DAYS_URL;
   saveMaintenanceDay = AppConstants.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
   deleteMaintenanceDay = AppConstants.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
+  updateMaintanenceDaysRemarks=AppConstants.apiURLs.UPDATE_MAINTENANCE_DAYS_REMARKS;
   saveTargetDay = AppConstants.apiURLs.SAVE_TARGET_DAYS_URL;
   annotationDates = AppConstants.apiURLs.ANNOTATION_DATES_URL;
   productionGridKpiUrl = AppConstants.apiURLs.CONSUMPTION_GRID_API_URL;
@@ -88,6 +89,11 @@ export class ProductionService {
   public updateMaintanenceTargetDays(data: object) {
     return this.apiCallService.callAPIwithData(this.saveTargetDay, data)
   }
+
+
+  public updateMaintenanceDaysRemarks(data:object){
+    return this.apiCallService.callPutAPIwithData(this.updateMaintanenceDaysRemarks,data);
+  } 
 
   public getAnnotationDates(data: object) {
     return this.apiCallService.callAPIwithData(this.annotationDates, data)
