@@ -14,6 +14,7 @@ import { ProductionLineView } from './production-line-view';
 import { StatusService } from '../../shared/service/status.service';
 import * as $ from "jquery";
 import { Subscription } from 'rxjs';
+import { ConsumptionTable } from '../consumption-dashboard/consumption-table';
 
 @Component({
   selector: 'app-production-dashboard',
@@ -32,6 +33,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   productionEnquiryData: ProductionEnquiry;
   productionLineView: ProductionLineView;
   annotationDates: any = [];
+  thresholdTargetMap: any;
   startDate: string = '';
   endDate: string = '';
   updateChartSubscription: Subscription;
@@ -40,7 +42,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   private annualChartRendered: boolean;
   private monthlyChartRendered: boolean;
   private productionChartRendered: boolean;
-
 
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
@@ -69,6 +70,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.productionEnquiryData = new ProductionEnquiry();
     this.productionLineView = new ProductionLineView();
     this.annualChart = new ProductionBar();
+    this.thresholdTargetMap = new Object();
     this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
     this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
@@ -88,9 +90,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
+    this.getThresholdTarget();
   }
-
-
 
   setProductionLineForm() {
     this.producionLineForm = new ProducionLineForm();
@@ -99,13 +100,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.producionLineForm.endDate = this.endDate;
   }
 
-
-
   public changeMonthlyChartType() {
     this.monthlyChart.chartType = (this.monthlyChart.chartType === 'stack-bar') ? 'stack-area' : 'stack-bar';
   }
-
-
 
   public getProductionYDayData() {
     this.yesterdayProductionData = new ProductionLine();
@@ -308,6 +305,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         if (isGridRequest)
           this.getProdGrid(prodLineResponse);
+
       });
   }
 
@@ -454,6 +452,22 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.monthlyChartRendered = false;
       }, 100);
     }
+  }
+
+  public getThresholdTarget() {
+    const requestData = {
+      kpiCategoryId: "1",
+      millId: this.statusService.common.selectedMill.millId
+    };
+
+    this.productionService.getDataForGrid(requestData).
+      subscribe((thresholdTarget: ConsumptionTable[]) => {
+        thresholdTarget[0].series.forEach(processLine => {
+          const target = processLine.target.split(',')[0].split(':')[1];
+          this.thresholdTargetMap[processLine.name] = target;
+        });
+      });
+
   }
 
   ngOnDestroy() {

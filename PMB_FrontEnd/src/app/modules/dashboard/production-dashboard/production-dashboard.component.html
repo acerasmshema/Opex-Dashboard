@@ -229,7 +229,13 @@
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                       <tr>
                         <td *ngFor="let col of columns" [ngClass]="col.field == 'DATE' ? 'text-center' : 'text-right'">
-                          {{rowData[col.field]}}
+                          <div *ngIf="thresholdTargetMap[col.header] !== undefined"
+                            [style.color]="(thresholdTargetMap[col.header] < rowData[col.field]) ? 'black' : 'red'">
+                            {{rowData[col.field]}}
+                          </div>
+                          <div *ngIf="col.field == 'DATE'">
+                            {{rowData[col.field]}}
+                          </div>
                         </td>
                       </tr>
                     </ng-template>
