@@ -467,7 +467,7 @@ productionRequestHD:any;
 
  getDataForProductionGrid(startDate: string, endDate: string, frequancy: any) {
     this.productionRequestHD = this.getProductionRequest(startDate,endDate,[],frequancy);
-    const newWork = this.productionService.getAllProductionLinesDateForGrid(this.productionRequestHD).subscribe((data: any) => {
+    this.productionService.getAllProductionLinesDateForGrid(this.productionRequestHD).subscribe((data: any) => {
       console.log("this the data ",data);
       data.map(ob => {
         console.log("OB: ",ob);
