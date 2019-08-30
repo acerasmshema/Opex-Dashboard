@@ -130,30 +130,6 @@ export class DialogComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  public deleteAnnotationList() {
-    this.annotationDialog.newAnnotationDeleteList = [];
-    this.annotationDialog.annotationsLines.forEach(annotation => {
-      this.annotationDialog.annotations_annoID = annotation["annotationId"];
-      //this.annotationDialog.annotations_userID = annotation["userId"];
-    });
-
-    const annotationData = {
-      "annotationId": this.annotationDialog.annotations_annoID,
-      "userId": this.annotationDialog.currentLoggedIdUserID
-    };
-
-    this.annotationDialog.newAnnotationDeleteList.push(annotationData);
-    const dataany = this.annotationDialog.newAnnotationDeleteList;
-    this.dialogService.deleteAnnotationLists(dataany).
-      subscribe((dataany: any) => {
-        this.showError("success", "", "Deleted sucessfully");
-        this.getAnnotationData(this.annotationDialog.annotationKpiId);
-      });
-  }
-  
-
-  
   public showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
@@ -168,7 +144,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.showError("error", "Error Message", "Please select Date.");
       return;
     }
-    if (this.maintenanceDays.textAreaValue == undefined || this.maintenanceDays.textAreaValue == null) {
+    if (this.maintenanceDays.textAreaValue == undefined || this.maintenanceDays.textAreaValue == null || this.maintenanceDays.textAreaValue === '') {
       this.showError("error", "Error Message", "Please enter Remarks.");
       return;
     }
