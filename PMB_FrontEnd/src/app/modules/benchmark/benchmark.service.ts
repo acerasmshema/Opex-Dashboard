@@ -194,7 +194,7 @@ export class BenchmarkService {
                     barCount++;
                 }
             }
-        }, 1000);
+        }, 2000);
     }
 
     getDataforBenchmart(benchmarkRequest: ConsumptionRequest) {

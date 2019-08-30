@@ -16,6 +16,4 @@ export class AnnotationDialog {
     currentLoggedInUsersName: string;
     annotations_annoID: any;
     showDeleteButton: boolean;
-    selectAnnotationRow:any;
-
 }

@@ -7,8 +7,6 @@ export class DialogService {
 
     saveAnnotation = AppConstants.apiURLs.SAVE_ANNOTATION_URL;
     findAnnotation = AppConstants.apiURLs.FIND_ANNOTATION_URL;
-    deleteAnnotation = AppConstants.apiURLs.DEL_ANNOTATION_URL;
-
 
     constructor(private apiCallService: ApiCallService) { }
 
@@ -19,10 +17,4 @@ export class DialogService {
     public fetchAnnotation(data: any) {
         return this.apiCallService.callAPIwithData(this.findAnnotation, data);
     }
-
-
-    public deleteAnnotationLists(data: any) {
-        return this.apiCallService.callAPIwithData(this.deleteAnnotation, data);
-    }
-
 }
