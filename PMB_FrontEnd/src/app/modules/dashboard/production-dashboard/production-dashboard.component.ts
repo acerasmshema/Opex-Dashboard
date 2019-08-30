@@ -63,7 +63,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       subscribe(() => {
         this.getProjectedTarget();
       });
-
   }
 
   openProductionDashboard() {
