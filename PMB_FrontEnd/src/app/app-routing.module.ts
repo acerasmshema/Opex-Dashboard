@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './modules/shared/login/login.component';
-import { LayoutComponent } from './modules/core/layout/layout.component';
-import { BenchmarkModule } from './modules/benchmark/benchmark.module';
+import { LoginComponent } from './shared/login/login.component';
+import { LayoutComponent } from './core/layout/layout.component';
 
 const routes: Routes = [
   {
@@ -26,17 +25,17 @@ const routes: Routes = [
       {
         path: "dashboard",
         pathMatch: 'full',
-        loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+        loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
       {
         path: "benchmark",
         pathMatch: 'full',
-        loadChildren: './modules/benchmark/benchmark.module#BenchmarkModule'
+        loadChildren: './benchmark/benchmark.module#BenchmarkModule'
       },
       {
         path: "kappaAnalytics",
         pathMatch: 'full',
-        loadChildren: './modules/kappaAnalytics/kappaAnalytics.module#kappaAnalyticsModule'
+        loadChildren: './kappa-analytics/kappa-analytics.module#kappaAnalyticsModule'
       }
     ]
   },

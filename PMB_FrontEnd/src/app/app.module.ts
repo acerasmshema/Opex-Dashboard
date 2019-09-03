@@ -4,7 +4,7 @@ export function setupTranslateFactory(
 }
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,16 +19,23 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { CommonModule, DatePipe } from '@angular/common';
 import { StorageServiceModule } from 'ngx-webstorage-service';
-import { ApiCallService } from './modules/shared/service/APIService/ApiCall.service';
-import { TranslateService } from './modules/shared/service/translate/translate.service';
-import { LoginComponent } from './modules/shared/login/login.component';
-import { CoreModule } from './modules/core/core.module';
-import { SharedBootstrapModule } from './modules/shared/shared-bootstrap.module';
-import { RequestHelperService } from './modules/shared/service/request-helper.service';
-import { StatusService } from './modules/shared/service/status.service';
-import { PrimeNgModule } from './modules/shared/primeng-modules';
+import { TranslateService } from './shared/service/translate/translate.service';
+import { LoginComponent } from './shared/login/login.component';
+import { CoreModule } from './core/core.module';
+import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
+import { StatusService } from './shared/service/status.service';
+import { PrimeNgModule } from './shared/primeng-modules';
 import { MessageService } from 'primeng/primeng';
-import { LocalStorageService } from './modules/shared/service/localStorage/local-storage.service';
+import { LocalStorageService } from './shared/service/localStorage/local-storage.service';
+import { ApiCallService } from './shared/service/api/api-call.service';
+import { ProductionService } from './dashboard/production-dashboard/production.service';
+import { ConsumptionService } from './dashboard/consumption-dashboard/consumption.service';
+import { DialogService } from './core/dialog/dialog.service';
+import { SidebarService } from './core/sidebar/sidebar-service';
+import { LoginService } from './shared/login/login.service';
+import { BenchmarkService } from './benchmark/benchmark.service';
+import { HeaderService } from './core/header/header.service';
+import { DashboardService } from './dashboard/dashboard.service';
 
 @NgModule({
   declarations: [
@@ -62,8 +69,16 @@ import { LocalStorageService } from './modules/shared/service/localStorage/local
       }
     }),
   ],
-  providers: [ApiCallService,
-    RequestHelperService,
+  providers: [
+    HeaderService,
+    LoginService,
+    DashboardService,
+    ProductionService,
+    ConsumptionService,
+    DialogService,
+    SidebarService,
+    BenchmarkService,
+    ApiCallService,
     DatePipe,
     MessageService,
     LocalStorageService,
