@@ -8,6 +8,7 @@ import { ConsumptionModel } from '../models/consumption-model';
 
 @Injectable()
 export class StatusService {
+    public spinnerSubject: Subject<boolean> = new Subject<boolean>();
     public sidebarSubject: Subject<SidebarRequest> = new Subject<SidebarRequest>();
     public sidebarSizeSubject: Subject<string> = new Subject<string>();
     public dialogSubject: Subject<any> = new Subject<any>();
@@ -16,9 +17,10 @@ export class StatusService {
     public projectTargetSubject: Subject<any> = new Subject<any>();
     public enableTabs: Subject<boolean> = new Subject<boolean>();
     public benchmarkSubject: Subject<SearchKpiData> = new Subject<SearchKpiData>();
-    
-    public kpiCategoryMap: Map<string, any>= new Map<string, any>();
+
+    public kpiCategoryMap: Map<string, any> = new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();
     public benchmarkList: ConsumptionModel[] = [];
     public common: CommonModel = new CommonModel();
+    public isSpin: boolean = false;
 }

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { LoginService } from './login.service';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
+import { CommonMessage } from '../constant/Common-Message';
+import { StatusService } from '../service/status.service';
 
 
 @Component({
@@ -20,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(private localStorageService: LocalStorageService,
     private fb: FormBuilder,
     private router: Router,
+    private statusService: StatusService,
     private messageService: MessageService,
     private loginService: LoginService) {
   }
@@ -30,26 +33,26 @@ export class LoginComponent implements OnInit {
   }
 
   validateUser(data: any) {
-
     if (data.loginId == "") {
-      this.messageService.add({ severity: 'error', summary: '', detail: 'Username is required' });
+      this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.USERNAME_VALIDATION });
       return null;
     }
     if (data.userPassword == "") {
-      this.messageService.add({ severity: 'error', summary: '', detail: 'Password is required' });
+      this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.PASSWORD_VALIDATION });
       return null;
     }
+    this.statusService.spinnerSubject.next(true);
+    this.loginService.validateUser(data).
+      subscribe((data: any) => {
+        this.statusService.spinnerSubject.next(false);
 
-    this.loginService.validateUser(data).subscribe((data: any) => {
-
-      if (data == "e") {
-        this.messageService.add({ severity: 'error', summary: '', detail: 'Invalid user credentials' });
-        return null;
-      } else {
-        this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-        this.router.navigateByUrl("home/dashboard");
-      }
-    });
+        if (data == "e") {
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.INVALID_USER });
+        } else {
+          this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
+          this.router.navigateByUrl("home/dashboard");
+        }
+      });
   }
 
 }

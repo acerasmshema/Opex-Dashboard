@@ -10,6 +10,7 @@ import { MaintenanceDays } from './maintenance-days';
 import { ProductionService } from '../../dashboard/production-dashboard/production.service';
 import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 
 @Component({
   selector: 'app-dialog',
@@ -98,11 +99,11 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.annotationDialog.annotationLines = "";
     const loginId = this.localStorageService.fetchloginId();
     if (this.annotationDialog.annotationProcessLines.length === 0) {
-      this.showMessage("error", "Error Message", "Please select process lines.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.PROCESS_LINE_VALIDATION);
       return;
     }
     if (this.annotationDialog.annotationDescription === undefined || this.annotationDialog.annotationDescription == "") {
-      this.showMessage("error", "Error Message", "Please add description.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.ADD_DESCRIPTION_VALIDATION);
       return;
     }
 
@@ -124,7 +125,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.createAnnotation(data).
       subscribe((data: any) => {
         if (data == null) {
-          this.showMessage("success", "", "Annotation saved successfully.");
+          this.showMessage("success", "", CommonMessage.SUCCESS.ANNOTATION_SAVED);
           this.annotationDialog.annotationDescription = "";
           this.annotationDialog.annotationProcessLines = [];
           this.getAnnotationData(this.annotationDialog.annotationKpiId);
@@ -136,7 +137,7 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.statusService.updateChartSubject.next(dashboardName);
 
         } else {
-          this.showMessage("error", "", "Annotation could not be saved.");
+          this.showMessage("error", "",  CommonMessage.ERROR.ANNOTATION_ERROR);
         }
       });
   }
@@ -147,11 +148,11 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   public add() {
     if (this.maintenanceDays.dateValue == undefined) {
-      this.showError("error", "Error Message", "Please select Date.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.DATE_ERROR);
       return;
     }
     if (this.maintenanceDays.textAreaValue == undefined || this.maintenanceDays.textAreaValue == null || this.maintenanceDays.textAreaValue === '') {
-      this.showError("error", "Error Message", "Please enter Remarks.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.REMARKS_ERROR);
       return;
     }
     let maintanenceListDataNew = [];
@@ -173,7 +174,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.productionService.saveMaintenanceDays(requestData).
       subscribe((response: any) => {
         if (response == null) {
-          this.showError("success", "", "Added Successfully.");
+          this.showMessage("success", "", CommonMessage.SUCCESS.ADD_SUCCESS);
           this.maintenanceDays.textAreaValue = "";
           this.maintenanceDays.dateValue = null;
           this.viewMaintenanceDays();
@@ -207,7 +208,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.productionService.deleteMaintenanceDays(requestData).
       subscribe(
         (response: any) => {
-          this.showError("success", "", "Deleted.");
+          this.showMessage("success", "", CommonMessage.SUCCESS.DELETE_SUCCESS);
           this.viewMaintenanceDays();
           this.statusService.projectTargetSubject.next();
         });
@@ -215,11 +216,11 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   public addTargetDays() {
     if (this.maintenanceDays.targetDays == undefined || this.maintenanceDays.targetDays == null) {
-      this.showError("error", "Error Message", "Please enter target days.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.ADD_TARGET_DAYS);
       return;
     }
     if (this.maintenanceDays.targetDays <= 0) {
-      this.showError("error", "Error Message", "Please enter target days value greater than 0.");
+      this.showMessage("error", "Error Message", CommonMessage.ERROR.TARGET_DAYS_GREATER_THAN_ZERO);
       return;
     }
     const requestData = {
@@ -232,14 +233,10 @@ export class DialogComponent implements OnInit, OnDestroy {
       subscribe(
         (data: any) => {
           if (data == null) {
-            this.showError("success", "", "Target days changed successfully");
+            this.showMessage("success", "", CommonMessage.SUCCESS.TARGET_CHANGED_SUCCESS);
             this.statusService.projectTargetSubject.next();
           }
         });
-  }
-
-  public showError(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
   public openSettingIcon(maintenanceData: any) {

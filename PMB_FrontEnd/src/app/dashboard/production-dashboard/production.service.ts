@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'src/app/shared/constant/API_URLs';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 
 @Injectable({
@@ -7,24 +7,24 @@ import { ApiCallService } from '../../shared/service/api/api-call.service';
 })
 export class ProductionService {
 
-  ydayProcessLines = AppConstants.apiURLs.PROCESS_LINES_URL;
-  annualTarget = AppConstants.apiURLs.ANNUAL_TARGET_URL;
-  projectedData = AppConstants.apiURLs.PROJECTED_DATA_URL;
-  ydayAllProcessLines = AppConstants.apiURLs.YTD_ALL_PROCESS_LINES_URL;
-  kpiPulpArea = AppConstants.apiURLs.KPI_PULP_AREA_URL;
-  kpiPulp = AppConstants.apiURLs.KPI_PULP_URL;
-  ytdProcessLineTarget = AppConstants.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
-  drProcessLine = AppConstants.apiURLs.DR_ALL_PROCESS_LINES_URL;
-  allProcessLinesTarget = AppConstants.apiURLs.ALL_PROCESS_LINES_TARGET_URL;
-  drSelectedProcessLine = AppConstants.apiURLs.DR_SELECTED_PROCESS_LINES_URL;
-  kpiGrid = AppConstants.apiURLs.DOWNLOAD_DATA_GRID_URL;
-  saveAnnotation = AppConstants.apiURLs.SAVE_ANNOTATION_URL;
-  getMaintenanceDay = AppConstants.apiURLs.GET_MAINTENANCE_DAYS_URL;
-  saveMaintenanceDay = AppConstants.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
-  deleteMaintenanceDay = AppConstants.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
-  saveTargetDay = AppConstants.apiURLs.SAVE_TARGET_DAYS_URL;
-  annotationDates = AppConstants.apiURLs.ANNOTATION_DATES_URL;
-  productionGridKpiUrl = AppConstants.apiURLs.CONSUMPTION_GRID_API_URL;
+  ydayProcessLines = API_URL.apiURLs.PROCESS_LINES_URL;
+  annualTarget = API_URL.apiURLs.ANNUAL_TARGET_URL;
+  projectedData = API_URL.apiURLs.PROJECTED_DATA_URL;
+  ydayAllProcessLines = API_URL.apiURLs.YTD_ALL_PROCESS_LINES_URL;
+  kpiPulpArea = API_URL.apiURLs.KPI_PULP_AREA_URL;
+  kpiPulp = API_URL.apiURLs.KPI_PULP_URL;
+  ytdProcessLineTarget = API_URL.apiURLs.YTD_PROCESS_LINE_TARGET_URL;
+  drProcessLine = API_URL.apiURLs.DR_ALL_PROCESS_LINES_URL;
+  allProcessLinesTarget = API_URL.apiURLs.ALL_PROCESS_LINES_TARGET_URL;
+  drSelectedProcessLine = API_URL.apiURLs.DR_SELECTED_PROCESS_LINES_URL;
+  kpiGrid = API_URL.apiURLs.DOWNLOAD_DATA_GRID_URL;
+  saveAnnotation = API_URL.apiURLs.SAVE_ANNOTATION_URL;
+  getMaintenanceDay = API_URL.apiURLs.GET_MAINTENANCE_DAYS_URL;
+  saveMaintenanceDay = API_URL.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
+  deleteMaintenanceDay = API_URL.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
+  saveTargetDay = API_URL.apiURLs.SAVE_TARGET_DAYS_URL;
+  annotationDates = API_URL.apiURLs.ANNOTATION_DATES_URL;
+  productionGridKpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
 
   constructor(private apiCallService: ApiCallService) { }
 

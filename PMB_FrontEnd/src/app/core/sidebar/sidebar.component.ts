@@ -146,6 +146,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       flag = true;
     }
     if (!flag) {
+      this.statusService.spinnerSubject.next(true);
       this.sidebarForm.dateError = false;
       this.sidebarForm.millsError = false;
 
@@ -164,6 +165,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.sidebarForm.dateError = true;
     }
     else {
+      this.statusService.spinnerSubject.next(true);
       this.sidebarForm.dateError = false;
 
       if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {

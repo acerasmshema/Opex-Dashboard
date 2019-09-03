@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'src/app/shared/constant/API_URLs';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 
 @Injectable()
 export class DialogService {
 
-    saveAnnotation = AppConstants.apiURLs.SAVE_ANNOTATION_URL;
-    findAnnotation = AppConstants.apiURLs.FIND_ANNOTATION_URL;
+    saveAnnotation = API_URL.apiURLs.SAVE_ANNOTATION_URL;
+    findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
 
     constructor(private apiCallService: ApiCallService) { }
 

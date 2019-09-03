@@ -6,12 +6,12 @@ import { StatusService } from '../shared/service/status.service';
 import { ApiCallService } from '../shared/service/api/api-call.service';
 import { ConsumptionRequest } from '../dashboard/consumption-dashboard/consumption-reqest';
 import { ConsumptionGridView } from '../dashboard/consumption-dashboard/consumption-grid-view';
-import { AppConstants } from 'src/app/shared/constant/API_URLs';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
 
 @Injectable()
 export class BenchmarkService {
 
-    benchmarkKpiUrl = AppConstants.apiURLs.BENCHMARK_FILTER_URL;
+    benchmarkKpiUrl = API_URL.apiURLs.BENCHMARK_FILTER_URL;
     private searchKpiData: SearchKpiData;
 
     constructor(private apiCallService: ApiCallService,
@@ -85,6 +85,9 @@ export class BenchmarkService {
                 });
                 benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
                 this.resetDataLabel(benchmark, benchmark.data.length);
+
+                if (this.statusService.isSpin)
+                    this.statusService.spinnerSubject.next(false);
             });
     }
 
@@ -193,7 +196,7 @@ export class BenchmarkService {
                     barCount++;
                 }
             }
-        }, 2000);
+        }, 1500);
     }
 
     getDataforBenchmart(benchmarkRequest: ConsumptionRequest) {

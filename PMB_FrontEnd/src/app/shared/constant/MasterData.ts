@@ -10,7 +10,7 @@ export class MasterData {
     { name: 'Monthly', code: '1' },
     { name: 'Quarterly', code: '2' },
     { name: 'Yearly', code: '3' }
-  ];;
+  ];
 
   static maintanenceDaysColumn = [
     { field: 'maintainceDates', header: 'Date' },

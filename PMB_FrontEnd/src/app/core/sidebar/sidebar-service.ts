@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import { SidebarForm } from './sidebar-form';
 import { SidebarRequest } from './sidebar-request';
 import { MasterData } from '../../shared/constant/MasterData';
-import { AppConstants } from 'src/app/shared/constant/API_URLs';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { StatusService } from '../../shared/service/status.service';
 
 @Injectable()
 export class SidebarService {
 
-    kpiTypeUrl = AppConstants.apiURLs.KPI_TYPE_URL;
+    kpiTypeUrl = API_URL.apiURLs.KPI_TYPE_URL;
     
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService) { }

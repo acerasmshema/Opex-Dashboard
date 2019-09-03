@@ -5,15 +5,20 @@
   margin-right: 10px
 }
 
-  .chemicalcell {
-    border-right: 1px solid lightgray;
-    border-left: 1px solid lightgray;
-    height: 30px;
-    margin-bottom: 5px;
-    margin-left: -1px;
-  }
+.chemicalcell {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+  height: 30px;
+  margin-bottom: 5px;
+  margin-left: -1px;
+}
   
-  .pButton{
-    height: 20px;
-  }
+.pButton{
+  height: 20px;
+}
 
+.error {
+  text-align: center;
+  color: grey;
+  margin-top: 17%;
+}

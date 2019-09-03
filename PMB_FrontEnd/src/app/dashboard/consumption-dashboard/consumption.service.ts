@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'src/app/shared/constant/API_URLs';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { ConsumptionModel } from '../../shared/models/consumption-model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
@@ -14,8 +14,8 @@ import { ConsumptionGridView } from './consumption-grid-view';
 })
 export class ConsumptionService {
 
-  consumptionKpiUrl = AppConstants.apiURLs.CONSUMPTION_API_URL;
-  consumptionGridKpiUrl = AppConstants.apiURLs.CONSUMPTION_GRID_API_URL;
+  consumptionKpiUrl = API_URL.apiURLs.CONSUMPTION_API_URL;
+  consumptionGridKpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
 
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
@@ -92,8 +92,11 @@ export class ConsumptionService {
             consumption.error = false;
           }
           else {
-            consumption.error = false;
+            consumption.error = true;
           }
+
+          if (this.statusService.isSpin)
+            this.statusService.spinnerSubject.next(false);
         }
       });
   }
