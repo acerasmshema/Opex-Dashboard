@@ -103,12 +103,13 @@ public class ProcessLineTargetUtil {
 	}
 
 	public static ProcessLineProjectedResponse populateResponse(Long projectedTargetValue, Integer finalTarget,
-			String endDate) {
+			String endDate, String annualTargetValue) {
 		ProcessLineProjectedResponse response = new ProcessLineProjectedResponse();
 		response.setStartDate(Utility.dateToStringConvertor(new Date(), DashboardConstant.FORMAT));
 		response.setEndDate(endDate);
 		response.setTargetDays(finalTarget.longValue());
 		response.setProjectedTarget(projectedTargetValue);
+		response.setAnnualTarget(annualTargetValue);
 		return response;
 	}
 	

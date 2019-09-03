@@ -22,6 +22,7 @@ public class ProcessLineProjectedResponse {
 	private String endDate;
 	private Long targetDays;
 	private Long projectedTarget;
+	private String annualTarget;
 	
 	public String getStartDate() {
 		return startDate;
@@ -46,5 +47,11 @@ public class ProcessLineProjectedResponse {
 	}
 	public void setProjectedTarget(Long projectedTarget) {
 		this.projectedTarget = projectedTarget;
+	}
+	public String getAnnualTarget() {
+		return annualTarget;
+	}
+	public void setAnnualTarget(String annualTarget) {
+		this.annualTarget = annualTarget;
 	}
 }

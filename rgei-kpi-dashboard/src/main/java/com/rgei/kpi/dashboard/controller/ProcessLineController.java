@@ -169,9 +169,9 @@ public class ProcessLineController {
 	@GetMapping(value = "/v1/process_line/projected_target_details")
 	public ResponseEntity<ProcessLineProjectedResponse> getProjecctedTargetDetails(@RequestHeader(value="millId") String millId,
 			@RequestHeader(value="buId") String buId,@RequestHeader(value="kpiCategoryId") String kpiCategoryId,
-			@RequestHeader(value="kpiId") String kpiId) {
+			@RequestHeader(value="kpiId") String kpiId, @RequestHeader(value="annualTargetRequired") Boolean annualTargetRequired) {
 		logger.info("Fetching projected target details for process lines.");
-		ProcessLineProjectedResponse  processLineProjectedResponse = processLinePulpKpiService.getProjectedProcessLineDetails(millId, buId, kpiCategoryId, kpiId);
+		ProcessLineProjectedResponse  processLineProjectedResponse = processLinePulpKpiService.getProjectedProcessLineDetails(millId, buId, kpiCategoryId, kpiId, annualTargetRequired);
 		return new ResponseEntity<>(processLineProjectedResponse,HttpStatus.OK);
 	}
 	
