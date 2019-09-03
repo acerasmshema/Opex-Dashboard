@@ -102,7 +102,7 @@ export class BenchmarkService {
             let benchmarkRequest = new ConsumptionRequest();
             benchmarkRequest.startDate = this.searchKpiData.startDate;
             benchmarkRequest.endDate = this.searchKpiData.endDate;
-            benchmarkRequest.kpiId = this.searchKpiData.kpiId;
+            benchmarkRequest.kpiId = kpiId;
             benchmarkRequest.millId = millIds;
             benchmarkRequest.frequency = "0";
 
@@ -143,7 +143,6 @@ export class BenchmarkService {
             consumptionGridView: consumptionGridView
         }
         this.statusService.dialogSubject.next(data);
-
     }
 
     refreshBenchmark() {

@@ -70,8 +70,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.productionLineView = new ProductionLineView();
     this.annualChart = new ProductionBar();
     this.thresholdTargetMap = new Object();
-    this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
-    this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    const currentDate = new Date();
+    this.startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth()).toString() + '-' + (currentDate.getDate() - 1);
+    this.endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
 
     this.setProductionLineForm();
     if (this.localStorageService.fetchUserRole() == "Mills Operation") {
@@ -304,88 +305,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         if (isGridRequest)
           this.getProdGrid(prodLineResponse);
-          this.checkProdlineRequest(startDate, endDate, processLines, frequency, prodLineResponse);
+
       });
   }
-
-
-  /* 
-  
-  Calculation for the production color 
-
-  */
- sroItem: any[] = [];
- 
-  public checkProdlineRequest(startDate, endDate, processLines, frequency,prodLineResponse: any){
-   var newDataKeys, newDataValues;
-    for (let each of prodLineResponse){
-      newDataKeys = each.name;
-      for (let eachOne of each.series){
-        newDataValues = eachOne.value;
-        this.getSroValues(startDate, endDate, processLines, frequency,newDataKeys,newDataValues);
-      }
-    }
-  }
-
-  public getSroValues(startDate, endDate, processLines, frequency,newDataKeys,newDataValues){
-    let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
-    this.productionService.getkpiCatForYDayAllProcessLineData(productionRequest)
-    .subscribe((data: any) => {
-      data.map(ob => {
-        ob.series.map(sro => {
-          sro['id'] = newDataKeys;
-          if (sro['value'] != null || sro['value'] != "N/A") {
-            if (sro['name'] === sro['id']) {
-              sro['value'] = newDataValues;
-              this.parseAndGetColor(sro);
-              sro['color'] = this.parseAndGetColor(sro);
-              this.sroItem.push(sro);
-            }
-          }
-        })
-      });
-    });
-  }
-
-  
-
-
-  parseAndGetColor(sro) {
-    let prev = 0;
-    let ar = sro.target.split(",");
-    let blackValue, redValue: number;
-
-    if (sro.value === "N/A" || sro.value === null) {
-      return 'red';
-    } else {
-      for (let v1 of ar) {
-        let ix = v1.split(":");
-        if (ix[0].trim() === "black") {
-          blackValue = parseInt(ix[1].trim());
-        } else if (ix[0].trim() === "red") {
-          redValue = parseInt(ix[1].trim());
-        }
-      }
-      if (sro.value <= blackValue && sro.value <= redValue) {
-        return 'red';
-      } else if (sro.value <= blackValue && sro.value >= redValue) {
-        return 'black'
-      } else if (sro.value >= blackValue && sro.value >= redValue) {
-        return 'black';
-      }
-    }
-  }
-
-  checkSroColor(data_header,data_value) {
-       if (this.sroItem.length > 0) {
-        for (let eachLineofSroItem of this.sroItem) {
-          if (eachLineofSroItem.value == data_value && eachLineofSroItem.name == data_header) {
-            return eachLineofSroItem.color;
-          }
-        }
-      }
-    }
-
 
   public getProdGrid(prodLineResponse: any) {
     this.productionLineView.rows = 10;
@@ -415,47 +337,47 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.productionLineView.productionLines = gridData;
   }
 
-  public changeMonthlyChartDuration(event: any) {
+  public changeMonthlyChartDuration(duration: string) {
     const chartType = this.monthlyChart.chartType;
-    if (event == "radio1") {
-      this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() + 1);
-      this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    const currentDate = new Date();
+    if (duration === "one-month-chart") {
+      this.startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth()).toString() + '-' + (currentDate.getDate() + 1);
+      this.endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
       this.getMonthlyChartData(this.startDate, this.endDate, chartType);
-    } else if (event == "radio2") {
-      this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() - 2).toString() + '-' + (new Date().getDate() + 1);
-      this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    } else if (duration === "three-month-chart") {
+      this.startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth() - 2).toString() + '-' + (currentDate.getDate() + 1);
+      this.endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
       this.getMonthlyChartData(this.startDate, this.endDate, chartType);
-    } else if (event == "radio3") {
-      this.startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() - 5).toString() + '-' + (new Date().getDate() + 1);
-      this.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    } else if (duration === "six-month-chart") {
+      this.startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth() - 5).toString() + '-' + (currentDate.getDate() + 1);
+      this.endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
       this.getMonthlyChartData(this.startDate, this.endDate, chartType);
     }
   }
 
-  public changeChartDurationLineChart(event) {
+  public changeChartDurationLineChart(duration: string) {
     let startDate;
     let endDate;
-    if (event == "radio1") {
-      startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
-      endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    } else if (event == "radio2") {
-      startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() - 2).toString() + '-' + (new Date().getDate() - 1);
-      endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    } else if (event == "radio3") {
-      if (new Date().getMonth() < 6) {
-        startDate = (new Date().getFullYear() - 1).toString() + '-' + (new Date().getMonth() + 7).toString() + '-' + (new Date().getDate() - 1);
-        endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    const currentDate = new Date();
+    if (duration === "one-month-line-chart") {
+      startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth()).toString() + '-' + (currentDate.getDate() - 1);
+      endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    } else if (duration === "three-month-line-chart") {
+      startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth() - 2).toString() + '-' + (currentDate.getDate() - 1);
+      endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    } else if (duration === "six-month-line-chart") {
+      if (currentDate.getMonth() < 6) {
+        startDate = (currentDate.getFullYear() - 1).toString() + '-' + (currentDate.getMonth() + 7).toString() + '-' + (currentDate.getDate() - 1);
+        endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
       } else {
-        startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() - 5).toString() + '-' + (new Date().getDate() - 1);
-        endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+        startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth() - 5).toString() + '-' + (currentDate.getDate() - 1);
+        endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
       }
     }
     this.getAllProductionLinesDateRangeData(startDate, endDate);
   }
 
   public searchData(isGridRequest: boolean) {
-
-
     if (this.productionEnquiryData.lineChartDate !== null) {
       const startDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[0], 'yyyy-MM-dd');
       const endDate = this.datePipe.transform(this.productionEnquiryData.lineChartDate[1], 'yyyy-MM-dd');
@@ -465,7 +387,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       if (this.productionEnquiryData.lineChartPLines.length > 0) {
         this.productionEnquiryData.lineChartPLines.forEach(processLine => {
           processLines.push(processLine['processLineCode']);
-     
         });
       }
       this.getSelectedProductionLinesDateRangeData(startDate, endDate, processLines, frequency, isGridRequest);
@@ -534,7 +455,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       }, 100);
     }
   }
-
 
   public getThresholdTarget() {
     const requestData = {

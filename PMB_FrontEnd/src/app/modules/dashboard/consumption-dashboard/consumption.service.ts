@@ -42,9 +42,10 @@ export class ConsumptionService {
 
   showKpiCharts(kpiId: number, kpiName: string, kpiCategoryId: string) {
     let searchKpiData = new SearchKpiData();
-    let startDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth()).toString() + '-' + (new Date().getDate() - 1);
+    const currentDate = new Date();
+    let startDate = currentDate.getFullYear().toString() + '-' + (currentDate.getMonth()).toString() + '-' + (currentDate.getDate() - 1);
     searchKpiData.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-    searchKpiData.endDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    searchKpiData.endDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
     searchKpiData.kpiName = kpiName;
     searchKpiData.kpiId = kpiId;
     searchKpiData.processLines = [];
@@ -87,8 +88,11 @@ export class ConsumptionService {
               domains.push(legendColor);
             });
             consumption.colorScheme = { domain: domains };
-
             consumption.data = response;
+            consumption.error = false;
+          }
+          else {
+            consumption.error = false;
           }
         }
       });
@@ -189,6 +193,7 @@ export class ConsumptionService {
     ccm.xAxisLabel = "";
     ccm.yAxisLabel = "";
     ccm.showKpiType = true;
+    ccm.error = false;
 
     let domains = [];
     let processLines = this.statusService.common.processLines;

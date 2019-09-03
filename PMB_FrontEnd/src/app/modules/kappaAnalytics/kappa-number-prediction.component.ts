@@ -12,6 +12,8 @@ export class KappaNumberPredictionComponent implements OnInit {
   constructor(private statusService: StatusService) { }
 
   ngOnInit() {
+    document.getElementById("select_mill").style.display = "none";
+    
     let sidebarRequest = new SidebarRequest();
     sidebarRequest.isShow = false;
     this.statusService.sidebarSubject.next(sidebarRequest);

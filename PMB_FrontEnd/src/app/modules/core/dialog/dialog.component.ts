@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MessageService } from 'primeng/primeng';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { MessageService, Panel } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
@@ -9,6 +9,7 @@ import { ConsumptionGridView } from '../../dashboard/consumption-dashboard/consu
 import { MaintenanceDays } from './maintenance-days';
 import { ProductionService } from '../../dashboard/production-dashboard/production.service';
 import { MasterData } from '../../shared/constant/MasterData';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-dialog',
@@ -17,6 +18,10 @@ import { MasterData } from '../../shared/constant/MasterData';
   providers: [DialogService, MessageService, LocalStorageService, ProductionService]
 })
 export class DialogComponent implements OnInit, OnDestroy {
+
+  @ViewChild(Table) consumptionGrid: Table;
+  @ViewChild(Panel) maintenancePanel: Panel;
+  @ViewChild(Panel) annotationPanel: Panel;
 
   dialogSubscription: Subscription;
 
@@ -51,8 +56,15 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.annotationDialog.processLinesForAnnotation = this.statusService.common.processLines;
           this.getAnnotationData(this.annotationDialog.annotationKpiId);
           this.annotationDialog.displayAnnotations = true;
+
+          setTimeout(() => {
+            this.annotationPanel.collapsed = true;
+          }, 1);
         }
         else if (dialogName === 'consumptionGridView') {
+          setTimeout(() => {
+            this.consumptionGrid.reset();
+          }, 10);
           this.consumptionGridView = data.consumptionGridView;
         }
         else if (dialogName === 'maintenanceDays') {
@@ -134,11 +146,6 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
-  ngOnDestroy() {
-    this.dialogSubscription.unsubscribe();
-    this.dialogName = null;
-  }
-
   public add() {
     if (this.maintenanceDays.dateValue == undefined) {
       this.showError("error", "Error Message", "Please select Date.");
@@ -184,7 +191,6 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.productionService.getMaintenanceData(requestData).
       subscribe(
         (response: any) => {
-          console.log("Response: ", response);
           this.maintenanceDays.maintanenceDayModel = response;
         }
       )
@@ -233,52 +239,24 @@ export class DialogComponent implements OnInit, OnDestroy {
         });
   }
 
-  public onRowEditInit(rowData){  
-    return rowData.remarks;
-  }
-
-  public onRowEditSave(rowData){
-    console.log("This are onRowEditSave", rowData);
-    let rowData_ID =[];
-    let  rowDataIds = rowData.id.toString();
-    rowData_ID.push(rowDataIds);
-
-    const datas ={
-     "ids":rowData_ID,
-     "remarks":rowData.remarks,
-     "updatedBy":1
-   }
-
-   console.log("The data is : ",datas);
-    this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
-      console.log("The data nw onRowEditSave ",datas);
-      
-    });
-    console.log(this.viewMaintenanceDays());
-
-  }
-// make changes on this file
-  public onRowEditCancel(rowData,ri){
-    console.log("This are onRowEditCancel remarks", rowData.remarks);
-    console.log("This are ri ",ri);    
-    let cancelData = rowData;
-    let cancelPerm = ""
-    this.viewMaintenanceDays();
-
-
-  }
-
   public showError(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
   public openSettingIcon(maintenanceData: any) {
     this.viewMaintenanceDays();
- 
     this.maintenanceDays = new MaintenanceDays();
     this.maintenanceDays.maintanenceDaysColumn = MasterData.maintanenceDaysColumn;
     this.maintenanceDays.targetDays = maintenanceData.targetDays;
-    this.maintenanceDays.collapsed = false;
     this.maintenanceDays.show = !this.maintenanceDays.show;
+    setTimeout(() => {
+      this.maintenancePanel.collapsed = true;
+    }, 1);
   }
+
+  ngOnDestroy() {
+    this.dialogSubscription.unsubscribe();
+    this.dialogName = null;
+  }
+
 }

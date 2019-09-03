@@ -13,6 +13,7 @@ export class ConsumptionModel {
     showDataLabel: boolean;
     roundEdges: boolean;
     checked: boolean;
+    error: boolean;
     barPadding: number;
     groupPadding: number;
     yScaleMax: number;
