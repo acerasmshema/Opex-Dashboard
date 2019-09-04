@@ -75,7 +75,7 @@ export class BenchmarkService {
         this.getDataforBenchmart(benchmarkRequest).
             subscribe((response: any) => {
                 const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
-                
+
                 if (response.kpiData.length > 0) {
                     benchmark.data = response.kpiData;
                     let maxValue = 0;
@@ -92,7 +92,7 @@ export class BenchmarkService {
                 else {
                     benchmark.error = true;
                 }
-                
+
                 if (this.statusService.isSpin)
                     this.statusService.spinnerSubject.next(false);
             });
@@ -104,6 +104,7 @@ export class BenchmarkService {
             this.download(benchmarkData, kpiName);
         }
         else {
+            this.statusService.spinnerSubject.next(true);
             let millIds = [];
             this.searchKpiData.mills.forEach(mill => {
                 millIds.push(mill.millId);
@@ -120,6 +121,7 @@ export class BenchmarkService {
                 subscribe((response: any) => {
                     const kpiData = response.kpiData;
                     this.download(kpiData, kpiName);
+                    this.statusService.spinnerSubject.next(false);
                 });
         }
     }

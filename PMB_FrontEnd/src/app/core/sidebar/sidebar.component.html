@@ -49,13 +49,9 @@
                             optionLabel="name" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
                         </p-dropdown>
                     </div>
-                    <div class="form-group m-t-5" style="padding-left: 30%;">
-                        <button pButton [disabled]="!sidebarForm.isResetButtonEnable" [hidden]="sidebarForm.hide"
-                            type="button" label="Reset" (click)="onReset('dashboard')" class="ui-button-primary"
-                            style="background-color: #007ad9;height:30px; margin-right: 5px"></button>
-                        <button pButton [hidden]="sidebarForm.hide" type="button" label="Apply"
-                            (click)="onSearchData('dashboard')" class="ui-button-primary"
-                            style="background-color: #007ad9;height:30px;"></button>
+                    <div class="form-group m-t-5" style="padding-left: 60%;">
+                        <button [hidden]="sidebarForm.hide" (click)="onSearchData('dashboard')" class="btn btn-info"
+                            style="background-color: #007ad9;height:30px;">Apply</button>
                     </div>
                 </form>
             </div>
@@ -117,16 +113,12 @@
                                 optionLabel="name" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
                             </p-dropdown>
                         </div>
-                        <div class="form-group m-t-5" style="padding-left: 35%;">
-                            <button pButton [disabled]="!sidebarForm.isResetButtonEnable" [hidden]="sidebarForm.hide"
-                                type="button" label="Reset" (click)="onReset('benchmark')" class="ui-button-primary"
-                                style="background-color: #007ad9;height:30px; margin-right: 5px"></button>
-                            <button pButton [hidden]="sidebarForm.hide" type="button" label="Apply"
-                                (click)="onSearchData('benchmark')" class="ui-button-primary"
-                                style="background-color: #007ad9;height:30px;"></button>
+                        <div class="form-group m-t-5" style="padding-left: 70%;">
+                            <button [hidden]="sidebarForm.hide" (click)="onSearchData('benchmark')" class="btn btn-info"
+                                style="background-color: #007ad9;height:30px;">Apply</button>
                         </div>
                     </div>
-                </form>
+                </form>`
             </div>
         </nav>
     </div>

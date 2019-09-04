@@ -8,7 +8,6 @@ export class SidebarForm {
     frequencies: any;
     hide: boolean;
     isActive: boolean;
-    isResetButtonEnable: boolean;
     collapsed: boolean;
     pushRightClass: string;
     kpiCategoryId: string;
