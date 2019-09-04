@@ -132,7 +132,7 @@
         <p-panel header="List of Maintenance Days " [collapsed]="maintenanceDays.collapsed" [toggleable]="true"
             (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
-                <div class="row" style="height: 260px;">
+                <div class="row" style="height: 260px;width: 750px;">
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
@@ -141,11 +141,14 @@
                             [tableStyle]="{'table-layout':'auto'}">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th style="width: 3em">
+                                    <th style="width: 3em;">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
                                     <th *ngFor="let col of columns" style="text-align: center">
                                         {{col.header}}
+                                    </th>
+                                    <th style="width: 2em; text-align:center;">
+                                        User Action
                                     </th>
                                 </tr>
                             </ng-template>
@@ -155,19 +158,45 @@
                                     <td>
                                         <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
                                     </td>
-                                    <td class=".ng-invalid.ng-dirty text-center" style="width: 20%;">
+                                    <td class=".ng-invalid.ng-dirty text-center" style="width: 100px;">
                                         {{rowData.maintainceDates}}
                                     </td>
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%"
+                                            
+                                               <textarea [rows]="2" [cols]="30" [(ngModel)]="rowData.remarks"  style="width:100%; max-width:500px;"
+                                               pInputTextarea autoResize="autoResize"></textarea>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{rowData.remarks}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <!--
+                                         <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                            
+                                                <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%;"
                                                     class="ng-pristine ng-valid ng-star-inserted ng-touched">
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData.remarks}}
                                             </ng-template>
                                         </p-cellEditor>
+                                    </td>
+                                    -->
+                                    <td style="text-align:center; width: 180px; ">
+                                        <button *ngIf="!editing" pButton type="button" pInitEditableRow
+                                            icon="fa fa-pencil-square-o" label="Edit" class="ui-button-info"
+                                            (click)="onRowEditInit(rowData)"></button>
+                                        <button *ngIf="editing" pButton type="button" pSaveEditableRow
+                                            icon="fa fa-check-square-o" label="Save" class="ui-button-success"
+                                            style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                                        <button *ngIf="editing" pButton type="button" pCancelEditableRow
+                                            icon=" fa fa-times" label="Cancel" class="ui-button-danger"
+                                            (click)="onRowEditCancel()"></button>
                                     </td>
                                 </tr>
                             </ng-template>

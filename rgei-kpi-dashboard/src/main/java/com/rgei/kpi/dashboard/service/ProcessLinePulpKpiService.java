@@ -51,7 +51,7 @@ public interface ProcessLinePulpKpiService {
 	public Long getAnnualTargetValue(String millId, String buId, String kpiCategoryId, String kpiId);
 
 	public ProcessLineProjectedResponse getProjectedProcessLineDetails(String millId, String buId, String kpiCategoryId,
-			String kpiId);
+			String kpiId, Boolean annualTargetRequired);
 
 	public List<DateRangeResponse> getProcessLinesForFrequency(ProcessLineRequest productionRequestDTO);
 

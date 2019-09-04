@@ -253,7 +253,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	
 	@Override
 	public ProcessLineProjectedResponse getProjectedProcessLineDetails(String millId, String buId, String kpiCategoryId,
-			String kpiId) {
+			String kpiId, Boolean annualTargetRequired) {
 		logger.info("Getting projected process line details");
 		Long tarDiff = calculateTargetDifference(millId, buId, kpiCategoryId, kpiId);
 		Integer targetDays = getTargetDays(millId, buId, kpiCategoryId);
@@ -263,7 +263,19 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		Integer finalTargetDays = ProcessLineTargetUtil.processTargetDaysAsPerMaintainanceDays(dates, maintainanceDays, targetDays);
 		Long projectedTargetValue = ProcessLineTargetUtil.setProjectedTaeget(tarDiff,targetDays, dailyTargetValue);
 		String endDate = new ProcessLineTargetUtil().getProjectedDate(finalTargetDays);
-		return ProcessLineTargetUtil.populateResponse(projectedTargetValue, targetDays, endDate);
+		
+		//Merger with Api GET /restCall/v1/yesterday/ytd_process_line 
+		String annualTarget = "";
+		//Fetch annualTarget value if annualTargetRequired is true
+		if(annualTargetRequired) {
+			MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
+					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
+			if(millBuKpiCategoryEntity != null) {
+				annualTarget = millBuKpiCategoryEntity.getAnnualTarget();
+			}
+		}
+		
+		return ProcessLineTargetUtil.populateResponse(projectedTargetValue, targetDays, endDate, annualTarget);
 	}
 	
 	@Override
