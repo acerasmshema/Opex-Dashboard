@@ -60,7 +60,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     this.projectTargetSubscription = this.statusService.projectTargetSubject.
       subscribe(() => {
-        this.getProjectedTarget();
+        this.getProjectedTarget(false);
       });
   }
 
@@ -83,9 +83,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     const frequency = this.productionEnquiryData.selectedValue['code'];
 
     this.getProductionYTDData();
-    this.getProjectedTarget();
+    this.getProjectedTarget(true);
     this.getProductionYDayData();
-    this.getAnnualTarget();
     this.getMonthlyChartData(this.startDate, this.endDate, "stack-bar");
     this.getAllProdYestData(this.startDate, this.endDate, []);
     this.getSelectedProductionLinesDateRangeData(this.startDate, this.endDate, [], frequency, true);
@@ -127,21 +126,22 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getProjectedTarget() {
-    const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getProjectedTarget(data).
-      subscribe((data: any) => {
-        this.annualChart.targetDays = data['targetDays'];
-        this.annualChart.targetValue = data['projectedTarget'].toLocaleString('en-us');
-        this.annualChart.targetEndDate = data['endDate'];
-      });
-  }
+  public getProjectedTarget(isAnnualTargetRequired: boolean) {
+    const requestData = {
+      millId: this.statusService.common.selectedMill.millId,
+      buId: '1',
+      kpiCategoryId: '1',
+      kpiId: '1',
+      annualTargetRequired: '' + isAnnualTargetRequired
+    };
+    this.productionService.getProjectedTarget(requestData).
+      subscribe((responseData: any) => {
+        this.annualChart.targetDays = responseData['targetDays'];
+        this.annualChart.targetValue = responseData['projectedTarget'].toLocaleString('en-us');
+        this.annualChart.targetEndDate = responseData['endDate'];
 
-  public getAnnualTarget() {
-    const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getAnnualTarget(data).
-      subscribe((data: any) => {
-        this.annualChart.annualTarget = data['annualTarget'].toLocaleString('en-us');
+        if (isAnnualTargetRequired)
+          this.annualChart.annualTarget = responseData['annualTarget'].toLocaleString('en-us');
       });
   }
 
@@ -390,9 +390,6 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         });
       }
       this.getSelectedProductionLinesDateRangeData(startDate, endDate, processLines, frequency, isGridRequest);
-    }
-    else {
-      alert("Please select date range");
     }
   }
 

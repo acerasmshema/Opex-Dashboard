@@ -10,7 +10,6 @@ export class API_URL {
         ALL_MILLS_URL: API_URL.BASE_API_URL_v1 + '/location/all_mills',
         ALL_BU_TYPE_URL: API_URL.BASE_API_URL_v1 + '/location/get_all_bu_type',
         PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/yesterday/total_process_line',
-        ANNUAL_TARGET_URL: API_URL.BASE_API_URL_v1 + '/yesterday/ytd_process_line',
         PROJECTED_DATA_URL: API_URL.BASE_API_URL_v1 + '/process_line/projected_target_details',
         YTD_ALL_PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/yesterday/all_process_lines',
         KPI_PULP_AREA_URL: API_URL.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp_area',

@@ -9,4 +9,10 @@ export class MaintenanceDays {
     selectedMaintenanceDay: any;
     maintanenceDayModel: any;
     editing: boolean;
+    isDateError: boolean
+    dateErrorMessage: string;
+    isRemarksError: boolean;
+    remarksErrorMessage: string;
+    isTargetDaysError: boolean;
+    targetDaysErrorMessage: string;
 }

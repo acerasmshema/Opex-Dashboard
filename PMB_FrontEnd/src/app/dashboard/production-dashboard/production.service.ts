@@ -8,7 +8,6 @@ import { ApiCallService } from '../../shared/service/api/api-call.service';
 export class ProductionService {
 
   ydayProcessLines = API_URL.apiURLs.PROCESS_LINES_URL;
-  annualTarget = API_URL.apiURLs.ANNUAL_TARGET_URL;
   projectedData = API_URL.apiURLs.PROJECTED_DATA_URL;
   ydayAllProcessLines = API_URL.apiURLs.YTD_ALL_PROCESS_LINES_URL;
   kpiPulpArea = API_URL.apiURLs.KPI_PULP_AREA_URL;
@@ -31,11 +30,7 @@ export class ProductionService {
   public getProductionYDayData(data: object) {
     return this.apiCallService.callGetAPIwithData(this.ydayProcessLines, data);
   }
-
-  public getAnnualTarget(data: object) {
-    return this.apiCallService.callGetAPIwithData(this.annualTarget, data);
-  }
-
+  
   public getProjectedTarget(data: object) {
     return this.apiCallService.callGetAPIwithData(this.projectedData, data);
   }
