@@ -239,6 +239,32 @@ export class DialogComponent implements OnInit, OnDestroy {
         });
   }
 
+
+  public onRowEditInit(rowData){  
+    return rowData.remarks;
+  }
+
+  public onRowEditSave(rowData){
+    let rowData_ID =[];
+    let  rowDataIds = rowData.id.toString();
+    rowData_ID.push(rowDataIds);
+
+    const datas ={
+     "ids":rowData_ID,
+     "remarks":rowData.remarks,
+     "updatedBy":1
+   }
+
+    this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
+    });
+
+  }
+
+  public onRowEditCancel(){
+    this.viewMaintenanceDays();
+  }
+
+
   public showError(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
