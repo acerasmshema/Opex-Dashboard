@@ -9,7 +9,7 @@
                                 <div class="col-md-9 text-center">
                                     <h4 style="padding-left: 36%">{{benchmark.kpiName}}</h4>
                                 </div>
-                                <div class="col-md-2">
+                                <div *ngIf="!benchmark.error" class="col-md-2">
                                     <div class="m-l-5"
                                         (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName, true)">
                                         <em class="fa fa-download fa-2x"></em>
@@ -17,14 +17,14 @@
                                     </div>
                                     <label for=""></label>
                                 </div>
-                                <div class="col-md-1">
+                                <div *ngIf="!benchmark.error" class="col-md-1">
                                     <span class="m-l-5"
                                         (click)="showGridDialog(benchmark.kpiId, benchmark.kpiName, false)">
                                         <em class="fa fa-download fa-2x"></em>
                                     </span>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div *ngIf="!benchmark.error" class="row">
                                 <div class="col-md-12" [id]="'benchmark_' + benchmark.kpiId">
                                     <div *ngIf="benchmark.chartType === 'bar'" style="height: 250px;">
                                         <ngx-charts-bar-vertical-2d [scheme]="benchmark.colorScheme"
@@ -41,6 +41,9 @@
                                         </ngx-charts-bar-vertical-2d>
                                     </div>
                                 </div>
+                            </div>
+                            <div *ngIf="benchmark.error" style="height: 250px;">
+                                <h3 class="chart-error">No Data Found</h3>
                             </div>
                         </div>
                     </div>

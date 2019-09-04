@@ -74,18 +74,25 @@ export class BenchmarkService {
 
         this.getDataforBenchmart(benchmarkRequest).
             subscribe((response: any) => {
-                let benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
-                benchmark.data = response.kpiData;
-                let maxValue = 0;
-                benchmark.data.forEach(kpiData => {
-                    kpiData.series.forEach(seriesData => {
-                        if (seriesData.value > maxValue)
-                            maxValue = seriesData.value;
+                const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
+                
+                if (response.kpiData.length > 0) {
+                    benchmark.data = response.kpiData;
+                    let maxValue = 0;
+                    benchmark.data.forEach(kpiData => {
+                        kpiData.series.forEach(seriesData => {
+                            if (seriesData.value > maxValue)
+                                maxValue = seriesData.value;
+                        });
                     });
-                });
-                benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
-                this.resetDataLabel(benchmark, benchmark.data.length);
-
+                    benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
+                    this.resetDataLabel(benchmark, benchmark.data.length);
+                    benchmark.error = false;
+                }
+                else {
+                    benchmark.error = true;
+                }
+                
                 if (this.statusService.isSpin)
                     this.statusService.spinnerSubject.next(false);
             });

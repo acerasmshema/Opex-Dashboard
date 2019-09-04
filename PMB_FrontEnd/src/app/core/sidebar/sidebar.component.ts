@@ -111,7 +111,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarForm.hide = !this.sidebarForm.hide;
     this.statusService.sidebarSizeSubject.next(sidebarSize);
 
-    if(this.sidebarForm.collapsed) {
+    if (this.sidebarForm.collapsed) {
       this.sidebarForm.dateError = false;
       this.sidebarForm.millsError = false;
     }
@@ -135,36 +135,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
     return dom.classList.contains(this.sidebarForm.pushRightClass);
   }
 
-  searchBenchmarkData() {
-    let flag = false;
+  public onSearchData(type: string) {
+    let isError = false;
     if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
       this.sidebarForm.dateError = true;
-      flag = true;
+      isError = true;
     }
-    if (this.searchKpiData.mills === undefined || this.searchKpiData.mills.length < 2) {
-      this.sidebarForm.millsError = true;
-      flag = true;
-    }
-    if (!flag) {
-      this.statusService.spinnerSubject.next(true);
-      this.sidebarForm.dateError = false;
-      this.sidebarForm.millsError = false;
 
-      if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
-        this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
-      }
-      if (this.searchKpiData.processLines === undefined || this.searchKpiData.processLines.length === 0) {
-        this.searchKpiData.processLines = [];
-      }
-      this.statusService.benchmarkSubject.next(this.searchKpiData);
-    }
-  }
-
-  searchData(type: string) {
-    if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
-      this.sidebarForm.dateError = true;
-    }
-    else {
+    if (type === 'dashboard' && !isError) {
       this.statusService.spinnerSubject.next(true);
       this.sidebarForm.dateError = false;
 
@@ -178,6 +156,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const consumptionDetail = this.statusService.consumptionDetailMap.get(this.sidebarForm.kpiCategoryId);
       consumptionDetail.searchKpiData = this.searchKpiData;
       this.consumptionService.filterCharts(this.searchKpiData, this.sidebarForm.kpiCategoryId);
+    }
+    else if (type === 'benchmark' && !isError) {
+      if (this.searchKpiData.mills === undefined || this.searchKpiData.mills.length < 2) {
+        this.sidebarForm.millsError = true;
+      }
+      else {
+        this.statusService.spinnerSubject.next(true);
+        this.sidebarForm.dateError = false;
+        this.sidebarForm.millsError = false;
+
+        if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
+          this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
+        }
+        if (this.searchKpiData.processLines === undefined || this.searchKpiData.processLines.length === 0) {
+          this.searchKpiData.processLines = [];
+        }
+        this.statusService.benchmarkSubject.next(this.searchKpiData);
+      }
     }
   }
 
@@ -211,6 +207,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.millsError = true;
       } else {
         this.sidebarForm.millsError = false;
+        this.sidebarForm.isResetButtonEnable = true;
       }
     }
   }
@@ -218,7 +215,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
   onDateValidation() {
     const datePicker: any = document.getElementById("daterangepicker_input");
     if (datePicker !== null && datePicker.value !== "" && this.sidebarForm.dateError) {
-      this.sidebarForm.dateError = false
+      this.sidebarForm.dateError = false;
+    }
+    this.sidebarForm.isResetButtonEnable = true;
+  }
+
+  onReset(tab: string) {
+    this.sidebarForm.dateError = false;
+    this.sidebarForm.isResetButtonEnable = false;
+    this.searchKpiData = new SearchKpiData();
+
+    if (tab === 'dashboard') {
+      this.searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+        this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
+        this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+    }
+    else if (tab === 'benchmark') {
+      this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+      this.sidebarForm.millsError = false;
     }
   }
 
