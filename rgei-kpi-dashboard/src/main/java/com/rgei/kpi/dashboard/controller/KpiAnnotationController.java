@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.exception.handling.ApiSuccess;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateSerachRes;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDeleteRequest;
@@ -57,7 +58,7 @@ public class KpiAnnotationController {
 			@RequestBody KpiAnnotationRequest kpiAnnotationRequest) {
 		logger.info("Save annotation request", kpiAnnotationRequest);
 		kpiAnnotationService.saveKpiAnnotationRequest(kpiAnnotationRequest);
-		return new ResponseEntity<>(HttpStatus.OK);
+		throw new ApiSuccess("Annotation successfully saved for Mill Id - "+kpiAnnotationRequest.getMillId());
 	}
 
 	@PostMapping(value = "/v1/kpi_annotation/get_annotation")
