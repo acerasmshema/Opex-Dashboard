@@ -40,7 +40,7 @@
                         </ejs-daterangepicker>
                     </div>
                     <div *ngIf="sidebarForm.dateError" style="padding-left: 23px;">
-                        <label class="labelClass">Please select date range</label>
+                        <label class="labelClass">{{sidebarForm.dateErrorMessage}}</label>
                     </div>
                     <div class="form-group">
                         <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
@@ -79,7 +79,7 @@
                             </p-multiSelect>
                         </div>
                         <div *ngIf="sidebarForm.millsError">
-                            <label class="labelClass mill-error">Please select atleast 2 mills</label>
+                            <label class="labelClass mill-error">{{sidebarForm.millsErrorMessage}}</label>
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><em class="fa fa-fw fa-wrench"></em></label>
@@ -104,7 +104,7 @@
                             </ejs-daterangepicker>
                         </div>
                         <div *ngIf="sidebarForm.dateError">
-                            <label class="labelClass">Please select date range</label>
+                            <label class="labelClass">{{sidebarForm.dateErrorMessage}}</label>
                         </div>
                         <div class="form-group">
                             <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
