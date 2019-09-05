@@ -1,4 +1,4 @@
-package com.rgei.kpi.dashboard.exception.handling;
+package com.rgei.kpi.dashboard.exception;
 
 public class StatusCodes {
 	private StatusCodes() {
@@ -28,6 +28,9 @@ public class StatusCodes {
 	 */
 	public static final String BAD_REQUEST = "400";
 	
-	public static final String RECORD_NOT_FOUND = "204";
+	
+	public static final String RECORD_STORED = "100";
+	public static final String RECORD_UPDATED = "101";
+	public static final String RECORD_NOT_FOUND = "102";
 
 }
