@@ -1,0 +1,40 @@
+table {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+    font-size: 11pt;
+}
+
+.td-user {    
+    font-family: arial;
+    font-size: 11pt;
+}
+
+
+label {
+    display: inline-block;
+}
+
+.label-danger {
+    background-color: #ef5350;
+}
+
+.label-info {
+    background-color: #398bf7;
+}
+
+.label {
+    padding: 3px 10px;
+    line-height: 13px;
+    color: #ffffff;
+    font-weight: 400;
+    border-radius: 4px;
+    font-size: 9pt;
+}
+
+.table-label {
+    font-size: 10pt;
+    padding-right: 0px;
+    font-weight: 500;
+}

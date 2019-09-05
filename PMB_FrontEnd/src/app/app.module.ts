@@ -46,7 +46,6 @@ import { DashboardService } from './dashboard/dashboard.service';
     BrowserModule,
     SidebarModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     CoreModule,
     CommonModule,
     GaugeChartModule,

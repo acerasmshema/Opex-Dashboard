@@ -36,6 +36,11 @@ const routes: Routes = [
         path: "kappaAnalytics",
         pathMatch: 'full',
         loadChildren: './kappa-analytics/kappa-analytics.module#kappaAnalyticsModule'
+      },
+      {
+        path: "user",
+        pathMatch: 'full',
+        loadChildren: './user-management/user-management.module#UserManagementModule'
       }
     ]
   },
