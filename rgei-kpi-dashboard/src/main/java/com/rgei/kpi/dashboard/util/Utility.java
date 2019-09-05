@@ -26,6 +26,7 @@ import java.util.Date;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.response.model.ApiSuccessResponse;
 
 public class Utility {
 	
@@ -79,5 +80,9 @@ public class Utility {
 	
 	public static double parseProcessLineValue(Double value) {
 		return !value.isNaN()?value:-300;
+	}
+	
+	public static ApiSuccessResponse getApiResponse(String description, String status) {
+		return new ApiSuccessResponse(new Date(System.currentTimeMillis()).toString(), description, status);
 	}
 }
