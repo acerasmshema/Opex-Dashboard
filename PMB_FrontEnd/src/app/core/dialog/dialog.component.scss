@@ -7,3 +7,7 @@
     font-weight: 500;
     color: red;
 }
+
+body .ui-table .ui-table-thead > tr > th {
+    max-width: 50px;
+}
