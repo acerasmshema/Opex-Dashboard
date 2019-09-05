@@ -158,19 +158,19 @@
         <p-panel header="List of Maintenance Days " [collapsed]="maintenanceDays.collapsed" [toggleable]="true"
             (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
-                <div class="row" style="height: 260px;width: 750px;">
+                <div class="row" style="height: 260px;width:700px; " class="list_maintenances_remarks">
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
-                            scrollHeight="150px" [rows]="5" [paginator]="true"
+                            scrollHeight="150px" [rows]="5" [paginator]="true" 
                             [(selection)]="maintenanceDays.selectedMaintenanceDay" dataKey="id"
                             [tableStyle]="{'table-layout':'auto'}">
                             <ng-template pTemplate="header" let-columns>
-                                <tr>
+                                <tr >
                                     <th style="width: 3em;">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
-                                    <th *ngFor="let col of columns" style="text-align: center">
+                                    <th *ngFor="let col of columns" style="text-align: center, max-width: 1em;">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 2em; text-align:center;">
@@ -184,14 +184,14 @@
                                     <td>
                                         <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
                                     </td>
-                                    <td class=".ng-invalid.ng-dirty text-center" style="width: 100px;">
+                                    <td class=".ng-invalid.ng-dirty text-center" style="width: 90px;">
                                         {{rowData.maintainceDates}}
                                     </td>
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <textarea [rows]="2" [cols]="30" [(ngModel)]="rowData.remarks"
-                                                    style="width:100%; max-width:500px;" pInputTextarea
+                                                    style="width:100%; max-width:300px;" pInputTextarea
                                                     autoResize="autoResize"></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
@@ -200,6 +200,7 @@
                                         </p-cellEditor>
                                     </td>
                                     <!--
+                                         <span style="width:100px;"></span>
                                          <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
