@@ -1,4 +1,4 @@
-package com.rgei.kpi.dashboard.controller.exception;
+package com.rgei.kpi.dashboard.exception;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartException;
 
-import com.rgei.kpi.dashboard.exception.MessageConstant;
-import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
-import com.rgei.kpi.dashboard.exception.StatusCodes;
 import com.rgei.kpi.dashboard.response.model.ApiErrorResponse;
 
 @ControllerAdvice
