@@ -14,4 +14,6 @@ export class SidebarForm {
     selectedValue: any;
     dateError: boolean;
     millsError: boolean;
+    dateErrorMessage: string;
+    millsErrorMessage: string;
 }

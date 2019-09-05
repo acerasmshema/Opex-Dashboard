@@ -11,6 +11,7 @@ import { ConsumptionService } from '../../dashboard/consumption-dashboard/consum
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
 import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 
 @Component({
   selector: 'app-sidebar',
@@ -140,6 +141,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (type === 'dashboard') {
       if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
         this.sidebarForm.dateError = true;
+        this.sidebarForm.dateErrorMessage = CommonMessage.ERROR.DATE_ERROR;
       }
       else {
         this.statusService.spinnerSubject.next(true);
@@ -161,10 +163,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
       let isError = false;
       if (this.searchKpiData.date === undefined || this.searchKpiData.date === null) {
         this.sidebarForm.dateError = true;
+        this.sidebarForm.dateErrorMessage = CommonMessage.ERROR.DATE_ERROR;
         isError = true;
       }
       if (this.searchKpiData.mills === undefined || this.searchKpiData.mills.length < 2) {
         this.sidebarForm.millsError = true;
+        this.sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
         isError = true;
       }
       if(!isError) {

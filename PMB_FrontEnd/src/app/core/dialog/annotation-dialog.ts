@@ -16,4 +16,8 @@ export class AnnotationDialog {
     currentLoggedInUsersName: string;
     annotations_annoID: any;
     showDeleteButton: boolean;
+    isProcessLineError: boolean;
+    processLineErrorMessage: string;
+    isDescriptionError: boolean;
+    descriptionErrorMessage: string;
 }
