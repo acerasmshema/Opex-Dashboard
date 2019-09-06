@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,25 +33,23 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateSerachRes;
+import com.rgei.kpi.dashboard.response.model.KpiAnnotationDeleteRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationResponse;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationSearchRequest;
 import com.rgei.kpi.dashboard.service.KpiAnnotationService;
 
-
-
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/restCall/v1")
+@RequestMapping("/restCall")
 public class KpiAnnotationController {
-	
+
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiAnnotationController.class);
 
 	@Resource
 	private KpiAnnotationService kpiAnnotationService;
 
-
-	@PostMapping(value = "/kpi_annotation/save_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/save_annotation")
 	public ResponseEntity<HttpStatus> saveAnnotationRequest(
 			@RequestBody KpiAnnotationRequest kpiAnnotationRequest) {
 		logger.info("Save annotation request", kpiAnnotationRequest);
@@ -58,20 +57,29 @@ public class KpiAnnotationController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/kpi_annotation/get_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/get_annotation")
 	public ResponseEntity<List<KpiAnnotationResponse>> getAnnotationRequest(
 			@RequestBody KpiAnnotationSearchRequest kpiAnnotationSearchRequest) {
 		logger.info("Get annotation request", kpiAnnotationSearchRequest);
-		List<KpiAnnotationResponse>  response = kpiAnnotationService.getAnnotationDetails(kpiAnnotationSearchRequest);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		List<KpiAnnotationResponse> response = kpiAnnotationService.getAnnotationDetails(kpiAnnotationSearchRequest);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-	@PostMapping(value = "/kpi_annotation/get_annotation_date")
+
+	@PostMapping(value = "/v1/kpi_annotation/get_annotation_date")
 	public ResponseEntity<KpiAnnotationDateSerachRes> getAnnotationByDate(
 			@RequestBody KpiAnnotationDateRangeSerach kpiAnnotationDateRangeSerach) {
 		logger.info("Get annotation by date", kpiAnnotationDateRangeSerach);
-		KpiAnnotationDateSerachRes response = kpiAnnotationService.kpiAnnotationDateRangeSerach(kpiAnnotationDateRangeSerach);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		KpiAnnotationDateSerachRes response = kpiAnnotationService
+				.kpiAnnotationDateRangeSerach(kpiAnnotationDateRangeSerach);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/v1/kpi_annotation/delete_annotation")
+	public ResponseEntity<HttpStatus> deleteAnnotation(
+			@RequestBody List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
+		logger.info("delete annotation", kpiAnnotationDeleteRequest);
+		kpiAnnotationService.deleteAnnotation(kpiAnnotationDeleteRequest);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

@@ -20,6 +20,7 @@ public class KpiTypeResponse {
 	
 	private Integer kpiTypeId;
 	private String kpiTypeName;
+	 
 	
 	public Integer getKpiTypeId() {
 		return kpiTypeId;

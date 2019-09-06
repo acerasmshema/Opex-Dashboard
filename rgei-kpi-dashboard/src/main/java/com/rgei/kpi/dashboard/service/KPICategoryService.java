@@ -18,10 +18,16 @@ package com.rgei.kpi.dashboard.service;
 
 import java.util.List;
 
+import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
+import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 
 
 public interface KPICategoryService {
 	
 	public List<KpiTypeResponse> getKPICategory(Integer kpiCategoryId);
+
+	public List<ProcessLinesResponse> getProcessLines(Integer kpiId, Integer millId);
+
+	public List<KpiTypeExtendedResponse> getKPICategoryDetails(List<String> kpiCategoryId);
 }

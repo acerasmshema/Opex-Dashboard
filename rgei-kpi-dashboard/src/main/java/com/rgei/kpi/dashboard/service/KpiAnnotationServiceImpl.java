@@ -17,6 +17,7 @@
 package com.rgei.kpi.dashboard.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,14 +30,15 @@ import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiAnnotationEntity;
 import com.rgei.kpi.dashboard.repository.KpiAnnotationEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
+import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateSerachRes;
+import com.rgei.kpi.dashboard.response.model.KpiAnnotationDeleteRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationRequest;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationResponse;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationSearchRequest;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.KpiAnnotationUtil;
 import com.rgei.kpi.dashboard.util.Utility;
-import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
 
 
 
@@ -54,12 +56,13 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 	@Override
 	public void saveKpiAnnotationRequest(KpiAnnotationRequest kpiAnnotationRequest) {
 		logger.info("Saving kpi annotation", kpiAnnotationRequest);
+		boolean status=Boolean.TRUE;
 		try {
-			kpiAnnotationEntityRepository.saveAll(KpiAnnotationUtil.convertToEntity(kpiAnnotationRequest));
+			kpiAnnotationEntityRepository.saveAll(KpiAnnotationUtil.convertToEntity(kpiAnnotationRequest,status));
 		}catch(Exception e) {
 			logger.error("Exception in saving the annotation.", e);
 		}
-	}
+	}  
 
 	@Override
 	public List<KpiAnnotationResponse> getAnnotationDetails(KpiAnnotationSearchRequest kpiAnnotationSearchRequest) {
@@ -83,6 +86,7 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 		if(kpiAnnotationEntities != null && !kpiAnnotationEntities.isEmpty()) {
 			for(KpiAnnotationEntity entity:kpiAnnotationEntities) {
 			annotationResponse = new KpiAnnotationResponse();
+			annotationResponse.setAnnotationId(entity.getKpiAnnotationId());
 			annotationResponse.setUserId(getUserDetails(entity.getCreatedBy().trim()));
 			annotationResponse.setProcessLines(entity.getProcessLines());
 			annotationResponse.setAnnotationDate(Utility.dateToStringConvertor(entity.getAnnotationDate(), DashboardConstant.FORMAT));
@@ -118,4 +122,31 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 		return response;
 	}
 
+	@Override
+	public void deleteAnnotation(List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
+		logger.info("deleting kpi annotation", kpiAnnotationDeleteRequest);
+		KpiAnnotationEntity kpiAnnotationEntity = null;
+		for (KpiAnnotationDeleteRequest annotationDeleteRequest : kpiAnnotationDeleteRequest) {
+			try {
+				kpiAnnotationEntity = kpiAnnotationEntityRepository
+						.findById(Integer.parseInt(annotationDeleteRequest.getAnnotationId())).orElse(null);
+			
+			} catch (Exception e) {
+				logger.error("Exception in fetching the annotation.", e);
+			}
+
+			if (kpiAnnotationEntity != null) {
+				if (kpiAnnotationEntity.getCreatedBy().equals(annotationDeleteRequest.getUserId())) {
+					kpiAnnotationEntity.setActive(Boolean.FALSE);
+					kpiAnnotationEntity.setUpdatedDate(new Date());
+					try {
+						kpiAnnotationEntityRepository.save(kpiAnnotationEntity);
+					} catch (Exception e) {
+						logger.error("Exception in deleting the annotation.", e);
+					}
+				}
+			}
+		}
+	}
+	
 }

@@ -27,10 +27,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
 public class KpiDashboardCategoryDataGridUtility {
+	
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiDashboardCategoryDataGridUtility.class);
 
 	//no-arg constructor
 	private KpiDashboardCategoryDataGridUtility() {
@@ -40,6 +44,7 @@ public class KpiDashboardCategoryDataGridUtility {
 	 * Api is to get the result for download data grid
 	 */
 	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data daily response");
 		  List<Map<String, Object>> transferList = new ArrayList<>();
 		  for(Object[] obj: downloadGridResponse) {
 				Map<String, Object> transferMap = new HashMap<>();
@@ -55,6 +60,7 @@ public class KpiDashboardCategoryDataGridUtility {
 	}
 	
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data monthly");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
 				Map<String, Object> transferMap = new HashMap<>();
@@ -74,6 +80,7 @@ public class KpiDashboardCategoryDataGridUtility {
 	
 	
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data quarterly");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new HashMap<>();
@@ -99,6 +106,7 @@ public class KpiDashboardCategoryDataGridUtility {
 	}
 
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data yearly");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
 			Map<String, Object> transferMap = new HashMap<>();
@@ -112,78 +120,80 @@ public class KpiDashboardCategoryDataGridUtility {
 	}
 	
 	private static void createResponseForDailyFrequency(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		logger.info("Create response for daily frequency for process line ", processLine);
 		String value = null;
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			value = parseNaNValue(Double.valueOf(obj[1].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			value = parseNaNValue(Double.valueOf(obj[2].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			value = parseNaNValue(Double.valueOf(obj[3].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			value = parseNaNValue(Double.valueOf(obj[4].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseNaNValue(Double.valueOf(obj[5].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseNaNValue(Double.valueOf(obj[6].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseNaNValue(Double.valueOf(obj[7].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			value = parseNaNValue(Double.valueOf(obj[8].toString()));
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		default:
 		}
 	}
 	
 	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		logger.info("Create response for process line ", processLine);
 		String value = null;
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			value = parseProcessLineNullValue(obj[1]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			value = parseProcessLineNullValue(obj[2]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			value = parseProcessLineNullValue(obj[3]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			value = parseProcessLineNullValue(obj[4]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseProcessLineNullValue(obj[5]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseProcessLineNullValue(obj[6]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseProcessLineNullValue(obj[7]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			value = parseProcessLineNullValue(obj[8]);
-			transferMap.put(processLine.toLowerCase(), value);
+			transferMap.put(processLine, value);
 			break;
 		default:
 		}

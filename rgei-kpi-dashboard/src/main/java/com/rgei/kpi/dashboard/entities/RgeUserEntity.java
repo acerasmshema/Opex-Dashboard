@@ -17,9 +17,18 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 @Entity
@@ -73,8 +82,11 @@ public class RgeUserEntity implements Serializable {
 	@ManyToMany(mappedBy="rgeUsers", fetch = FetchType.EAGER)
 	private List<UserRoleEntity> userRoles;
 	
-	@OneToMany(mappedBy="rgeUserEntity")
+	@OneToMany(mappedBy="rgeUserEntity", fetch = FetchType.LAZY)
 	private List<LoginDetailEntity> loginDetails;
+	
+	@OneToMany(mappedBy="user", fetch = FetchType.EAGER)
+	private List<UserRoleMillEntity> userRoleMills;
 
 	public Long getUserId() {
 		return this.userId;
@@ -212,4 +224,11 @@ public class RgeUserEntity implements Serializable {
 		this.loginDetails = loginDetails;
 	}
 
+	public List<UserRoleMillEntity> getUserRoleMills() {
+		return userRoleMills;
+	}
+
+	public void setUserRoleMills(List<UserRoleMillEntity> userRoleMills) {
+		this.userRoleMills = userRoleMills;
+	}
 }

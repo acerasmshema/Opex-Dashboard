@@ -18,6 +18,9 @@ package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -54,21 +57,28 @@ public class KpiEntity implements Serializable {
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
+	
+	
+
 
 	//bi-directional many-to-one association to DailyKpiPulp
+	@JsonIgnore
 	@OneToMany(mappedBy="kpi")
 	private List<DailyKpiPulpEntity> dailyKpiPulps;
 
 	//bi-directional many-to-one association to KpiType
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="kpi_type_id")
 	private KpiTypeEntity kpiType;
 
 	//bi-directional many-to-one association to KpiAnnotation
+	@JsonIgnore
 	@OneToMany(mappedBy="kpi")
 	private List<KpiAnnotationEntity> kpiAnnotations;
 
 	//bi-directional many-to-one association to KpiProcessLine
+	@JsonIgnore
 	@OneToMany(mappedBy="kpi", fetch = FetchType.EAGER)
 	private List<KpiProcessLineEntity> kpiProcessLines;
 
@@ -135,6 +145,9 @@ public class KpiEntity implements Serializable {
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+	
+
+
 
 	public List<DailyKpiPulpEntity> getDailyKpiPulps() {
 		return this.dailyKpiPulps;

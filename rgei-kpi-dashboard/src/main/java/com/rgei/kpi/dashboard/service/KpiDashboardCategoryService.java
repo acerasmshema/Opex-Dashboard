@@ -33,8 +33,10 @@ public interface KpiDashboardCategoryService {
 	public List<DateRangeResponse> getKpiCategoryData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 	
 	public List<DateRangeResponse> getKpiCategoryLineChartData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
+	
+	public DateRangeResponse getKpiCategoryLineChartTargetData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 		
 	public List<List<Map<String,Object>>> getKpiCategoryDownloadGridData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 	
-	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId);
+	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId);
 }

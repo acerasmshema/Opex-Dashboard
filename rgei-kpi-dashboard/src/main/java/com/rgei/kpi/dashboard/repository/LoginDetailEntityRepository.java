@@ -16,6 +16,7 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
+import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 
 @Repository
 public interface LoginDetailEntityRepository extends CrudRepository<LoginDetailEntity, Long>{
@@ -32,4 +34,10 @@ public interface LoginDetailEntityRepository extends CrudRepository<LoginDetailE
 	public LoginDetailEntity findByLoginIdAndStatus(@Param("loginId") String loginId, @Param("status") Boolean status);
 
 	public List<LoginDetailEntity> findByRgeUserEntity_UserIdAndStatus(Long userId, Boolean status);
+	
+	@Query("Select l from LoginDetailEntity l where date(l.loginTime) between :startDate and :endDate order by date(l.loginTime) asc")
+	public List<LoginDetailEntity> findAllLoginDetailsByLoginTime(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
+	
+	@Query("Select distinct l.rgeUserEntity from LoginDetailEntity l inner join RgeUserEntity ru on l.rgeUserEntity.userId = ru.userId where date(l.loginTime) between :startDate and :endDate")
+	public List<RgeUserEntity> findDistinctLoginDetailsByLoginTime(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }

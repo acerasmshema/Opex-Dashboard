@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.KpiAnnotationEntity;
@@ -29,17 +31,22 @@ import com.rgei.kpi.dashboard.response.model.KpiAnnotationRequest;
 
 public class KpiAnnotationUtil {
 	
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiAnnotationUtil.class);
+	
 	//no-arg constructor
 	private KpiAnnotationUtil() {
 	}
 
-	public static List<KpiAnnotationEntity> convertToEntity(KpiAnnotationRequest kpiAnnotationRequest) {
-
+	public static List<KpiAnnotationEntity> convertToEntity(KpiAnnotationRequest kpiAnnotationRequest,boolean status) {
+		logger.info("Creating list of KpiAnnotationEntity");
 		KpiAnnotationEntity kpiAnnotationEntity = null;
 		List<KpiAnnotationEntity> annotations = new ArrayList<>();
 		if(kpiAnnotationRequest != null ) {
 				kpiAnnotationEntity = new KpiAnnotationEntity();
-				kpiAnnotationEntity.setActive(Boolean.TRUE);
+				if(status==Boolean.FALSE) {
+					kpiAnnotationEntity.setKpiAnnotationId(kpiAnnotationRequest.getAnnotationId());
+				}
+				kpiAnnotationEntity.setActive(status);
 				kpiAnnotationEntity.setAnnotationDate(Utility.stringToDateConvertor(kpiAnnotationRequest.getAnnotationDate(), DashboardConstant.FORMAT));
 				kpiAnnotationEntity.setCreatedDate(new Date());
 				kpiAnnotationEntity.setDescription(kpiAnnotationRequest.getDescription());
@@ -60,6 +67,7 @@ public class KpiAnnotationUtil {
 				kpiAnnotationEntity.setCreatedBy(kpiAnnotationRequest.getUserLoginId());
 				kpiAnnotationEntity.setUpdatedBy(kpiAnnotationRequest.getUserLoginId());
 				kpiAnnotationEntity.setProcessLines(kpiAnnotationRequest.getProcessLines());
+				
 				annotations.add(kpiAnnotationEntity);
 		}
 		return annotations;

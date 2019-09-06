@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
@@ -32,6 +33,7 @@ import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineSeries;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
+import com.rgei.kpi.dashboard.util.DailyKpiPulpConverterRZ;
 
 @Service
 public class DailyKpiPulpServiceImpl implements DailyKpiPulpService{
@@ -51,24 +53,38 @@ public class DailyKpiPulpServiceImpl implements DailyKpiPulpService{
 	public ProcessLineAnnualResponse getAnnualProcessLine(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Inside DailyKpiPulpServiceImpl to fetch annual data for process lines");
+		ProcessLineAnnualResponse processLineAnnualResponse=null;
 		MillBuKpiCategoryEntity  millBuKpiCategoryEntity  = millBuKpiCategoryEntityRepository.find(DailyKpiPulpConverter.covertToInteger(millId),
 				DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(buId));
 		logger.info("Entity data from MillBuKpiCategoryEntity", millBuKpiCategoryEntity);
 		List<DailyKpiPulpEntity> dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
 				DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
 				DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
-		return DailyKpiPulpConverter.prePareResponse(millBuKpiCategoryEntity, dailyKpiEntities);
+		if(millId.equals(DashboardConstant.KRC)) {
+			processLineAnnualResponse = DailyKpiPulpConverter.prePareResponse(millBuKpiCategoryEntity, dailyKpiEntities);
+		}
+		else if(millId.equals(DashboardConstant.RZ)) {
+			processLineAnnualResponse = DailyKpiPulpConverterRZ.prePareResponse(millBuKpiCategoryEntity, dailyKpiEntities);
+		}
+		return processLineAnnualResponse;
 	}
 
 	@Override
 	public List<ProcessLineSeries> calculateDateWiseTotalProcessLine(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Calculating date wise total for process lines");
+		List<ProcessLineSeries> processLineSeries = null;
 		List<DailyKpiPulpEntity> dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
 				DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
 				DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
 		logger.info("Entity data from DailyKpiPulpEntity", dailyKpiEntities);
-		return DailyKpiPulpConverter.prePareDailyTargetResponse(dailyKpiEntities);
+		if(millId.equals(DashboardConstant.KRC)) {
+			processLineSeries = DailyKpiPulpConverter.prePareDailyTargetResponse(dailyKpiEntities);
+		}
+		else if(millId.equals(DashboardConstant.RZ)) {
+			processLineSeries = DailyKpiPulpConverterRZ.prePareDailyTargetResponse(dailyKpiEntities);
+		}
+		return processLineSeries;
 	}
 	
 	@Override

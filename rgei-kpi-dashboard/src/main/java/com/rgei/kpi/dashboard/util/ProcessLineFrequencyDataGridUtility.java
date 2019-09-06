@@ -21,15 +21,18 @@ import java.math.RoundingMode;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
+import com.rgei.crosscutting.logger.RgeiLoggerFactory;
+import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.constant.Quarter;
 
 public class ProcessLineFrequencyDataGridUtility {
+	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineFrequencyDataGridUtility.class);
 	
 	private ProcessLineFrequencyDataGridUtility() {
 	}
@@ -38,16 +41,18 @@ public class ProcessLineFrequencyDataGridUtility {
 	 * Api is to get the result for download data grid
 	 */
 	public static List<Map<String,Object>> getGridDataDailyResponse(List<String> lineList, List<Map<String, Object>> downloadGridResponse) {
+		logger.info("Get grid data daily response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			downloadGridResponse.forEach(item -> {
-				Map<String, Object> transferMap = new HashMap<>();
+				Map<String, Object> transferMap = new TreeMap<>();
 				for(Map.Entry<String, Object> entry : item.entrySet()) {
-					if(entry.getKey().equals(DashboardConstant.DATE) || ((Double) entry.getValue()).isNaN()) {
-						transferMap.put(entry.getKey(), entry.getValue());
+					if(entry.getKey().equalsIgnoreCase(DashboardConstant.DATE) || ((Double) entry.getValue()).isNaN()) {
+						transferMap.put(entry.getKey().toUpperCase(), entry.getValue());
 						continue;
 					}
 					for(String processLine: lineList) {
 					if(entry.getKey().equalsIgnoreCase(processLine)) {
+						
 					transferMap.put(entry.getKey(), (new BigDecimal(entry.getValue().toString()).setScale(0, RoundingMode.CEILING)));
 					}
 					}
@@ -59,9 +64,10 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 	
 	public static List<Map<String,Object>> getGridDataMonthly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data monthly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 			for(Object[] obj: downloadGridResponse) {
-				Map<String, Object> transferMap = new HashMap<>();
+				Map<String, Object> transferMap = new TreeMap<>();
 				for(String processLine: lineList) {
 				transferMap.put(DashboardConstant.DATE, Month.of(Integer.valueOf(String.valueOf(obj[0]).split("\\.")[0])).getDisplayName(TextStyle.SHORT, Locale.ENGLISH)+"-"+String.valueOf(obj[9]).split("\\.")[0]);
 				createResponse(obj, transferMap, processLine);
@@ -73,9 +79,10 @@ public class ProcessLineFrequencyDataGridUtility {
 	
 	
 	public static List<Map<String,Object>> getGridDataQuarterly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data quarterly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new HashMap<>();
+			Map<String, Object> transferMap = new TreeMap<>();
 			for (String processLine : lineList) {
 				if (Quarter.Q1.getValue().equalsIgnoreCase(obj[0].toString())) {
 					transferMap.put(DashboardConstant.DATE, Quarter.Q1.toString() + "/" + String.valueOf(obj[9]).split("\\.")[0]);
@@ -98,9 +105,10 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 
 	public static List<Map<String,Object>> getGridDataYearly(List<String> lineList, List<Object[]> downloadGridResponse) {
+		logger.info("Get grid data yearly response");
 		List<Map<String, Object>> transferList = new ArrayList<>();
 		for (Object[] obj : downloadGridResponse) {
-			Map<String, Object> transferMap = new HashMap<>();
+			Map<String, Object> transferMap = new TreeMap<>();
 			for (String processLine : lineList) {
 					transferMap.put(DashboardConstant.DATE, String.valueOf(obj[0]).split("\\.")[0]);
 					createResponse(obj, transferMap, processLine);
@@ -111,30 +119,31 @@ public class ProcessLineFrequencyDataGridUtility {
 	}
 	
 	private static void createResponse(Object[] obj, Map<String, Object> transferMap, String processLine) {
+		logger.info("Create response for process line ", processLine);
 		switch(processLine) {
 		case DashboardConstant.PROCESS_LINE_FL1:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[1].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[2].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[3].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[4].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[5].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[6].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[6].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[7].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[7].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
-			transferMap.put(processLine.toLowerCase(), new BigDecimal(obj[8].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
+			transferMap.put(processLine, new BigDecimal(obj[8].toString()).setScale(0, RoundingMode.CEILING).doubleValue());
 			break;
 		default:
 		}

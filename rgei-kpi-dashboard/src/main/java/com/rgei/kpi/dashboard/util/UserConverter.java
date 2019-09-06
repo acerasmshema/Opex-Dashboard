@@ -23,7 +23,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
+import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
+import com.rgei.kpi.dashboard.entities.UserRoleEntity;
+import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.response.model.LoginDetailResponse;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 
 public class UserConverter {
@@ -51,6 +56,72 @@ public class UserConverter {
 			}
 		}
 		return rgeUserResponse;
+	}
+	
+	public static List<LoginDetailResponse> convertLoginUserInfoToLoginDetailResponse(List<LoginDetailEntity> loginDetailEntityList,
+			Integer millId) {
+		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<LoginDetailResponse>();
+		LoginDetailResponse response = null;
+		for (LoginDetailEntity entity : loginDetailEntityList) {
+			List<UserRoleMillEntity> rolesMillList = entity.getRgeUserEntity().getUserRoleMills();
+			List<UserRoleEntity> roleList = entity.getRgeUserEntity().getUserRoles();
+			for (UserRoleMillEntity e : rolesMillList) {
+				if (e.getMillId() == millId) {
+					response = new LoginDetailResponse();
+					response.setFirstName(entity.getRgeUserEntity().getFirstName());
+					response.setLastName(entity.getRgeUserEntity().getLastName());
+					response.setLoginId(entity.getRgeUserEntity().getLoginId());
+					response.setLoginTime(Utility.dateToStringConvertor(entity.getLoginTime(), DashboardConstant.DATE_TIME_FORMAT));
+
+					for(UserRoleEntity roleEntity : roleList) {
+						if(roleEntity.getRoleId() == e.getRoleId()) {
+							response.setRoleName(roleEntity.getRoleName());
+							break;
+						}
+					}
+					loginDetailResponseList.add(response);
+				}
+			}
+		}
+		return loginDetailResponseList;
+	}
+	
+	public static List<LoginDetailResponse> convertToLoginDetailResponseFromRgeUserEntity(List<RgeUserEntity> rgeUserEntityList,
+			Integer millId) {
+		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<>();
+		LoginDetailResponse response = null;
+		for (RgeUserEntity entity : rgeUserEntityList) {
+			List<UserRoleMillEntity> rolesMillList = entity.getUserRoleMills();
+			for (UserRoleMillEntity e : rolesMillList) {
+				fetchResponse(millId, loginDetailResponseList, entity, e);
+			}
+		}
+		return loginDetailResponseList;
+	}
+
+	private static void fetchResponse(Integer millId, List<LoginDetailResponse> loginDetailResponseList,
+			RgeUserEntity entity, UserRoleMillEntity e) {
+		LoginDetailResponse response;
+		if (e.getMillId().equals(millId)) {
+			response = new LoginDetailResponse();
+			response.setFirstName(entity.getFirstName());
+			response.setLastName(entity.getLastName());
+			response.setLoginId(entity.getLoginId());
+
+			for(UserRoleEntity roleEntity : entity.getUserRoles()) {
+				if(roleEntity.getRoleId() == e.getRoleId()) {
+					response.setRoleName(roleEntity.getRoleName());
+					break;
+				}
+			}
+			for(LoginDetailEntity loginEntity : entity.getLoginDetails()) {
+				if(loginEntity.getRgeUserEntity().getUserId().equals(entity.getUserId())) {
+					response.setLoginTime(Utility.dateToStringConvertor(loginEntity.getLoginTime(), DashboardConstant.FORMAT));
+					break;
+				}
+			}
+			loginDetailResponseList.add(response);
+		}
 	}
 	
 	public static Date getCurrentDate() {

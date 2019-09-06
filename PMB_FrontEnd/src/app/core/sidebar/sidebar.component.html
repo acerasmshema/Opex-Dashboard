@@ -1,0 +1,125 @@
+<div *ngIf="sidebarForm !== undefined && showSidebar">
+    <div *ngIf="sidebarForm.type === 'dashboard'">
+        <nav class="sidebar" [ngClass]="{sidebarPushRight: sidebarForm.isActive, collapsed: sidebarForm.collapsed}">
+            <div class="container-fluid">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
+                        <p-dropdown [options]="sidebarForm.buisnessUnits" [hidden]="sidebarForm.hide"
+                            [(ngModel)]="searchKpiData.businessUnit" [ngModelOptions]="{standalone: true}"
+                            optionLabel="buTypeName" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="form-group">
+                        <label class="labelClass"><em class="fa fa-fw fa-wrench"></em></label>
+                        <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
+                            [(ngModel)]="searchKpiData.kpiTypes" [ngModelOptions]="{standalone: true}"
+                            [style]="{width: '173px', height: '35px', maxHeight: '40px'}" scrollHeight="250px"
+                            [panelStyle]="{minWidth:'12em'}" defaultLabel="KPI Type" optionLabel="kpiTypeName">
+                        </p-multiSelect>
+                    </div>
+                    <div class="form-group">
+                        <label class="labelClass"><em class="fa fa-fw fa-th-list"></em></label>
+                        <p-multiSelect [options]="sidebarForm.processLines" [hidden]="sidebarForm.hide"
+                            [panelStyle]="{minWidth:'14em'}" defaultLabel="Process Lines" scrollHeight="200px"
+                            [(ngModel)]="searchKpiData.processLines" [style]="{width: '173px', height: '35px'}"
+                            [ngModelOptions]="{standalone: true}" optionLabel="processLineCode">
+                        </p-multiSelect>
+                        <div class="toggle-button" style="width:5px;padding: 0px"
+                            [ngClass]="{collapsed: sidebarForm.collapsed}" (click)="toggleCollapsed()">
+                            <em class="fa fa-fw fa-angle-double-{{sidebarForm.collapsed?'right':'left'}}"
+                                style="font-size: 21pt;"></em>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="labelClass"><em class="fa fa-fw fa-calendar"></em></label>
+                        <ejs-daterangepicker [hidden]="sidebarForm.hide"
+                            [class]="(!sidebarForm.dateError) ? 'daterangepicker' : 'daterangepicker error'"
+                            id='daterangepicker' [(ngModel)]="searchKpiData.date" [ngModelOptions]="{standalone: true}"
+                            placeholder="{{'  Date Range' | translate }}" (change)="onDateValidation()">
+                        </ejs-daterangepicker>
+                    </div>
+                    <div *ngIf="sidebarForm.dateError" style="padding-left: 23px;">
+                        <label class="labelClass">{{sidebarForm.dateErrorMessage}}</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
+                        <p-dropdown [options]="sidebarForm.frequencies" [hidden]="sidebarForm.hide"
+                            [(ngModel)]="searchKpiData.frequency" [ngModelOptions]="{standalone: true}"
+                            optionLabel="name" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="form-group m-t-5" style="padding-left: 60%;">
+                        <button [hidden]="sidebarForm.hide" (click)="onSearchData('dashboard')" class="btn btn-info"
+                            style="background-color: #007ad9;height:30px;">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </nav>
+    </div>
+    <div *ngIf="sidebarForm.type === 'benchmark'">
+        <nav class="sidebar" [ngClass]="{sidebarPushRight: sidebarForm.isActive, collapsed: sidebarForm.collapsed}">
+            <div class="container-fluid">
+                <form class="form-inline">
+                    <div class="list-group">
+                        <div class="form-group">
+                            <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
+                            <p-dropdown [options]="sidebarForm.buisnessUnits" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.businessUnit" [ngModelOptions]="{standalone: true}"
+                                optionLabel="buTypeName" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="form-group">
+                            <label class="labelClass"><em class="fa fa-fw fa-location-arrow"></em></label>
+                            <p-multiSelect [(ngModel)]="searchKpiData.mills" [ngModelOptions]="{standalone: true}"
+                                [class]="(!sidebarForm.millsError) ? '' : 'error'" [options]="sidebarForm.mills"
+                                [hidden]="sidebarForm.hide" [panelStyle]="{minWidth:'12em'}"
+                                [style]="{width: '173px', height: '35px'}" scrollHeight="250px" defaultLabel="Mill"
+                                optionLabel="millName" (click)="onMillValidation()">
+                            </p-multiSelect>
+                        </div>
+                        <div *ngIf="sidebarForm.millsError">
+                            <label class="labelClass mill-error">{{sidebarForm.millsErrorMessage}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="labelClass"><em class="fa fa-fw fa-wrench"></em></label>
+                            <p-multiSelect [options]="sidebarForm.kpiTypes" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.kpiTypes" [ngModelOptions]="{standalone: true}"
+                                [style]="{width: '173px', height: '35px', maxHeight: '40px'}" scrollHeight="250px"
+                                [panelStyle]="{minWidth:'12em'}" defaultLabel="KPI Type" optionLabel="kpiTypeName">
+                            </p-multiSelect>
+                            <div class="toggle-button" style="width:5px;padding: 0px"
+                                [ngClass]="{collapsed: sidebarForm.collapsed}" (click)="toggleCollapsed()">
+                                <em class="fa fa-fw fa-angle-double-{{sidebarForm.collapsed?'right':'left'}}"
+                                    style="font-size: 21pt;"></em>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="labelClass"><em class="fa fa-fw fa-calendar"></em></label>
+                            <ejs-daterangepicker [hidden]="sidebarForm.hide"
+                                [class]="(!sidebarForm.dateError) ? 'daterangepicker' : 'daterangepicker error'"
+                                id='daterangepicker' [(ngModel)]="searchKpiData.date"
+                                [ngModelOptions]="{standalone: true}" placeholder="{{'  Date Range' | translate }}"
+                                (change)="onDateValidation()">
+                            </ejs-daterangepicker>
+                        </div>
+                        <div *ngIf="sidebarForm.dateError">
+                            <label class="labelClass">{{sidebarForm.dateErrorMessage}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="labelClass"><em class="fa fa-fw fa-tags"></em></label>
+                            <p-dropdown [options]="sidebarForm.frequencies" [hidden]="sidebarForm.hide"
+                                [(ngModel)]="searchKpiData.frequency" [ngModelOptions]="{standalone: true}"
+                                optionLabel="name" [style]="{width: '173px', height: '35px', fontSize: '13px'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="form-group m-t-5" style="padding-left: 70%;">
+                            <button [hidden]="sidebarForm.hide" (click)="onSearchData('benchmark')" class="btn btn-info"
+                                style="background-color: #007ad9;height:30px;">Apply</button>
+                        </div>
+                    </div>
+                </form>`
+            </div>
+        </nav>
+    </div>
+</div>
