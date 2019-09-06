@@ -29,6 +29,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
   public dialogName: string;
+  public isShow = false;
 
   public annotationsCols = [
     { field: 'annotationDate', header: 'Date' },
@@ -70,6 +71,9 @@ export class DialogComponent implements OnInit, OnDestroy {
         else if (dialogName === 'maintenanceDays') {
           this.openSettingIcon(data);
         }
+        else if (dialogName === 'addUser')
+          this.isShow = true;
+
         this.dialogName = dialogName;
       });
   }

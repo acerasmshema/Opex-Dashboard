@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
+import { StatusService } from 'src/app/shared/service/status.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -9,9 +10,8 @@ import { MessageService } from 'primeng/primeng';
 })
 export class UserDetailComponent implements OnInit {
 
-  isShow: boolean = false;
-
   cols = [
+    { field: 'username', header: 'User Name' },
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },
     { field: 'email', header: 'Email' },
@@ -21,10 +21,17 @@ export class UserDetailComponent implements OnInit {
 
   users: UserDetail[] = [];
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private statusService: StatusService) {
   }
 
   ngOnInit() {
+    this.onGetUserList();
+  }
+
+  onGetUserList() {
+    const millId = this.statusService.common.selectedMill.millId; // request URL
+
+    //Response
     for (let index = 1; index < 30; index++) {
       let userDetail = new UserDetail();
       userDetail.userId = index;
@@ -36,8 +43,8 @@ export class UserDetailComponent implements OnInit {
         userDetail.role = 2;
         userDetail.isActive = false;
       }
-      userDetail.createdDate = "03-09-2019" 
-      userDetail.loginId = "Sahil" + index;
+      userDetail.createdDate = "03-09-2019"
+      userDetail.username = "Sahil" + index;
       userDetail.firstName = "Sahil" + index;
       userDetail.middleName = "Khushi";
       userDetail.address = "Baker Street " + index;
@@ -49,7 +56,6 @@ export class UserDetailComponent implements OnInit {
 
       this.users.push(userDetail);
     }
-    this.isShow = true;
   }
 
   onEdit(userId: number) {
@@ -63,9 +69,16 @@ export class UserDetailComponent implements OnInit {
     this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
   }
 
-  onCancel(userId: number) {
-    const userDetail = this.users.find((user) => user.userId === userId)
+  onCancel(user: UserDetail) {
+    const userDetail = this.users.find((user) => user.userId === user.userId)
     userDetail.isReadOnly = false;
+  }
+
+  onCreateUser() {
+    const data = {
+      dialogName: "addUser",
+    }
+    this.statusService.dialogSubject.next(data);
   }
 
 }

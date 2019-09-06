@@ -24,12 +24,12 @@
             </li>
             <li *ngIf="selectedMillName === 'Kerinci'" class="nav-item ">
               <a class="nav-link" routerLink='/home/kappaAnalytics' style="color:white;"><em
-                  class="fa fa-users"></em><span class="header-size">
+                  class="fa fa-snowflake-o "></em><span class="header-size">
                   {{ 'Digester Kappa Analytics' | translate }}</span></a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" routerLink='/home/user' style="color:white;"><em
-                  class="fa fa-users"></em><span class="header-size">
+              <a class="nav-link" routerLink='/home/user' style="color:white;"><em class="fa fa-users"></em><span
+                  class="header-size">
                   {{ 'User Management' | translate }}</span></a>
             </li>
           </ul>
@@ -47,7 +47,9 @@
                 <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;"> {{ user }} <strong class="caret"></strong></a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li (click)="logOut()"><a class="dropdown-item"> {{ 'Logout' | translate }}</a></li>
+                  <li><a class="dropdown-item" style="font-size: 11pt;"> {{ 'Setting' | translate }}</a></li>
+                  <li (click)="logOut()"><a class="dropdown-item" style="font-size: 11pt;">
+                      {{ 'Logout' | translate }}</a></li>
                 </ul>
               </li>
             </ul>

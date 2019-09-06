@@ -10,7 +10,7 @@ export class UserDetail {
     address: string;
     isActive: boolean;
     country: string;
-    loginId: string;
+    username: string;
     role: number;
     updatedBy: string;
     isReadOnly: boolean;

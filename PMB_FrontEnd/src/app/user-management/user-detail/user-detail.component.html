@@ -1,9 +1,9 @@
-<div class="dashboard-container" style="height: 81vh;">
-  <p-table #dt1 [columns]="cols" [value]="users" [paginator]="true" [rows]="11" dataKey="userId"
-    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false">
+<div style="height: 81vh;">
+  <p-table #user [columns]="cols" [value]="users" [paginator]="true" [rows]="11" dataKey="userId"
+    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="firstName" sortOrder="1">
     <ng-template pTemplate="caption">
       <div class="text-right">
-        <span class="m-r-20" (click)="dt1.exportCSV()">
+        <span class="m-r-20" (click)="user.exportCSV()">
           <em class="fa fa-download fa-2x"></em>
         </span>
         <span class="m-l-5" (click)="onCreateUser()">
@@ -15,17 +15,17 @@
       <tr class="text-center">
         <th style="width: 6%;"></th>
         <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn pReorderableColumn
-          [style.width]="(col.header === 'Status') ? '6%' : ''">
-          <p-sortIcon *ngIf="col.header !== 'Status'" [field]="col.field"></p-sortIcon>
+          [style.width]="(col.header === 'Status') ? '7%' : ''">
+          <p-sortIcon [field]="col.field"></p-sortIcon>
           {{col.header}}
         </th>
       </tr>
       <tr class="text-center">
-        <th></th>
+        <th style="width: 6%;"><i class="fa fa-search"></i></th>
         <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
           <input *ngIf="col.field !== 'isActive' && col.field !== 'role'" pInputText type="text"
-            (input)="dt1.filter($event.target.value, col.field, col.filterMatchMode)"
-            [value]="dt1.filters[col.field]?.value">
+            (input)="user.filter($event.target.value, col.field, col.filterMatchMode)"
+            [value]="user.filters[col.field]?.value">
         </th>
       </tr>
     </ng-template>
@@ -82,13 +82,6 @@
                       </div>
                       <div class="form-group">
                         <div class="row">
-                          <label class="col-md-4 table-label" for="middleName">Middle Name:</label>
-                          <input class="col-md-8 form-control" type="text" id="middleName" [value]="rowData.middleName"
-                            [readonly]="!rowData.isReadOnly">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="row">
                           <label class="col-md-4 table-label" for="lastName">Last Name:</label>
                           <input class="col-md-8 form-control" type="text" id="lastName" [value]="rowData.lastName"
                             [readonly]="!rowData.isReadOnly">
@@ -96,13 +89,6 @@
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="form-group">
-                        <div class="row">
-                          <label class="col-md-4 table-label" for="loginId">Login Id:</label>
-                          <input class="col-md-8 form-control" type="text" id="loginId" [value]="rowData.loginId"
-                            [readonly]="!rowData.isReadOnly">
-                        </div>
-                      </div>
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" for="email">Email:</label>
@@ -134,13 +120,6 @@
                             [readonly]="!rowData.isReadOnly">
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="row">
-                          <label class="col-md-4 table-label" for="createdDate">Created Date:</label>
-                          <input class="col-md-8 form-control" type="text" id="createdDate"
-                            [value]="rowData.createdDate" readonly>
-                        </div>
-                      </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
@@ -156,8 +135,8 @@
                         <div class="row">
                           <label class="col-md-4 table-label" for="status">Status:</label>
                           <select class="col-md-7 form-control" name="" id="status" [disabled]="!rowData.isReadOnly">
-                            <option [selected]="rowData.isActive" value="true">Activate</option>
-                            <option [selected]="!rowData.isActive" value="false">Deactivate</option>
+                            <option [selected]="rowData.isActive" value="true">Active</option>
+                            <option [selected]="!rowData.isActive" value="false">InActive</option>
                           </select>
                         </div>
                       </div>

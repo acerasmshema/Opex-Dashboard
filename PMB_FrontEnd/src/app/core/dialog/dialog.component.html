@@ -240,5 +240,81 @@
     </p-dialog>
 </div>
 
+<div *ngIf="dialogName === 'addUser'">
+    <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
+        [baseZIndex]="10000" [(visible)]="isShow">
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="firstName" class="table-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group">
+                        <label for="middleName" class="table-label">Middle Name:</label>
+                        <input type="text" class="form-control" id="middleName" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="table-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group" class="table-label">
+                        <label for="username">User Name:</label>
+                        <input type="text" class="form-control" id="username" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group" class="table-label">
+                        <label for="username">Password:</label>
+                        <input type="password" class="form-control" id="username" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group" class="table-label">
+                        <label for="username">Confirm Password:</label>
+                        <input type="password" class="form-control" id="username" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="table-label">Email:</label>
+                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="table-label">Phone:</label>
+                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="table-label">Country:</label>
+                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
+                    </div>
+                    <div class="form-group" style="display: inline-grid;">
+                        <label class="table-label" for="role">Mills:</label>
+                        <p-multiSelect [style]="{width: '173px', height: '35px', maxHeight: '40px'}"
+                            scrollHeight="250px" [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Mill"
+                            optionLabel="roles">
+                        </p-multiSelect>
+                    </div>
+                    <div class="form-group" style="display: inline-grid;">
+                        <label class="table-label" for="role">User Role:</label>
+                        <p-multiSelect [style]="{width: '173px', height: '35px', maxHeight: '40px'}"
+                            scrollHeight="250px" [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Role"
+                            optionLabel="roles">
+                        </p-multiSelect>
+                    </div>
+                    <div class="form-group">
+                        <label class="table-label" for="role">Status:</label>
+                        <select class="form-control" name="" id="status" style="font-size: 11pt;">
+                            <option value="admin" style="font-size: 11pt;">Active</option>
+                            <option value="department_head" style="font-size: 11pt;">InActive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-5">
+                <div class="col-md-12">
+                    <button class="btn btn-primary m-r-5">Create</button>
+                    <button class="btn btn-dange">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+</div>
 
 <p-toast [baseZIndex]="12000" [style]="{marginTop: '20px'}"></p-toast>
