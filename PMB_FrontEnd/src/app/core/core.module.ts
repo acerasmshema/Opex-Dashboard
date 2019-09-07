@@ -23,7 +23,6 @@ import { TranslatePipe } from '../shared/pipes/translate.pipe';
     CommonModule,
     FormsModule,
     RouterModule,
-    ReactiveFormsModule,
     PrimeNgModule,
     ReactiveFormsModule,
   ],

@@ -5,8 +5,8 @@ import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { LoginService } from './login.service';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
-import { CommonMessage } from '../constant/Common-Message';
-import { StatusService } from '../service/status.service';
+import { StatusService } from 'src/app/shared/service/status.service';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 
 
 @Component({

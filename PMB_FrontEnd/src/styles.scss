@@ -132,6 +132,10 @@
   margin-top: 5px;
 }
 
+.m-t-30 {
+  margin-top: 30px;
+}
+
 .m-b-5 {
   margin-bottom: 5px;
 }
@@ -164,4 +168,9 @@
   font-size: 10pt;
   padding-right: 0px;
   font-weight: 500;
+}
+
+.required:after {
+  color: #e32;
+  content: ' *';
 }

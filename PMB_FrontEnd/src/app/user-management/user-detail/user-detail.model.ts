@@ -11,7 +11,7 @@ export class UserDetail {
     isActive: boolean;
     country: string;
     username: string;
-    role: number;
+    role: string;
     updatedBy: string;
     isReadOnly: boolean;
 }

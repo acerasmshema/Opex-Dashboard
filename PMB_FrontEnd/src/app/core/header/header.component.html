@@ -47,7 +47,7 @@
                 <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                   style="color:white;font-size: 11pt;"> {{ user }} <strong class="caret"></strong></a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li><a class="dropdown-item" style="font-size: 11pt;"> {{ 'Setting' | translate }}</a></li>
+                  <li><a routerLink='/home/profile' class="dropdown-item" style="font-size: 11pt;color: white;"> {{ 'Setting' | translate }}</a></li>
                   <li (click)="logOut()"><a class="dropdown-item" style="font-size: 11pt;">
                       {{ 'Logout' | translate }}</a></li>
                 </ul>

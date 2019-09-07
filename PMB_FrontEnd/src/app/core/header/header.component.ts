@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { TranslateService } from '../../shared/service/translate/translate.service';
-import { LoginService } from '../../shared/login/login.service';
 import { StatusService } from '../../shared/service/status.service';
 import { HeaderService } from './header.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
+import { LoginService } from 'src/app/profile/login/login.service';
 
 @Component({
   selector: 'app-header',

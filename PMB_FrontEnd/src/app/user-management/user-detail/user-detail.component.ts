@@ -21,8 +21,8 @@ export class UserDetailComponent implements OnInit {
 
   users: UserDetail[] = [];
 
-  constructor(private messageService: MessageService, private statusService: StatusService) {
-  }
+  constructor(private messageService: MessageService,
+               private statusService: StatusService) { }
 
   ngOnInit() {
     this.onGetUserList();
@@ -35,14 +35,16 @@ export class UserDetailComponent implements OnInit {
     for (let index = 1; index < 30; index++) {
       let userDetail = new UserDetail();
       userDetail.userId = index;
+     
       if (index < 4) {
-        userDetail.role = 1;
+        userDetail.role = "Admin";
         userDetail.isActive = true;
       }
       else {
-        userDetail.role = 2;
+        userDetail.role = "Department Head";
         userDetail.isActive = false;
       }
+     
       userDetail.createdDate = "03-09-2019"
       userDetail.username = "Sahil" + index;
       userDetail.firstName = "Sahil" + index;
@@ -69,9 +71,12 @@ export class UserDetailComponent implements OnInit {
     this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
   }
 
-  onCancel(user: UserDetail) {
-    const userDetail = this.users.find((user) => user.userId === user.userId)
+  onCancel(rUser: UserDetail) {
+    const userDetail = this.users.find((user) => user.userId === rUser.userId)
     userDetail.isReadOnly = false;
+    console.log(rUser.firstName)
+    console.log(userDetail.firstName)
+    
   }
 
   onCreateUser() {

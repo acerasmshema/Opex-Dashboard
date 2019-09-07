@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './shared/login/login.component';
 import { LayoutComponent } from './core/layout/layout.component';
+import { LoginComponent } from './profile/login/login.component';
 
 const routes: Routes = [
   {
@@ -41,6 +41,11 @@ const routes: Routes = [
         path: "user",
         pathMatch: 'full',
         loadChildren: './user-management/user-management.module#UserManagementModule'
+      },
+      {
+        path: "profile",
+        pathMatch: 'full',
+        loadChildren: './profile/profile.module#ProfileModule'
       }
     ]
   },
