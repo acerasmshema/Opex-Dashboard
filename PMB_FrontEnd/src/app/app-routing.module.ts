@@ -5,25 +5,20 @@ import { LoginComponent } from './profile/login/login.component';
 
 const routes: Routes = [
   {
-    path: "",
-    redirectTo: "login",
-    pathMatch: "full"
-  },
-  {
     path: 'login',
     component: LoginComponent
   },
   {
-    path: 'home',
+    path: "",
+    redirectTo: "home",
+    pathMatch: "full"
+  },
+  {
+    path: "",
     component: LayoutComponent,
     children: [
       {
-        path: "",
-        redirectTo: "dashboard",
-        pathMatch: "full"
-      },
-      {
-        path: "dashboard",
+        path: "home",
         pathMatch: 'full',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
@@ -49,7 +44,7 @@ const routes: Routes = [
       }
     ]
   },
-  
+  { path: "**",redirectTo:"home"}
 ];
 
 @NgModule({

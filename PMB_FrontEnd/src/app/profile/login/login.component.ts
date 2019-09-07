@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.INVALID_USER });
         } else {
           this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-          this.router.navigateByUrl("home/dashboard");
+          this.router.navigateByUrl("/home");
         }
       });
   }
