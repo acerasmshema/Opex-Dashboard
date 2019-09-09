@@ -1,4 +1,4 @@
-package com.rgei.kpi.dashboard.exception.handling;
+package com.rgei.kpi.dashboard.exception;
 
 public class MessageConstant {
 	public static final String UNKNOWN_EXCEPTION = "Some error has occured. Please contact administrator";

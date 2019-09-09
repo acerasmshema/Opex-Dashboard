@@ -1,11 +1,11 @@
-package com.rgei.kpi.dashboard.exception.handling;
+package com.rgei.kpi.dashboard.response.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class ApiResponse {
+public class ApiErrorResponse {
 
 	private String status;
 	private String description;
@@ -18,11 +18,11 @@ public class ApiResponse {
 	private Throwable throwable;
 
 
-	public ApiResponse() {
+	public ApiErrorResponse() {
 
 	}
 
-	public ApiResponse(String timestamp, Throwable ex, String description, String path,
+	public ApiErrorResponse(String timestamp, Throwable ex, String description, String path,
 			String status) {
 
 		this.timestamp = timestamp;
@@ -35,20 +35,20 @@ public class ApiResponse {
 		this.status = status;
 	}
 
-	public ApiResponse(String errorCode, String errorMessage) {
+	public ApiErrorResponse(String errorCode, String errorMessage) {
 
 		this.status = errorCode;
 		this.error = errorMessage;
 	}
 
-	public ApiResponse(String errorCode, String errorMessage, String developerMessage) {
+	public ApiErrorResponse(String errorCode, String errorMessage, String developerMessage) {
 
 		this.status = errorCode;
 		this.error = errorMessage;
 		this.description = developerMessage;
 	}
 
-	public ApiResponse(String errorCode, String errorMessage, Throwable throwable) {
+	public ApiErrorResponse(String errorCode, String errorMessage, Throwable throwable) {
 
 		this.status = errorCode;
 		this.description = errorMessage;

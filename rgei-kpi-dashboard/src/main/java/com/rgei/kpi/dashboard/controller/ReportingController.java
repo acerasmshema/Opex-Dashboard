@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
-import com.rgei.kpi.dashboard.exception.handling.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.response.model.LoginDetailResponse;
 import com.rgei.kpi.dashboard.service.ReportingService;
 
