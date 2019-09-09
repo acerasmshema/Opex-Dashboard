@@ -14,6 +14,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.LoginDetailEntityRepository;
 import com.rgei.kpi.dashboard.response.model.LoginDetailResponse;
 import com.rgei.kpi.dashboard.util.CommonFunction;
@@ -31,9 +32,14 @@ public class ReportingServiceImpl implements ReportingService {
 	public List<LoginDetailResponse> getAllUserLoginDetails(String startDate, String endDate, String millId) {
 		logger.info("Inside get all login details by MillId :{}", millId);
 		if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
-			List<LoginDetailEntity> loginDetailEntityList = loginDetailEntityRepository.findAllLoginDetailsByLoginTime(
-					Utility.stringToDateConvertor(startDate, DashboardConstant.FORMAT),
-					Utility.stringToDateConvertor(endDate, DashboardConstant.FORMAT));
+			List<LoginDetailEntity> loginDetailEntityList;
+			try {
+				loginDetailEntityList = loginDetailEntityRepository.findAllLoginDetailsByLoginTime(
+						Utility.stringToDateConvertor(startDate, DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(endDate, DashboardConstant.FORMAT));
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Records not found for Mill Id - "+millId);
+			}
 			return UserConverter.convertLoginUserInfoToLoginDetailResponse(loginDetailEntityList, CommonFunction.covertToInteger(millId));
 		}
 		return new ArrayList<LoginDetailResponse>();
@@ -44,9 +50,14 @@ public class ReportingServiceImpl implements ReportingService {
 	public List<LoginDetailResponse> getDistinctUserLoginDetails(String startDate, String endDate, String millId) {
 		logger.info("Inside get distinct login details by MillId :{}", millId);
 		if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
-			List<RgeUserEntity> loginDetailEntityList = loginDetailEntityRepository.findDistinctLoginDetailsByLoginTime(
-					Utility.stringToDateConvertor(startDate, DashboardConstant.FORMAT),
-					Utility.stringToDateConvertor(endDate, DashboardConstant.FORMAT));
+			List<RgeUserEntity> loginDetailEntityList;
+			try {
+				loginDetailEntityList = loginDetailEntityRepository.findDistinctLoginDetailsByLoginTime(
+						Utility.stringToDateConvertor(startDate, DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(endDate, DashboardConstant.FORMAT));
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Records not found for Mill Id - "+millId);
+			}
 			return UserConverter.convertToLoginDetailResponseFromRgeUserEntity(loginDetailEntityList, CommonFunction.covertToInteger(millId));
 		}
 		return new ArrayList<LoginDetailResponse>();

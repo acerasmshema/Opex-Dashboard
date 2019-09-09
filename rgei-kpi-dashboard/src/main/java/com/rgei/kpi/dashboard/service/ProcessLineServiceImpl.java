@@ -13,6 +13,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.BusinessUnitTypeRepository;
 import com.rgei.kpi.dashboard.repository.MillEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
@@ -39,8 +40,16 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 	@Override
 	public List<ProcessLineDetailsResponse> getProcessLines(String millId) {
 		if (Objects.nonNull(millId)) {
-			List<ProcessLineEntity> processLine = processLineRepository
-					.getPrcessLineByLocation(CommonFunction.covertToInteger(millId), Boolean.TRUE);
+			List<ProcessLineEntity> processLine;
+			try {
+				processLine = processLineRepository.getPrcessLineByLocation(CommonFunction.covertToInteger(millId),
+						Boolean.TRUE);
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
+			}
+			if(processLine == null || processLine.isEmpty()) {
+				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
+			}
 			return ProcessLineUtility.generateResponse(processLine);
 		}
 		return null;
@@ -70,6 +79,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 				buTypeResponse = ProcessLineUtility.preareBUTypeResponse(businessUnitTypeEntityList);
 			} catch (Exception e) {
 				logger.info("error in fetching BU Types", e);
+				throw new RecordNotFoundException("Error while fetching record for Bu Types");
 			}
 		}
 		return buTypeResponse;
