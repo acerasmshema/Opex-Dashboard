@@ -77,34 +77,17 @@
                     </div>
                     <div class="form-group">
                       <div class="row">
-                        <label class="col-md-4 table-label" for="lastName">Last Name:</label>
-                        <input class="col-md-8 form-control" type="text" id="lastName" [value]="rowData.lastName"
-                          [readonly]="!rowData.isReadOnly">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <div class="row">
-                        <label class="col-md-4 table-label" for="email">Email:</label>
-                        <input class="col-md-8 form-control" type="text" id="email" [value]="rowData.email"
-                          [readonly]="!rowData.isReadOnly">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="row">
-                        <label class="col-md-4 table-label" for="phone">Phone:</label>
-                        <input class="col-md-8 form-control" type="text" id="phone" [value]="rowData.phone"
-                          [readonly]="!rowData.isReadOnly">
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <div class="row">
                         <label class="col-md-4 table-label" for="country">Country:</label>
                         <input class="col-md-8 form-control" type="text" id="country" [value]="rowData.country"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="lastName">Last Name:</label>
+                        <input class="col-md-8 form-control" type="text" id="lastName" [value]="rowData.lastName"
                           [readonly]="!rowData.isReadOnly">
                       </div>
                     </div>
@@ -119,11 +102,27 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <div class="row">
+                        <label class="col-md-4 table-label" for="phone">Phone:</label>
+                        <input class="col-md-8 form-control" type="text" id="phone" [value]="rowData.phone"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
                         <label class="col-md-4 table-label" for="role">User Role:</label>
                         <select class="col-md-7 form-control" name="" id="role" [disabled]="!rowData.isReadOnly">
                           <option [selected]="rowData.role === 1" value="admin">Admin</option>
                           <option [selected]="rowData.role === 2" value="department_head">Department Head</option>
                         </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="email">Email:</label>
+                        <input class="col-md-8 form-control" type="text" id="email" [value]="rowData.email"
+                          [readonly]="!rowData.isReadOnly">
                       </div>
                     </div>
                     <div class="form-group">

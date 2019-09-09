@@ -162,11 +162,11 @@
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
-                            scrollHeight="150px" [rows]="5" [paginator]="true" 
+                            scrollHeight="150px" [rows]="5" [paginator]="true"
                             [(selection)]="maintenanceDays.selectedMaintenanceDay" dataKey="id"
                             [tableStyle]="{'table-layout':'auto'}">
                             <ng-template pTemplate="header" let-columns>
-                                <tr >
+                                <tr>
                                     <th style="width: 3em;">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
@@ -243,77 +243,111 @@
 <div *ngIf="dialogName === 'addUser'">
     <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
         [baseZIndex]="10000" [(visible)]="isShow">
-        <form>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="firstName" class="table-label">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group">
-                        <label for="middleName" class="table-label">Middle Name:</label>
-                        <input type="text" class="form-control" id="middleName" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName" class="table-label">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group" class="table-label">
-                        <label for="username">User Name:</label>
-                        <input type="text" class="form-control" id="username" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group" class="table-label">
-                        <label for="username">Password:</label>
-                        <input type="password" class="form-control" id="username" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group" class="table-label">
-                        <label for="username">Confirm Password:</label>
-                        <input type="password" class="form-control" id="username" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="table-label">Email:</label>
-                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="email" class="table-label">Phone:</label>
-                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="table-label">Country:</label>
-                        <input type="text" class="form-control" id="email" style="font-size: 11pt;">
-                    </div>
-                    <div class="form-group" style="display: inline-grid;">
-                        <label class="table-label" for="role">Mills:</label>
-                        <p-multiSelect [style]="{width: '173px', height: '35px', maxHeight: '40px'}"
-                            scrollHeight="250px" [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Mill"
-                            optionLabel="roles">
-                        </p-multiSelect>
-                    </div>
-                    <div class="form-group" style="display: inline-grid;">
-                        <label class="table-label" for="role">User Role:</label>
-                        <p-multiSelect [style]="{width: '173px', height: '35px', maxHeight: '40px'}"
-                            scrollHeight="250px" [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Role"
-                            optionLabel="roles">
-                        </p-multiSelect>
-                    </div>
-                    <div class="form-group">
-                        <label class="table-label" for="role">Status:</label>
-                        <select class="form-control" name="" id="status" style="font-size: 11pt;">
-                            <option value="admin" style="font-size: 11pt;">Active</option>
-                            <option value="department_head" style="font-size: 11pt;">InActive</option>
-                        </select>
-                    </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="edit-label required">First Name</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
                 </div>
             </div>
-            <div class="row m-t-5">
-                <div class="col-md-12">
-                    <button class="btn btn-primary m-r-5">Create</button>
-                    <button class="btn btn-dange">Cancel</button>
+            <div class="col-sm-4">
+                <label class="edit-label">Middle Name</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
                 </div>
             </div>
-        </form>
+            <div class="col-sm-4">
+                <label class="edit-label required">Last Name</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-5">
+            <div class="col-sm-6">
+                <label class="edit-label required">Phone</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label class="edit-label required">Email</label>
+                <div class="form-group">
+                    <input type="email" class="form-control edit-input">
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-5">
+            <div class="col-sm-6">
+                <label class="edit-label required">User Name</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label class="edit-label required">Status</label>
+                <div class="form-group">
+                    <select name="" id="" class="form-control edit-input" style="height: 40px;">
+                        <option value="" class="edit-input">Active</option>
+                        <option value="" class="edit-input">InActive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-5">
+            <div class="col-sm-6">
+                <label class="edit-label required">Password</label>
+                <div class="form-group">
+                    <input type="password" class="form-control edit-input">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label class="edit-label required">Confirm Password</label>
+                <div class="form-group">
+                    <input type="password" class="form-control edit-input">
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-5">
+            <div class="col-sm-4">
+                <label class="edit-label required">Country</label>
+                <div class="form-group">
+                    <select name="" id="" class="form-control edit-input" style="height: 40px;">
+                        <option value="" class="edit-input">India</option>
+                        <option value="" class="edit-input">Malysia</option>
+                        <option value="" class="edit-input">China</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="edit-label required">Mills</label>
+                <div class="form-group">
+                    <p-multiSelect [style]="{width: '238px', height: '40px', maxHeight: '40px'}" scrollHeight="250px"
+                        [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Mills" optionLabel="roles">
+                    </p-multiSelect>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="edit-label required">User Role</label>
+                <div class="form-group">
+                    <p-multiSelect [style]="{width: '238px', height: '40px', maxHeight: '40px'}" scrollHeight="250px"
+                        [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Role" optionLabel="roles">
+                    </p-multiSelect>
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-5">
+            <div class="col-sm-12">
+                <label class="edit-label required">Address</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-t-30">
+            <button class="btn btn-primary btn-lg float-right">Save</button>
+            <button class="btn btn-danger btn-lg float-right m-r-5">Cancel</button>
+        </div>
     </p-dialog>
 </div>
 

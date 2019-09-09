@@ -11,7 +11,7 @@ import { StatusService } from 'src/app/shared/service/status.service';
 export class UserDetailComponent implements OnInit {
 
   cols = [
-    { field: 'username', header: 'User Name' },
+    { field: 'username', header: 'Username' },
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },
     { field: 'email', header: 'Email' },
