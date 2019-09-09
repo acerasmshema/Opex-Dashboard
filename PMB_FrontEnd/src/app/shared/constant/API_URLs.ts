@@ -10,7 +10,6 @@ export class API_URL {
         ALL_MILLS_URL: API_URL.BASE_API_URL_v1 + '/location/all_mills',
         ALL_BU_TYPE_URL: API_URL.BASE_API_URL_v1 + '/location/get_all_bu_type',
         PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/yesterday/total_process_line',
-        ANNUAL_TARGET_URL: API_URL.BASE_API_URL_v1 + '/yesterday/ytd_process_line',
         PROJECTED_DATA_URL: API_URL.BASE_API_URL_v1 + '/process_line/projected_target_details',
         YTD_ALL_PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/yesterday/all_process_lines',
         KPI_PULP_AREA_URL: API_URL.BASE_API_URL_v1 + '/date_range/daily_kpi_pulp_area',
@@ -36,6 +35,8 @@ export class API_URL {
         GET_MAINTENANCE_DAYS_URL: API_URL.BASE_API_URL_v1 + '/maintenance_days/get_maintenance_days',
         SAVE_MAINTENANCE_DAYS_URL: API_URL.BASE_API_URL_v1 + '/maintenance_days/save_maintenance_days',
         DELETE_MAINTENANCE_DAYS_URL: API_URL.BASE_API_URL_v1 + '/maintenance_days/delete_maintenance_days',
+        UPDATE_MAINTENANCE_DAYS_REMARKS:API_URL.BASE_API_URL_v1 + '/maintenance_days/update_maintenance_days_remarks',
+        
         SAVE_TARGET_DAYS_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/save_target_days',
         ANNOTATION_DATES_URL: API_URL.BASE_API_URL_v1 + '/kpi_annotation/get_annotation_date',
         ALL_PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/process_line/get_all_process_lines',
