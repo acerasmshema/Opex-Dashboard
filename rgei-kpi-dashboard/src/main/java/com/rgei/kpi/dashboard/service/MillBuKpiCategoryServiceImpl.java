@@ -28,6 +28,8 @@ import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
@@ -39,51 +41,62 @@ import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverterRZ;
 import com.rgei.kpi.dashboard.util.ProcessLineUtility;
 
-
 @Service
-public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService{
+public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(MillBuKpiCategoryServiceImpl.class);
-	
+
 	@Resource
 	private MillBuKpiCategoryEntityRepository millBuKpiCategoryEntityRepository;
-	
+
 	@Resource
 	DailyKpiPulpEntityRepository dailyKpiPulpEntityRepository;
-	
+
 	@Resource
 	ProcessLineRepository processLineRepository;
-	
-	
+
 	@Override
-	public ProcessLineResponse yesterdayAvgProductionLine(String millId,
-			String buId, String kpiCategoryId, String kpiId) {
+	public ProcessLineResponse yesterdayAvgProductionLine(String millId, String buId, String kpiCategoryId,
+			String kpiId) {
 		logger.info("Yesterday avg production line");
-		ProcessLineResponse processLineResponse=null;
-		List<ProcessLineEntity> processLineEntites = processLineRepository.findByProcessLineNameIn(ProcessLineUtility.getRequestedProcessLines());
-		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-		List<DailyKpiPulpEntity>  dailyKpiPulpEntities = dailyKpiPulpEntityRepository.readByRequestedParameters(CommonFunction.getYesterdayDate(),
-				CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(buId),
-				CommonFunction.covertToInteger(kpiCategoryId),CommonFunction.covertToInteger(kpiId));
-		if(millId.equals(DashboardConstant.KRC)) {
-			processLineResponse = DailyKpiPulpConverter.prePareResponse(processLineEntites,dailyKpiPulpEntities,millBuKpiCategoryEntity);
+		ProcessLineResponse processLineResponse = null;
+		List<ProcessLineEntity> processLineEntites = processLineRepository
+				.findByProcessLineNameIn(ProcessLineUtility.getRequestedProcessLines());
+		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(
+				CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(kpiCategoryId),
+				CommonFunction.covertToInteger(buId));
+		List<DailyKpiPulpEntity> dailyKpiPulpEntities = dailyKpiPulpEntityRepository.readByRequestedParameters(
+				CommonFunction.getYesterdayDate(), CommonFunction.covertToInteger(millId),
+				CommonFunction.covertToInteger(buId), CommonFunction.covertToInteger(kpiCategoryId),
+				CommonFunction.covertToInteger(kpiId));
+		if (millBuKpiCategoryEntity == null) {
+			throw new RecordNotFoundException("No MillBuKpiCategory entity found for millId : " + millId);
 		}
-		else if(millId.equals(DashboardConstant.RZ)) {
-			processLineResponse = DailyKpiPulpConverterRZ.prePareResponse(processLineEntites,dailyKpiPulpEntities,millBuKpiCategoryEntity);
+		if (millId.equals(DashboardConstant.KRC)) {
+			processLineResponse = DailyKpiPulpConverter.prePareResponse(processLineEntites, dailyKpiPulpEntities,
+					millBuKpiCategoryEntity);
+		} else if (millId.equals(DashboardConstant.RZ)) {
+			processLineResponse = DailyKpiPulpConverterRZ.prePareResponse(processLineEntites, dailyKpiPulpEntities,
+					millBuKpiCategoryEntity);
 		}
 		return processLineResponse;
 	}
-	
-	
+
 	@Override
-	public void saveKpiCategoryTargetDaysRequest(
-			KpiCategoryTargetDaysRequest kpiCategoryTargetDaysRequest) {
+	public void saveKpiCategoryTargetDaysRequest(KpiCategoryTargetDaysRequest kpiCategoryTargetDaysRequest) {
 		logger.info("Saving kpi category target days", kpiCategoryTargetDaysRequest);
-		MillBuKpiCategoryEntity  millBuKpiCategoryEntity  = millBuKpiCategoryEntityRepository.find(kpiCategoryTargetDaysRequest.getMillId(),
-				kpiCategoryTargetDaysRequest.getKpiCategoryId(), kpiCategoryTargetDaysRequest.getBuId());
-		if(millBuKpiCategoryEntity != null) {
-			millBuKpiCategoryEntity.setTargetDays(kpiCategoryTargetDaysRequest.getNoOfTargetDays());
-			millBuKpiCategoryEntityRepository.save(millBuKpiCategoryEntity);
+		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(
+				kpiCategoryTargetDaysRequest.getMillId(), kpiCategoryTargetDaysRequest.getKpiCategoryId(),
+				kpiCategoryTargetDaysRequest.getBuId());
+		if (millBuKpiCategoryEntity != null) {
+			try {
+				millBuKpiCategoryEntity.setTargetDays(kpiCategoryTargetDaysRequest.getNoOfTargetDays());
+				millBuKpiCategoryEntityRepository.save(millBuKpiCategoryEntity);
+			} catch (Exception e) {
+				throw new RecordNotCreatedException("Error while storing record for Kpi Category Target Days request");
+			}
+		} else {
+			throw new RecordNotFoundException("No record found while storing Kpi Category Target Days request");
 		}
 	}
 
@@ -91,9 +104,13 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService{
 	public ProcessLineDailyTargetResponse getProcessLineDailyTarget(String millId, String buId, String kpiCategoryId) {
 		logger.info("Getting process line daily target");
 		ProcessLineDailyTargetResponse response = new ProcessLineDailyTargetResponse();
-		MillBuKpiCategoryEntity millBuKpiCategoryEntity  = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),  CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
+		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(
+				CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(kpiCategoryId),
+				CommonFunction.covertToInteger(buId));
 		if (millBuKpiCategoryEntity != null && millBuKpiCategoryEntity.getDailyTarget() != null)
 			response.setDailyTarget(millBuKpiCategoryEntity.getDailyTarget());
+		else
+			throw new RecordNotFoundException("No record found for process line daily target for mill Id : "+millId);
 		return response;
 	}
 

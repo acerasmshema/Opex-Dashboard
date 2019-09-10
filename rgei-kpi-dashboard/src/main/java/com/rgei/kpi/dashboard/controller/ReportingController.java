@@ -43,6 +43,10 @@ public class ReportingController {
 	public ResponseEntity<List<LoginDetailResponse>> getDistinctDatewiseLoginDetails(@RequestHeader(value = "startDate") String startDate, @RequestHeader(value = "endDate") String endDate, @RequestHeader(value="millId") String millId){
 		logger.info("Entering into the get datewise login details by startDate:{}",startDate);
 		List<LoginDetailResponse> loginDetailResponse = userReportService.getDistinctUserLoginDetails(startDate, endDate, millId);
-		return new ResponseEntity<>(loginDetailResponse, HttpStatus.OK);
+		if(!loginDetailResponse.isEmpty()) {
+			return new ResponseEntity<>(loginDetailResponse, HttpStatus.OK);
+		}else {
+			throw new RecordNotFoundException("Records not found for Mill Id - "+millId);
+		}
 	}
 }
