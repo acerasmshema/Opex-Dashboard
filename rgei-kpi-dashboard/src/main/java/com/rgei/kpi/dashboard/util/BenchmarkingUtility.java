@@ -49,16 +49,16 @@ public class BenchmarkingUtility {
 
 	public static BenchmarkingReponse fetchBenchmarkingResponse(Kpi kpi, List<DateRangeResponse> resultList) {
 		BenchmarkingReponse benchmarkingResponse = new BenchmarkingReponse();
-			benchmarkingResponse.setKpiId(kpi.getKpiId().toString());
-			benchmarkingResponse.setKpiName(kpi.getKpiName());
-			benchmarkingResponse.setKpiUnit(kpi.getKpiUnit());
-			if(!resultList.isEmpty()) {
+		benchmarkingResponse.setKpiId(kpi.getKpiId().toString());
+		benchmarkingResponse.setKpiName(kpi.getKpiName());
+		benchmarkingResponse.setKpiUnit(kpi.getKpiUnit());
+		if (!resultList.isEmpty()) {
 			benchmarkingResponse.setKpiData(resultList);
-			}else {
-				throw new RecordNotFoundException("Data not found for the current request for kpi id: "+ kpi.getKpiId());
-			}
+		} else {
+			throw new RecordNotFoundException("Data not found for the current request for kpi id: " + kpi.getKpiId());
+		}
 		return benchmarkingResponse;
-		
+
 	}
 
 	public static Map<String, List<String>> fetchProcessLines(List<Kpi> kpiList) {

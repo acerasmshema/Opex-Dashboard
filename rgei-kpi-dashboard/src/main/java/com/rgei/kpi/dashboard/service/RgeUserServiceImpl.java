@@ -14,6 +14,7 @@ import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.exception.InvalidCredentialsException;
 import com.rgei.kpi.dashboard.exception.LogoutException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.UserNotExistException;
 import com.rgei.kpi.dashboard.repository.LoginDetailEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
@@ -66,8 +67,8 @@ public class RgeUserServiceImpl implements RgeUserService{
 		if(rgeUserLoginRequest.getLoginId() != null) {
 			entity = rgeUserEntityRepository.findByLoginId(rgeUserLoginRequest.getLoginId());
 			if(entity == null) {
-				logger.info("User not found against the requested id and password.",rgeUserLoginRequest.getLoginId(), rgeUserLoginRequest.getUserPassword());
-				throw new InvalidCredentialsException("Requested user name and password is not found in the system:"+rgeUserLoginRequest.getLoginId() +"-"+rgeUserLoginRequest.getUserPassword());
+				logger.info("User not found against the requested username",rgeUserLoginRequest.getLoginId());
+				throw new UserNotExistException("Requested user not exist in the system:"+rgeUserLoginRequest.getLoginId());
 			}
 			response = 	validateCredential(entity,rgeUserLoginRequest);
 			populateLoginDetails(entity);
