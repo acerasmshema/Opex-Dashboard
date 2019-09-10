@@ -229,7 +229,7 @@ public class DailyKpiPulpConverter {
 	
 	//Shubham and Dixit code
 	private static void populateProcessLinesValues(List<DailyKpiPulp> dailyKpiPulp, List<DailyKpiPulpResponse> response) {
-		if (!dailyKpiPulp.isEmpty()) {
+		if (dailyKpiPulp != null && !dailyKpiPulp.isEmpty()) {
 			
 			try {
 				response.get(0).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine1()).setScale(0, RoundingMode.CEILING).doubleValue());

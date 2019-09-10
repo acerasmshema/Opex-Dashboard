@@ -33,6 +33,7 @@ import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MillsResponse;
@@ -222,7 +223,7 @@ public class ProcessLineUtility {
 			processLine7 = dailyTargetResponse.get(6).getSeries();
 			processLine8 = dailyTargetResponse.get(7).getSeries();
 		} catch (ArrayIndexOutOfBoundsException e) {
-
+			throw new ArrayIndexOutOfBoundsException();
 		}
 		populateDailyLineTargetReponse(processLine, dailyKpiPulpEntities, processLine1, processLine2, processLine3,
 				processLine4, processLine5, processLine6, processLine7, processLine8);
@@ -295,6 +296,8 @@ public class ProcessLineUtility {
 				millObject.setCountryId(millEntity.getCountry().getCountryId().toString());
 				response.add(millObject);
 			}
+		}else {
+			throw new RecordNotFoundException("No records for mills data");
 		}
 		return response;
 	}
