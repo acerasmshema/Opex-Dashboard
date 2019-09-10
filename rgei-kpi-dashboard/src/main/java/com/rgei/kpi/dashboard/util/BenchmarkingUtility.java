@@ -13,6 +13,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.response.model.BenchmarkingReponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.Kpi;
@@ -51,7 +52,11 @@ public class BenchmarkingUtility {
 			benchmarkingResponse.setKpiId(kpi.getKpiId().toString());
 			benchmarkingResponse.setKpiName(kpi.getKpiName());
 			benchmarkingResponse.setKpiUnit(kpi.getKpiUnit());
+			if(!resultList.isEmpty()) {
 			benchmarkingResponse.setKpiData(resultList);
+			}else {
+				throw new RecordNotFoundException("Data not found for the current request for kpi id: "+ kpi.getKpiId());
+			}
 		return benchmarkingResponse;
 		
 	}
