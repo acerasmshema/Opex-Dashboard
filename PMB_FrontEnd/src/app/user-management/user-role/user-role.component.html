@@ -1,34 +1,63 @@
-<div class="card" style="height: 81vh;">
-    <div class="card-body">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th style="font-size: 11pt;width: 5%">#</th>
-                    <th style="font-size: 11pt">User Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="font-size: 11pt">1</td>
-                    <td style="font-size: 11pt">Admin</td>
-                </tr>
-                <tr>
-                    <td style="font-size: 11pt">2</td>
-                    <td style="font-size: 11pt">Department Head</td>
-                </tr>
-                <tr >
-                    <td style="font-size: 11pt">3</td>
-                    <td style="font-size: 11pt">MillOps</td>
-                </tr>
-                <tr>
-                    <td style="font-size: 11pt">4</td>
-                    <td style="font-size: 11pt">BCID</td>
-                </tr>
-                <tr>
-                    <td style="font-size: 11pt">5</td>
-                    <td style="font-size: 11pt">Finance</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container" style="height: 81vh;">
+    <div class="card card-table">
+        <div class="card-body">
+            <p-table #userRole [value]="roles" dataKey="userId" editMode="row" [paginator]="true" [rows]="11">
+                <ng-template pTemplate="caption">
+                    <div class="text-right">
+                        <span class="m-r-20" (click)="userRole.exportCSV()">
+                            <em class="fa fa-download fa-2x" style="color: #333333"></em>
+                        </span>
+                        <span class="m-l-5" (click)="onCreateUserRole()">
+                            <em class="fa fa-user-plus fa-2x"></em>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 8%">#</th>
+                        <th>User Role</th>
+                        <th style="width: 10%">Status</th>
+                        <th style="width: 16%">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="rowData">
+                        <td class="td-role">
+                            {{rowData.sNo}}
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input class="form-control td-role" pInputText type="text"
+                                        [(ngModel)]="rowData.roleName">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span class="td-role">{{rowData.roleName}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-checkbox [disabled]="!rowData.isReadOnly" [(ngModel)]="rowData.status" [binary]="rowData.status"></p-checkbox>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <p-checkbox [disabled]="!rowData.isReadOnly" [(ngModel)]="rowData.status" [binary]="rowData.status"></p-checkbox>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="text-align:center">
+                            <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                                class="ui-button-info" (click)="onEdit(rowData)"></button>
+                            <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                                class="ui-button-success" style="margin-right: .5em"
+                                (click)="onSave(rowData)"></button>
+                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                                class="ui-button-danger" (click)="onCancel(rowData, ri)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
     </div>
 </div>

@@ -12,6 +12,7 @@ import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consum
 import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -203,7 +204,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         countryIds: "1,2"
       }
       this.headerService.getAllMills(requestData).
-        subscribe((mills: any) => {
+        subscribe((mills: MillDetail[]) => {
           this.statusService.common.mills = mills;
           this.sidebarForm.mills = mills;
         });

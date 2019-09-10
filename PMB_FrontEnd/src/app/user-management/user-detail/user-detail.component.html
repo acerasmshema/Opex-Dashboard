@@ -4,7 +4,7 @@
   <ng-template pTemplate="caption">
     <div class="text-right">
       <span class="m-r-20" (click)="user.exportCSV()">
-        <em class="fa fa-download fa-2x"></em>
+        <em class="fa fa-download fa-2x" style="color: #333333"></em>
       </span>
       <span class="m-l-5" (click)="onCreateUser()">
         <em class="fa fa-user-plus fa-2x"></em>
@@ -23,7 +23,7 @@
     <tr class="text-center">
       <th style="width: 6%;"><i class="fa fa-search"></i></th>
       <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
-        <input *ngIf="col.field !== 'isActive' && col.field !== 'role'" pInputText type="text"
+        <input *ngIf="col.field !== 'isActive'" pInputText type="text"
           (input)="user.filter($event.target.value, col.field, col.filterMatchMode)"
           [value]="user.filters[col.field]?.value">
       </th>
@@ -55,7 +55,7 @@
     <tr>
       <td [attr.colspan]="columns.length + 1">
         <div class="card">
-          <div class="card-body" style="background: #eae7e7;">
+          <div class="card-body" style="background: #efefef;">
             <div class="card-title text-right" style="border-bottom: 1px solid #cccccc;">
               <span *ngIf="!rowData.isReadOnly" class="m-r-20" style="font-size: 20px;color: #3e3e3e;"
                 (click)="onEdit(rowData.userId)"><i class="fa fa-edit"></i></span>

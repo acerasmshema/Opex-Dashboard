@@ -127,8 +127,8 @@
                             </div>
                             <div class="col-md-3">
                                 <button [disabled]="maintenanceDays.isRemarksError || maintenanceDays.isDateError"
-                                    pButton type="button" label="Add" (click)="add()" class="ui-button-primary"
-                                    style="background-color: #007ad9;height:30px;"></button>
+                                    pButton type="button" label="Add" (click)="onAddMaintenanceDays()"
+                                    class="ui-button-primary" style="background-color: #007ad9;height:30px;"></button>
                             </div>
                         </div>
                     </div>
@@ -170,7 +170,7 @@
                                     <th style="width: 3em;">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
-                                    <th *ngFor="let col of columns" style="text-align: center, max-width: 1em;">
+                                    <th *ngFor="let col of columns" style="text-align: center">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 2em; text-align:center;">
@@ -242,28 +242,22 @@
 
 <div *ngIf="dialogName === 'addUser'">
     <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
-        [baseZIndex]="10000" [(visible)]="isShow">
+        [baseZIndex]="10000" [(visible)]="user.showDialog">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <label class="edit-label required">First Name</label>
                 <div class="form-group">
                     <input type="text" class="form-control edit-input">
                 </div>
             </div>
-            <div class="col-sm-4">
-                <label class="edit-label">Middle Name</label>
-                <div class="form-group">
-                    <input type="text" class="form-control edit-input">
-                </div>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <label class="edit-label required">Last Name</label>
                 <div class="form-group">
                     <input type="text" class="form-control edit-input">
                 </div>
             </div>
         </div>
-        <div class="row m-t-5">
+        <div class="row">
             <div class="col-sm-6">
                 <label class="edit-label required">Phone</label>
                 <div class="form-group">
@@ -277,9 +271,27 @@
                 </div>
             </div>
         </div>
-        <div class="row m-t-5">
+        <div class="row">
+            <div class="col-sm-8">
+                <label class="edit-label required">Address</label>
+                <div class="form-group">
+                    <input type="text" class="form-control edit-input">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="edit-label required">Country</label>
+                <div class="form-group">
+                    <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                        <option value="" class="edit-input">India</option>
+                        <option value="" class="edit-input">Malaysia</option>
+                        <option value="" class="edit-input">China</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
-                <label class="edit-label required">User Name</label>
+                <label class="edit-label required">Username</label>
                 <div class="form-group">
                     <input type="text" class="form-control edit-input">
                 </div>
@@ -287,14 +299,14 @@
             <div class="col-sm-6">
                 <label class="edit-label required">Status</label>
                 <div class="form-group">
-                    <select name="" id="" class="form-control edit-input" style="height: 40px;">
+                    <select name="" id="" class="form-control edit-input" style="height: 34px;">
                         <option value="" class="edit-input">Active</option>
                         <option value="" class="edit-input">InActive</option>
                     </select>
                 </div>
             </div>
         </div>
-        <div class="row m-t-5">
+        <div class="row">
             <div class="col-sm-6">
                 <label class="edit-label required">Password</label>
                 <div class="form-group">
@@ -308,45 +320,50 @@
                 </div>
             </div>
         </div>
-        <div class="row m-t-5">
-            <div class="col-sm-4">
-                <label class="edit-label required">Country</label>
-                <div class="form-group">
-                    <select name="" id="" class="form-control edit-input" style="height: 40px;">
-                        <option value="" class="edit-input">India</option>
-                        <option value="" class="edit-input">Malysia</option>
-                        <option value="" class="edit-input">China</option>
-                    </select>
-                </div>
+        <div>
+            <div class="table-wrapper">
+                <table class="table table-bordered" style="background: #f1f1f1;">
+                    <div class="table-title text-center">
+                        <span style="font-size: 12pt;font-family: Arial">User Role</span>
+                        <span class="float-right m-r-5" (click)="onAddMillRole()">
+                            <em class="fa fa-user-plus fa-2x"></em>
+                        </span>
+                    </div>
+                    <thead class="m-t-5">
+                        <tr>
+                            <th style="width: 30%;">Mill</th>
+                            <th style="width: 55%;">User Role</th>
+                            <th style="width: 15%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let millRole of user.millRoles">
+                            <td style="width: 30%;">
+                                <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                                    <option class="edit-input" value="" disabled selected>Select Mill</option>
+                                    <option class="edit-input" *ngFor="let mill of millRole.mills">{{mill.millName}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td style="width: 55%;">
+                                <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                                    <option class="edit-input" value="" disabled selected>Select User Role</option>
+                                    <option class="edit-input" *ngFor="let userRole of millRole.userRoles">
+                                        {{userRole.roleName}}</option>
+                                </select>
+                            </td>
+                            <td class="text-center">
+                                <a (click)='onDeleteMillRole(millRole.millRoleId)'><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="col-sm-4">
-                <label class="edit-label required">Mills</label>
-                <div class="form-group">
-                    <p-multiSelect [style]="{width: '238px', height: '40px', maxHeight: '40px'}" scrollHeight="250px"
-                        [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Mills" optionLabel="roles">
-                    </p-multiSelect>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <label class="edit-label required">User Role</label>
-                <div class="form-group">
-                    <p-multiSelect [style]="{width: '238px', height: '40px', maxHeight: '40px'}" scrollHeight="250px"
-                        [panelStyle]="{minWidth:'12em'}" defaultLabel="Select Role" optionLabel="roles">
-                    </p-multiSelect>
-                </div>
-            </div>
-        </div>
-        <div class="row m-t-5">
-            <div class="col-sm-12">
-                <label class="edit-label required">Address</label>
-                <div class="form-group">
-                    <input type="text" class="form-control edit-input">
-                </div>
-            </div>
+
         </div>
         <div class="form-group m-t-30">
-            <button class="btn btn-primary btn-lg float-right">Save</button>
-            <button class="btn btn-danger btn-lg float-right m-r-5">Cancel</button>
+            <button class="btn btn-primary btn-md float-right">Save</button>
+            <button class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
         </div>
     </p-dialog>
 </div>

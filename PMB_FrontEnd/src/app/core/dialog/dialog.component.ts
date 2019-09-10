@@ -11,6 +11,8 @@ import { ProductionService } from '../../dashboard/production-dashboard/producti
 import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 
 @Component({
   selector: 'app-dialog',
@@ -28,8 +30,8 @@ export class DialogComponent implements OnInit, OnDestroy {
   public annotationDialog: AnnotationDialog;
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
+  public user: UserDetail;
   public dialogName: string;
-  public isShow = false;
 
   public annotationsCols = [
     { field: 'annotationDate', header: 'Date' },
@@ -71,8 +73,9 @@ export class DialogComponent implements OnInit, OnDestroy {
         else if (dialogName === 'maintenanceDays') {
           this.openSettingIcon(data);
         }
-        else if (dialogName === 'addUser')
-          this.isShow = true;
+        else if (dialogName === 'addUser') {
+          this.user = this.dialogService.createUserForm();
+        }
 
         this.dialogName = dialogName;
       });
@@ -158,7 +161,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
-  public add() {
+  public onAddMaintenanceDays() {
     let isError = false;
     if (this.maintenanceDays.dateValue == undefined) {
       this.maintenanceDays.isDateError = true;
@@ -267,27 +270,27 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
 
-  public onRowEditInit(rowData){  
+  public onRowEditInit(rowData) {
     return rowData.remarks;
   }
 
-  public onRowEditSave(rowData){
-    let rowData_ID =[];
-    let  rowDataIds = rowData.id.toString();
+  public onRowEditSave(rowData) {
+    let rowData_ID = [];
+    let rowDataIds = rowData.id.toString();
     rowData_ID.push(rowDataIds);
 
-    const datas ={
-     "ids":rowData_ID,
-     "remarks":rowData.remarks,
-     "updatedBy":1
-   }
+    const datas = {
+      "ids": rowData_ID,
+      "remarks": rowData.remarks,
+      "updatedBy": 1
+    }
 
-    this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
-    });
+    // this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
+    // });
 
   }
 
-  public onRowEditCancel(){
+  public onRowEditCancel() {
     this.viewMaintenanceDays();
   }
 
@@ -304,50 +307,35 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onTargetDaysValidation() {
-    if (this.maintenanceDays.targetDays <= 0) {
-      this.maintenanceDays.targetDaysErrorMessage = CommonMessage.ERROR.TARGET_DAYS_GREATER_THAN_ZERO;
-      this.maintenanceDays.isTargetDaysError = true;
-    }
-    else {
-      this.maintenanceDays.isTargetDaysError = false;
-    }
+    this.dialogService.targetDaysValidation(this.maintenanceDays);
   }
 
   onRemarksValidation() {
-    if (this.maintenanceDays.textAreaValue == undefined || this.maintenanceDays.textAreaValue == null || this.maintenanceDays.textAreaValue === '') {
-      this.maintenanceDays.remarksErrorMessage = CommonMessage.ERROR.REMARKS_ERROR;
-      this.maintenanceDays.isRemarksError = true;
-    }
-    else {
-      this.maintenanceDays.isRemarksError = false;
-    }
+    this.dialogService.remarksValidation(this.maintenanceDays);
   }
 
   onDateValidation() {
-    const datePicker: any = document.getElementById("daterangepicker_input");
-    if (datePicker !== null && datePicker.value !== "" && this.maintenanceDays.isDateError) {
-      this.maintenanceDays.isDateError = false;
-    }
+    this.dialogService.dateValidation(this.maintenanceDays);
   }
 
   onPorocessLineValidation() {
-    if (this.annotationDialog.annotationProcessLines.length === 0) {
-      this.annotationDialog.isProcessLineError = true;
-      this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
-    }
-    else {
-      this.annotationDialog.isProcessLineError = false;
-    }
+    this.dialogService.processLineValidation(this.annotationDialog);
   }
 
   onDescriptionValidation() {
-    if (this.annotationDialog.annotationDescription == undefined || this.annotationDialog.annotationDescription == null || this.annotationDialog.annotationDescription === '') {
-      this.annotationDialog.descriptionErrorMessage = CommonMessage.ERROR.ADD_DESCRIPTION_VALIDATION;
-      this.annotationDialog.isDescriptionError = true;
-    }
-    else {
-      this.annotationDialog.isDescriptionError = false;
-    }
+    this.dialogService.descriptionValidation(this.annotationDialog);
+  }
+
+  onAddMillRole() {
+    let millRole = new MillRole();
+    millRole.millRoleId = Math.random();
+    millRole.mills = this.statusService.common.mills;
+    millRole.userRoles = this.statusService.common.userRoles;
+    this.user.millRoles.push(millRole);
+  }
+
+  onDeleteMillRole(millRoleId: number) {
+    this.user.millRoles = this.user.millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
   }
 
   ngOnDestroy() {

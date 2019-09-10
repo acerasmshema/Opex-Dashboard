@@ -1,3 +1,5 @@
+import { MillRole } from './mill-role.model';
+
 export class UserDetail {
     userId: number;
     firstName: string;
@@ -13,5 +15,7 @@ export class UserDetail {
     username: string;
     role: string;
     updatedBy: string;
+    millRoles: MillRole[] = [];
     isReadOnly: boolean;
+    showDialog: boolean;
 }

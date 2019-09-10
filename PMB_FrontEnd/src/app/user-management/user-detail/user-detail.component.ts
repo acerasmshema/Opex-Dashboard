@@ -74,9 +74,6 @@ export class UserDetailComponent implements OnInit {
   onCancel(rUser: UserDetail) {
     const userDetail = this.users.find((user) => user.userId === rUser.userId)
     userDetail.isReadOnly = false;
-    console.log(rUser.firstName)
-    console.log(userDetail.firstName)
-    
   }
 
   onCreateUser() {
