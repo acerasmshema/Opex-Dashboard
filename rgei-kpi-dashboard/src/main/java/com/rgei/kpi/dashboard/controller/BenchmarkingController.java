@@ -20,10 +20,9 @@ import com.rgei.kpi.dashboard.service.BenchmarkingService;
 @RestController
 @RequestMapping("/restCall")
 public class BenchmarkingController {
-	
-CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.class);
-	
-	
+
+	CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.class);
+
 	@Resource
 	private BenchmarkingService benchmarkingService;
 
@@ -34,5 +33,5 @@ CentralizedLogger logger = RgeiLoggerFactory.getLogger(BenchmarkingController.cl
 		BenchmarkingReponse response = benchmarkingService.getBenchmarkingData(benchmarkingRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	 
+
 }
