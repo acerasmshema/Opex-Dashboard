@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { PasswordService } from './password.service';
 
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss']
+  styleUrls: ['./password.component.scss'],
+  providers: [PasswordService]
 })
 export class PasswordComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  passwordForm: FormGroup;
+
+  constructor(private passwordDetailService: PasswordService) { }
 
   ngOnInit() {
+    this.passwordForm = this.passwordDetailService.createPasswordForm();
   }
 
-  onSave() {
-    this.router.navigateByUrl('login');
+  onChangePassword() {
+    this.passwordDetailService.changePassword();
   }
 }

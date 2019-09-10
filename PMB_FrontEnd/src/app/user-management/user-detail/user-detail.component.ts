@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
 import { StatusService } from 'src/app/shared/service/status.service';
+import { UserDetailService } from './user-detail.service';
 
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.scss']
+  styleUrls: ['./user-detail.component.scss'],
 })
 export class UserDetailComponent implements OnInit {
 
@@ -22,42 +23,11 @@ export class UserDetailComponent implements OnInit {
   users: UserDetail[] = [];
 
   constructor(private messageService: MessageService,
+              private userDetailService: UserDetailService,
                private statusService: StatusService) { }
 
   ngOnInit() {
-    this.onGetUserList();
-  }
-
-  onGetUserList() {
-    const millId = this.statusService.common.selectedMill.millId; // request URL
-
-    //Response
-    for (let index = 1; index < 30; index++) {
-      let userDetail = new UserDetail();
-      userDetail.userId = index;
-     
-      if (index < 4) {
-        userDetail.role = "Admin";
-        userDetail.isActive = true;
-      }
-      else {
-        userDetail.role = "Department Head";
-        userDetail.isActive = false;
-      }
-     
-      userDetail.createdDate = "03-09-2019"
-      userDetail.username = "Sahil" + index;
-      userDetail.firstName = "Sahil" + index;
-      userDetail.middleName = "Khushi";
-      userDetail.address = "Baker Street " + index;
-      userDetail.lastName = "Kalra" + index;
-      userDetail.email = "sahil.kalra" + index + "@globallogic.com";
-      userDetail.phone = "9696048000";
-      userDetail.isReadOnly = false;
-      userDetail.country = "India";
-
-      this.users.push(userDetail);
-    }
+    this.userDetailService.getUserDetailList(this.users);
   }
 
   onEdit(userId: number) {
@@ -65,10 +35,8 @@ export class UserDetailComponent implements OnInit {
     userDetail.isReadOnly = true;
   }
 
-  onSave(userId: number) {
-    const userDetail = this.users.find((user) => user.userId === userId)
-    userDetail.isReadOnly = false;
-    this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
+  onSave(userDetail: UserDetail) {
+    this.userDetailService.saveUserDetail(userDetail, this.users);
   }
 
   onCancel(rUser: UserDetail) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRole } from './user-role.model';
+import { UserRoleService } from './user-role.service';
 
 @Component({
   selector: 'app-user-role',
@@ -8,29 +9,20 @@ import { UserRole } from './user-role.model';
 })
 export class UserRoleComponent implements OnInit {
 
-  roles: any = [];
+  userRoles: UserRole[] = [];
 
-  constructor() { }
+  constructor(private userRoleService: UserRoleService) { }
 
   ngOnInit() {
-    this.onGetUserRoles();
+    this.userRoleService.getUserRoles(this.userRoles);
   }
 
-  onGetUserRoles() {
-    let roles = ["Admin", "Deparment Head", "BCID", "MillOps"];
-    for (let index = 1; index < 5; index++) {
-      let userRole = new UserRole();
-      userRole.userRoleId = index;
-      userRole.sNo = index;
-      userRole.roleName = roles[index - 1];
-      userRole.status = true;
-      userRole.isReadOnly = true;
-      this.roles.push(userRole);
-    }
+  onCreateUserRole() {
+    this.userRoleService.createUserRole(this.userRoles);
   }
 
   onEdit(userRoleId: number) {
-    const userRole = this.roles.find((userRole) => userRole.userRoleId === userRoleId)
+    const userRole = this.userRoles.find((userRole) => userRole.userRoleId === userRoleId)
     userRole.isReadOnly = false;
   }
 
@@ -39,7 +31,7 @@ export class UserRoleComponent implements OnInit {
   }
 
   onSave(userRole: UserRole) {
-    userRole.isReadOnly = true;
+   this.userRoleService.saveUserRole(userRole);
   }
 
 }

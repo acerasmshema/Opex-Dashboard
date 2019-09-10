@@ -1,7 +1,7 @@
 <div class="container" style="height: 81vh;">
     <div class="card card-table">
         <div class="card-body">
-            <p-table #userRole [value]="roles" dataKey="userId" editMode="row" [paginator]="true" [rows]="11">
+            <p-table #userRole [value]="userRoles" dataKey="userId" [paginator]="true" [rows]="11">
                 <ng-template pTemplate="caption">
                     <div class="text-right">
                         <span class="m-r-20" (click)="userRole.exportCSV()">
@@ -20,40 +20,26 @@
                         <th style="width: 16%">Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="rowData">
+                <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+                    <tr>
                         <td class="td-role">
                             {{rowData.sNo}}
                         </td>
                         <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input class="form-control td-role" pInputText type="text"
-                                        [(ngModel)]="rowData.roleName">
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    <span class="td-role">{{rowData.roleName}}</span>
-                                </ng-template>
-                            </p-cellEditor>
+                            <input [class]="(rowData.isReadOnly) ? 'input-read td-role': 'form-control td-role'"
+                                type="text" [readonly]="rowData.isReadOnly" [(ngModel)]="rowData.roleName">
                         </td>
                         <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-checkbox [disabled]="!rowData.isReadOnly" [(ngModel)]="rowData.status" [binary]="rowData.status"></p-checkbox>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    <p-checkbox [disabled]="!rowData.isReadOnly" [(ngModel)]="rowData.status" [binary]="rowData.status"></p-checkbox>
-                                </ng-template>
-                            </p-cellEditor>
+                            <input class="form-control" style="font-size: 5px;"  type="checkbox" [checked]="rowData.status"
+                                [disabled]="rowData.isReadOnly" [(ngModel)]="rowData.status">
                         </td>
                         <td style="text-align:center">
-                            <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
-                                class="ui-button-info" (click)="onEdit(rowData)"></button>
-                            <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
-                                class="ui-button-success" style="margin-right: .5em"
-                                (click)="onSave(rowData)"></button>
-                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
-                                class="ui-button-danger" (click)="onCancel(rowData, ri)"></button>
+                            <span *ngIf="rowData.isReadOnly" class="font-20 m-r-20" style="color: #3e3e3e;"
+                                (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit"></i></span>
+                            <span *ngIf="!rowData.isReadOnly" class="font-20 m-r-20" style="color: #398bf7;"><i
+                                    class="fa fa-save" (click)="onSave(rowData.userId)"></i></span>
+                            <span *ngIf="!rowData.isReadOnly" class="font-20 m-r-20" style="color: red;"><i
+                                    class="fa fa-remove" (click)="onCancel(rowData)"></i></span>
                         </td>
                     </tr>
                 </ng-template>
