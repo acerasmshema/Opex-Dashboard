@@ -8,7 +8,6 @@ import { ApiCallService } from '../../shared/service/api/api-call.service';
 export class ProductionService {
 
   ydayProcessLines = API_URL.apiURLs.PROCESS_LINES_URL;
-  annualTarget = API_URL.apiURLs.ANNUAL_TARGET_URL;
   projectedData = API_URL.apiURLs.PROJECTED_DATA_URL;
   ydayAllProcessLines = API_URL.apiURLs.YTD_ALL_PROCESS_LINES_URL;
   kpiPulpArea = API_URL.apiURLs.KPI_PULP_AREA_URL;
@@ -22,6 +21,7 @@ export class ProductionService {
   getMaintenanceDay = API_URL.apiURLs.GET_MAINTENANCE_DAYS_URL;
   saveMaintenanceDay = API_URL.apiURLs.SAVE_MAINTENANCE_DAYS_URL;
   deleteMaintenanceDay = API_URL.apiURLs.DELETE_MAINTENANCE_DAYS_URL;
+  updateMaintanenceDaysRemarks=API_URL.apiURLs.UPDATE_MAINTENANCE_DAYS_REMARKS;
   saveTargetDay = API_URL.apiURLs.SAVE_TARGET_DAYS_URL;
   annotationDates = API_URL.apiURLs.ANNOTATION_DATES_URL;
   productionGridKpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
@@ -31,11 +31,7 @@ export class ProductionService {
   public getProductionYDayData(data: object) {
     return this.apiCallService.callGetAPIwithData(this.ydayProcessLines, data);
   }
-
-  public getAnnualTarget(data: object) {
-    return this.apiCallService.callGetAPIwithData(this.annualTarget, data);
-  }
-
+  
   public getProjectedTarget(data: object) {
     return this.apiCallService.callGetAPIwithData(this.projectedData, data);
   }
@@ -81,6 +77,10 @@ export class ProductionService {
 
   public updateMaintanenceTargetDays(data: object) {
     return this.apiCallService.callAPIwithData(this.saveTargetDay, data)
+  }
+
+  public updateMaintenanceDaysRemarks(data:object){
+    return this.apiCallService.callPutAPIwithData(this.updateMaintanenceDaysRemarks,data);
   }
 
   public getAnnotationDates(data: object) {

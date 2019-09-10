@@ -11,6 +11,9 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
+import com.rgei.kpi.dashboard.exception.InvalidCredentialsException;
+import com.rgei.kpi.dashboard.exception.LogoutException;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.LoginDetailEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
@@ -37,6 +40,8 @@ public class RgeUserServiceImpl implements RgeUserService{
 		RgeUserResponse response = null;
 		if(userObject.isPresent()) {
 			response = UserConverter.convertToResponse(userObject.get());
+		}else {
+			throw new RecordNotFoundException("User not found for user Id : "+userId);
 		}
 		return response;
 	}
@@ -62,7 +67,7 @@ public class RgeUserServiceImpl implements RgeUserService{
 			entity = rgeUserEntityRepository.findByLoginId(rgeUserLoginRequest.getLoginId());
 			if(entity == null) {
 				logger.info("User not found against the requested id and password.",rgeUserLoginRequest.getLoginId(), rgeUserLoginRequest.getUserPassword());
-				throw new RuntimeException("Requested user name and password is not found in the system:"+rgeUserLoginRequest.getLoginId() +"-"+rgeUserLoginRequest.getUserPassword());
+				throw new InvalidCredentialsException("Requested user name and password is not found in the system:"+rgeUserLoginRequest.getLoginId() +"-"+rgeUserLoginRequest.getUserPassword());
 			}
 			response = 	validateCredential(entity,rgeUserLoginRequest);
 			populateLoginDetails(entity);
@@ -99,7 +104,7 @@ public class RgeUserServiceImpl implements RgeUserService{
 			return userResponse;
 		}else {
 			logger.info("Invalid credential requested for login id :",rgeUserLoginRequest.getLoginId(),rgeUserLoginRequest.getUserPassword());
-			throw new RuntimeException("Invalid credential requested for login id :"+entity.getLoginId());
+			throw new InvalidCredentialsException("Invalid credential requested for login id :"+entity.getLoginId());
 		}
 	}
 
@@ -108,7 +113,7 @@ public class RgeUserServiceImpl implements RgeUserService{
 		if(rgeUserLogoutRequest.getLoginId() != null) {
 			LoginDetailEntity loginEntity = loginDetailEntityRepository.findByLoginIdAndStatus(rgeUserLogoutRequest.getLoginId().trim(), Boolean.TRUE);
 			if(loginEntity == null) {
-				throw new RuntimeException("Invalid user id requested or user is not logged in.");
+				throw new LogoutException("Invalid user id requested or user is not logged in.");
 			}
 				loginEntity.setLogoutTime(new java.util.Date());
 				loginEntity.setStatus(Boolean.FALSE);

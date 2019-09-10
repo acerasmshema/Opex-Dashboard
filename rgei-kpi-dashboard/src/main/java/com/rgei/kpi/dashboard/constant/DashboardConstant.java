@@ -53,5 +53,9 @@ public class DashboardConstant {
 	
 	public static final String KRC = "1";
 	public static final String RZ = "3";
-
+	
+	public static final String MAINTENANCE = "maintenance";
+	public static final String ANNOTATION = "annotation";
+	public static final String TARGET = "target";
 }
+

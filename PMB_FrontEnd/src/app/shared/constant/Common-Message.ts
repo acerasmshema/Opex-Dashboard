@@ -19,7 +19,9 @@ export class CommonMessage {
         ADD_TARGET_DAYS: "Please enter target days.",
         TARGET_DAYS_GREATER_THAN_ZERO: "Please enter target days value greater than 0.",
         ANNOTATION_ERROR: "Annotation could not be saved.",
-        DATE_ERROR: "Please select Date.",
-        REMARKS_ERROR: "Please enter Remarks.",
+        DATE_ERROR: "Please select date range",
+        REMARKS_ERROR: "Please enter Remarks",
+        TARGET_DAYS_ERROR: "Please enter target days",
+        MILLS_SELECT: "Please select atleast 2 mills",
     };
 }

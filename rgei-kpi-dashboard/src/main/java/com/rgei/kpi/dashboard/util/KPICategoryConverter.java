@@ -23,6 +23,7 @@ import java.util.List;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.response.model.KpiTypeDetails;
 import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
 import com.rgei.kpi.dashboard.response.model.KpiTypeResponse;
@@ -60,6 +61,8 @@ public class KPICategoryConverter {
 				processLinesResponse.setProcessLineName(entity.getProcessLineCode());
 				processLines.add(processLinesResponse);
 			}
+		} else {
+			throw new RecordNotFoundException("Error records not found for process lines");
 		}
 		return processLines;
 	}
