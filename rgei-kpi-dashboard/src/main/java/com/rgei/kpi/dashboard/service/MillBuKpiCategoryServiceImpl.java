@@ -110,7 +110,7 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService {
 		if (millBuKpiCategoryEntity != null && millBuKpiCategoryEntity.getDailyTarget() != null)
 			response.setDailyTarget(millBuKpiCategoryEntity.getDailyTarget());
 		else
-			throw new RecordNotFoundException("No record found for process line daily target for mill Id : "+millId);
+			throw new RecordNotFoundException("No record found for process line daily target for mill Id : " + millId);
 		return response;
 	}
 

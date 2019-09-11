@@ -39,6 +39,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 
 	@Override
 	public List<ProcessLineDetailsResponse> getProcessLines(String millId) {
+		List<ProcessLineDetailsResponse> response = null;
 		if (Objects.nonNull(millId)) {
 			List<ProcessLineEntity> processLine;
 			try {
@@ -47,12 +48,12 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 			} catch (Exception e) {
 				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
 			}
-			if(processLine == null || processLine.isEmpty()) {
+			if (processLine == null || processLine.isEmpty()) {
 				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
 			}
 			return ProcessLineUtility.generateResponse(processLine);
 		}
-		return null;
+		return response;
 	}
 
 	@Override

@@ -5,3 +5,4 @@ public class LogoutException extends RuntimeException {
 		super(exception);
 	}
 }
+
