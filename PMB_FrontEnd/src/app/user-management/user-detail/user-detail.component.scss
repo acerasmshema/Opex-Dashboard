@@ -32,3 +32,8 @@ label {
     border-radius: 4px;
     font-size: 9pt;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+  }

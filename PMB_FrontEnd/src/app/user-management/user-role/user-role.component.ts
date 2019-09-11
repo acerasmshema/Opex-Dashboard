@@ -9,7 +9,8 @@ import { UserRoleService } from './user-role.service';
 })
 export class UserRoleComponent implements OnInit {
 
-  userRoles: UserRole[] = [];
+  public userRoles: UserRole[] = [];
+  private editUserRole: UserRole;
 
   constructor(private userRoleService: UserRoleService) { }
 
@@ -24,14 +25,21 @@ export class UserRoleComponent implements OnInit {
   onEdit(userRoleId: number) {
     const userRole = this.userRoles.find((userRole) => userRole.userRoleId === userRoleId)
     userRole.isReadOnly = false;
+
+    this.editUserRole = new UserRole();
+    this.editUserRole.roleName = userRole.roleName;
+    this.editUserRole.status = userRole.status;
   }
 
   onCancel(userRole: UserRole) {
     userRole.isReadOnly = true;
+    userRole.roleName = this.editUserRole.roleName;
+    userRole.status = this.editUserRole.status;
   }
 
   onSave(userRole: UserRole) {
-   this.userRoleService.saveUserRole(userRole);
+    this.userRoleService.saveUserRole(userRole);
+    this.editUserRole = null;
   }
 
 }
