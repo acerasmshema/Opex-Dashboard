@@ -16,7 +16,7 @@ export class ApiCallService {
         'Access-Control-Allow-Origin': '*'
       })
     };
-    return this.httpClient.get(url, httpOptions).pipe(catchError(this.errorHandler));
+    return this.httpClient.get(url, httpOptions);
   }
 
   public callGetAPIwithData(url: string, data: object) {
@@ -30,7 +30,7 @@ export class ApiCallService {
     const httpOptions = {
       headers: new HttpHeaders(mergedHeaders)
     };
-    return this.httpClient.get(url, httpOptions).pipe(catchError(this.errorHandler));
+    return this.httpClient.get(url, httpOptions);
   }
 
   public callPutAPIwithData(url: string, data: object) {
@@ -43,7 +43,7 @@ export class ApiCallService {
     const httpOptions = {
       headers: new HttpHeaders(mergedHeaders)
     };
-    return this.httpClient.put(url, data, httpOptions).pipe(catchError(this.errorHandler));
+    return this.httpClient.put(url, data, httpOptions);
   }
 
   public callAPIwithData(url: string, data: any) {
@@ -54,12 +54,18 @@ export class ApiCallService {
         'Access-Control-Allow-Origin': '*'
       })
     };
-    return this.httpClient.post(url, data, httpOptions).pipe(catchError(this.errorHandler));
+    return this.httpClient.post(url, data, httpOptions);
   }
 
   errorHandler(error: HttpErrorResponse) {
-      console.error(error.error.message);
+    let errorMessage = '';
+    if (error.error instanceof ProgressEvent) {    
+    alert("Server Error");
+    } else {
       return "e";
+    }
+    
+    
   }
 
 }

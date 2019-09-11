@@ -44,15 +44,19 @@ export class LoginComponent implements OnInit {
     this.statusService.spinnerSubject.next(true);
     this.loginService.validateUser(data).
       subscribe((data: any) => {
+        this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
         this.statusService.spinnerSubject.next(false);
-
-        if (data == "e") {
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.INVALID_USER });
-        } else {
-          this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-          this.router.navigateByUrl("home/dashboard");
+        this.router.navigateByUrl("home/dashboard");
+      },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
         }
-      });
+      }
+      );
   }
 
 }

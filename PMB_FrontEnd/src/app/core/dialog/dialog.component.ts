@@ -71,7 +71,15 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.openSettingIcon(data);
         }
         this.dialogName = dialogName;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   annotationCollapse() {
@@ -92,7 +100,14 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.fetchAnnotation(kpiData).
       subscribe((annotationsLines: any) => {
         this.annotationDialog.annotationsLines = annotationsLines;
-      });
+      },
+      (error: any) => {
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
+      }
+    });
   }
 
   public createAnnotation() {
@@ -146,7 +161,15 @@ export class DialogComponent implements OnInit, OnDestroy {
           } else {
             this.showMessage("error", "", CommonMessage.ERROR.ANNOTATION_ERROR);
           }
-        });
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
     }
   }
 
@@ -195,7 +218,15 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.viewMaintenanceDays();
             this.statusService.projectTargetSubject.next();
           }
-        });
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
     }
   }
 
@@ -208,8 +239,16 @@ export class DialogComponent implements OnInit, OnDestroy {
       subscribe(
         (response: any) => {
           this.maintenanceDays.maintanenceDayModel = response;
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
         }
-      )
+      }
+      );
   }
 
   public delMaintanenceDays() {
@@ -227,7 +266,15 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.showMessage("success", "", CommonMessage.SUCCESS.DELETE_SUCCESS);
           this.viewMaintenanceDays();
           this.statusService.projectTargetSubject.next();
-        });
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
   }
 
   public addTargetDays() {
@@ -258,7 +305,15 @@ export class DialogComponent implements OnInit, OnDestroy {
               this.showMessage("success", "", CommonMessage.SUCCESS.TARGET_CHANGED_SUCCESS);
               this.statusService.projectTargetSubject.next();
             }
-          });
+          },
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if(error.status=="0"){
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+            }else{
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
     }
   }
 
@@ -279,7 +334,15 @@ export class DialogComponent implements OnInit, OnDestroy {
    }
 
     this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
-    });
+    },
+    (error: any) => {
+      this.statusService.spinnerSubject.next(false);
+      if(error.status=="0"){
+      alert(CommonMessage.ERROR.SERVER_ERROR)
+      }else{
+        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+    }
+  });
 
   }
 

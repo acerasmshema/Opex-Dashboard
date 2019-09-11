@@ -74,7 +74,7 @@ public class KpiAnnotationController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/v1/kpi_annotation/delete_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/delete_annotation")
 	public ResponseEntity<HttpStatus> deleteAnnotation(
 			@RequestBody List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
 		logger.info("delete annotation", kpiAnnotationDeleteRequest);
