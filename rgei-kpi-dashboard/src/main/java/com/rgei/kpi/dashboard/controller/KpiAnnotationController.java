@@ -85,7 +85,7 @@ public class KpiAnnotationController {
 
 	@ApiOperation(value = "deleteAnnotation", notes = "Delete annotations")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
-	@DeleteMapping(value = "/v1/kpi_annotation/delete_annotation")
+	@PostMapping(value = "/v1/kpi_annotation/delete_annotation")
 	public ResponseEntity<HttpStatus> deleteAnnotation(
 			@RequestBody List<KpiAnnotationDeleteRequest> kpiAnnotationDeleteRequest) {
 		logger.info("delete annotation", kpiAnnotationDeleteRequest);

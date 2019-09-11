@@ -4,6 +4,8 @@ import { SidebarRequest } from '../core/sidebar/sidebar-request';
 import { DashboardService } from './dashboard.service';
 import { Subscription } from 'rxjs';
 import { ConsumptionService } from './consumption-dashboard/consumption.service';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +26,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(private statusService: StatusService,
     private consumptionService: ConsumptionService,
-    private dashboardService: DashboardService) {
+    private dashboardService: DashboardService,
+    private messageService:MessageService) {
 
     this.cacheMap = new Map<string, boolean>();
     this.cacheMap.set("1", true);
@@ -117,7 +120,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.selected = true;
           }, 200);
         }
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   ngOnDestroy() {

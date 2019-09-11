@@ -38,11 +38,20 @@ public class UserRoleEntity implements Serializable {
 	@Column(name="role_name")
 	private String roleName;
 	
+	@Column(name="created_by")
+	private String createdBy;
+	
+	@Column(name="updated_by")
+	private String updatedBy;
+	
+	@Column(name="active")
+	private Boolean status;
+	
 	@Column(name="created_date")
 	private Timestamp createdDate;
 
 	@Column(name="updated_date")
-	private String updatedBy;
+	private Timestamp updatedDate;
 
 	@ManyToMany
 	@JoinTable(
@@ -95,6 +104,14 @@ public class UserRoleEntity implements Serializable {
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
+	
+	public Timestamp getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Timestamp updatedDate) {
+		this.updatedDate = updatedDate;
+	}
 
 	public String getUpdatedBy() {
 		return updatedBy;
@@ -102,6 +119,22 @@ public class UserRoleEntity implements Serializable {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 }

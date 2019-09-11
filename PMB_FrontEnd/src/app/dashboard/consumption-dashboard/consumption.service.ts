@@ -8,6 +8,8 @@ import { LocalStorageService } from '../../shared/service/localStorage/local-sto
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class ConsumptionService {
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
     private datePipe: DatePipe,
-    private localStorageService: LocalStorageService) { }
+    private localStorageService: LocalStorageService,
+    private messageService:MessageService) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
@@ -98,7 +101,15 @@ export class ConsumptionService {
           if (this.statusService.isSpin)
             this.statusService.spinnerSubject.next(false);
         }
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public changeChartType(event: any, kpiId: number, kpiCategoryId: string) {
