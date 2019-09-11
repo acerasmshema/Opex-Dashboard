@@ -47,7 +47,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 			} catch (Exception e) {
 				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
 			}
-			if(processLine == null || processLine.isEmpty()) {
+			if (processLine == null || processLine.isEmpty()) {
 				throw new RecordNotFoundException("Error while fetching process lines for mill Id : " + millId);
 			}
 			return ProcessLineUtility.generateResponse(processLine);

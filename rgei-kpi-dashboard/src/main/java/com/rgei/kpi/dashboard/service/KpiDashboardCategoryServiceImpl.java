@@ -204,7 +204,7 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository
 				.getYesterdayAllProcessLinesData(KpiDashboardCategoryUtility.getYesterdayDate(), kpiCategoryId, millId);
 		if (responseEntity == null || responseEntity.isEmpty()) {
-			throw new RecordNotFoundException("Record not found for Kpi Category Id : "+kpiCategoryId);
+			throw new RecordNotFoundException("Record not found for Kpi Category Id : " + kpiCategoryId);
 		} else {
 			if (DashboardConstant.KRC.equals(millId.toString())) {
 				KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
