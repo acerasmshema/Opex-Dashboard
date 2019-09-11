@@ -20,6 +20,7 @@ import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.util.UserConverter;
 
 @Service
@@ -61,9 +62,9 @@ public class RgeUserServiceImpl implements RgeUserService{
 	}
 
 	@Override
-	public RgeUserResponse loginProcess(RgeUserLoginRequest rgeUserLoginRequest) {
+	public User loginProcess(RgeUserLoginRequest rgeUserLoginRequest) {
 		RgeUserEntity entity = null;
-		RgeUserResponse response = null;
+		User response = null;
 		if(rgeUserLoginRequest.getLoginId() != null) {
 			entity = rgeUserEntityRepository.findByLoginId(rgeUserLoginRequest.getLoginId());
 			if(entity == null) {
@@ -96,17 +97,15 @@ public class RgeUserServiceImpl implements RgeUserService{
 		loginDetailEntityRepository.save(loginDetailEntity);
 	}
 
-	private RgeUserResponse validateCredential(RgeUserEntity entity, RgeUserLoginRequest rgeUserLoginRequest) {
+	private User validateCredential(RgeUserEntity entity, RgeUserLoginRequest rgeUserLoginRequest) {
+		User user = null;
 		if(entity.getLoginId().equals(rgeUserLoginRequest.getLoginId()) && entity.getUserPassword().equals(rgeUserLoginRequest.getUserPassword())) {
-			RgeUserResponse userResponse = new RgeUserResponse();
-			userResponse.setLoginId(entity.getLoginId());
-			userResponse.setUserName(entity.getFirstName());
-			userResponse.setUserRole(entity.getUserRoles().get(0).getRoleName());
-			return userResponse;
+			user = UserConverter.createUserResponse(entity);
 		}else {
 			logger.info("Invalid credential requested for login id :",rgeUserLoginRequest.getLoginId(),rgeUserLoginRequest.getUserPassword());
 			throw new InvalidCredentialsException("Invalid credential requested for login id :"+entity.getLoginId());
 		}
+		return user;
 	}
 
 	@Override
