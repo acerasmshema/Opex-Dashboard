@@ -39,6 +39,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 
 	@Override
 	public List<ProcessLineDetailsResponse> getProcessLines(String millId) {
+		List<ProcessLineDetailsResponse> response = null;
 		if (Objects.nonNull(millId)) {
 			List<ProcessLineEntity> processLine;
 			try {
@@ -52,7 +53,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 			}
 			return ProcessLineUtility.generateResponse(processLine);
 		}
-		return null;
+		return response;
 	}
 
 	@Override

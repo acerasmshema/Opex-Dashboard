@@ -296,7 +296,7 @@ public class ProcessLineUtility {
 				millObject.setCountryId(millEntity.getCountry().getCountryId().toString());
 				response.add(millObject);
 			}
-		} else {
+		}else {
 			throw new RecordNotFoundException("No records for mills data");
 		}
 		return response;

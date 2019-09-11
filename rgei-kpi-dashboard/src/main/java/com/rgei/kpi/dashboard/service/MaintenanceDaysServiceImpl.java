@@ -95,7 +95,6 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService {
 					throw new RecordNotCreatedException("Error while saving maintenance days for date :"
 							+ maintenanceDaysRequest.getMaintenanceDays());
 				}
-
 			}
 		} else {
 			logger.info("Maintenance dates are empty", dates);

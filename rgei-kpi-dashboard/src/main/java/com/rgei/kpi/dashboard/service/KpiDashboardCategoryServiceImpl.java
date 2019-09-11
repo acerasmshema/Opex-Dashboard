@@ -546,5 +546,4 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		}
 		return MillBuKpiUtility.getDailySeriesResponse(targetDates, targetValue);
 	}
-
 }
