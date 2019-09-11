@@ -1,7 +1,9 @@
+import { MillDetail } from 'src/app/shared/models/mill-detail.model';
+
 export class SidebarForm {
     type: string;
     countries: any;
-    mills: any;
+    mills: MillDetail[] = [];
     buisnessUnits: any;
     processLines: any[];
     kpiTypes: any;

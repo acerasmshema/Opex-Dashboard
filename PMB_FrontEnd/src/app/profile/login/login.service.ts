@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
-import { ApiCallService } from '../service/api/api-call.service';
+import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 @Injectable({
   providedIn: 'root'
 })

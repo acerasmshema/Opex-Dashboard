@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { TranslateService } from '../../shared/service/translate/translate.service';
-import { LoginService } from '../../shared/login/login.service';
 import { StatusService } from '../../shared/service/status.service';
 import { HeaderService } from './header.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
 import { CommonMessage } from '../../shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { LoginService } from 'src/app/profile/login/login.service';
+import { MillDetail } from 'src/app/shared/models/mill-detail.model';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,7 +19,7 @@ export class HeaderComponent implements OnInit {
 
   user: any;
   loginId: any;
-  mills: any = [];
+  mills: MillDetail[] = [];
   selectedMillName: string;
 
   constructor(private router: Router,
@@ -89,11 +91,10 @@ export class HeaderComponent implements OnInit {
       countryIds: "1,2"
     }
     this.headerService.getAllMills(requestData).
-      subscribe((mills: any) => {
+      subscribe((mills: MillDetail[]) => {
         this.statusService.common.mills = mills;
         this.mills = this.statusService.common.mills;
-      },
-      (error: any) => {
+      }, (error: any) => {
         this.statusService.spinnerSubject.next(false);
         if(error.status=="0"){
         alert(CommonMessage.ERROR.SERVER_ERROR)
@@ -101,7 +102,11 @@ export class HeaderComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
       }
     });
-    this.statusService.common.selectedMill = { millId: "1", millName: 'Kerinci', countryId: "1" }
+    let millDetail = new MillDetail();
+    millDetail.millId = "1";
+    millDetail.millName = "Kerinci";
+    millDetail.countryId = '1';
+    this.statusService.common.selectedMill = millDetail;
     this.selectedMillName = this.statusService.common.selectedMill.millName;
   }
 }

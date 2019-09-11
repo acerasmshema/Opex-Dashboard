@@ -120,12 +120,20 @@
   margin-right: 5px;
 }
 
+.m-r-20 {
+  margin-right: 20px;
+}
+
 .m-r-30 {
   margin-right: 30px;
 }
 
 .m-t-5 {
   margin-top: 5px;
+}
+
+.m-t-30 {
+  margin-top: 30px;
 }
 
 .m-b-5 {
@@ -154,4 +162,23 @@
     border: 2px solid red;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+.table-label {
+  font-size: 10pt;
+  padding-right: 0px;
+  font-weight: 500;
+}
+
+.required:after {
+  color: #e32;
+  content: ' *';
+}
+
+.font-5 {
+  font-size: 5px;
+}
+
+.font-20 {
+  font-size: 20px;
 }

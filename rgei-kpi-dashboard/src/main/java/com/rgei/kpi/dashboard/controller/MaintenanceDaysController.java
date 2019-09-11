@@ -39,25 +39,32 @@ import com.rgei.kpi.dashboard.response.model.MaintenanceDaysResponse;
 import com.rgei.kpi.dashboard.response.model.UpdateRemarksRequest;
 import com.rgei.kpi.dashboard.service.MaintenanceDaysService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/restCall")
 public class MaintenanceDaysController {
-	
+
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(MaintenanceDaysController.class);
-	
+
 	@Resource
 	private MaintenanceDaysService maintenanceDaysService;
-	
+
+	@ApiOperation(value = "getMaintainanceDetails", notes = "Retrieve  maintenance days details", response = MaintenanceDaysResponse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping(value = "/v1/maintenance_days/get_maintenance_days")
-	public ResponseEntity<List<MaintenanceDaysResponse>> getMaintainanceDetails(@RequestHeader(value="millId") String millId,
-			@RequestHeader(value="buId") String buId) {
+	public ResponseEntity<List<MaintenanceDaysResponse>> getMaintainanceDetails(
+			@RequestHeader(value = "millId") String millId, @RequestHeader(value = "buId") String buId) {
 		logger.info("Inside MaintenanceDaysController to fetch maintenance days");
-		List<MaintenanceDaysResponse>  response = maintenanceDaysService.getMaintainanceDayDetails(millId, buId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		List<MaintenanceDaysResponse> response = maintenanceDaysService.getMaintainanceDayDetails(millId, buId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "saveMaintainanceRequest", notes = "Save  maintenance days details")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/maintenance_days/save_maintenance_days")
 	public ResponseEntity<HttpStatus> saveMaintainanceRequest(
 			@RequestBody MaintenanceDaysRequest maintenanceDaysRequest) {
@@ -65,21 +72,27 @@ public class MaintenanceDaysController {
 		maintenanceDaysService.saveMaintenanceDays(maintenanceDaysRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "updateMaintainanceRequest", notes = "Update  maintenance days details")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/maintenance_days/update_maintenance_days")
 	public ResponseEntity<HttpStatus> updateMaintainanceRequest(
 			@RequestBody MaintenanceDaysRequest maintenanceDaysRequest) {
 		logger.info("Inside MaintenanceDaysController to update maintenance days");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "deleteMaintainanceDetails", notes = "Update  maintenance days details")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/maintenance_days/delete_maintenance_days")
 	public ResponseEntity<HttpStatus> deleteMaintainanceDetails(@RequestBody DeleteRequest request) {
 		logger.info("Inside MaintenanceDaysController to delete maintenance days");
 		maintenanceDaysService.deleteMaintainanceDayDetails(request);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "updateMaintainanceRemarksRequest", notes = "Update  maintenance days remarks")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping(value = "/v1/maintenance_days/update_maintenance_days_remarks")
 	public ResponseEntity<HttpStatus> updateMaintainanceRemarksRequest(@RequestBody UpdateRemarksRequest request) {
 		logger.info("Inside MaintenanceDaysController to update maintenance days remarks");

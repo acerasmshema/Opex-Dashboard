@@ -14,22 +14,23 @@
           </div>
         </div>
       </div>
-      <p-tabPanel header="Production" headerStyleClass="production-dashboard-id" [selected]="selected" [cache]="cacheMap.get('1')">
+      <p-tabPanel header="Production" headerStyleClass="production-dashboard-id" leftIcon="fa fa-bar-chart"
+        [selected]="selected" [cache]="cacheMap.get('1')">
         <ng-template pTemplate="app-production-dashboard">
           <app-production-dashboard></app-production-dashboard>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="Chemical Consumption" [disabled]="disableTab" [cache]="cacheMap.get('2')">
+      <p-tabPanel header="Chemical Consumption" leftIcon="fa fa-flask" [disabled]="disableTab" [cache]="cacheMap.get('2')">
         <ng-template pTemplate="app-consumption-dashboard">
           <app-consumption-dashboard [kpiCategoryId]="'2'"></app-consumption-dashboard>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="Utilities Consumption" [disabled]="disableTab" [cache]="cacheMap.get('3')">
+      <p-tabPanel header="Utilities Consumption" leftIcon="fa fa-th-large" [disabled]="disableTab" [cache]="cacheMap.get('3')">
         <ng-template pTemplate="app-utilities-consumption-dashboard">
           <app-consumption-dashboard [kpiCategoryId]="'3'"></app-consumption-dashboard>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="Wood Consumption" [disabled]="disableTab" [cache]="cacheMap.get('4')">
+      <p-tabPanel header="Wood Consumption" leftIcon="fa fa-leaf" [disabled]="disableTab" [cache]="cacheMap.get('4')">
         <ng-template pTemplate="app-wood-consumption-dashboard">
           <app-consumption-dashboard [kpiCategoryId]="'4'"></app-consumption-dashboard>
         </ng-template>
