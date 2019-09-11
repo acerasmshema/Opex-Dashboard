@@ -13,6 +13,7 @@ import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Component({
   selector: 'app-dialog',
@@ -44,6 +45,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
+    private validationService: ValidationService,
     private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
@@ -307,23 +309,23 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onTargetDaysValidation() {
-    this.dialogService.targetDaysValidation(this.maintenanceDays);
+    this.validationService.targetDaysValidation(this.maintenanceDays);
   }
 
   onRemarksValidation() {
-    this.dialogService.remarksValidation(this.maintenanceDays);
+    this.validationService.remarksValidation(this.maintenanceDays);
   }
 
   onDateValidation() {
-    this.dialogService.dateValidation(this.maintenanceDays);
+    this.validationService.dateValidation(this.maintenanceDays);
   }
 
   onPorocessLineValidation() {
-    this.dialogService.processLineValidation(this.annotationDialog);
+    this.validationService.processLineValidation(this.annotationDialog);
   }
 
   onDescriptionValidation() {
-    this.dialogService.descriptionValidation(this.annotationDialog);
+    this.validationService.descriptionValidation(this.annotationDialog);
   }
 
   onAddMillRole() {

@@ -259,7 +259,7 @@
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <label class="edit-label required">Phone</label>
+                <label class="edit-label">Phone</label>
                 <div class="form-group">
                     <input type="text" class="form-control edit-input">
                 </div>
@@ -273,13 +273,13 @@
         </div>
         <div class="row">
             <div class="col-sm-8">
-                <label class="edit-label required">Address</label>
+                <label class="edit-label">Address</label>
                 <div class="form-group">
                     <input type="text" class="form-control edit-input">
                 </div>
             </div>
             <div class="col-sm-4">
-                <label class="edit-label required">Country</label>
+                <label class="edit-label">Country</label>
                 <div class="form-group">
                     <select name="" id="" class="form-control edit-input" style="height: 34px;">
                         <option value="" class="edit-input">India</option>
@@ -297,11 +297,12 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <label class="edit-label required">Status</label>
+                <label class="edit-label required">Department</label>
                 <div class="form-group">
-                    <select name="" id="" class="form-control edit-input" style="height: 34px;">
-                        <option value="" class="edit-input">Active</option>
-                        <option value="" class="edit-input">InActive</option>
+                    <select name="" id="" class="form-control edit-input" style="height: 34px;font-size: 10pt">
+                        <option value="" class="edit-input" disabled selected>Select Department</option>
+                        <option value="" class="edit-input">Technical</option>
+                        <option value="" class="edit-input">BCID</option>
                     </select>
                 </div>
             </div>
@@ -324,7 +325,7 @@
             <div class="table-wrapper">
                 <table class="table table-bordered" style="background: #f1f1f1;">
                     <div class="table-title text-center">
-                        <span style="font-size: 12pt;font-family: Arial">User Role</span>
+                        <span class="required role-head">User Role</span>
                         <span class="float-right m-r-5" (click)="onAddMillRole()">
                             <em class="fa fa-user-plus fa-2x"></em>
                         </span>

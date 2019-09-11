@@ -36,6 +36,9 @@ import { HeaderService } from './core/header/header.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { LoginComponent } from './profile/login/login.component';
 import { LoginService } from './profile/login/login.service';
+import { UserDetailService } from './user-management/user-detail/user-detail.service';
+import { UserRoleService } from './user-management/user-role/user-role.service';
+import { ValidationService } from './shared/service/validation/validation.service';
 
 @NgModule({
   declarations: [
@@ -82,7 +85,11 @@ import { LoginService } from './profile/login/login.service';
     MessageService,
     LocalStorageService,
     TranslateService,
-    StatusService],
+    StatusService,
+    UserDetailService,
+    UserRoleService,
+    ValidationService
+  ],
   bootstrap: [AppComponent]
 })
 

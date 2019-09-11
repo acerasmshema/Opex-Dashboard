@@ -4,9 +4,7 @@ import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { StatusService } from 'src/app/shared/service/status.service';
-import { MaintenanceDays } from './maintenance-days';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { AnnotationDialog } from './annotation-dialog';
+import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
 
 @Injectable()
 export class DialogService {
@@ -15,6 +13,7 @@ export class DialogService {
     findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
 
     constructor(private apiCallService: ApiCallService,
+        private userRoleService: UserRoleService,
         private statusService: StatusService) { }
 
     public createAnnotation(data: any) {
@@ -32,59 +31,23 @@ export class DialogService {
         let millRoles: MillRole[] = [];
         let millRole = new MillRole();
         millRole.mills = this.statusService.common.mills;
-        millRole.userRoles = this.statusService.common.userRoles;
+        millRole.userRoles = [];
+        this.userRoleService.getUserRoles(millRole.userRoles)
         millRoles.push(millRole);
 
+        this.getDepartmentList(user);
+        this.getCountryList(user);
         user.millRoles = millRoles;
         return user;
     }
-
-    targetDaysValidation(maintenanceDays: MaintenanceDays) {
-        if (maintenanceDays.targetDays <= 0) {
-            maintenanceDays.targetDaysErrorMessage = CommonMessage.ERROR.TARGET_DAYS_GREATER_THAN_ZERO;
-            maintenanceDays.isTargetDaysError = true;
-        }
-        else {
-            maintenanceDays.isTargetDaysError = false;
-        }
+    //Api Call and error Handling
+    getDepartmentList(user: UserDetail) {
+        user.departmentList = this.statusService.common.departmentList;
     }
 
-    remarksValidation(maintenanceDays: MaintenanceDays) {
-        if (maintenanceDays.textAreaValue == undefined || maintenanceDays.textAreaValue == null || maintenanceDays.textAreaValue === '') {
-            maintenanceDays.remarksErrorMessage = CommonMessage.ERROR.REMARKS_ERROR;
-            maintenanceDays.isRemarksError = true;
-        }
-        else {
-            maintenanceDays.isRemarksError = false;
-        }
+    //Api Call and error Handling
+    getCountryList(user: UserDetail) {
+        user.countryList = this.statusService.common.countryList;
     }
-
-    dateValidation(maintenanceDays: MaintenanceDays) {
-        const datePicker: any = document.getElementById("daterangepicker_input");
-        if (datePicker !== null && datePicker.value !== "" && maintenanceDays.isDateError) {
-            maintenanceDays.isDateError = false;
-        }
-    }
-
-    processLineValidation(annotationDialog: AnnotationDialog) {
-        if (annotationDialog.annotationProcessLines.length === 0) {
-            annotationDialog.isProcessLineError = true;
-            annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
-        }
-        else {
-            annotationDialog.isProcessLineError = false;
-        }
-    }
-
-    descriptionValidation(annotationDialog: AnnotationDialog) {
-        if (annotationDialog.annotationDescription == undefined || annotationDialog.annotationDescription == null || annotationDialog.annotationDescription === '') {
-            annotationDialog.descriptionErrorMessage = CommonMessage.ERROR.ADD_DESCRIPTION_VALIDATION;
-            annotationDialog.isDescriptionError = true;
-        }
-        else {
-            annotationDialog.isDescriptionError = false;
-        }
-    }
-
 
 }
