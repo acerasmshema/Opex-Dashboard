@@ -12,6 +12,7 @@ import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consum
 import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,7 +33,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private benchmarkService: BenchmarkService,
     private localStorageService: LocalStorageService,
     private headerService: HeaderService,
-    private statusService: StatusService) {
+    private statusService: StatusService,
+    private messageService:MessageService) {
   }
 
   ngOnInit() {
@@ -77,7 +79,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
         let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
         this.statusService.sidebarSizeSubject.next(sidebarSize);
         this.showSidebar = sidebarRequestData.isShow;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled())
@@ -92,7 +102,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarService.getKpiTypes(requestData)
       .subscribe((kpiTypes: any) => {
         this.sidebarForm.kpiTypes = kpiTypes;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   getKpiDetails(kpiCategoryId: any) {
@@ -103,7 +121,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((kpiTypes: any) => {
         this.statusService.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
         this.sidebarForm.kpiTypes = kpiTypes;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   toggleCollapsed() {
@@ -193,7 +219,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
         subscribe((buTypes: any) => {
           this.statusService.common.buTypes = buTypes;
           this.sidebarForm.buisnessUnits = buTypes;
-        });
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
     }
   }
 
@@ -206,7 +240,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
         subscribe((mills: any) => {
           this.statusService.common.mills = mills;
           this.sidebarForm.mills = mills;
-        });
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if(error.status=="0"){
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+          }else{
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
     }
   }
 

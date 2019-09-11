@@ -7,7 +7,7 @@ import { ApiCallService } from '../service/api/api-call.service';
 export class LoginService {
 
   loginUrl = API_URL.apiURLs.LOGIN_URL;
-  logoutUrl = API_URL.apiURLs.LOGIN_URL;
+  logoutUrl = API_URL.apiURLs.LOGOUT_URL;
 
   constructor(private apiCallService: ApiCallService) { }
 
