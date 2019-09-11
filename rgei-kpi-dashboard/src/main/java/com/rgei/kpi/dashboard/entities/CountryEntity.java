@@ -35,6 +35,7 @@ public class CountryEntity implements Serializable {
 	@Column(name="country_id")
 	private Integer countryId;
 
+	@Column(name="active")
 	private Boolean active;
 
 	@Column(name="country_code")

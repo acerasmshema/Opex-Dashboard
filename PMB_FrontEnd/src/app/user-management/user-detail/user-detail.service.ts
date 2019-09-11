@@ -4,7 +4,6 @@ import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { MillRole } from './mill-role.model';
 
 @Injectable()
 export class UserDetailService {
@@ -40,20 +39,6 @@ export class UserDetailService {
             userDetail.isReadOnly = false;
             userDetail.country = "India";
 
-            let millRoles: MillRole[] = [];
-            let millRole = new MillRole();
-            millRole.mills = this.statusService.common.mills;
-            millRole.userRoles = [];
-            millRoles.push(millRole);
-            userDetail.millRoles = millRoles;
-
-            let millRoles1 = [];
-            let millRole1 = new MillRole();
-            millRole1.mills = this.statusService.common.mills;
-            millRole1.userRoles = [];
-            userDetail.millRoles.push(millRole);
-            
-             
             userList.push(userDetail);
         }
 

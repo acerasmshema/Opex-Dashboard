@@ -5,6 +5,8 @@ import { TranslateService } from '../../shared/service/translate/translate.servi
 import { StatusService } from '../../shared/service/status.service';
 import { HeaderService } from './header.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
+import { CommonMessage } from '../../shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { LoginService } from 'src/app/profile/login/login.service';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 
@@ -25,7 +27,8 @@ export class HeaderComponent implements OnInit {
     private headerService: HeaderService,
     private statusService: StatusService,
     private translate: TranslateService,
-    private localStorageService: LocalStorageService) { }
+    private localStorageService: LocalStorageService,
+    private messageService:MessageService) { }
 
   ngOnInit() {
     this.user = this.localStorageService.fetchUserName();
@@ -45,7 +48,15 @@ export class HeaderComponent implements OnInit {
     this.loginService.logOut(data).
       subscribe((data: any) => {
        this.localStorageService.removeUserDetail();
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
     this.router.navigateByUrl('login');
   }
 
@@ -63,7 +74,15 @@ export class HeaderComponent implements OnInit {
     this.headerService.getAllBuType().
       subscribe((buTypes: any) => {
         this.statusService.common.buTypes = buTypes;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
 
     }
 
@@ -75,7 +94,14 @@ export class HeaderComponent implements OnInit {
       subscribe((mills: MillDetail[]) => {
         this.statusService.common.mills = mills;
         this.mills = this.statusService.common.mills;
-      });
+      }, (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
     let millDetail = new MillDetail();
     millDetail.millId = "1";
     millDetail.millName = "Kerinci";
