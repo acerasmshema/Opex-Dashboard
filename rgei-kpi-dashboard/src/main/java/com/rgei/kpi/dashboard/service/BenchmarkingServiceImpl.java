@@ -16,6 +16,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.BenchmarkingRepository;
 import com.rgei.kpi.dashboard.repository.KpiRepository;
 import com.rgei.kpi.dashboard.response.model.BenchmarkingReponse;
@@ -56,6 +57,7 @@ public class BenchmarkingServiceImpl implements BenchmarkingService {
 
 		} else {
 			logger.info("KPI Entity not present for kpi id", benchmarkingRequest.getKpiId());
+			throw new RecordNotFoundException("Record not found to get benchmarking data for Kpi Id : "+benchmarkingRequest.getKpiId());
 		}
 		Map<String, List<String>> finalBenchmarkingProcessLines = BenchmarkingUtility.fetchProcessLines(kpiList);
 		if (!Objects.nonNull(benchmarkingRequest.getFrequency())) {

@@ -5,8 +5,8 @@ import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { LoginService } from './login.service';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
-import { CommonMessage } from '../constant/Common-Message';
-import { StatusService } from '../service/status.service';
+import { StatusService } from 'src/app/shared/service/status.service';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 
 
 @Component({
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.INVALID_USER });
         } else {
           this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-          this.router.navigateByUrl("home/dashboard");
+          this.router.navigateByUrl("/home");
         }
       });
   }

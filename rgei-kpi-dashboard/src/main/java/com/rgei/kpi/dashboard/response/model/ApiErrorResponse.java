@@ -1,29 +1,26 @@
 package com.rgei.kpi.dashboard.response.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;;
+import java.util.Date;
 
-@JsonInclude(Include.NON_DEFAULT)
+import com.fasterxml.jackson.annotation.JsonIgnore;;
+
 public class ApiErrorResponse {
 
 	private String status;
 	private String description;
 	private String timestamp;
-	private String path;
 	private String error;
+	private String path;
 	@JsonIgnore
 	private String stackTrace;
 	@JsonIgnore
 	private Throwable throwable;
 
-
 	public ApiErrorResponse() {
 
 	}
 
-	public ApiErrorResponse(String timestamp, Throwable ex, String description, String path,
-			String status) {
+	public ApiErrorResponse(String timestamp, Throwable ex, String description, String path, String status) {
 
 		this.timestamp = timestamp;
 		if (ex != null) {
@@ -41,11 +38,21 @@ public class ApiErrorResponse {
 		this.error = errorMessage;
 	}
 
+	public ApiErrorResponse(String errorCode, String errorMessage, String developerMessage, String path) {
+
+		this.timestamp = new Date(System.currentTimeMillis()).toString();
+		this.status = errorCode;
+		this.error = errorMessage;
+		this.description = developerMessage;
+		this.path = path;
+	}
+
 	public ApiErrorResponse(String errorCode, String errorMessage, String developerMessage) {
 
 		this.status = errorCode;
 		this.error = errorMessage;
 		this.description = developerMessage;
+
 	}
 
 	public ApiErrorResponse(String errorCode, String errorMessage, Throwable throwable) {
@@ -58,7 +65,7 @@ public class ApiErrorResponse {
 			this.stackTrace = "";
 		}
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -117,9 +124,8 @@ public class ApiErrorResponse {
 
 	@Override
 	public String toString() {
-		return "RequestMessage [status=" + status + ", path=" + path + ", timestamp=" + timestamp
-				+ ", message=" + description + ", error=" + error + "]";
+		return "RequestMessage [status=" + status + ", path=" + path + ", timestamp=" + timestamp + ", message="
+				+ description + ", error=" + error + "]";
 	}
 
 }
-

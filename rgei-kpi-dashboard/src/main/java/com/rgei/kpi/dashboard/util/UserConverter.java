@@ -28,6 +28,7 @@ import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.response.model.LoginDetailResponse;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 
@@ -54,6 +55,8 @@ public class UserConverter {
 			if(!rgeUserEntity.getUserRoles().isEmpty()) {
 				rgeUserResponse.setUserRole(rgeUserEntity.getUserRoles().get(0).getRoleName());
 			}
+		}else {
+			throw new RecordNotFoundException("User not found");
 		}
 		return rgeUserResponse;
 	}

@@ -1,29 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './shared/login/login.component';
 import { LayoutComponent } from './core/layout/layout.component';
+import { LoginComponent } from './profile/login/login.component';
 
 const routes: Routes = [
-  {
-    path: "",
-    redirectTo: "login",
-    pathMatch: "full"
-  },
   {
     path: 'login',
     component: LoginComponent
   },
   {
-    path: 'home',
+    path: "",
+    redirectTo: "home",
+    pathMatch: "full"
+  },
+  {
+    path: "",
     component: LayoutComponent,
     children: [
       {
-        path: "",
-        redirectTo: "dashboard",
-        pathMatch: "full"
-      },
-      {
-        path: "dashboard",
+        path: "home",
         pathMatch: 'full',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
@@ -36,10 +31,20 @@ const routes: Routes = [
         path: "kappaAnalytics",
         pathMatch: 'full',
         loadChildren: './kappa-analytics/kappa-analytics.module#kappaAnalyticsModule'
+      },
+      {
+        path: "user",
+        pathMatch: 'full',
+        loadChildren: './user-management/user-management.module#UserManagementModule'
+      },
+      {
+        path: "profile",
+        pathMatch: 'full',
+        loadChildren: './profile/profile.module#ProfileModule'
       }
     ]
   },
-  
+  { path: "**",redirectTo:"home"}
 ];
 
 @NgModule({

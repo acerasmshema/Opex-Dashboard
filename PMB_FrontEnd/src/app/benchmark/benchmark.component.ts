@@ -33,7 +33,8 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
         this.benchmarkList = this.statusService.benchmarkList;
         this.becnhmarkService.filterCharts(searchKpiData);
         this.isShowBenchmark = true;
-      })
+      },
+      )
   }
 
   boundFormatDataLabel = this.formatDataLabel.bind(this);

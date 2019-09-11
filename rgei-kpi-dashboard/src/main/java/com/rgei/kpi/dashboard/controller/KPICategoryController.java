@@ -35,43 +35,39 @@ import com.rgei.kpi.dashboard.response.model.ProcessLinesResponse;
 import com.rgei.kpi.dashboard.service.KPICategoryService;
 import com.rgei.kpi.dashboard.util.DailyKpiPulpConverter;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/restCall")
 public class KPICategoryController {
-	
+
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KPICategoryController.class);
-	
+
 	@Resource
 	private KPICategoryService kpiCategoryService;
-	
-//	@GetMapping(value = "/v1/kpi_category/get_kpi_type")
-//	public ResponseEntity<List<KpiTypeResponse>> getRequestedKPIType(@RequestHeader(value="kpiCategoryId") String kpiCategoryId){
-//		logger.info("Get kpi types by kpiCategoryId", kpiCategoryId);
-//		List<KpiTypeResponse> response = kpiCategoryService.getKPICategory(DailyKpiPulpConverter.covertToInteger(kpiCategoryId));
-//		return new ResponseEntity<>(response,HttpStatus.OK);
-//	}
-	
-	/*
-	 * Get all kpi types for list of kpi category ids
-	 * 
-	 * @param List<String> kpiCategoryId
-	 * 
-	 * @return List<KpiTypeExtendedResponse>
-	 */
+
+	@ApiOperation(value = "getKpiTypeDetails", notes = "Get kpi type by kpiCategoryId", response = KpiTypeExtendedResponse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping(value = "/v1/kpi_category/get_kpi_type")
-	public ResponseEntity<List<KpiTypeExtendedResponse>> getKPITypeDetails(@RequestHeader(value="kpiCategoryId") List<String> kpiCategoryId){
+	public ResponseEntity<List<KpiTypeExtendedResponse>> getKpiTypeDetails(
+			@RequestHeader(value = "kpiCategoryId") List<String> kpiCategoryId) {
 		logger.info("Get kpi type by kpiCategoryId", kpiCategoryId);
 		List<KpiTypeExtendedResponse> response = kpiCategoryService.getKPICategoryDetails(kpiCategoryId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "getRequestedProcessLines", notes = "Retrieve process lines by kpi and mill ids", response = ProcessLinesResponse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping(value = "/v1/kpi_category/get_process_lines")
-	public ResponseEntity<List<ProcessLinesResponse>> getRequestedProcessLines(@RequestHeader(value="kpiId") String kpiId, @RequestHeader(value="millId") String millId){
+	public ResponseEntity<List<ProcessLinesResponse>> getRequestedProcessLines(
+			@RequestHeader(value = "kpiId") String kpiId, @RequestHeader(value = "millId") String millId) {
 		logger.info("Get kpi type by kpiCategoryId", kpiId);
-		List<ProcessLinesResponse> response = kpiCategoryService.getProcessLines(DailyKpiPulpConverter.covertToInteger(kpiId), DailyKpiPulpConverter.covertToInteger(millId));
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		List<ProcessLinesResponse> response = kpiCategoryService.getProcessLines(
+				DailyKpiPulpConverter.covertToInteger(kpiId), DailyKpiPulpConverter.covertToInteger(millId));
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

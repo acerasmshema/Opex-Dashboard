@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showTabs = true;
 
         setTimeout(() => {
-          this.selectedMillName = this.statusService.common.selectedMill;
+          this.selectedMillName = this.statusService.common.selectedMill.millName;
         }, 200);
 
         if (isMillChange) {

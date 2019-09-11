@@ -10,7 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
     CoreModule,
     HttpClientModule,
     KappaNumberPredictionRoutingModule,
-    CoreModule,
   ]
 })
 export class kappaAnalyticsModule { }
