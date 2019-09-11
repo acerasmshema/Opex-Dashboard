@@ -203,13 +203,15 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		}
 		List<Object[]> responseEntity = kpiCategoryDashboardRepository
 				.getYesterdayAllProcessLinesData(KpiDashboardCategoryUtility.getYesterdayDate(), kpiCategoryId, millId);
-		
+		if (responseEntity == null || responseEntity.isEmpty()) {
+			throw new RecordNotFoundException("Record not found for Kpi Category Id : "+kpiCategoryId);
+		} else {
 			if (DashboardConstant.KRC.equals(millId.toString())) {
 				KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
 			} else if (DashboardConstant.RZ.equals(millId.toString())) {
 				KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
 			}
-		
+		}
 		return resultList;
 	}
 
@@ -546,3 +548,4 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 	}
 
 }
+
