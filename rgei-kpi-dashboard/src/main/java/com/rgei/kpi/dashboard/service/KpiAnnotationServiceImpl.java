@@ -165,4 +165,5 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService {
 			}
 		}
 	}
+
 }
