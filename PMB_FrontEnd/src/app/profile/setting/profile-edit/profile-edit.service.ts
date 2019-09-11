@@ -16,7 +16,7 @@ export class ProfileEditService {
         userDetail.firstName = "Sahil"
 
         let userDetailForm = this.formBuilder.group({
-            'docDetails': this.formBuilder.array(this.statusService.common.departmentList),
+            'department': this.formBuilder.array(this.statusService.common.departmentList),
             'country': this.formBuilder.array(this.statusService.common.countryList),
             'firstName': new FormControl(userDetail.firstName),
             'lastName': new FormControl(userDetail.lastName),

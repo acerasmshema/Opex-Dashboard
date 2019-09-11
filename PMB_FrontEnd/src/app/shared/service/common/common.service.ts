@@ -51,6 +51,7 @@ export class CommonService {
                     (countries: Country[]) => {
                         countryList.push(...countries);
                         this.statusService.common.countryList = countries;
+                        console.log(countries);
                     },
                     (error: any) => {
                         console.log("Error handling")
