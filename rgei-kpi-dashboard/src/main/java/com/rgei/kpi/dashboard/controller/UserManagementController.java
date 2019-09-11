@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.service.CountryService;
+import com.rgei.kpi.dashboard.service.UserManagementService;
 
 @RestController
 @RequestMapping("/restCall")
-public class CountryController {
+public class UserManagementController {
 	
-	CentralizedLogger logger = RgeiLoggerFactory.getLogger(CountryController.class);
+	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementController.class);
 	
 	@Resource
-	CountryService countryService;
+	UserManagementService userManagementService;
 	
-	@GetMapping("/v1/get_countries")
+	@GetMapping("/v1/countries")
 	public ResponseEntity<List<CountryResponse>> getAllCountries(){
 		logger.info("Get all countries list");
-		List<CountryResponse> responseList = countryService.getCountryList();
+		List<CountryResponse> responseList = userManagementService.getCountryList();
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 }

@@ -15,9 +15,9 @@ import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 
 @Service
-public class CountryServiceImpl implements CountryService {
+public class UserManagementServiceImpl implements UserManagementService {
 
-	CentralizedLogger logger = RgeiLoggerFactory.getLogger(CountryServiceImpl.class);
+	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementServiceImpl.class);
 	
 	@Resource
 	CountryRepository countryRepository;
