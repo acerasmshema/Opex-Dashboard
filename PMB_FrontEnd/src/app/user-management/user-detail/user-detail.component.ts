@@ -20,11 +20,12 @@ export class UserDetailComponent implements OnInit {
     { field: 'isActive', header: 'Status' }
   ];
 
-  users: UserDetail[] = [];
+  public users: UserDetail[] = [];
+  private editUserDetail: UserDetail;
 
   constructor(private messageService: MessageService,
-              private userDetailService: UserDetailService,
-               private statusService: StatusService) { }
+    private userDetailService: UserDetailService,
+    private statusService: StatusService) { }
 
   ngOnInit() {
     this.userDetailService.getUserDetailList(this.users);
@@ -33,15 +34,21 @@ export class UserDetailComponent implements OnInit {
   onEdit(userId: number) {
     const userDetail = this.users.find((user) => user.userId === userId)
     userDetail.isReadOnly = true;
+
+    this.editUserDetail = new UserDetail();
+    this.editUserDetail.firstName = userDetail.firstName;
+    this.editUserDetail.lastName = userDetail.lastName;
   }
 
   onSave(userDetail: UserDetail) {
     this.userDetailService.saveUserDetail(userDetail, this.users);
+    this.editUserDetail = null;
   }
 
-  onCancel(rUser: UserDetail) {
-    const userDetail = this.users.find((user) => user.userId === rUser.userId)
+  onCancel(userDetail: UserDetail) {
     userDetail.isReadOnly = false;
+    userDetail.firstName = this.editUserDetail.firstName;
+    userDetail.lastName = this.editUserDetail.lastName;
   }
 
   onCreateUser() {
