@@ -36,7 +36,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
-import com.rgei.kpi.dashboard.response.model.MillsResponse;
+import com.rgei.kpi.dashboard.response.model.MillDetail;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineProjectedResponse;
@@ -184,12 +184,12 @@ public class ProcessLineController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "getMills", notes = "Retrieve mills against the requested country ids", response = MillsResponse.class)
+	@ApiOperation(value = "getMills", notes = "Retrieve mills against the requested country ids", response = MillDetail.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping(value = "/v1/location/all_mills")
-	public ResponseEntity<List<MillsResponse>> getMills(@RequestHeader(value = "countryIds") List<String> countryIds) {
+	public ResponseEntity<List<MillDetail>> getMills(@RequestHeader(value = "countryIds") List<String> countryIds) {
 		logger.info("Fetching mills against the requested country ids.", countryIds);
-		List<MillsResponse> response = processLineService.getMillDetails(countryIds);
+		List<MillDetail> response = processLineService.getMillDetails(countryIds);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

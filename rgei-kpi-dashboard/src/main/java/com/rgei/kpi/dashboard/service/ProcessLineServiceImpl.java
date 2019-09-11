@@ -18,7 +18,7 @@ import com.rgei.kpi.dashboard.repository.BusinessUnitTypeRepository;
 import com.rgei.kpi.dashboard.repository.MillEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
-import com.rgei.kpi.dashboard.response.model.MillsResponse;
+import com.rgei.kpi.dashboard.response.model.MillDetail;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.ProcessLineUtility;
@@ -56,7 +56,7 @@ public class ProcessLineServiceImpl implements ProcessLineService {
 	}
 
 	@Override
-	public List<MillsResponse> getMillDetails(List<String> countryIds) {
+	public List<MillDetail> getMillDetails(List<String> countryIds) {
 		if (countryIds != null && !countryIds.isEmpty()) {
 			List<Integer> ids = new ArrayList<>();
 			for (String s : countryIds) {

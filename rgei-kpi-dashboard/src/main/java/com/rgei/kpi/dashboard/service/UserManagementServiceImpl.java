@@ -15,7 +15,7 @@ import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.repository.UserRoleRepository;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.response.model.UserRoleResponse;
+import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.util.UserManagementUtility;
 
 @Service
@@ -40,11 +40,11 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public List<UserRoleResponse> getUserRolesByStatus(Boolean status) {
-		logger.info("Inside service call to get roles by status : "+status);
+	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
+		logger.info("Inside service call to get roles by status : "+activeRoles);
 		List<UserRoleEntity> entities = null;
-		if(Objects.nonNull(status) && status) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(status);
+		if(Objects.nonNull(activeRoles) && activeRoles) {
+			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
 		} else {
 			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
 		}

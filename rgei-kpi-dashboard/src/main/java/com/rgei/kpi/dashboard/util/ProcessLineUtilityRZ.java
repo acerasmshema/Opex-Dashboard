@@ -33,7 +33,7 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
-import com.rgei.kpi.dashboard.response.model.MillsResponse;
+import com.rgei.kpi.dashboard.response.model.MillDetail;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
@@ -239,14 +239,14 @@ public class ProcessLineUtilityRZ {
 		return responses;
 	}
 
-	public static List<MillsResponse> prePareMillResponse(List<MillEntity> mills) {
+	public static List<MillDetail> prePareMillResponse(List<MillEntity> mills) {
 		
-		MillsResponse millObject = null;
-		List<MillsResponse> response = null;
+		MillDetail millObject = null;
+		List<MillDetail> response = null;
 		if(mills != null && !mills.isEmpty()) {
 			response = new ArrayList<>();
 			for(MillEntity millEntity:mills) {
-				millObject = new MillsResponse();
+				millObject = new MillDetail();
 				millObject.setMillId(millEntity.getMillId().toString());
 				millObject.setMillCode(millEntity.getMillCode());
 				millObject.setMillName(millEntity.getMillName());

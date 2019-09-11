@@ -3,10 +3,10 @@ package com.rgei.kpi.dashboard.service;
 import java.util.List;
 
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.response.model.UserRoleResponse;
+import com.rgei.kpi.dashboard.response.model.UserRole;
 
 public interface UserManagementService {
 	List<CountryResponse> getCountryList();
 	
-	List<UserRoleResponse> getUserRolesByStatus(Boolean status);
+	List<UserRole> getUserRolesByStatus(Boolean activeRoles);
 }
