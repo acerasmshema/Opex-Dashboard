@@ -16,5 +16,7 @@ public interface MillEntityRepository extends JpaRepository<MillEntity, Integer>
 	List<MillEntity> findByCountry(@Param("countryIds") List<Integer> countryIds, @Param("status") Boolean status);
 	
 	List<MillEntity> findByActive(@Param("active") Boolean active);
+	
+	MillEntity findByMillId(Integer millId);
 
 }

@@ -81,14 +81,14 @@ export class DialogComponent implements OnInit, OnDestroy {
 
         this.dialogName = dialogName;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   annotationCollapse() {
@@ -110,13 +110,13 @@ export class DialogComponent implements OnInit, OnDestroy {
       subscribe((annotationsLines: any) => {
         this.annotationDialog.annotationsLines = annotationsLines;
       },
-      (error: any) => {
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
-      }
-    });
+        (error: any) => {
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
+          }
+        });
   }
 
   public createAnnotation() {
@@ -171,14 +171,14 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.showMessage("error", "", CommonMessage.ERROR.ANNOTATION_ERROR);
           }
         },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
     }
   }
 
@@ -228,14 +228,14 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.statusService.projectTargetSubject.next();
           }
         },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
     }
   }
 
@@ -251,12 +251,12 @@ export class DialogComponent implements OnInit, OnDestroy {
         },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
             this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
         }
-      }
       );
   }
 
@@ -278,12 +278,12 @@ export class DialogComponent implements OnInit, OnDestroy {
         },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
             this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
+          }
+        });
   }
 
   public addTargetDays() {
@@ -317,12 +317,12 @@ export class DialogComponent implements OnInit, OnDestroy {
           },
           (error: any) => {
             this.statusService.spinnerSubject.next(false);
-            if(error.status=="0"){
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-            }else{
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
               this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
-        });
+            }
+          });
     }
   }
 
@@ -342,21 +342,16 @@ export class DialogComponent implements OnInit, OnDestroy {
       "updatedBy": 1
     }
 
-<<<<<<< HEAD
     this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
     },
-    (error: any) => {
-      this.statusService.spinnerSubject.next(false);
-      if(error.status=="0"){
-      alert(CommonMessage.ERROR.SERVER_ERROR)
-      }else{
-        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-    }
-  });
-=======
-    // this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
-    // });
->>>>>>> upstream/OpEx-KPI-Dev
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if (error.status == "0") {
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+        } else {
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
 
   }
 

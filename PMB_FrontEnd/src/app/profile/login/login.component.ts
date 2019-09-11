@@ -46,25 +46,16 @@ export class LoginComponent implements OnInit {
       subscribe((data: any) => {
         this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
         this.statusService.spinnerSubject.next(false);
-<<<<<<< HEAD:PMB_FrontEnd/src/app/shared/login/login.component.ts
         this.router.navigateByUrl("home/dashboard");
       },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-=======
-
-        if (data == "e") {
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.INVALID_USER });
-        } else {
-          this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-          this.router.navigateByUrl("/home");
->>>>>>> upstream/OpEx-KPI-Dev:PMB_FrontEnd/src/app/profile/login/login.component.ts
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
         }
-      }
       );
   }
 

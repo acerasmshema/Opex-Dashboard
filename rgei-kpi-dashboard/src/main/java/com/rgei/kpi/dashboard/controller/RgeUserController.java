@@ -18,6 +18,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.service.RgeUserService;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 
@@ -65,9 +66,9 @@ public class RgeUserController {
 	@ApiOperation(value = "getUserByName", notes = "Authenticate user by username and password", response = RgeUserResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/user_info/login")
-	public ResponseEntity<RgeUserResponse> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) {
+	public ResponseEntity<User> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) {
 		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getLoginId());
-		RgeUserResponse response = rgeUserService.loginProcess(rgeUserLoginRequest);
+		User response = rgeUserService.loginProcess(rgeUserLoginRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
