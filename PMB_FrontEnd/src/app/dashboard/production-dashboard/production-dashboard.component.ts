@@ -14,6 +14,8 @@ import { StatusService } from '../../shared/service/status.service';
 import * as $ from "jquery";
 import { Subscription } from 'rxjs';
 import { ConsumptionTable } from '../consumption-dashboard/consumption-table';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-production-dashboard',
@@ -45,7 +47,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   constructor(private localStorageService: LocalStorageService,
     private statusService: StatusService,
     private productionService: ProductionService,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe,
+    private messageService:MessageService) {
   }
 
   ngOnInit() {
@@ -56,7 +59,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (dashboardName === 'production') {
           this.searchData(false);
         }
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
 
     this.projectTargetSubscription = this.statusService.projectTargetSubject.
       subscribe(() => {
@@ -123,7 +134,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         colorArr.filter(item => this.yesterdayProductionData.options.arcColors.push((item)));
         this.yesterdayProductionData.show = true;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getProjectedTarget(isAnnualTargetRequired: boolean) {
@@ -144,7 +163,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
           this.annualChart.annualTarget = responseData['annualTarget'].toLocaleString('en-us');
         }
           
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getProductionYTDData() {
@@ -163,7 +190,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.annualChart.annualData = targetData;
         this.annualChartRendered = true;
         this.enableTabs();
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getMonthlyChartData(startDate: string, endDate: string, chartType: string) {
@@ -183,11 +218,27 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.productionService.getStackBarChartData(productionRequest).
       subscribe((data: any) => {
         this.monthlyChart.stackBar = data;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
     this.productionService.getStackAreaChartData(productionRequest).
       subscribe((data: any) => {
         this.monthlyChart.stackArea = data;
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getAllProdYestData(startDate: string, endDate: string, processLines: any) {
@@ -235,7 +286,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             color.filter(item => prodLine.options.arcColors.push((item)));
           }
         }
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
 
     this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
   }
@@ -258,8 +317,24 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
             this.monthlyChartRendered = true;
             this.enableTabs();
-          });
-      });
+          },
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if(error.status=="0"){
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+            }else{
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, processLines: any, frequency: any, isGridRequest: boolean) {
@@ -298,7 +373,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
               this.prodLineChart.productionLineData = prodLineResponse;
               this.productionChartRendered = true;
               this.enableTabs();
-            });
+            },
+            (error: any) => {
+              this.statusService.spinnerSubject.next(false);
+              if(error.status=="0"){
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+              }else{
+                this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
         } else {
           this.prodLineChart.productionLineData = prodLineResponse;
           this.productionChartRendered = true;
@@ -308,7 +391,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (isGridRequest)
           this.getProdGrid(prodLineResponse);
 
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
   }
 
   public getProdGrid(prodLineResponse: any) {
@@ -467,7 +558,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
           const target = processLine.target.split(',')[0].split(':')[1];
           this.thresholdTargetMap[processLine.name] = target;
         });
-      });
+      },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if(error.status=="0"){
+        alert(CommonMessage.ERROR.SERVER_ERROR)
+        }else{
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+      }
+    });
 
   }
 

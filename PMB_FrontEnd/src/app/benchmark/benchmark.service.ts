@@ -7,6 +7,8 @@ import { ApiCallService } from '../shared/service/api/api-call.service';
 import { ConsumptionRequest } from '../dashboard/consumption-dashboard/consumption-reqest';
 import { ConsumptionGridView } from '../dashboard/consumption-dashboard/consumption-grid-view';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable()
 export class BenchmarkService {
@@ -16,7 +18,8 @@ export class BenchmarkService {
 
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService,
-        private datePipe: DatePipe) { }
+        private datePipe: DatePipe,
+    private messageService:MessageService) { }
 
 
     public filterCharts(searchKpiData: SearchKpiData) {
@@ -95,7 +98,15 @@ export class BenchmarkService {
 
                 if (this.statusService.isSpin)
                     this.statusService.spinnerSubject.next(false);
-            });
+            },
+            (error: any) => {
+              this.statusService.spinnerSubject.next(false);
+              if(error.status=="0"){
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+              }else{
+                this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
     }
 
     downloadBenchmarkData(kpiId: number, kpiName: string, isDaily: boolean) {
@@ -122,7 +133,15 @@ export class BenchmarkService {
                     const kpiData = response.kpiData;
                     this.download(kpiData, kpiName);
                     this.statusService.spinnerSubject.next(false);
-                });
+                },
+                (error: any) => {
+                  this.statusService.spinnerSubject.next(false);
+                  if(error.status=="0"){
+                  alert(CommonMessage.ERROR.SERVER_ERROR)
+                  }else{
+                    this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+                }
+              });
         }
     }
 
