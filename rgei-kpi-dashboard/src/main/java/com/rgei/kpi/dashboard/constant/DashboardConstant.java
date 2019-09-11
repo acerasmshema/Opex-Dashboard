@@ -58,4 +58,3 @@ public class DashboardConstant {
 	public static final String ANNOTATION = "annotation";
 	public static final String TARGET = "target";
 }
-
