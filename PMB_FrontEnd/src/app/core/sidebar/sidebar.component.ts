@@ -12,6 +12,8 @@ import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consum
 import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MillDetail } from 'src/app/shared/models/mill-detail.model';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,6 +34,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private benchmarkService: BenchmarkService,
     private localStorageService: LocalStorageService,
     private headerService: HeaderService,
+    private validationService: ValidationService,
     private statusService: StatusService) {
   }
 
@@ -203,7 +206,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         countryIds: "1,2"
       }
       this.headerService.getAllMills(requestData).
-        subscribe((mills: any) => {
+        subscribe((mills: MillDetail[]) => {
           this.statusService.common.mills = mills;
           this.sidebarForm.mills = mills;
         });
@@ -211,21 +214,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   onMillValidation() {
-    let mills = this.searchKpiData.mills;
-    if (mills !== undefined) {
-      if (mills.length < 2 && !this.sidebarForm.millsError) {
-        this.sidebarForm.millsError = true;
-      } else {
-        this.sidebarForm.millsError = false;
-      }
-    }
+    this.validationService.millValidation(this.searchKpiData, this.sidebarForm);
   }
 
   onDateValidation() {
-    const datePicker: any = document.getElementById("daterangepicker_input");
-    if (datePicker !== null && datePicker.value !== "" && this.sidebarForm.dateError) {
-      this.sidebarForm.dateError = false;
-    }
+   this.validationService.sidebarDateValidation(this.sidebarForm);
   }
 
   ngOnDestroy() {

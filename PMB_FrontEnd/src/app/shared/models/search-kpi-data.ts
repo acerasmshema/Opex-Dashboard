@@ -1,6 +1,8 @@
+import { MillDetail } from './mill-detail.model';
+
 export class SearchKpiData {
     mill: string;
-    mills: any;
+    mills: MillDetail[] = [];
     country: string;
     buisnessUnit: any;
     type: string;

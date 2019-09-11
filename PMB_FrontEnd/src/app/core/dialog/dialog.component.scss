@@ -11,3 +11,45 @@
 body .ui-table .ui-table-thead > tr > th {
     max-width: 50px;
 }
+
+.edit-label {
+    font-size: 9pt;
+    font-weight: 600;
+}
+
+.edit-input {
+    margin-top: -5px;
+    font-size: 11pt;
+    height: 34px;
+}
+
+.fa-edit {
+    font-size: 23px;
+    color: blue;
+}
+
+.fa-trash {
+    font-size: 23px;
+    color: red;
+}
+
+.ui-dropdown-label .ui-inputtext {
+    font-size: 10pt;
+}
+
+tbody {
+    display:block;
+    height: 100px;
+    overflow:auto;
+}
+
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+
+.role-head {
+    font-size: 12pt;
+    font-family: Arial
+}

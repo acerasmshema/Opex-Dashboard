@@ -1,0 +1,16 @@
+<div class="container-fluid" style="padding: 0">
+    <div>
+        <p-tabView>
+            <p-tabPanel header="Users" [selected]="true" leftIcon="fa fa-users">
+                <ng-template pTemplate="app-user-detail">
+                    <app-user-detail></app-user-detail>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="User Role" leftIcon="fa fa-user-circle-o">
+                <ng-template pTemplate="app-user-role">
+                    <app-user-role></app-user-role>
+                </ng-template>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

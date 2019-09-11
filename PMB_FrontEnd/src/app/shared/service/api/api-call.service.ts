@@ -54,11 +54,11 @@ export class ApiCallService {
         'Access-Control-Allow-Origin': '*'
       })
     };
+    
     return this.httpClient.post(url, data, httpOptions).pipe(catchError(this.errorHandler));
   }
 
   errorHandler(error: HttpErrorResponse) {
-      console.error(error.error.message);
       return "e";
   }
 

@@ -1,0 +1,144 @@
+<p-table #user [columns]="cols" [value]="users" [paginator]="true" [rows]="11" dataKey="userId"
+  [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="firstName" sortOrder="1"
+  rowExpandMode="single">
+  <ng-template pTemplate="caption">
+    <div class="text-right">
+      <span class="m-r-20" (click)="user.exportCSV()">
+        <em class="fa fa-download fa-2x" style="color: #333333"></em>
+      </span>
+      <span class="m-l-5" (click)="onCreateUser()">
+        <em class="fa fa-user-plus fa-2x"></em>
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr class="text-center">
+      <th style="width: 6%;"></th>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn pReorderableColumn
+        [style.width]="(col.header === 'Status') ? '8%' : ''">
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+        {{col.header}}
+      </th>
+    </tr>
+    <tr class="text-center">
+      <th style="width: 6%;"><i class="fa fa-search"></i></th>
+      <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
+        <input *ngIf="col.field !== 'isActive'" pInputText type="text"
+          (input)="user.filter($event.target.value, col.field, col.filterMatchMode)"
+          [value]="user.filters[col.field]?.value">
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">
+    <tr [pSelectableRow]="rowData" class="text-center">
+      <td>
+        <a href="#" [pRowToggler]="rowData">
+          <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+        </a>
+      </td>
+      <td *ngFor="let col of columns">
+        <div *ngIf="col.field !== 'role' && col.field !== 'isActive'" class="td-user">
+          {{rowData[col.field]}}
+        </div>
+        <div *ngIf="col.field === 'role'">
+          <span *ngIf="rowData[col.field] === 'Admin'" class="label label-danger td-user">{{rowData[col.field]}}</span>
+          <span *ngIf="rowData[col.field] === 'Department Head'"
+            class="label label-info td-user">{{rowData[col.field]}}</span>
+        </div>
+        <div *ngIf="col.field === 'isActive' " class="td-user" [style.color]="(rowData[col.field]) ? '#28a745' : 'red'">
+          <i class="fa fa-circle font-10 m-r-10 "></i>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+    <tr>
+      <td [attr.colspan]="columns.length + 1">
+        <div class="card">
+          <div class="card-body" style="background: #efefef;">
+            <div class="card-title text-right" style="border-bottom: 1px solid #cccccc;">
+              <span *ngIf="!rowData.isReadOnly" class="font-20 m-r-20" style="color: #3e3e3e;"
+                (click)="onEdit(rowData.userId)"><i class="fa fa-edit"></i></span>
+              <span *ngIf="rowData.isReadOnly" class="font-20 m-r-20" style="color: #398bf7;"><i
+                  class="fa fa-save" (click)="onSave(rowData)"></i></span>
+              <span *ngIf="rowData.isReadOnly" class="font-20 m-r-20" style="color: red;"><i
+                  class="fa fa-remove" (click)="onCancel(rowData)"></i></span>
+            </div>
+            <div class="m-t-5">
+              <form>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="firstName">First Name:</label>
+                        <input class="col-md-8 form-control" type="text" id="firstName" [(ngModel)]="rowData.firstName"
+                          [ngModelOptions]="{standalone: true}" [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="email">Email:</label>
+                        <input class="col-md-8 form-control" type="text" id="email" [value]="rowData.email"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="role">Department</label>
+                        <select class="col-md-8 form-control" name="" [disabled]="!rowData.isReadOnly">
+                          <option [selected]="rowData.role === 1" value="admin">Technical</option>
+                          <option [selected]="rowData.role === 2" value="department_head">BCID</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="lastName">Last Name:</label>
+                        <input class="col-md-8 form-control" type="text" id="lastName" [value]="rowData.lastName"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="address">Address:</label>
+                        <input class="col-md-8 form-control" type="text" id="address" [value]="rowData.address"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="status">Status:</label>
+                        <select class="col-md-7 form-control" name="" id="status" [disabled]="!rowData.isReadOnly">
+                          <option [selected]="rowData.isActive" value="true">Active</option>
+                          <option [selected]="!rowData.isActive" value="false">InActive</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="phone">Phone:</label>
+                        <input class="col-md-8 form-control" type="text" id="phone" [value]="rowData.phone"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-4 table-label" for="country">Country:</label>
+                        <input class="col-md-8 form-control" type="text" id="country" [value]="rowData.country"
+                          [readonly]="!rowData.isReadOnly">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
