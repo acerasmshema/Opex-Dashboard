@@ -22,9 +22,8 @@ export class UserDetailComponent implements OnInit {
 
   users: UserDetail[] = [];
 
-  constructor(private messageService: MessageService,
-              private userDetailService: UserDetailService,
-               private statusService: StatusService) { }
+  constructor(private userDetailService: UserDetailService,
+    private statusService: StatusService) { }
 
   ngOnInit() {
     this.userDetailService.getUserDetailList(this.users);

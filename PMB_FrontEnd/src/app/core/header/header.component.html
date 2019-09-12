@@ -27,7 +27,7 @@
                   class="fa fa-snowflake-o "></em><span class="header-size">
                   {{ 'Digester Kappa Analytics' | translate }}</span></a>
             </li>
-            <li class="nav-item ">
+            <li *ngIf="isShow" class="nav-item ">
               <a class="nav-link" routerLink='/user' style="color:white;"><em class="fa fa-user-o"></em><span
                   class="header-size">
                   {{ 'User Management' | translate }}</span></a>

@@ -3,10 +3,13 @@ import { ApiCallService } from '../api/api-call.service';
 import { StatusService } from '../status.service';
 import { API_URL } from '../../constant/API_URLs';
 import { UserRole } from 'src/app/user-management/user-role/user-role.model';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
 import { Department } from 'src/app/user-management/user-detail/department.model';
+import { MillDetail } from '../../models/mill-detail.model';
+import { CommonMessage } from '../../constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
 
 @Injectable()
 export class CommonService {
@@ -18,10 +21,33 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
+        private messageService: MessageService,
         private statusService: StatusService) { }
 
-    public getAllMills(data: any): any {
-        return this.apiCallService.callGetAPIwithData(this.allMills, data);
+    public getAllMills(form: any) {
+        if (this.statusService.common.mills.length === 0) {
+            const requestData = {
+                countryIds: "46,104"
+            }
+            this.apiCallService.callGetAPIwithData(this.allMills, requestData).
+                subscribe(
+                    (mills: MillDetail[]) => {
+                        this.statusService.common.mills = mills;
+                        if (form !== null)
+                            form.mills = mills;
+                    },
+                    (error: any) => {
+                        this.statusService.spinnerSubject.next(false);
+                        if (error.status == "0") {
+                            alert(CommonMessage.ERROR.SERVER_ERROR)
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+                        }
+                    });
+        } else if (form !== null) {
+            form.mills = this.statusService.common.mills;
+        }
+
     }
 
     public getAllBuType(sidebarForm: SidebarForm) {
@@ -42,16 +68,19 @@ export class CommonService {
         }
     }
 
-    public getAllCountry(userDetailForm: FormGroup): any {
-        let countryList: any = userDetailForm.controls.countryList;
-
+    public getAllCountry(userDetailForm: any) {
         if (this.statusService.common.countryList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allCountry).
                 subscribe(
                     (countries: Country[]) => {
-                        countryList.push(...countries);
+                        if (userDetailForm instanceof FormGroup) {
+                            const countryList: any = userDetailForm.controls.countryList;
+                            let countryControl = countryList.controls;
+                            countries.forEach(country => {
+                                countryControl.push(new FormControl(country));
+                            });
+                        }
                         this.statusService.common.countryList = countries;
-                        console.log(countries);
                     },
                     (error: any) => {
                         console.log("Error handling")
@@ -59,37 +88,40 @@ export class CommonService {
                 );
         }
         else {
-            countryList = this.statusService.common.countryList;
+            const countries = this.statusService.common.countryList;
+            const countryList: any = userDetailForm.controls.countryList;
+            let countryControl = countryList.controls;
+            countries.forEach(country => {
+                countryControl.push(new FormControl(country));
+            });
         }
     }
 
-    public getAllDepartment(userDetailForm: FormGroup): any {
-        let departmentList: any = userDetailForm.controls.departmentList;
-
+    public getAllDepartment(): any {
         if (this.statusService.common.departmentList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allDepartment).
                 subscribe(
                     (departments: Department[]) => {
-                        departmentList.push(...departments);
+
                         this.statusService.common.departmentList = departments;
+                        console.log(departments);
                     },
                     (error: any) => {
                         console.log("Error handling")
                     }
                 );
         }
-        else {
-            departmentList = this.statusService.common.departmentList;
-        }
     }
 
-    public getAllUserRole(userRoles: UserRole[]) {
+    public getAllUserRole(userRoles: UserRole[], activeAll: boolean) {
         if (this.statusService.common.userRoles.length === 0) {
-            let requestData: any = null;
+            const requestData = {
+                activeRoles: "" + activeAll
+            }
             this.apiCallService.callGetAPIwithData(this.allUserRole, requestData)
                 .subscribe(
                     (roleList: UserRole[]) => {
-                        userRoles = roleList;
+                        userRoles.push(...roleList);
                         this.statusService.common.userRoles = roleList;
                     },
                     (error: any) => {
@@ -97,9 +129,21 @@ export class CommonService {
                     }
 
                 );
-        } else {
-            userRoles = this.statusService.common.userRoles;
         }
+        else {
+            userRoles.push(...this.statusService.common.userRoles);
+        }
+    }
 
+    clearStatus() {
+        this.statusService.common.buTypes = [];
+        this.statusService.common.countryList = [];
+        this.statusService.common.userRoles = [];
+        this.statusService.common.mills = [];
+        this.statusService.common.departmentList = [];
+        this.statusService.common.processLines = [];
+        this.statusService.common.selectedMill = null;
+        this.statusService.common.selectedRole = null;
+        this.statusService.common.userDetail = null;
     }
 }

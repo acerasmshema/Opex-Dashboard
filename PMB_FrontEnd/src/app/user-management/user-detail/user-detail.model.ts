@@ -6,6 +6,7 @@ export class UserDetail {
     userId: number;
     firstName: string;
     lastName: string;
+    username: string;
     email: string;
     phone: string;
     createdBy: string;
@@ -14,7 +15,7 @@ export class UserDetail {
     isActive: boolean;
     country: string;
     countryList: Country[] = [];
-    username: string;
+    department: Department;
     departmentList: Department[];
     millRoles: MillRole[] = [];
     updatedBy: string;

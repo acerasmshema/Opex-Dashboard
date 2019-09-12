@@ -10,6 +10,7 @@ export class CommonModel {
     public buTypes: any = [];
     public processLines: any = [];
     public selectedMill: MillDetail;
+    public selectedRole: UserRole;
     public userRoles: UserRole[] = [];
     public departmentList: Department[] = [];
     public countryList: Country[] = [];
