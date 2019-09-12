@@ -4,6 +4,7 @@ import java.util.List;
 
 public class User {
 
+	private String userId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -19,6 +20,14 @@ public class User {
 	private List<MillRole> millRoles;
 	private Department department;
 	private String password = null;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getFirstName() {
 		return firstName;
