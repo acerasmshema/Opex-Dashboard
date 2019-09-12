@@ -7,6 +7,7 @@ import { LoginService } from './login.service';
 import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({ loginId: "", userPassword: "" });
-    this.localStorageService.emptyLocalStorage();
+    this.localStorageService.removeUserDetail();
   }
 
   validateUser(data: any) {
@@ -41,13 +42,16 @@ export class LoginComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.PASSWORD_VALIDATION });
       return null;
     }
+    
     this.statusService.spinnerSubject.next(true);
     this.loginService.validateUser(data).
-      subscribe((data: any) => {
-        this.localStorageService.storeUserDetails(data.userName, data.userRole, data.loginId);
-        this.statusService.spinnerSubject.next(false);
-        this.router.navigateByUrl("home/dashboard");
-      },
+      subscribe(
+        (userDetail: UserDetail) => {
+          this.statusService.common.userDetail = userDetail;
+          this.localStorageService.storeUserDetails(userDetail);
+          this.statusService.spinnerSubject.next(false);
+          this.router.navigateByUrl("home/dashboard");
+        },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
           if (error.status == "0") {

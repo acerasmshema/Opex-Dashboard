@@ -45,7 +45,7 @@ export class API_URL {
 
     static user_api_URLs = {
         ALL_COUNTRY: API_URL.BASE_API_URL_v1 + '/countries',
-        ALL_DEPARTMENT: API_URL.BASE_API_URL_v1 + '/kpi_category/save_target_days',
+        ALL_DEPARTMENT: API_URL.BASE_API_URL_v1 + '/location/all_mills',
         ALL_USER_ROLE: API_URL.BASE_API_URL_v1 + '/roles',
     }
 }

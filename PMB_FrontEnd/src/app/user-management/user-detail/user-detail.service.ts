@@ -3,14 +3,12 @@ import { StatusService } from 'src/app/shared/service/status.service';
 import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Injectable()
 export class UserDetailService {
 
     constructor(private statusService: StatusService,
         private messageService: MessageService,
-        private formBuilder: FormBuilder,
         private apiCallService: ApiCallService) { }
 
     getUserDetailList(userList: UserDetail[]) {
@@ -18,8 +16,7 @@ export class UserDetailService {
 
         for (let index = 1; index < 30; index++) {
             let userDetail = new UserDetail();
-            userDetail.userId = index;
-
+            
             if (index < 4) {
                 userDetail.role = "Admin";
                 userDetail.isActive = true;
@@ -41,12 +38,11 @@ export class UserDetailService {
 
             userList.push(userDetail);
         }
-
     }
 
     saveUserDetail(user: UserDetail, users: UserDetail[]) {
-        const userDetail = users.find((user) => user.userId === user.userId)
-        userDetail.isReadOnly = false;
-        this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
+        // const userDetail = users.find((user) => user.userId === user.userId)
+        // userDetail.isReadOnly = false;
+        // this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
     }
 }
