@@ -7,6 +7,10 @@ import { FormGroup } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
 import { Department } from 'src/app/user-management/user-detail/department.model';
+import { MillDetail } from '../../models/mill-detail.model';
+import { CommonMessage } from '../../constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 
 @Injectable()
 export class CommonService {
@@ -18,10 +22,33 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
+        private messageService: MessageService,
         private statusService: StatusService) { }
 
-    public getAllMills(data: any): any {
-        return this.apiCallService.callGetAPIwithData(this.allMills, data);
+    public getAllMills(form: any) {
+        if (this.statusService.common.mills.length === 0) {
+            const requestData = {
+                countryIds: "46,135"
+            }
+            this.apiCallService.callGetAPIwithData(this.allMills, requestData).
+                subscribe(
+                    (mills: MillDetail[]) => {
+                        this.statusService.common.mills = mills;
+                        if (form !== null)
+                            form.mills = mills;
+                    },
+                    (error: any) => {
+                        this.statusService.spinnerSubject.next(false);
+                        if (error.status == "0") {
+                            alert(CommonMessage.ERROR.SERVER_ERROR)
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+                        }
+                    });
+        } else if (form !== null) {
+            form.mills = this.statusService.common.mills;
+        }
+
     }
 
     public getAllBuType(sidebarForm: SidebarForm) {
@@ -42,14 +69,11 @@ export class CommonService {
         }
     }
 
-    public getAllCountry(userDetailForm: FormGroup): any {
-        let countryList: any = userDetailForm.controls.countryList;
-
+    public getAllCountry(): any {
         if (this.statusService.common.countryList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allCountry).
                 subscribe(
                     (countries: Country[]) => {
-                        countryList.push(...countries);
                         this.statusService.common.countryList = countries;
                         console.log(countries);
                     },
@@ -58,38 +82,29 @@ export class CommonService {
                     }
                 );
         }
-        else {
-            countryList = this.statusService.common.countryList;
-        }
     }
 
-    public getAllDepartment(userDetailForm: FormGroup): any {
-        let departmentList: any = userDetailForm.controls.departmentList;
-
+    public getAllDepartment(): any {
         if (this.statusService.common.departmentList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allDepartment).
                 subscribe(
                     (departments: Department[]) => {
-                        departmentList.push(...departments);
+
                         this.statusService.common.departmentList = departments;
+                        console.log(departments);
                     },
                     (error: any) => {
                         console.log("Error handling")
                     }
                 );
         }
-        else {
-            departmentList = this.statusService.common.departmentList;
-        }
     }
 
-    public getAllUserRole(userRoles: UserRole[]) {
+    public getAllUserRole() {
         if (this.statusService.common.userRoles.length === 0) {
-            let requestData: any = null;
-            this.apiCallService.callGetAPIwithData(this.allUserRole, requestData)
+            this.apiCallService.callGetAPIwithOutData(this.allUserRole)
                 .subscribe(
                     (roleList: UserRole[]) => {
-                        userRoles = roleList;
                         this.statusService.common.userRoles = roleList;
                     },
                     (error: any) => {
@@ -97,9 +112,6 @@ export class CommonService {
                     }
 
                 );
-        } else {
-            userRoles = this.statusService.common.userRoles;
         }
-
     }
 }

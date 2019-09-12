@@ -9,12 +9,12 @@ import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { SidebarService } from './sidebar-service';
 import { ConsumptionService } from '../../dashboard/consumption-dashboard/consumption.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
-import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,7 +34,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private consumptionService: ConsumptionService,
     private benchmarkService: BenchmarkService,
     private localStorageService: LocalStorageService,
-    private headerService: HeaderService,
+    private commonService: CommonService,
     private validationService: ValidationService,
     private statusService: StatusService,
     private messageService:MessageService) {
@@ -65,10 +65,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
           }
           else {
-            this.onGetAllMills();
-            this.onGetAllBuType();
-            this.getBenchmarkKpiDetail();
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            this.commonService.getAllMills(this.sidebarForm);
+            this.commonService.getAllBuType(this.sidebarForm);
+            this.getBenchmarkKpiDetail();
             this.searchKpiData = new SearchKpiData();
             this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
 
@@ -213,45 +213,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         }
         this.statusService.benchmarkSubject.next(this.searchKpiData);
       }
-    }
-  }
-
-  onGetAllBuType() {
-    if (this.statusService.common.buTypes.length === 0) {
-      this.headerService.getAllBuType().
-        subscribe((buTypes: any) => {
-          this.statusService.common.buTypes = buTypes;
-          this.sidebarForm.buisnessUnits = buTypes;
-        },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
-    }
-  }
-
-  onGetAllMills() {
-    if (this.statusService.common.mills.length === 0) {
-      const requestData = {
-        countryIds: "1,2"
-      }
-      this.headerService.getAllMills(requestData).
-        subscribe((mills: MillDetail[]) => {
-          this.statusService.common.mills = mills;
-          this.sidebarForm.mills = mills;
-        },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
     }
   }
 

@@ -15,15 +15,14 @@ export class ProfileEditService {
         //temp Code
         userDetail.firstName = "Sahil"
 
-        let userDetailForm = this.formBuilder.group({
-            'department': this.formBuilder.array(this.statusService.common.departmentList),
-            'country': this.formBuilder.array(this.statusService.common.countryList),
-            'firstName': new FormControl(userDetail.firstName),
-            'lastName': new FormControl(userDetail.lastName),
-            'email': new FormControl(userDetail.email),
-            'phone': new FormControl(userDetail.phone),
-            'address': new FormControl(userDetail.address),
+        return this.formBuilder.group({
+            countryList: this.formBuilder.array(this.statusService.common.countryList),
+            departmentList: this.formBuilder.array(this.statusService.common.departmentList),
+            firstName: new FormControl(userDetail.firstName),
+            lastName: new FormControl(userDetail.lastName),
+            email: new FormControl(userDetail.email),
+            phone: new FormControl(userDetail.phone),
+            address: new FormControl(userDetail.address),
         });
-        return userDetailForm;
     }
 }

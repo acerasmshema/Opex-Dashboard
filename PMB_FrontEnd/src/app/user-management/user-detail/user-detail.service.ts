@@ -3,14 +3,12 @@ import { StatusService } from 'src/app/shared/service/status.service';
 import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Injectable()
 export class UserDetailService {
 
     constructor(private statusService: StatusService,
         private messageService: MessageService,
-        private formBuilder: FormBuilder,
         private apiCallService: ApiCallService) { }
 
     getUserDetailList(userList: UserDetail[]) {
@@ -41,7 +39,6 @@ export class UserDetailService {
 
             userList.push(userDetail);
         }
-
     }
 
     saveUserDetail(user: UserDetail, users: UserDetail[]) {

@@ -16,7 +16,6 @@ export class ProfileEditComponent implements OnInit {
 
   ngOnInit() {
     this.userDetailForm = this.profileEditService.createUserDetailForm();
-    console.log(this.userDetailForm)
   }
 
 }
