@@ -123,7 +123,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public createAnnotation() {
     let isError = false;
     this.annotationDialog.annotationLines = "";
-    const loginId = this.localStorageService.fetchloginId();
+    const loginId = this.statusService.common.userDetail.userId;
     if (this.annotationDialog.annotationProcessLines.length === 0) {
       this.annotationDialog.isProcessLineError = true;
       this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;

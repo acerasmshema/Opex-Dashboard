@@ -21,10 +21,10 @@ export class UserManagementComponent implements OnInit {
     sidebarRequest.type = "user-management";
     this.statusService.sidebarSubject.next(sidebarRequest);
 
-    this.commonService.getAllCountry();
-    this.commonService.getAllMills(null);
-    this.commonService.getAllDepartment();
-    this.commonService.getAllUserRole();
+    //this.commonService.getAllCountry();
+    //this.commonService.getAllMills(null);
+    //this.commonService.getAllDepartment();
+    //this.commonService.getAllUserRole();
   }
 
 }

@@ -21,13 +21,13 @@ export class UserRoleComponent implements OnInit {
     this.userRoleService.createUserRole(this.userRoles);
   }
 
-  onEdit(userRoleId: number) {
+  onEdit(userRoleId: string) {
     const userRole = this.userRoles.find((userRole) => userRole.userRoleId === userRoleId)
-    userRole.isReadOnly = false;
+    userRole.isEnable = true;
   }
 
   onCancel(userRole: UserRole) {
-    userRole.isReadOnly = true;
+    userRole.isEnable = true;
   }
 
   onSave(userRole: UserRole) {

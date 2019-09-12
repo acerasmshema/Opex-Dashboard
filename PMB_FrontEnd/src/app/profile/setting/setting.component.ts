@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonService } from 'src/app/shared/service/common/common.service';
+
 
 @Component({
   selector: 'app-setting',
@@ -8,11 +8,9 @@ import { CommonService } from 'src/app/shared/service/common/common.service';
 })
 export class SettingComponent implements OnInit {
 
-  constructor(private commonService: CommonService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.commonService.getAllDepartment();
-    this.commonService.getAllCountry();
   }
 
 }

@@ -3,14 +3,13 @@ import { ApiCallService } from '../api/api-call.service';
 import { StatusService } from '../status.service';
 import { API_URL } from '../../constant/API_URLs';
 import { UserRole } from 'src/app/user-management/user-role/user-role.model';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
 import { Department } from 'src/app/user-management/user-detail/department.model';
 import { MillDetail } from '../../models/mill-detail.model';
 import { CommonMessage } from '../../constant/Common-Message';
 import { MessageService } from 'primeng/primeng';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 
 @Injectable()
 export class CommonService {
@@ -28,7 +27,7 @@ export class CommonService {
     public getAllMills(form: any) {
         if (this.statusService.common.mills.length === 0) {
             const requestData = {
-                countryIds: "46,135"
+                countryIds: "46,104"
             }
             this.apiCallService.callGetAPIwithData(this.allMills, requestData).
                 subscribe(
@@ -69,18 +68,32 @@ export class CommonService {
         }
     }
 
-    public getAllCountry(): any {
+    public getAllCountry(userDetailForm: any) {
         if (this.statusService.common.countryList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allCountry).
                 subscribe(
                     (countries: Country[]) => {
+                        if (userDetailForm instanceof FormGroup) {
+                            const countryList: any = userDetailForm.controls.countryList;
+                            let countryControl = countryList.controls;
+                            countries.forEach(country => {
+                                countryControl.push(new FormControl(country));
+                            });
+                        }
                         this.statusService.common.countryList = countries;
-                        console.log(countries);
                     },
                     (error: any) => {
                         console.log("Error handling")
                     }
                 );
+        }
+        else {
+            const countries = this.statusService.common.countryList;
+            const countryList: any = userDetailForm.controls.countryList;
+            let countryControl = countryList.controls;
+            countries.forEach(country => {
+                countryControl.push(new FormControl(country));
+            });
         }
     }
 
@@ -100,11 +113,15 @@ export class CommonService {
         }
     }
 
-    public getAllUserRole() {
+    public getAllUserRole(userRoles: UserRole[], activeAll: boolean) {
         if (this.statusService.common.userRoles.length === 0) {
-            this.apiCallService.callGetAPIwithOutData(this.allUserRole)
+            const requestData = {
+                activeRoles: "" + activeAll
+            }
+            this.apiCallService.callGetAPIwithData(this.allUserRole, requestData)
                 .subscribe(
                     (roleList: UserRole[]) => {
+                        userRoles.push(...roleList);
                         this.statusService.common.userRoles = roleList;
                     },
                     (error: any) => {
@@ -113,5 +130,20 @@ export class CommonService {
 
                 );
         }
+        else {
+            userRoles.push(...this.statusService.common.userRoles);
+        }
+    }
+
+    clearStatus() {
+        this.statusService.common.buTypes = [];
+        this.statusService.common.countryList = [];
+        this.statusService.common.userRoles = [];
+        this.statusService.common.mills = [];
+        this.statusService.common.departmentList = [];
+        this.statusService.common.processLines = [];
+        this.statusService.common.selectedMill = null;
+        this.statusService.common.selectedRole = null;
+        this.statusService.common.userDetail = null;
     }
 }

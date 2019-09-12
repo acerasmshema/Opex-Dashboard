@@ -52,7 +52,7 @@ export class ConsumptionService {
     searchKpiData.kpiName = kpiName;
     searchKpiData.kpiId = kpiId;
     searchKpiData.processLines = [];
-    searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+    searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
       { name: "Daily", code: "0" } :
       { name: "Monthly", code: "1" };
 

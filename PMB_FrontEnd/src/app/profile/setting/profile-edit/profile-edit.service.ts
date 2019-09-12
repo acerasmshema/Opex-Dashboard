@@ -2,27 +2,33 @@ import { Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Injectable()
 export class ProfileEditService {
 
     constructor(private formBuilder: FormBuilder,
+        private commonService: CommonService,
         private statusService: StatusService) { }
 
     createUserDetailForm(): FormGroup {
-        const userDetail = new UserDetail(); this.statusService.common.userDetail;
+        const userDetail = this.statusService.common.userDetail;
 
-        //temp Code
-        userDetail.firstName = "Sahil"
-
-        return this.formBuilder.group({
-            countryList: this.formBuilder.array(this.statusService.common.countryList),
-            departmentList: this.formBuilder.array(this.statusService.common.departmentList),
+        let userDetailForm = this.formBuilder.group({
             firstName: new FormControl(userDetail.firstName),
             lastName: new FormControl(userDetail.lastName),
             email: new FormControl(userDetail.email),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
+            country: new FormControl(userDetail.country),
+            countryList: this.formBuilder.array([]),
+            department: new FormControl(userDetail.department),
+            departmentList: this.formBuilder.array([])
         });
+
+        this.commonService.getAllDepartment();
+        this.commonService.getAllCountry(userDetailForm);
+
+        return userDetailForm;
     }
 }

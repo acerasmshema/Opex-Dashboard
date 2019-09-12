@@ -1,7 +1,6 @@
 export class UserRole {
-    userRoleId: number;
-    sNo: number;
+    userRoleId: string;
     roleName: string;
-    status: boolean;
-    isReadOnly: boolean;
+    active: boolean;
+    isEnable: boolean;
 }

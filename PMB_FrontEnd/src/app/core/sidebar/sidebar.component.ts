@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
     private validationService: ValidationService,
     private statusService: StatusService,
-    private messageService:MessageService) {
+    private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -59,7 +59,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
             else {
               this.searchKpiData = new SearchKpiData();
-              this.searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+              this.searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
                 this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
                 this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
             }
@@ -83,14 +83,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSizeSubject.next(sidebarSize);
         this.showSidebar = sidebarRequestData.isShow;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled())
@@ -106,14 +106,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((kpiTypes: any) => {
         this.sidebarForm.kpiTypes = kpiTypes;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   getKpiDetails(kpiCategoryId: any) {
@@ -125,14 +125,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.statusService.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
         this.sidebarForm.kpiTypes = kpiTypes;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   toggleCollapsed() {
@@ -175,7 +175,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       else {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
-  
+
         if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
           this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
         }
@@ -200,7 +200,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
         isError = true;
       }
-      if(!isError) {
+      if (!isError) {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
         this.sidebarForm.millsError = false;
@@ -221,7 +221,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   onDateValidation() {
-   this.validationService.sidebarDateValidation(this.sidebarForm);
+    this.validationService.sidebarDateValidation(this.sidebarForm);
   }
 
   ngOnDestroy() {

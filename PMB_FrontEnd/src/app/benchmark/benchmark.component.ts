@@ -20,7 +20,7 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
 
   constructor(private statusService: StatusService,
     private becnhmarkService: BenchmarkService,
-    private messageService:MessageService) { }
+    private messageService: MessageService) { }
 
   ngOnInit() {
     document.getElementById("select_mill").style.display = "none";
@@ -31,20 +31,22 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
     this.statusService.sidebarSubject.next(sidebarRequest);
 
     this.benchmarkSubscription = this.statusService.benchmarkSubject.
-      subscribe((searchKpiData: SearchKpiData) => {
-        this.statusService.benchmarkList = [];
-        this.benchmarkList = this.statusService.benchmarkList;
-        this.becnhmarkService.filterCharts(searchKpiData);
-        this.isShowBenchmark = true;
-      },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+      subscribe(
+        (searchKpiData: SearchKpiData) => {
+          this.statusService.benchmarkList = [];
+          this.benchmarkList = this.statusService.benchmarkList;
+          this.becnhmarkService.filterCharts(searchKpiData);
+          this.isShowBenchmark = true;
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          }
+          else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   boundFormatDataLabel = this.formatDataLabel.bind(this);

@@ -23,22 +23,22 @@
                 <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
                     <tr>
                         <td class="td-role">
-                            {{rowData.sNo}}
+                            {{ri + 1}}
                         </td>
                         <td>
-                            <input [class]="(rowData.isReadOnly) ? 'input-read td-role': 'form-control td-role'"
-                                type="text" [readonly]="rowData.isReadOnly" [(ngModel)]="rowData.roleName">
+                            <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'"
+                                type="text" [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName">
                         </td>
                         <td>
-                            <input class="form-control" style="font-size: 5px;"  type="checkbox" [checked]="rowData.status"
-                                [disabled]="rowData.isReadOnly" [(ngModel)]="rowData.status">
+                            <input class="form-control" style="font-size: 5px;"  type="checkbox" [checked]="rowData.active"
+                                [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
                         </td>
                         <td style="text-align:center">
-                            <span *ngIf="rowData.isReadOnly" class="font-20 m-r-20" style="color: #3e3e3e;"
+                            <span *ngIf="!rowData.isEnable" class="font-20 m-r-20" style="color: #3e3e3e;"
                                 (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit"></i></span>
-                            <span *ngIf="!rowData.isReadOnly" class="font-20 m-r-20" style="color: #398bf7;"><i
+                            <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: #398bf7;"><i
                                     class="fa fa-save" (click)="onSave(rowData.userId)"></i></span>
-                            <span *ngIf="!rowData.isReadOnly" class="font-20 m-r-20" style="color: red;"><i
+                            <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: red;"><i
                                     class="fa fa-remove" (click)="onCancel(rowData)"></i></span>
                         </td>
                     </tr>
