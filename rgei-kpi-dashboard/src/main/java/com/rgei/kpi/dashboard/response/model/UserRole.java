@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.response.model;
 
+import java.sql.Timestamp;
+
 public class UserRole {
 	private String userRoleId;
 	private String roleName;
@@ -7,7 +9,7 @@ public class UserRole {
 	private String createdDate;
 	private String updatedBy;
 	private String updatedDate;
-	private Boolean active;
+	private Boolean active = true;
 
 	public String getUserRoleId() {
 		return userRoleId;

@@ -5,7 +5,7 @@
         <h3 class="title">General Account Setting</h3>
       </div>
       <div class="card-body">
-        <form [formGroup]='userDetailForm' (ngSubmit)="onFormSubmit()">
+        <form [formGroup]='userDetailForm' (ngSubmit)="onEditProfileSave()">
           <div class="row">
             <div class="col-sm-6">
               <label class="edit-label required">First Name</label>
@@ -16,7 +16,7 @@
             <div class="col-sm-6">
               <label class="edit-label required">Last Name</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input">
+                <input type="text" class="form-control edit-input" formControlName="lastName">
               </div>
             </div>
           </div>
@@ -24,13 +24,13 @@
             <div class="col-sm-6">
               <label class="edit-label required">Email</label>
               <div class="form-group">
-                <input type="email" class="form-control edit-input">
+                <input type="email" class="form-control edit-input" formControlName="email">
               </div>
             </div>
             <div class="col-sm-6">
               <label class="edit-label">Phone</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input">
+                <input type="text" class="form-control edit-input" formControlName="phone">
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
             <div class="col-sm-12">
               <label class="edit-label">Address</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input">
+                <input type="text" class="form-control edit-input" formControlName="address">
               </div>
             </div>
           </div>
@@ -47,9 +47,9 @@
               <label class="edit-label">Country</label>
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;">
-                  <option value="" class="edit-input">India</option>
-                  <option value="" class="edit-input">Malysia</option>
-                  <option value="" class="edit-input">China</option>
+                  <option *ngFor="let country of userDetailForm.controls.countryList.controls"
+                    [selected]="(country.value.countryName === userDetailForm.controls.country.value)" class="edit-input">
+                    {{country.value.countryName}}</option>
                 </select>
               </div>
             </div>
@@ -66,7 +66,7 @@
           </div>
           <div class="form-group m-t-30">
             <button type="submit" class="btn btn-primary btn-lg float-right">Save</button>
-            <button class="btn btn-danger btn-lg float-right m-r-5">Cancel</button>
+            <button (click)="onCancel()" class="btn btn-danger btn-lg float-right m-r-5">Cancel</button>
           </div>
         </form>
       </div>

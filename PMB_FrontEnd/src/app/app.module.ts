@@ -32,13 +32,13 @@ import { ConsumptionService } from './dashboard/consumption-dashboard/consumptio
 import { DialogService } from './core/dialog/dialog.service';
 import { SidebarService } from './core/sidebar/sidebar-service';
 import { BenchmarkService } from './benchmark/benchmark.service';
-import { HeaderService } from './core/header/header.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { LoginComponent } from './profile/login/login.component';
 import { LoginService } from './profile/login/login.service';
 import { UserDetailService } from './user-management/user-detail/user-detail.service';
 import { UserRoleService } from './user-management/user-role/user-role.service';
 import { ValidationService } from './shared/service/validation/validation.service';
+import { CommonService } from './shared/service/common/common.service';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,7 @@ import { ValidationService } from './shared/service/validation/validation.servic
     }),
   ],
   providers: [
-    HeaderService,
+    CommonService,
     LoginService,
     DashboardService,
     ProductionService,

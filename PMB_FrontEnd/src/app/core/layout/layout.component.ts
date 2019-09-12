@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit, OnDestroy {
-  user: any;
   showSidebar: boolean;
   sidebarClass: string = "left1";
   mainClass: string = "main1";
@@ -22,9 +21,13 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.user = this.localStorageService.fetchUserName();
-    if (this.user == undefined || this.user == null) {
-      this.router.navigateByUrl('login');
+    let user = this.localStorageService.fetchUserDetail();
+    if (user == undefined || user == null) {
+      this.router.navigateByUrl('/login');
+    } 
+    else {
+      this.statusService.common.userDetail = user;
+      this.statusService.common.selectedMill = this.statusService.common.userDetail.millRoles[0].selectedMill;
     }
 
     this.sidebarSizeSubscription = this.statusService.sidebarSizeSubject.
@@ -41,7 +44,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
           this.mainClass = "main3";
           this.sidebarClass = "left3";
         }
-
       });
   }
 

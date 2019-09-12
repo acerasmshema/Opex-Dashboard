@@ -14,6 +14,7 @@ import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-dialog',
@@ -31,7 +32,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public annotationDialog: AnnotationDialog;
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
-  public user: UserDetail;
+  public userDetailForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -76,7 +77,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.openSettingIcon(data);
         }
         else if (dialogName === 'addUser') {
-          this.user = this.dialogService.createUserForm();
+          this.userDetailForm = this.dialogService.createUserForm();
         }
 
         this.dialogName = dialogName;
@@ -122,7 +123,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public createAnnotation() {
     let isError = false;
     this.annotationDialog.annotationLines = "";
-    const loginId = this.localStorageService.fetchloginId();
+    const loginId = this.statusService.common.userDetail.userId;
     if (this.annotationDialog.annotationProcessLines.length === 0) {
       this.annotationDialog.isProcessLineError = true;
       this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
@@ -396,11 +397,14 @@ export class DialogComponent implements OnInit, OnDestroy {
     millRole.millRoleId = Math.random();
     millRole.mills = this.statusService.common.mills;
     millRole.userRoles = this.statusService.common.userRoles;
-    this.user.millRoles.push(millRole);
+    
+    let millRoles: any = this.userDetailForm.controls.millRoles;
+    millRoles.push(millRole);
   }
 
   onDeleteMillRole(millRoleId: number) {
-    this.user.millRoles = this.user.millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
+    let millRoles: any = this.userDetailForm.controls.millRoles;
+    millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
   }
 
   ngOnDestroy() {

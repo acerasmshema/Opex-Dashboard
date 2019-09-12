@@ -11,6 +11,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
+import com.rgei.kpi.dashboard.exception.InActiveUserException;
 import com.rgei.kpi.dashboard.exception.InvalidCredentialsException;
 import com.rgei.kpi.dashboard.exception.LogoutException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
@@ -65,16 +66,22 @@ public class RgeUserServiceImpl implements RgeUserService{
 	public User loginProcess(RgeUserLoginRequest rgeUserLoginRequest) {
 		RgeUserEntity entity = null;
 		User response = null;
-		if(rgeUserLoginRequest.getLoginId() != null) {
+		if (rgeUserLoginRequest.getLoginId() != null) {
 			entity = rgeUserEntityRepository.findByLoginId(rgeUserLoginRequest.getLoginId());
-			if(entity == null) {
-				logger.info("User not found against the requested username",rgeUserLoginRequest.getLoginId());
-				throw new UserNotExistException("Requested user not exist in the system:"+rgeUserLoginRequest.getLoginId());
+			if (entity == null) {
+				logger.info("User not found against the requested username", rgeUserLoginRequest.getLoginId());
+				throw new UserNotExistException(
+						"Requested user not exist in the system:" + rgeUserLoginRequest.getLoginId());
 			}
-			response = 	validateCredential(entity,rgeUserLoginRequest);
-			populateLoginDetails(entity);
+			if (Boolean.TRUE.equals(entity.getIsActive())) {
+				response = validateCredential(entity, rgeUserLoginRequest);
+				populateLoginDetails(entity);
+			} else {
+				logger.info("User is not active.", rgeUserLoginRequest.getLoginId());
+				throw new InActiveUserException("User is not active :" + entity.getLoginId());
+			}
 		}
-		logger.info("User logged in successfully.",rgeUserLoginRequest.getLoginId());
+		logger.info("User logged in successfully.", rgeUserLoginRequest.getLoginId());
 		return response;
 	}
 

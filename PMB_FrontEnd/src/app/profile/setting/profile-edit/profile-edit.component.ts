@@ -15,8 +15,15 @@ export class ProfileEditComponent implements OnInit {
   constructor(private profileEditService: ProfileEditService) { }
 
   ngOnInit() {
+    this.userDetailForm = null;
     this.userDetailForm = this.profileEditService.createUserDetailForm();
-    console.log(this.userDetailForm)
   }
 
+  onCancel() {
+    this.userDetailForm = this.profileEditService.createUserDetailForm();
+  }
+
+  onEditProfileSave() {
+
+  }
 }

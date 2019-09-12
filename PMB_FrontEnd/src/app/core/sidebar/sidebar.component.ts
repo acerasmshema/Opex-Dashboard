@@ -9,12 +9,12 @@ import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { SidebarService } from './sidebar-service';
 import { ConsumptionService } from '../../dashboard/consumption-dashboard/consumption.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
-import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,10 +34,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private consumptionService: ConsumptionService,
     private benchmarkService: BenchmarkService,
     private localStorageService: LocalStorageService,
-    private headerService: HeaderService,
+    private commonService: CommonService,
     private validationService: ValidationService,
     private statusService: StatusService,
-    private messageService:MessageService) {
+    private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -59,16 +59,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
             else {
               this.searchKpiData = new SearchKpiData();
-              this.searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+              this.searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
                 this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
                 this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
             }
           }
           else {
-            this.onGetAllMills();
-            this.onGetAllBuType();
-            this.getBenchmarkKpiDetail();
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+            this.commonService.getAllMills(this.sidebarForm);
+            this.commonService.getAllBuType(this.sidebarForm);
+            this.getBenchmarkKpiDetail();
             this.searchKpiData = new SearchKpiData();
             this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
 
@@ -83,14 +83,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.statusService.sidebarSizeSubject.next(sidebarSize);
         this.showSidebar = sidebarRequestData.isShow;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled())
@@ -106,14 +106,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((kpiTypes: any) => {
         this.sidebarForm.kpiTypes = kpiTypes;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   getKpiDetails(kpiCategoryId: any) {
@@ -125,14 +125,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.statusService.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
         this.sidebarForm.kpiTypes = kpiTypes;
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   toggleCollapsed() {
@@ -175,7 +175,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       else {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
-  
+
         if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
           this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
         }
@@ -200,7 +200,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
         isError = true;
       }
-      if(!isError) {
+      if (!isError) {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
         this.sidebarForm.millsError = false;
@@ -216,51 +216,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  onGetAllBuType() {
-    if (this.statusService.common.buTypes.length === 0) {
-      this.headerService.getAllBuType().
-        subscribe((buTypes: any) => {
-          this.statusService.common.buTypes = buTypes;
-          this.sidebarForm.buisnessUnits = buTypes;
-        },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
-    }
-  }
-
-  onGetAllMills() {
-    if (this.statusService.common.mills.length === 0) {
-      const requestData = {
-        countryIds: "1,2"
-      }
-      this.headerService.getAllMills(requestData).
-        subscribe((mills: MillDetail[]) => {
-          this.statusService.common.mills = mills;
-          this.sidebarForm.mills = mills;
-        },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if(error.status=="0"){
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-          }else{
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
-      });
-    }
-  }
-
   onMillValidation() {
     this.validationService.millValidation(this.searchKpiData, this.sidebarForm);
   }
 
   onDateValidation() {
-   this.validationService.sidebarDateValidation(this.sidebarForm);
+    this.validationService.sidebarDateValidation(this.sidebarForm);
   }
 
   ngOnDestroy() {
