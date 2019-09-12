@@ -6,18 +6,18 @@ import java.util.List;
 import com.rgei.kpi.dashboard.entities.CountryEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.response.model.UserRoleResponse;
+import com.rgei.kpi.dashboard.response.model.UserRole;
 
 public class UserManagementUtility {
 
-	public static List<UserRoleResponse> convertToUserRoleResponse(List<UserRoleEntity> entities){
-		List<UserRoleResponse> responseList = new ArrayList<UserRoleResponse>();
-		UserRoleResponse resp = null;
+	public static List<UserRole> convertToUserRoleResponse(List<UserRoleEntity> entities){
+		List<UserRole> responseList = new ArrayList<UserRole>();
+		UserRole resp = null;
 		for(UserRoleEntity entity : entities) {
-			resp = new UserRoleResponse();
-			resp.setRoleId(entity.getRoleId());
+			resp = new UserRole();
+			resp.setUserRoleId(entity.getRoleId().toString());
 			resp.setRoleName(entity.getRoleName());
-			resp.setStatus(entity.getStatus());
+			resp.setActive(entity.getStatus());
 			responseList.add(resp);
 		}
 		return responseList;

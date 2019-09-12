@@ -19,6 +19,7 @@ package com.rgei.kpi.dashboard.service;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.User;
 
 public interface RgeUserService {
 	
@@ -28,7 +29,7 @@ public interface RgeUserService {
 	
 	public RgeUserResponse getUserByEmail(String email);
 	
-	public RgeUserResponse loginProcess(RgeUserLoginRequest  rgeUserLoginRequest);
+	public User loginProcess(RgeUserLoginRequest  rgeUserLoginRequest);
 
 	public void logoutProcess(RgeUserLogoutRequest rgeUserLogoutRequest);
 
