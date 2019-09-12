@@ -123,6 +123,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(InActiveUserException.class)
+	public HttpEntity<ApiErrorResponse> handleInActiveUserException(InActiveUserException exception,
+			WebRequest request) {
+		ApiErrorResponse apiResponse = new ApiErrorResponse(StatusCodes.INACTIVE_USER, exception.getMessage(),
+				MessageConstant.INACTIVE_USER, request.getDescription(false));
+		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@ExceptionHandler(LogoutException.class)
 	public HttpEntity<ApiErrorResponse> handleLogoutException(LogoutException exception, WebRequest request) {
 		ApiErrorResponse apiResponse = new ApiErrorResponse(StatusCodes.LOGOUT_ERROR, exception.getMessage(),

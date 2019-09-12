@@ -139,6 +139,7 @@ public class UserConverter {
 
 	public static User createUserResponse(RgeUserEntity entity) {
 		User userResponse = new User();
+		userResponse.setUserId(entity.getUserId().toString());
 		userResponse.setFirstName(entity.getFirstName());
 		userResponse.setLastName(entity.getLastName());
 		userResponse.setEmail(entity.getEmail());

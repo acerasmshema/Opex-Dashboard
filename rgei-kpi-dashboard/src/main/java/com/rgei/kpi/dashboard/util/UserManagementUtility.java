@@ -25,11 +25,11 @@ public class UserManagementUtility {
 	
 	
 	public static List<CountryResponse> convertToCountryResponse(List<CountryEntity> entities){
-		List<CountryResponse> responseList = new ArrayList<CountryResponse>();
+		List<CountryResponse> responseList = new ArrayList<>();
 		CountryResponse resp = null;
 		for(CountryEntity entity : entities) {
 			resp = new CountryResponse();
-			resp.setCountryId(entity.getCountryId());
+			resp.setCountryId(entity.getCountryId().toString());
 			resp.setCountryName(entity.getCountryName());
 			resp.setCountryCode(entity.getCountryCode());
 			responseList.add(resp);
