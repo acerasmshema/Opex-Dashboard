@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.service.UserManagementService;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/restCall")
 public class UserManagementController {

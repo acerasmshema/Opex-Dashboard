@@ -29,8 +29,13 @@ import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.LoginDetailResponse;
+import com.rgei.kpi.dashboard.response.model.MillDetail;
+import com.rgei.kpi.dashboard.response.model.MillRole;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.User;
+import com.rgei.kpi.dashboard.response.model.UserRole;
 
 public class UserConverter {
 	
@@ -130,6 +135,75 @@ public class UserConverter {
 	public static Date getCurrentDate() {
 		LocalDate currentDate= LocalDate.now();
 		return Date.valueOf(currentDate.toString());
+	}
+
+	public static User createUserResponse(RgeUserEntity entity) {
+		User userResponse = new User();
+		userResponse.setFirstName(entity.getFirstName());
+		userResponse.setLastName(entity.getLastName());
+		userResponse.setEmail(entity.getEmail());
+		userResponse.setPhone(entity.getPhone());
+		userResponse.setUsername(entity.getLoginId());
+		userResponse.setAddress(entity.getAddress());
+		userResponse.setCountry(entity.getCountry());
+		userResponse.setActive(entity.getIsActive());
+		userResponse.setCreatedBy(entity.getCreatedBy());
+		userResponse.setCreatedDate(entity.getCreatedOn().toString());
+		userResponse.setUpdatedBy(entity.getUpdatedBy());
+		userResponse.setUpdatedDate(entity.getUpdatedOn().toString());
+		userResponse.setDepartment(getDepartmentDetails(entity));
+		userResponse.setMillRoles(getMillRoleDetails(entity));
+		return userResponse;
+	}
+
+	private static List<MillRole> getMillRoleDetails(RgeUserEntity entity) {
+		List<MillRole> millRoles = new ArrayList<>();
+		for( UserRoleMillEntity userRoleMill: entity.getUserRoleMills()) {
+			MillRole role = new MillRole();
+			role.setSelectedUserRole(getUserRoleDetails(userRoleMill));
+			role.setSelectedMill(getMillDetails(userRoleMill));
+			millRoles.add(role);
+		}
+		return millRoles;
+	}
+
+	private static MillDetail getMillDetails(UserRoleMillEntity userRoleMill) {
+		MillDetail millDetail = new MillDetail();
+		millDetail.setMillId(userRoleMill.getMillId().toString());
+		millDetail.setMillName(userRoleMill.getMill().getMillName());
+		millDetail.setMillCode(userRoleMill.getMill().getMillCode());
+		millDetail.setActive(userRoleMill.getMill().getActive());
+		millDetail.setCountryId(userRoleMill.getMill().getCountry().getCountryId().toString());
+		millDetail.setCreatedBy(userRoleMill.getMill().getCreatedBy());
+		millDetail.setCreatedDate(userRoleMill.getMill().getCreatedDate().toString());
+		millDetail.setUpdatedBy(userRoleMill.getMill().getUpdatedBy());
+		millDetail.setUpdatedDate(userRoleMill.getMill().getUpdatedDate().toString());
+		return millDetail;
+	}
+
+	private static UserRole getUserRoleDetails(UserRoleMillEntity userRoleMill) {
+		UserRole userRole = new UserRole();
+		userRole.setUserRoleId(userRoleMill.getRoleId().toString());
+		userRole.setRoleName(userRoleMill.getRole().getRoleName());
+		userRole.setActive(userRole.getActive());
+		userRole.setCreatedBy(userRole.getCreatedBy());
+		userRole.setCreatedDate(userRole.getCreatedDate());
+		userRole.setUpdatedBy(userRole.getUpdatedBy());
+		userRole.setUpdatedDate(userRole.getUpdatedDate());
+		return userRole;
+	}
+
+	private static Department getDepartmentDetails(RgeUserEntity entity) {
+		Department department = new Department();
+		department.setDepartmentId(entity.getDepartment().getDepartmentId());
+		department.setDepartmentName(entity.getDepartment().getDepartmentName());
+		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
+		department.setActive(entity.getDepartment().getActive());
+		department.setCreatedBy(entity.getDepartment().getCreatedBy());
+		department.setCreatedDate(entity.getDepartment().getCreatedDate().toString());
+		department.setUpdatedBy(entity.getDepartment().getUpdatedBy());
+		department.setUpdatedDate(entity.getDepartment().getUpdatedDate().toString());
+		return department;
 	}
 	
 }
