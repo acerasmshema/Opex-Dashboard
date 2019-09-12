@@ -4,9 +4,6 @@
             <p-table #userRole [value]="userRoles" dataKey="userId" [paginator]="true" [rows]="11">
                 <ng-template pTemplate="caption">
                     <div class="text-right">
-                        <span class="m-r-20" (click)="userRole.exportCSV()">
-                            <em class="fa fa-download fa-2x" style="color: #333333"></em>
-                        </span>
                         <span class="m-l-5" (click)="onCreateUserRole()">
                             <em class="fa fa-user-plus fa-2x"></em>
                         </span>
@@ -30,8 +27,8 @@
                                 type="text" [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName">
                         </td>
                         <td>
-                            <input class="form-control" style="font-size: 5px;"  type="checkbox" [checked]="rowData.active"
-                                [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
+                            <input class="form-control" style="font-size: 5px;" type="checkbox"
+                                [checked]="rowData.active" [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
                         </td>
                         <td style="text-align:center">
                             <span *ngIf="!rowData.isEnable" class="font-20 m-r-20" style="color: #3e3e3e;"

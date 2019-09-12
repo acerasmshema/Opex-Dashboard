@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-role',
@@ -9,7 +10,8 @@ import { UserRoleService } from './user-role.service';
 })
 export class UserRoleComponent implements OnInit {
 
-  userRoles: UserRole[] = [];
+  public userRoles: UserRole[] = [];
+  private selectedUserRole: UserRole;
 
   constructor(private userRoleService: UserRoleService) { }
 
@@ -23,15 +25,24 @@ export class UserRoleComponent implements OnInit {
 
   onEdit(userRoleId: string) {
     const userRole = this.userRoles.find((userRole) => userRole.userRoleId === userRoleId)
+    this.selectedUserRole = new UserRole();
+    this.selectedUserRole.roleName = userRole.roleName;
+    this.selectedUserRole.active = userRole.active;
+
     userRole.isEnable = true;
   }
 
   onCancel(userRole: UserRole) {
-    userRole.isEnable = true;
+    userRole.roleName = this.selectedUserRole.roleName;
+    userRole.active = this.selectedUserRole.active;
+    userRole.isEnable = false;
+    this.selectedUserRole = null;
   }
 
   onSave(userRole: UserRole) {
-   this.userRoleService.saveUserRole(userRole);
+    this.selectedUserRole = null;
+
+    this.userRoleService.saveUserRole(userRole);
   }
 
 }
