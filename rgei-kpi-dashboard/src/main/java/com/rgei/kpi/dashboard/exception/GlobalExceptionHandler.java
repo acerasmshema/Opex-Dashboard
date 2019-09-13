@@ -170,4 +170,12 @@ public class GlobalExceptionHandler {
 		}
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(RecordExistException.class)
+	public HttpEntity<ApiErrorResponse> handleRecordExistException(RecordExistException exception,
+			WebRequest request) {
+		ApiErrorResponse apiResponse = new ApiErrorResponse(StatusCodes.RECORD_EXISTS, exception.getMessage(),
+				MessageConstant.RECORD_EXISTS, request.getDescription(false));
+		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

@@ -114,4 +114,5 @@ public class UserManagementServiceImpl implements UserManagementService {
 		}
 		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
 	}
+	
 }
