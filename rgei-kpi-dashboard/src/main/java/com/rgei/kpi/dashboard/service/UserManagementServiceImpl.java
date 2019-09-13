@@ -11,6 +11,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.CountryEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.repository.UserRoleRepository;
@@ -52,6 +53,33 @@ public class UserManagementServiceImpl implements UserManagementService {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
 		}
 		throw new RecordNotFoundException("Roles list not available in database");
+	}
+
+	@Override
+	public void createUserRole(UserRole userRole) {
+		logger.info("Inside service call to get create new user role for request : "+userRole);
+		UserRoleEntity entity = UserManagementUtility.fetchUserRoleEntity(userRole);
+		try {
+		userRoleRepository.save(entity);
+		}catch(RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating new user role :"+ userRole);
+		}
+	}
+
+	@Override
+	public void updateUserRole(UserRole userRole) {
+		logger.info("Inside service call to get create new user role for request : " + userRole);
+		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
+		if (null != entity) {
+			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
+		} else {
+			throw new RecordNotFoundException("User Role not found against role id  :" + userRole.getUserRoleId());
+		}
+		try {
+			userRoleRepository.save(entity);
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
+		}
 	}
 
 	
