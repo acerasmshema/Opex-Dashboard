@@ -1,7 +1,5 @@
 package com.rgei.kpi.dashboard.response.model;
 
-import java.sql.Timestamp;
-
 public class UserRole {
 	private String userRoleId;
 	private String roleName;

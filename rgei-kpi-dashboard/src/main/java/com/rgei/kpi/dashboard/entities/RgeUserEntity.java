@@ -78,6 +78,7 @@ public class RgeUserEntity implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
+	@Column(name = "email")
 	private String email;
 
 	@Column(name = "first_name")
