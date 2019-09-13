@@ -10,12 +10,18 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.CountryEntity;
+import com.rgei.kpi.dashboard.entities.DepartmentEntity;
+import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
+import com.rgei.kpi.dashboard.repository.DepartmentRepository;
+import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.repository.UserRoleRepository;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
+import com.rgei.kpi.dashboard.response.model.Department;
+import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.util.UserManagementUtility;
 
@@ -29,6 +35,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 	
 	@Resource
 	UserRoleRepository userRoleRepository;
+	
+	@Resource
+	DepartmentRepository departmentRepository;
+	
+	@Resource
+	RgeUserEntityRepository rgeUserEntityRepository;
 	
 	@Override
 	public List<CountryResponse> getCountryList() {
@@ -82,5 +94,23 @@ public class UserManagementServiceImpl implements UserManagementService {
 		}
 	}
 
+	@Override
+	public List<Department> getDepartments() {
+		logger.info("Inside service call to get departments");
+		List<DepartmentEntity> entities = departmentRepository.findAllByActiveOrderByDepartmentNameAsc(true);
+		if(entities != null && !entities.isEmpty()) {
+			return UserManagementUtility.convertToDepartmentResponse(entities);
+		}
+		throw new RecordNotFoundException("Departments list not available in database");
+	}
 	
+	@Override
+	public List<User> getUsersByMillId(Integer millId) {
+		logger.info("Inside service call to get users by Mill Id : "+millId);
+		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId);
+		if(userEntities != null && !userEntities.isEmpty()) {
+			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities);
+		}
+		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
+	}
 }
