@@ -91,4 +91,5 @@ public class UserManagementController {
 		userManagementService.updateUserRole(userRole);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 }
