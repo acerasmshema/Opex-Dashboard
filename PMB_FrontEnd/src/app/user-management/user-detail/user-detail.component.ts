@@ -3,6 +3,7 @@ import { UserDetail } from './user-detail.model';
 import { MessageService } from 'primeng/primeng';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetailService } from './user-detail.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-detail',
@@ -21,12 +22,18 @@ export class UserDetailComponent implements OnInit {
   ];
 
   users: UserDetail[] = [];
+  userDetailForm: FormGroup;
 
   constructor(private userDetailService: UserDetailService,
     private statusService: StatusService) { }
 
   ngOnInit() {
     this.userDetailService.getUserDetailList(this.users);
+  }
+
+  expandUserDetail(userId: string) {
+    console.log(userId);
+    
   }
 
   onEdit(userId: number) {

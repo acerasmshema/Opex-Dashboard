@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { CommonService } from 'src/app/shared/service/common/common.service';
@@ -17,7 +17,7 @@ export class ProfileEditService {
         let userDetailForm = this.formBuilder.group({
             firstName: new FormControl(userDetail.firstName),
             lastName: new FormControl(userDetail.lastName),
-            email: new FormControl(userDetail.email),
+            email: new FormControl(userDetail.email, [Validators.required, Validators.email]),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
             country: new FormControl(userDetail.country),

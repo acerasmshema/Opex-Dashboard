@@ -14,9 +14,7 @@ export class UserDetail {
     address: string;
     isActive: boolean;
     country: string;
-    countryList: Country[] = [];
     department: Department;
-    departmentList: Department[];
     millRoles: MillRole[] = [];
     updatedBy: string;
     updatedDate: string;

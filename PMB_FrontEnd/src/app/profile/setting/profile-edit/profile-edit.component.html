@@ -25,6 +25,13 @@
               <label class="edit-label required">Email</label>
               <div class="form-group">
                 <input type="email" class="form-control edit-input" formControlName="email">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
+                  <span *ngIf="userDetailForm.get('email').errors['required']" class="error-text">Email is
+                    required</span>
+                  <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">Please enter a valid
+                    email</span>
+                </span>
               </div>
             </div>
             <div class="col-sm-6">
@@ -48,7 +55,8 @@
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;">
                   <option *ngFor="let country of userDetailForm.controls.countryList.controls"
-                    [selected]="(country.value.countryName === userDetailForm.controls.country.value)" class="edit-input">
+                    [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
+                    class="edit-input">
                     {{country.value.countryName}}</option>
                 </select>
               </div>

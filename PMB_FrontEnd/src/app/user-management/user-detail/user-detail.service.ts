@@ -35,7 +35,8 @@ export class UserDetailService {
             userDetail.phone = "9696048000";
             userDetail.isReadOnly = false;
             userDetail.country = "India";
-
+            userDetail.userId = index;
+            
             userList.push(userDetail);
         }
     }

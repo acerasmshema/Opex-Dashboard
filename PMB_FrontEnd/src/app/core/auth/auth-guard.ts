@@ -11,7 +11,6 @@ export class AuthGuard implements CanActivate {
         private localStorageService: LocalStorageService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-        console.log(state.url)
         let user = this.localStorageService.fetchUserDetail();
         if (!user) {
             this.router.navigateByUrl('/login');

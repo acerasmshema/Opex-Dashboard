@@ -28,8 +28,8 @@ export class DialogService {
 
     createUserForm(): FormGroup {
         let millRoles: MillRole[] = [];
-         let millRole = new MillRole();
-         // millRole.userRoles = this.statusService.common.userRoles;
+        let millRole = new MillRole();
+        // millRole.userRoles = this.statusService.common.userRoles;
         // millRoles.push(millRole);
 
         let userDetailForm = this.formBuilder.group({
@@ -52,16 +52,7 @@ export class DialogService {
         //this.commonService.getAllUserRole();
         //this.commonService.getAllDepartment(userDetailForm);
 
-        return userDetailForm ;
-    }
-    //Api Call and error Handling
-    getDepartmentList(user: UserDetail) {
-        user.departmentList = this.statusService.common.departmentList;
-    }
-
-    //Api Call and error Handling
-    getCountryList(user: UserDetail) {
-        user.countryList = this.statusService.common.countryList;
+        return userDetailForm;
     }
 
 }
