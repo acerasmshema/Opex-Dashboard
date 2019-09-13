@@ -38,4 +38,10 @@ public class CommonFunction {
 		return Date.valueOf(yesterdayDate.toString());
 	}
 
+	public static String getString(Object obj) {
+		if(obj != null) {
+			return obj.toString();
+		}
+		return null;
+	}
 }

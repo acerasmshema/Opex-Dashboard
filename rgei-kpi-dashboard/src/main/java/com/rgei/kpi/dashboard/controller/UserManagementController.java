@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.Department;
+import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.service.UserManagementService;
+import com.rgei.kpi.dashboard.util.CommonFunction;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -51,6 +53,20 @@ public class UserManagementController {
 	public ResponseEntity<List<UserRole>> getRoles(@RequestHeader(value = "activeRoles") Boolean activeRoles){
 		logger.info("Get roles by status : "+activeRoles);
 		List<UserRole> responseList = userManagementService.getUserRolesByStatus(activeRoles);
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/v1/departments")
+	public ResponseEntity<List<Department>> getDepartments(){
+		logger.info("Get all active departments list");
+		List<Department> responseList = userManagementService.getDepartments();
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/v1/users")
+	public ResponseEntity<List<User>> getUsersByMillId(@RequestHeader(value = "millId") String millId){
+		logger.info("Get all users by mill Id : "+millId);
+		List<User> responseList = userManagementService.getUsersByMillId(CommonFunction.covertToInteger(millId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
