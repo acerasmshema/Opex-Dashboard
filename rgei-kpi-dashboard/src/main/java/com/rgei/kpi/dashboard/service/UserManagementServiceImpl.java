@@ -45,9 +45,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to get roles by status : "+activeRoles);
 		List<UserRoleEntity> entities = null;
 		if(Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
+			entities = userRoleRepository.findAllByStatusOrderByRoleIdAsc(activeRoles);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
+			entities = userRoleRepository.findAllByOrderByRoleIdAsc();
 		}
 		if(entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
@@ -68,7 +68,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public void updateUserRole(UserRole userRole) {
-		logger.info("Inside service call to get create new user role for request : " + userRole);
+		logger.info("Inside service call to get update user role for request : " + userRole);
 		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
 		if (null != entity) {
 			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);

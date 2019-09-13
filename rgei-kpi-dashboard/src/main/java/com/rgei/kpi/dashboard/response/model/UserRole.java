@@ -1,15 +1,22 @@
 package com.rgei.kpi.dashboard.response.model;
 
-import java.sql.Timestamp;
-
 public class UserRole {
 	private String userRoleId;
 	private String roleName;
+	private String description;
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
 	private String updatedDate;
-	private Boolean active = true;
+	private Boolean active;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public String getUserRoleId() {
 		return userRoleId;
