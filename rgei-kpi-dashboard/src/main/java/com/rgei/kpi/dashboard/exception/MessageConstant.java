@@ -10,5 +10,6 @@ public class MessageConstant {
 	public static final String UPDATE_RECORD_ERROR = "Error during updating the record";
 	public static final String DELETE_RECORD_ERROR = "Error during deleting the record";
 	public static final String INACTIVE_USER = "User is inactive";
+	public static final String RECORD_EXISTS = "Record already exists";
 	
 }
