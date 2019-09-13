@@ -48,9 +48,10 @@ export class DialogService {
         });
 
         this.commonService.getAllCountry(userDetailForm);
+        this.commonService.getAllDepartment(userDetailForm);
         this.commonService.getAllMills(millRole);
         //this.commonService.getAllUserRole();
-        //this.commonService.getAllDepartment(userDetailForm);
+        
 
         return userDetailForm;
     }

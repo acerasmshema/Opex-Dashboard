@@ -15,8 +15,8 @@ export class ProfileEditService {
         const userDetail = this.statusService.common.userDetail;
 
         let userDetailForm = this.formBuilder.group({
-            firstName: new FormControl(userDetail.firstName),
-            lastName: new FormControl(userDetail.lastName),
+            firstName: new FormControl(userDetail.firstName, [Validators.required]),
+            lastName: new FormControl(userDetail.lastName, [Validators.required]),
             email: new FormControl(userDetail.email, [Validators.required, Validators.email]),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
@@ -26,8 +26,8 @@ export class ProfileEditService {
             departmentList: this.formBuilder.array([])
         });
 
-        this.commonService.getAllDepartment();
         this.commonService.getAllCountry(userDetailForm);
+        this.commonService.getAllDepartment(userDetailForm);
 
         return userDetailForm;
     }

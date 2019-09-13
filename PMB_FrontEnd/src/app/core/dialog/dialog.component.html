@@ -300,10 +300,10 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Department</label>
                     <div class="form-group">
-                        <select name="" id="" class="form-control edit-input" style="height: 34px;font-size: 10pt">
-                            <option value="" class="edit-input" disabled selected>Select Department</option>
-                            <option value="" class="edit-input">Technical</option>
-                            <option value="" class="edit-input">BCID</option>
+                        <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                            <option class="edit-input" selected value="" disabled>Select Department</option>
+                            <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
+                                class="edit-input"> {{department.value.departmentName}}</option>
                         </select>
                     </div>
                 </div>
@@ -357,7 +357,7 @@
                                 <td class="text-center">
                                     <a (click)='onDeleteMillRole(millRole.millRoleId)'><i class="fa fa-trash"></i></a>
                                 </td>
-                            </tr> 
+                            </tr>
                         </tbody>
                     </table>
                 </div>

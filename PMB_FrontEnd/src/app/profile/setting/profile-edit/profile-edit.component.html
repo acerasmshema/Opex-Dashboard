@@ -11,12 +11,22 @@
               <label class="edit-label required">First Name</label>
               <div class="form-group">
                 <input type="text" class="form-control edit-input" formControlName="firstName">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
+                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">Please enter the
+                    First Name</span>
+                </span>
               </div>
             </div>
             <div class="col-sm-6">
               <label class="edit-label required">Last Name</label>
               <div class="form-group">
                 <input type="text" class="form-control edit-input" formControlName="lastName">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
+                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Please enter the
+                    Last Name</span>
+                </span>
               </div>
             </div>
           </div>
@@ -65,9 +75,10 @@
               <label class="edit-label required">Department</label>
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;">
-                  <option value="" class="edit-input">MillOps</option>
-                  <option value="" class="edit-input">BCID</option>
-                  <option value="" class="edit-input">Tecnical</option>
+                  <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
+                    [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
+                    class="edit-input">
+                    {{department.value.departmentName}}</option>
                 </select>
               </div>
             </div>

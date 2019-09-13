@@ -32,7 +32,7 @@ export class UserRoleService {
         this.getUserRoles(userRoles);
     }
 
-     saveUserRole(userRole: UserRole, roles: UserRole[]) {
+    saveUserRole(userRole: UserRole, roles: UserRole[]) {
         userRole.isEnable = false;
         userRole.createdBy = this.statusService.common.userDetail.username;
         userRole.updatedBy = this.statusService.common.userDetail.username;

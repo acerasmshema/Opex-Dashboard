@@ -109,21 +109,35 @@ export class CommonService {
         }
     }
 
-    public getAllDepartment(): any {
+    public getAllDepartment(userDetailForm: any) {
         if (this.statusService.common.departmentList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allDepartment).
                 subscribe(
                     (departments: Department[]) => {
-
+                        if (userDetailForm instanceof FormGroup) {
+                            const departmentList: any = userDetailForm.controls.departmentList;
+                            let departmentControl = departmentList.controls;
+                            departments.forEach(department => {
+                                departmentControl.push(new FormControl(department));
+                            });
+                        }
                         this.statusService.common.departmentList = departments;
-                        console.log(departments);
                     },
                     (error: any) => {
                         console.log("Error handling")
                     }
                 );
         }
+        else {
+            const departments = this.statusService.common.departmentList;
+            const departmentList: any = userDetailForm.controls.departmentList;
+            let departmentControl = departmentList.controls;
+            departments.forEach(department => {
+                departmentControl.push(new FormControl(department));
+            });
+        }
     }
+
 
     public getAllUserRole(userRoles: UserRole[], activeAll: boolean) {
         if (this.statusService.common.userRoles.length === 0) {

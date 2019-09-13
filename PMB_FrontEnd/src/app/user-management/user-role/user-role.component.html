@@ -1,6 +1,6 @@
 <div *ngIf="userRoles.length  > 0">
-    <p-table #userRole [value]="userRoles" [paginator]="true" [rows]="10" dataKey="userRoleId" [resizableColumns]="true"
-        [reorderableColumns]="true" [scrollable]="false" sortField="userRole" sortOrder="1">
+    <p-table #userRole [columns]="cols" [value]="userRoles" [paginator]="true" [rows]="9" dataKey="userRoleId"
+        [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="roleName" sortOrder="1">
         <ng-template pTemplate="caption">
             <div class="text-right">
                 <span class="m-l-5" (click)="onCreateUserRole()">
@@ -10,18 +10,27 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th style="width: 8%">#</th>
-                <th pSortableColumn pResizableColumn pReorderableColumn>
-                    <p-sortIcon field></p-sortIcon> User Role
+                <th style="width: 4%;"></th>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn pReorderableColumn
+                    [style.width]="col.width">
+                    <p-sortIcon *ngIf="col.field === 'roleName'" [field]="col.field"></p-sortIcon>
+                    {{col.header}}
                 </th>
-                <th style="width: 40%">Description</th>
-                <th style="width: 10%">Status</th>
-                <th style="width: 16%">Action</th>
+                <th class="text-center" style="width: 10%">Action</th>
+            </tr>
+            <tr class="text-center">
+                <th style="width: 4%;"><i class="fa fa-search"></i></th>
+                <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
+                    <input *ngIf="col.field === 'roleName'" pInputText type="text"
+                        (input)="userRole.filter($event.target.value, col.field, col.filterMatchMode)"
+                        [value]="userRole.filters[col.field]?.value">
+                </th>
+                <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-ri="rowIndex" let-columns="columns">
             <tr>
-                <td class="td-role">
+                <td class="td-role text-center" style="width: 4%;">
                     {{ri + 1}}
                 </td>
                 <td>
@@ -36,7 +45,7 @@
                     <input class="form-control" style="font-size: 5px;" type="checkbox" [checked]="rowData.active"
                         [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
                 </td>
-                <td style="text-align:center">
+                <td class="text-center" style="width: 10%">
                     <span *ngIf="!rowData.isEnable" class="font-20 m-r-20" style="color: #3e3e3e;"
                         (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit"></i></span>
                     <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: #398bf7;"><i class="fa fa-save"
