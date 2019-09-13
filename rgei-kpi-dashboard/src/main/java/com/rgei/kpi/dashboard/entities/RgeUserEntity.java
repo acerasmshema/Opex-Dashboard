@@ -17,9 +17,10 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,7 +60,23 @@ public class RgeUserEntity implements Serializable {
 	private String updatedBy;
 
 	@Column(name = "created_date")
-	private Time createdOn;
+	private Date createdOn;
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
 
 	private String email;
 
@@ -78,10 +95,13 @@ public class RgeUserEntity implements Serializable {
 	private String phone;
 
 	@Column(name = "updated_date")
-	private Time updatedOn;
+	private Date updatedOn;
+	
+	@Column(name = "department_id")
+	private Integer departmentId;
 
-	@JoinColumn(name = "department_id")
-    @OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id",insertable=false, updatable=false)
 	private DepartmentEntity department;
 
 	@ManyToMany(mappedBy = "rgeUsers", fetch = FetchType.EAGER)
@@ -123,14 +143,6 @@ public class RgeUserEntity implements Serializable {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
-	}
-
-	public Time getCreatedOn() {
-		return this.createdOn;
-	}
-
-	public void setCreatedOn(Time createdOn) {
-		this.createdOn = createdOn;
 	}
 
 	public String getEmail() {
@@ -179,14 +191,6 @@ public class RgeUserEntity implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-
-	public Time getUpdatedOn() {
-		return this.updatedOn;
-	}
-
-	public void setUpdatedOn(Time updatedOn) {
-		this.updatedOn = updatedOn;
 	}
 
 	public List<UserRoleEntity> getUserRoles() {
@@ -244,4 +248,13 @@ public class RgeUserEntity implements Serializable {
 	public void setDepartment(DepartmentEntity department) {
 		this.department = department;
 	}
+
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
 }
+
