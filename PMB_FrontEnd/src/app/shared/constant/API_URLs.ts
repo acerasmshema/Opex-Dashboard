@@ -47,5 +47,8 @@ export class API_URL {
         ALL_COUNTRY: API_URL.BASE_API_URL_v1 + '/countries',
         ALL_DEPARTMENT: API_URL.BASE_API_URL_v1 + '/location/all_mills',
         ALL_USER_ROLE: API_URL.BASE_API_URL_v1 + '/roles',
+        ADD_USER_ROLE: API_URL.BASE_API_URL_v1 + '/create_user_role',
+        UPDATE_USER_ROLE: API_URL.BASE_API_URL_v1 + '/update_user_role',
     }
+    
 }

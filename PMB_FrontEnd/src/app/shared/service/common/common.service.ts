@@ -10,6 +10,7 @@ import { Department } from 'src/app/user-management/user-detail/department.model
 import { MillDetail } from '../../models/mill-detail.model';
 import { CommonMessage } from '../../constant/Common-Message';
 import { MessageService } from 'primeng/primeng';
+import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 
 @Injectable()
 export class CommonService {
@@ -24,7 +25,7 @@ export class CommonService {
         private messageService: MessageService,
         private statusService: StatusService) { }
 
-    public getAllMills(form: any) {
+    public getAllMills(millForm: any) {
         if (this.statusService.common.mills.length === 0) {
             const requestData = {
                 countryIds: "46,104"
@@ -32,9 +33,13 @@ export class CommonService {
             this.apiCallService.callGetAPIwithData(this.allMills, requestData).
                 subscribe(
                     (mills: MillDetail[]) => {
+                        if (millForm instanceof SidebarForm) {
+                            millForm.mills = mills;
+                        }
+                        else if (millForm instanceof MillRole) {
+                            millForm.mills = mills;
+                        }
                         this.statusService.common.mills = mills;
-                        if (form !== null)
-                            form.mills = mills;
                     },
                     (error: any) => {
                         this.statusService.spinnerSubject.next(false);
@@ -44,9 +49,16 @@ export class CommonService {
                             this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                         }
                     });
-        } else if (form !== null) {
-            form.mills = this.statusService.common.mills;
         }
+        else {
+            if (millForm instanceof SidebarForm) {
+                millForm.mills = this.statusService.common.mills;
+            }
+            else if (millForm instanceof MillRole) {
+                millForm.mills = this.statusService.common.mills;
+            }
+        }
+
 
     }
 

@@ -17,3 +17,7 @@
     font-size: 12pt;
     height: 40px;
 }
+
+input.ng-invalid {
+    border: 1px solid red;
+}

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
-import { FormGroup } from '@angular/forms';
+import { DataTable } from 'primeng/primeng';
 
 @Component({
   selector: 'app-user-role',
@@ -41,8 +41,7 @@ export class UserRoleComponent implements OnInit {
 
   onSave(userRole: UserRole) {
     this.selectedUserRole = null;
-
-    this.userRoleService.saveUserRole(userRole);
+    (!userRole.userRoleId) ? this.userRoleService.saveUserRole(userRole, this.userRoles) : this.userRoleService.updateUserRole(userRole, this.userRoles);
   }
 
 }

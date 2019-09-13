@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MessageService, Panel } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { AnnotationDialog } from './annotation-dialog';
 import { DialogService } from './dialog.service';
@@ -11,7 +10,6 @@ import { ProductionService } from '../../dashboard/production-dashboard/producti
 import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { FormGroup } from '@angular/forms';
@@ -46,8 +44,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
-    private validationService: ValidationService,
-    private localStorageService: LocalStorageService) { }
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.dialogSubscription = this.statusService.dialogSubject.

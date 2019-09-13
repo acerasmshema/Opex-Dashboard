@@ -1,46 +1,50 @@
-<div class="container" style="height: 81vh;">
-    <div class="card card-table">
-        <div class="card-body">
-            <p-table #userRole [value]="userRoles" dataKey="userId" [paginator]="true" [rows]="11">
-                <ng-template pTemplate="caption">
-                    <div class="text-right">
-                        <span class="m-l-5" (click)="onCreateUserRole()">
-                            <em class="fa fa-user-plus fa-2x"></em>
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 8%">#</th>
-                        <th>User Role</th>
-                        <th style="width: 10%">Status</th>
-                        <th style="width: 16%">Action</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
-                    <tr>
-                        <td class="td-role">
-                            {{ri + 1}}
-                        </td>
-                        <td>
-                            <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'"
-                                type="text" [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName">
-                        </td>
-                        <td>
-                            <input class="form-control" style="font-size: 5px;" type="checkbox"
-                                [checked]="rowData.active" [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
-                        </td>
-                        <td style="text-align:center">
-                            <span *ngIf="!rowData.isEnable" class="font-20 m-r-20" style="color: #3e3e3e;"
-                                (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit"></i></span>
-                            <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: #398bf7;"><i
-                                    class="fa fa-save" (click)="onSave(rowData.userId)"></i></span>
-                            <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: red;"><i
-                                    class="fa fa-remove" (click)="onCancel(rowData)"></i></span>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
+<div *ngIf="userRoles.length  > 0">
+    <p-table #userRole [value]="userRoles" [paginator]="true" [rows]="10" dataKey="userRoleId" [resizableColumns]="true"
+        [reorderableColumns]="true" [scrollable]="false" sortField="userRole" sortOrder="1">
+        <ng-template pTemplate="caption">
+            <div class="text-right">
+                <span class="m-l-5" (click)="onCreateUserRole()">
+                    <em class="fa fa-user-plus fa-2x"></em>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 8%">#</th>
+                <th pSortableColumn pResizableColumn pReorderableColumn>
+                    <p-sortIcon field></p-sortIcon> User Role
+                </th>
+                <th style="width: 40%">Description</th>
+                <th style="width: 10%">Status</th>
+                <th style="width: 16%">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-ri="rowIndex" let-columns="columns">
+            <tr>
+                <td class="td-role">
+                    {{ri + 1}}
+                </td>
+                <td>
+                    <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'" type="text"
+                        [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName">
+                </td>
+                <td>
+                    <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'" type="text"
+                        [readonly]="!rowData.isEnable" [(ngModel)]="rowData.description">
+                </td>
+                <td>
+                    <input class="form-control" style="font-size: 5px;" type="checkbox" [checked]="rowData.active"
+                        [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
+                </td>
+                <td style="text-align:center">
+                    <span *ngIf="!rowData.isEnable" class="font-20 m-r-20" style="color: #3e3e3e;"
+                        (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit"></i></span>
+                    <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: #398bf7;"><i class="fa fa-save"
+                            (click)="onSave(rowData)"></i></span>
+                    <span *ngIf="rowData.isEnable" class="font-20 m-r-20" style="color: red;"><i class="fa fa-remove"
+                            (click)="onCancel(rowData)"></i></span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

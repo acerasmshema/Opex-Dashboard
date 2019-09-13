@@ -1,19 +1,16 @@
-import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { ConsumptionModel } from '../../shared/models/consumption-model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { DatePipe } from '@angular/common';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ConsumptionService {
 
   consumptionKpiUrl = API_URL.apiURLs.CONSUMPTION_API_URL;
@@ -22,7 +19,6 @@ export class ConsumptionService {
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
     private datePipe: DatePipe,
-    private localStorageService: LocalStorageService,
     private messageService:MessageService) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
