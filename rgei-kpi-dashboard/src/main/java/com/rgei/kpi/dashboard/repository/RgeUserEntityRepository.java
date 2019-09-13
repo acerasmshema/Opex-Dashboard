@@ -38,7 +38,4 @@ public interface RgeUserEntityRepository extends JpaRepository<RgeUserEntity, Lo
 	
 	@Query("Select ru from RgeUserEntity ru, IN (ru.userRoleMills) AS urm WHERE urm.millId = :millId Order By ru.firstName Asc")
 	public List<RgeUserEntity> findAllUsersByMillId(@Param("millId") Integer millId);
-	
-	@Query("Select ru from RgeUserEntity ru Where ru.email = :value OR ru.loginId = :value")
-	public RgeUserEntity findByUsernameAndEmail(@Param("value") String value);
 }

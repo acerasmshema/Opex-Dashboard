@@ -92,12 +92,4 @@ public class UserManagementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "validateUsernameAndEmail", notes = "Validate username/email received in request, throw exception if it exists")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK"), @ApiResponse(code = 500, message = "RecordExistException") })
-	@GetMapping("/v1/validate_user_details")
-	public ResponseEntity<HttpStatus> validateUsernameAndEmail(@RequestHeader(name = "value") String requestParam) {
-		logger.info("Validation Email/Username for ", requestParam);
-		userManagementService.validateUserNameAndEmail(requestParam);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 }

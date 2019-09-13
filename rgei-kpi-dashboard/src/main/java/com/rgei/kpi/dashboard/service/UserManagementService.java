@@ -19,6 +19,4 @@ public interface UserManagementService {
 	List<Department> getDepartments();
 
 	List<User> getUsersByMillId(Integer millId);
-	
-	Boolean validateUserNameAndEmail(String value);
 }

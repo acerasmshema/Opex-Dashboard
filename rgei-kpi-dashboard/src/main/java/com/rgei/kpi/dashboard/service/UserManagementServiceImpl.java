@@ -13,7 +13,6 @@ import com.rgei.kpi.dashboard.entities.CountryEntity;
 import com.rgei.kpi.dashboard.entities.DepartmentEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
-import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
@@ -115,13 +114,4 @@ public class UserManagementServiceImpl implements UserManagementService {
 		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
 	}
 	
-	@Override
-	public Boolean validateUserNameAndEmail(String value) {
-		logger.info("Inside service call to validate user by Email/Username : "+value);
-		RgeUserEntity entity = rgeUserEntityRepository.findByUsernameAndEmail(value);
-		if(entity != null) {
-			throw new RecordExistException("User with Email/Username already exists");
-		}
-		return true;
-	}
 }
