@@ -56,6 +56,8 @@ public class UserManagementController {
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "getDepartments", notes = "Retrieve active departments", response = Department.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/departments")
 	public ResponseEntity<List<Department>> getDepartments(){
 		logger.info("Get all active departments list");
@@ -63,6 +65,8 @@ public class UserManagementController {
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "getUsersByMillId", notes = "Retrieve all users by Mill Id", response = User.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/users")
 	public ResponseEntity<List<User>> getUsersByMillId(@RequestHeader(value = "millId") String millId){
 		logger.info("Get all users by mill Id : "+millId);
@@ -70,7 +74,7 @@ public class UserManagementController {
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "getRoles", notes = "Create new user role")
+	@ApiOperation(value = "createUserRole", notes = "Create new user role")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
 	@PostMapping("/v1/create_user_role")
 	public ResponseEntity<HttpStatus> createUserRole(@RequestBody UserRole userRole){
@@ -79,7 +83,7 @@ public class UserManagementController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 		
-	@ApiOperation(value = "getRoles", notes = "Update user role")
+	@ApiOperation(value = "updateUserRole", notes = "Update user role")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping("/v1/update_user_role")
 	public ResponseEntity<HttpStatus> updateUserRole(@RequestBody UserRole userRole) {
