@@ -61,6 +61,7 @@ public class RgeUserEntity implements Serializable {
 	@Column(name = "created_date")
 	private Time createdOn;
 
+	@Column(name = "email")
 	private String email;
 
 	@Column(name = "first_name")
