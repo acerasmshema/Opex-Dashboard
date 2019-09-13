@@ -80,7 +80,7 @@ public class UserManagementUtility {
 	}
 	
 	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities){
-		List<Department> responseList = new ArrayList<Department>();
+		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
 		for(DepartmentEntity entity : entities) {
 			resp = new Department();
@@ -97,26 +97,26 @@ public class UserManagementUtility {
 		return responseList;
 	}
 	
-	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities){
-		List<User> responseList = new ArrayList<User>();
+	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities, Integer millId){
+		List<User> responseList = new ArrayList<>();
 		User user = null;
 		for(RgeUserEntity entity : entities) {
 			user = new User();
 			user.setUserId(CommonFunction.getString(entity.getUserId()));
-			user.setFirstName(entity.getFirstName());
-			user.setLastName(entity.getLastName());
-			user.setUsername(entity.getLoginId());
-			user.setCountry(entity.getCountry());
-			user.setAddress(entity.getAddress());
+			user.setFirstName(CommonFunction.getString(entity.getFirstName()));
+			user.setLastName(CommonFunction.getString(entity.getLastName()));
+			user.setUsername(CommonFunction.getString(entity.getLoginId()));
+			user.setCountry(CommonFunction.getString(entity.getCountry()));
+			user.setAddress(CommonFunction.getString(entity.getAddress()));
 			user.setActive(entity.getIsActive());
-			user.setEmail(entity.getEmail());
-			user.setPhone(entity.getPhone());
-			user.setCreatedBy(entity.getCreatedBy());
+			user.setEmail(CommonFunction.getString(entity.getEmail()));
+			user.setPhone(CommonFunction.getString(entity.getPhone()));
+			user.setCreatedBy(CommonFunction.getString(entity.getCreatedBy()));
 			user.setCreatedDate(CommonFunction.getString(entity.getCreatedOn()));
-			user.setUpdatedBy(entity.getUpdatedBy());
+			user.setUpdatedBy(CommonFunction.getString(entity.getUpdatedBy()));
 			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
 			user.setDepartment(getDepartment(entity.getDepartment()));
-			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
+			user.setMillRoles(getMillRoles(entity.getUserRoleMills(), millId));
 			responseList.add(user);
 		}
 		return responseList;
@@ -129,24 +129,26 @@ public class UserManagementUtility {
 			department.setDepartmentId(entity.getDepartmentId());
 			department.setDepartmentCode(entity.getDepartmentCode());
 			department.setActive(entity.getActive());
-			department.setCreatedBy(entity.getCreatedBy());
+			department.setCreatedBy(CommonFunction.getString(entity.getCreatedBy()));
 			department.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
-			department.setUpdatedBy(entity.getUpdatedBy());
+			department.setUpdatedBy(CommonFunction.getString(entity.getUpdatedBy()));
 			department.setUpdatedDate(CommonFunction.getString(entity.getUpdatedDate()));
 			return department;
 		}
 		return null;
 	}
 	
-	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities){
+	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities, Integer millId){
 		List<MillRole> millRoles = new ArrayList<>();
 		MillRole millRole = null;
 		if(Objects.nonNull(userRoleMillEntities)) {
 			for(UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
+				if(millId.equals(entity.getMill().getMillId())) {
 				millRole.setSelectedMill(getMillDetail(entity.getMill()));
 				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
 				millRoles.add(millRole);
+				}
 			}
 		}
 		return millRoles;
@@ -174,9 +176,10 @@ public class UserManagementUtility {
 			userRole.setRoleName(roleEntity.getRoleName());
 			userRole.setActive(roleEntity.getStatus());
 			userRole.setUserRoleId(CommonFunction.getString(roleEntity.getRoleId()));
-			userRole.setCreatedBy(roleEntity.getCreatedBy());
+			userRole.setDescription(CommonFunction.getString(roleEntity.getDescription()));
+			userRole.setCreatedBy(CommonFunction.getString(roleEntity.getCreatedBy()));
 			userRole.setCreatedDate(CommonFunction.getString(roleEntity.getCreatedDate()));
-			userRole.setUpdatedBy(roleEntity.getUpdatedBy());
+			userRole.setUpdatedBy(CommonFunction.getString(roleEntity.getUpdatedBy()));
 			userRole.setUpdatedDate(CommonFunction.getString(roleEntity.getUpdatedDate()));
 		}
 		return userRole;

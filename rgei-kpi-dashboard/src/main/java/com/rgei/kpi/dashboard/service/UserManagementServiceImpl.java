@@ -15,6 +15,7 @@ import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.repository.DepartmentRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
@@ -69,18 +70,18 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public void createUserRole(UserRole userRole) {
-		logger.info("Inside service call to get create new user role for request : "+userRole);
-		UserRoleEntity entity = UserManagementUtility.fetchUserRoleEntity(userRole);
+		logger.info("Inside service call to create new user role for request : " + userRole);
+		UserRoleEntity userRoleEntity = UserManagementUtility.fetchUserRoleEntity(userRole);
 		try {
-		userRoleRepository.save(entity);
-		}catch(RuntimeException e) {
-			throw new RecordNotCreatedException("Error while creating new user role :"+ userRole);
+			userRoleRepository.save(userRoleEntity);
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
 		}
 	}
 
 	@Override
 	public void updateUserRole(UserRole userRole) {
-		logger.info("Inside service call to get update user role for request : " + userRole);
+		logger.info("Inside service call to update user role for request : " + userRole);
 		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
 		if (null != entity) {
 			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
@@ -90,7 +91,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		try {
 			userRoleRepository.save(entity);
 		} catch (RuntimeException e) {
-			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
+			throw new RecordNotUpdatedException("Error while updating user role :" + userRole);
 		}
 	}
 
@@ -109,7 +110,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to get users by Mill Id : "+millId);
 		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId);
 		if(userEntities != null && !userEntities.isEmpty()) {
-			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities);
+			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities, millId);
 		}
 		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
 	}
