@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
-import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.Department;
+import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.service.UserManagementService;
+import com.rgei.kpi.dashboard.util.CommonFunction;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -54,7 +56,25 @@ public class UserManagementController {
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "getRoles", notes = "Create new user role")
+	@ApiOperation(value = "getDepartments", notes = "Retrieve active departments", response = Department.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping("/v1/departments")
+	public ResponseEntity<List<Department>> getDepartments(){
+		logger.info("Get all active departments list");
+		List<Department> responseList = userManagementService.getDepartments();
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "getUsersByMillId", notes = "Retrieve all users by Mill Id", response = User.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping("/v1/users")
+	public ResponseEntity<List<User>> getUsersByMillId(@RequestHeader(value = "millId") String millId){
+		logger.info("Get all users by mill Id : "+millId);
+		List<User> responseList = userManagementService.getUsersByMillId(CommonFunction.covertToInteger(millId));
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "createUserRole", notes = "Create new user role")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
 	@PostMapping("/v1/create_user_role")
 	public ResponseEntity<HttpStatus> createUserRole(@RequestBody UserRole userRole){
@@ -63,7 +83,7 @@ public class UserManagementController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 		
-	@ApiOperation(value = "getRoles", notes = "Update user role")
+	@ApiOperation(value = "updateUserRole", notes = "Update user role")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping("/v1/update_user_role")
 	public ResponseEntity<HttpStatus> updateUserRole(@RequestBody UserRole userRole) {
