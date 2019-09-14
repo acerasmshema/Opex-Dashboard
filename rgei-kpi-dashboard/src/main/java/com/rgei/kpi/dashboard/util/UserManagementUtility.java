@@ -90,7 +90,7 @@ public class UserManagementUtility {
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
 			newUser.setUserPassword(user.getPassword());
-			newUser.setIsActive(Boolean.TRUE);
+			newUser.setIsActive(user.getActive());
 			newUser.setCreatedBy(user.getCreatedBy());
 			newUser.setCreatedOn(date);
 			newUser.setUpdatedBy(user.getUpdatedBy());
