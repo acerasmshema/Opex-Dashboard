@@ -45,9 +45,10 @@ export class UserDetailComponent implements OnInit {
     this.userDetailService.saveUserDetail(userDetail, this.users);
   }
 
-  onCancel(rUser: UserDetail) {
-    const userDetail = this.users.find((user) => user.userId === rUser.userId)
+  onCancel(userInfo: UserDetail) {
+    const userDetail = this.users.find((user) => user.userId === userInfo.userId)
     userDetail.isReadOnly = false;
+    this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
   }
 
   onCreateUser() {
