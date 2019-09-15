@@ -15,4 +15,5 @@ public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long>{
 	public List<UserRoleEntity> findAllByOrderByRoleIdAsc();
 	
 	public UserRoleEntity findByRoleId(Long roleId);
+	
 }

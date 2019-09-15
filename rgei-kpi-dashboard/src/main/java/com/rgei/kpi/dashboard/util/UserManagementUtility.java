@@ -1,6 +1,7 @@
 package com.rgei.kpi.dashboard.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +11,7 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
@@ -19,10 +21,14 @@ import com.rgei.kpi.dashboard.response.model.UserRole;
 
 public class UserManagementUtility {
 
-	public static List<UserRole> convertToUserRoleResponse(List<UserRoleEntity> entities){
+	// no-arg constructor
+	private UserManagementUtility() {
+	}
+
+	public static List<UserRole> convertToUserRoleResponse(List<UserRoleEntity> entities) {
 		List<UserRole> responseList = new ArrayList<>();
 		UserRole resp = null;
-		for(UserRoleEntity entity : entities) {
+		for (UserRoleEntity entity : entities) {
 			resp = new UserRole();
 			resp.setUserRoleId(entity.getRoleId().toString());
 			resp.setRoleName(entity.getRoleName());
@@ -31,17 +37,16 @@ public class UserManagementUtility {
 			resp.setCreatedBy(entity.getCreatedBy());
 			resp.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
 			resp.setUpdatedBy(entity.getUpdatedBy());
-			resp.setUpdatedDate(CommonFunction.getString(entity.getUpdatedDate()));	
+			resp.setUpdatedDate(CommonFunction.getString(entity.getUpdatedDate()));
 			responseList.add(resp);
 		}
 		return responseList;
 	}
-	
-	
-	public static List<CountryResponse> convertToCountryResponse(List<CountryEntity> entities){
+
+	public static List<CountryResponse> convertToCountryResponse(List<CountryEntity> entities) {
 		List<CountryResponse> responseList = new ArrayList<>();
 		CountryResponse resp = null;
-		for(CountryEntity entity : entities) {
+		for (CountryEntity entity : entities) {
 			resp = new CountryResponse();
 			resp.setCountryId(entity.getCountryId().toString());
 			resp.setCountryName(entity.getCountryName());
@@ -56,7 +61,6 @@ public class UserManagementUtility {
 		return responseList;
 	}
 
-
 	public static UserRoleEntity fetchUserRoleEntity(UserRole userRole) {
 		UserRoleEntity newUserRole = new UserRoleEntity();
 		newUserRole.setRoleName(userRole.getRoleName());
@@ -69,7 +73,6 @@ public class UserManagementUtility {
 		return newUserRole;
 	}
 
-
 	public static UserRoleEntity updateFetchedUserRoleEntity(UserRole userRole, UserRoleEntity entity) {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
@@ -78,11 +81,51 @@ public class UserManagementUtility {
 		entity.setUpdatedDate(new java.util.Date());
 		return entity;
 	}
-	
-	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities){
+
+	public static RgeUserEntity createUserEntity(User user) {
+		RgeUserEntity newUser = new RgeUserEntity();
+		Date date = new Date();
+		try {
+			newUser.setFirstName(user.getFirstName());
+			newUser.setLastName(user.getLastName());
+			newUser.setAddress(user.getAddress());
+			newUser.setCountry(user.getCountry());
+			newUser.setDepartmentId(user.getDepartment().getDepartmentId());
+			newUser.setEmail(user.getEmail());
+			newUser.setLoginId(user.getUsername());
+			newUser.setPhone(user.getPhone());
+			newUser.setUserPassword(user.getPassword());
+			newUser.setIsActive(user.getActive());
+			newUser.setCreatedBy(user.getCreatedBy());
+			newUser.setCreatedOn(date);
+			newUser.setUpdatedBy(user.getUpdatedBy());
+			newUser.setUpdatedOn(date);
+		} catch (Exception e) {
+			throw new RecordNotCreatedException("Error while creating new user role :" + user);
+		}
+		return newUser;
+	}
+
+	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole) {
+		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
+		Date date = new Date();
+		try {
+			userRoleMill.setMillId(Integer.parseInt(millRole.getSelectedMill().getMillId()));
+			userRoleMill.setRoleId(Long.parseLong(millRole.getSelectedUserRole().getUserRoleId()));
+			userRoleMill.setStatus(Boolean.TRUE);
+			userRoleMill.setCreatedDate(date);
+			userRoleMill.setUpdatedDate(date);
+
+		} catch (Exception e) {
+			throw new RecordNotCreatedException("Error while creating new user role relation :" + millRole);
+		}
+		return userRoleMill;
+	}
+
+	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities) {
 		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
-		for(DepartmentEntity entity : entities) {
+		for (DepartmentEntity entity : entities) {
 			resp = new Department();
 			resp.setDepartmentId(entity.getDepartmentId());
 			resp.setDepartmentName(entity.getDepartmentName());
@@ -96,11 +139,11 @@ public class UserManagementUtility {
 		}
 		return responseList;
 	}
-	
-	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities, Integer millId){
+
+	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities, Integer millId) {
 		List<User> responseList = new ArrayList<>();
 		User user = null;
-		for(RgeUserEntity entity : entities) {
+		for (RgeUserEntity entity : entities) {
 			user = new User();
 			user.setUserId(CommonFunction.getString(entity.getUserId()));
 			user.setFirstName(CommonFunction.getString(entity.getFirstName()));
@@ -121,9 +164,9 @@ public class UserManagementUtility {
 		}
 		return responseList;
 	}
-	
+
 	public static Department getDepartment(DepartmentEntity entity) {
-		if(entity != null) {
+		if (entity != null) {
 			Department department = new Department();
 			department.setDepartmentName(entity.getDepartmentName());
 			department.setDepartmentId(entity.getDepartmentId());
@@ -137,26 +180,26 @@ public class UserManagementUtility {
 		}
 		return null;
 	}
-	
-	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities, Integer millId){
+
+	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities, Integer millId) {
 		List<MillRole> millRoles = new ArrayList<>();
 		MillRole millRole = null;
-		if(Objects.nonNull(userRoleMillEntities)) {
-			for(UserRoleMillEntity entity : userRoleMillEntities) {
+		if (Objects.nonNull(userRoleMillEntities)) {
+			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
-				if(millId.equals(entity.getMill().getMillId())) {
-				millRole.setSelectedMill(getMillDetail(entity.getMill()));
-				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
-				millRoles.add(millRole);
+				if (millId.equals(entity.getMill().getMillId())) {
+					millRole.setSelectedMill(getMillDetail(entity.getMill()));
+					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
+					millRoles.add(millRole);
 				}
 			}
 		}
 		return millRoles;
 	}
-	
-	public static MillDetail getMillDetail(MillEntity millEntity){
+
+	public static MillDetail getMillDetail(MillEntity millEntity) {
 		MillDetail millDetail = new MillDetail();
-		if(millEntity != null) {
+		if (millEntity != null) {
 			millDetail.setMillName(millEntity.getMillName());
 			millDetail.setActive(millEntity.getActive());
 			millDetail.setCountryId(CommonFunction.getString(millEntity.getCountry().getCountryId()));
@@ -169,10 +212,10 @@ public class UserManagementUtility {
 		}
 		return millDetail;
 	}
-	
+
 	public static UserRole getUserRole(UserRoleEntity roleEntity) {
 		UserRole userRole = new UserRole();
-		if(roleEntity != null) {
+		if (roleEntity != null) {
 			userRole.setRoleName(roleEntity.getRoleName());
 			userRole.setActive(roleEntity.getStatus());
 			userRole.setUserRoleId(CommonFunction.getString(roleEntity.getRoleId()));
@@ -184,4 +227,5 @@ public class UserManagementUtility {
 		}
 		return userRole;
 	}
+
 }
