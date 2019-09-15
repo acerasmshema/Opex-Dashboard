@@ -390,13 +390,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onAddMillRole() {
-    let millRole = new MillRole();
-    millRole.millRoleId = Math.random();
-    millRole.mills = this.statusService.common.mills;
-    millRole.userRoles = this.statusService.common.userRoles;
-    
-    let millRoles: any = this.userDetailForm.controls.millRoles;
-    millRoles.push(millRole);
+    this.dialogService.addMillRole(this.userDetailForm);
   }
 
   onDeleteMillRole(millRoleId: number) {

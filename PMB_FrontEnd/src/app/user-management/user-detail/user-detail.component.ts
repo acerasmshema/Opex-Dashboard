@@ -17,8 +17,8 @@ export class UserDetailComponent implements OnInit {
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },
     { field: 'email', header: 'Email' },
-    { field: 'role', header: 'Role' },
-    { field: 'isActive', header: 'Status' }
+    { field: 'millRoles', header: 'Role' },
+    { field: 'active', header: 'Status' }
   ];
 
   users: UserDetail[] = [];
@@ -32,11 +32,11 @@ export class UserDetailComponent implements OnInit {
   }
 
   expandUserDetail(userId: string) {
-    console.log(userId);
-    
+    const userDetail = this.users.find((user) => user.userId === userId);
+    this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
   }
 
-  onEdit(userId: number) {
+  onEdit(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId)
     userDetail.isReadOnly = true;
   }

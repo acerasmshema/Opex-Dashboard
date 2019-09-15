@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StatusService } from '../shared/service/status.service';
 import { SidebarRequest } from '../core/sidebar/sidebar-request';
-import { CommonService } from '../shared/service/common/common.service';
 
 @Component({
   selector: 'app-user-management',
@@ -10,8 +9,7 @@ import { CommonService } from '../shared/service/common/common.service';
 })
 export class UserManagementComponent implements OnInit {
 
-  constructor(private statusService: StatusService,
-    private commonService: CommonService) { }
+  constructor(private statusService: StatusService) { }
 
   ngOnInit() {
     document.getElementById("select_mill").style.display = "block";

@@ -63,7 +63,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
           else {
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
-            this.commonService.getAllMills(this.sidebarForm);
+            this.sidebarService.getMills(this.sidebarForm);
             this.commonService.getAllBuType(this.sidebarForm);
             this.getBenchmarkKpiDetail();
             this.searchKpiData = new SearchKpiData();

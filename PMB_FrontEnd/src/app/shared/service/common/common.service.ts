@@ -2,15 +2,11 @@ import { Injectable } from "@angular/core";
 import { ApiCallService } from '../api/api-call.service';
 import { StatusService } from '../status.service';
 import { API_URL } from '../../constant/API_URLs';
-import { UserRole } from 'src/app/user-management/user-role/user-role.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
 import { Department } from 'src/app/user-management/user-detail/department.model';
-import { MillDetail } from '../../models/mill-detail.model';
-import { CommonMessage } from '../../constant/Common-Message';
-import { MessageService } from 'primeng/primeng';
-import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CommonService {
@@ -22,44 +18,13 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
-        private messageService: MessageService,
         private statusService: StatusService) { }
 
-    public getAllMills(millForm: any) {
-        if (this.statusService.common.mills.length === 0) {
-            const requestData = {
-                countryIds: "46,104"
-            }
-            this.apiCallService.callGetAPIwithData(this.allMills, requestData).
-                subscribe(
-                    (mills: MillDetail[]) => {
-                        if (millForm instanceof SidebarForm) {
-                            millForm.mills = mills;
-                        }
-                        else if (millForm instanceof MillRole) {
-                            millForm.mills = mills;
-                        }
-                        this.statusService.common.mills = mills;
-                    },
-                    (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                        }
-                    });
+    public getAllMills(): Observable<any> {
+        const requestData = {
+            countryIds: "1,2"
         }
-        else {
-            if (millForm instanceof SidebarForm) {
-                millForm.mills = this.statusService.common.mills;
-            }
-            else if (millForm instanceof MillRole) {
-                millForm.mills = this.statusService.common.mills;
-            }
-        }
-
-
+        return this.apiCallService.callGetAPIwithData(this.allMills, requestData);
     }
 
     public getAllBuType(sidebarForm: SidebarForm) {
@@ -138,30 +103,14 @@ export class CommonService {
         }
     }
 
-
-    public getAllUserRole(userRoles: UserRole[], activeAll: boolean) {
-        if (this.statusService.common.userRoles.length === 0) {
-            const requestData = {
-                activeRoles: "" + activeAll
-            }
-            this.apiCallService.callGetAPIwithData(this.allUserRole, requestData)
-                .subscribe(
-                    (roleList: UserRole[]) => {
-                        userRoles.push(...roleList);
-                        this.statusService.common.userRoles = roleList;
-                    },
-                    (error: any) => {
-                        console.log("error in user role");
-                    }
-
-                );
+    public getAllUserRole(activeUserRoles: boolean): Observable<any> {
+        const requestData = {
+            activeRoles: "" + activeUserRoles
         }
-        else {
-            userRoles.push(...this.statusService.common.userRoles);
-        }
+        return this.apiCallService.callGetAPIwithData(this.allUserRole, requestData);
     }
 
-    clearStatus() {
+    public clearStatus() {
         this.statusService.common.buTypes = [];
         this.statusService.common.countryList = [];
         this.statusService.common.userRoles = [];

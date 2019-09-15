@@ -3,21 +3,19 @@ import { Department } from './department.model';
 import { Country } from 'src/app/shared/models/country.model';
 
 export class UserDetail {
-    userId: number;
+    userId: string;
     firstName: string;
     lastName: string;
     username: string;
     email: string;
     phone: string;
-    createdBy: string;
-    createdDate: string;
     address: string;
-    isActive: boolean;
+    active: boolean;
     country: string;
     department: Department;
     millRoles: MillRole[] = [];
+    createdBy: string;
     updatedBy: string;
-    updatedDate: string;
     role: string;
     isReadOnly: boolean;
     showDialog: boolean;
