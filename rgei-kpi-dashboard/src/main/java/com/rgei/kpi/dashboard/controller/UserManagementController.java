@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
+
+import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.response.model.UserRole;
@@ -92,4 +94,14 @@ public class UserManagementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+
+	@ApiOperation(value = "createUser", notes = "Create User")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
+	@PostMapping("/v1/create_user")
+	public ResponseEntity<HttpStatus> createUser(@RequestBody User user){
+		logger.info("Creating new user role", user);
+		userManagementService.createUser(user);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
 }

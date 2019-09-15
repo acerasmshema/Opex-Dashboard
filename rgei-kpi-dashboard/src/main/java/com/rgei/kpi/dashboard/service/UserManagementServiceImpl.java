@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
@@ -13,14 +14,17 @@ import com.rgei.kpi.dashboard.entities.CountryEntity;
 import com.rgei.kpi.dashboard.entities.DepartmentEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
+import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.repository.DepartmentRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
+import com.rgei.kpi.dashboard.repository.RgeUserRoleMillRepository;
 import com.rgei.kpi.dashboard.repository.UserRoleRepository;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
+import com.rgei.kpi.dashboard.response.model.MillRole;
 import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.response.model.UserRole;
 import com.rgei.kpi.dashboard.util.UserManagementUtility;
@@ -29,24 +33,27 @@ import com.rgei.kpi.dashboard.util.UserManagementUtility;
 public class UserManagementServiceImpl implements UserManagementService {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementServiceImpl.class);
-	
+
 	@Resource
 	CountryRepository countryRepository;
-	
+
 	@Resource
 	UserRoleRepository userRoleRepository;
+
+	@Resource
+	RgeUserEntityRepository rgeUserEntityRepository;
+
+	@Resource
+	RgeUserRoleMillRepository rgeUserRoleMillRepository;
 	
 	@Resource
 	DepartmentRepository departmentRepository;
-	
-	@Resource
-	RgeUserEntityRepository rgeUserEntityRepository;
-	
+
 	@Override
 	public List<CountryResponse> getCountryList() {
 		logger.info("Inside service call to get all countries");
 		List<CountryEntity> entities = countryRepository.findAllByActiveOrderByCountryNameAsc(true);
-		if(entities != null && !entities.isEmpty()) {
+		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToCountryResponse(entities);
 		}
 		throw new RecordNotFoundException("Country list not available in database");
@@ -54,14 +61,14 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
-		logger.info("Inside service call to get roles by status : "+activeRoles);
+		logger.info("Inside service call to get roles by status : " + activeRoles);
 		List<UserRoleEntity> entities = null;
-		if(Objects.nonNull(activeRoles) && activeRoles) {
+		if (Objects.nonNull(activeRoles) && activeRoles) {
 			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
 		} else {
 			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
 		}
-		if(entities != null && !entities.isEmpty()) {
+		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
 		}
 		throw new RecordNotFoundException("Roles list not available in database");
@@ -69,12 +76,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public void createUserRole(UserRole userRole) {
-		logger.info("Inside service call to get create new user role for request : "+userRole);
+		logger.info("Inside service call to get create new user role for request : " + userRole);
 		UserRoleEntity entity = UserManagementUtility.fetchUserRoleEntity(userRole);
 		try {
-		userRoleRepository.save(entity);
-		}catch(RuntimeException e) {
-			throw new RecordNotCreatedException("Error while creating new user role :"+ userRole);
+			userRoleRepository.save(entity);
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
 		}
 	}
 
@@ -94,6 +101,31 @@ public class UserManagementServiceImpl implements UserManagementService {
 		}
 	}
 
+	@Transactional
+	@Override
+	public void createUser(User user) {
+		logger.info("Inside service call to get create new user for request : " + user);
+		try {
+			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
+			rgeUserEntityRepository.save(userEntity);
+
+			if (userEntity != null) {
+				user.setUserId(userEntity.getUserId().toString());
+				List<MillRole> millRoles = user.getMillRoles();
+				for (MillRole millRole : millRoles) {
+					UserRoleMillEntity userRoleMillEntity = UserManagementUtility.createUserRoleMillEntity(millRole);
+					userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
+					userRoleMillEntity.setCreatedBy(user.getCreatedBy());
+					userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
+					rgeUserRoleMillRepository.save(userRoleMillEntity);
+				}
+			}
+
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating new user  :" + user);
+		}
+	}
+	
 	@Override
 	public List<Department> getDepartments() {
 		logger.info("Inside service call to get departments");
@@ -113,5 +145,5 @@ public class UserManagementServiceImpl implements UserManagementService {
 		}
 		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
 	}
-	
+
 }

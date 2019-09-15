@@ -11,12 +11,15 @@ public interface UserManagementService {
 	List<CountryResponse> getCountryList();
 
 	List<UserRole> getUserRolesByStatus(Boolean activeRoles);
-
+	
 	void createUserRole(UserRole userRole);
-
+	
 	void updateUserRole(UserRole userRole);
-
+	
+	void createUser(User user);
+	
 	List<Department> getDepartments();
-
+	
 	List<User> getUsersByMillId(Integer millId);
+
 }
