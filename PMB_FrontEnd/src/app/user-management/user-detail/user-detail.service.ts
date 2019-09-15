@@ -72,6 +72,16 @@ export class UserDetailService {
         return userDetailForm;
     }
 
+    addMillRole(userDetailForm: FormGroup) {
+        let millRoles: any = userDetailForm.controls.millRoles;
+        millRoles.controls.push(
+            new FormControl({
+                selectedMill: new FormControl(null),
+                selectedUserRole: new FormControl(null),
+            })
+        );
+    }
+    
     saveUserDetail(user: UserDetail, users: UserDetail[]) {
         // const userDetail = users.find((user) => user.userId === user.userId)
         // userDetail.isReadOnly = false;
@@ -132,4 +142,5 @@ export class UserDetailService {
             });
         }
     }
+
 }

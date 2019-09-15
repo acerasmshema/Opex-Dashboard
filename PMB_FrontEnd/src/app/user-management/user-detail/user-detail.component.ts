@@ -41,8 +41,10 @@ export class UserDetailComponent implements OnInit {
     userDetail.isReadOnly = true;
   }
 
-  onSave(userDetail: UserDetail) {
+  onSave(userInfo: UserDetail) {
+    const userDetail = this.users.find((user) => user.userId === userInfo.userId)
     this.userDetailService.saveUserDetail(userDetail, this.users);
+    userDetail.isReadOnly = false;
   }
 
   onCancel(userInfo: UserDetail) {
@@ -58,4 +60,22 @@ export class UserDetailComponent implements OnInit {
     this.statusService.dialogSubject.next(data);
   }
 
+  onAddMillRole(isReadOnly: boolean) {
+    if (!isReadOnly) {
+      this.userDetailService.addMillRole(this.userDetailForm);
+    }
+    else {
+      return false;
+    }
+  }
+
+  onDeleteMillRole(index: number, isReadOnly: boolean) {
+    if (!isReadOnly) {
+      let millRoles: any = this.userDetailForm.controls.millRoles;
+      millRoles.removeAt(index);
+    }
+    else {
+      return false;
+    }
+  }
 }
