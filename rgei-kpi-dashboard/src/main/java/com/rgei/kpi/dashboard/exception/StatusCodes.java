@@ -43,6 +43,7 @@ public class StatusCodes {
 	public static final String LOGOUT_ERROR = "1009";
 	public static final String RECORD_NOT_FOUND = "1010";
 	public static final String INACTIVE_USER = "1011";
+	public static final String RECORD_EXISTS = "1012";
 	
 	
 
