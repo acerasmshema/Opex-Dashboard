@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,6 +29,21 @@ public class UserRoleMillEntity {
 	
 	@Column(name="mill_id")
 	private Integer millId;
+	
+	@Column(name="created_by")
+	private String createdBy;
+	
+	@Column(name="updated_by")
+	private String updatedBy;
+	
+	@Column(name="active")
+	private Boolean status;
+	
+	@Column(name="created_date")
+	private Date createdDate;
+
+	@Column(name="updated_date")
+	private Date updatedDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", insertable = false, updatable = false)
@@ -94,5 +111,37 @@ public class UserRoleMillEntity {
 
 	public void setRole(UserRoleEntity role) {
 		this.role = role;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 }
