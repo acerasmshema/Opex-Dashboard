@@ -2,21 +2,29 @@ import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { StatusService } from 'src/app/shared/service/status.service';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, Validators, FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { UserRole } from 'src/app/user-management/user-role/user-role.model';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
+import { MessageService } from 'primeng/primeng';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class DialogService {
 
     saveAnnotation = API_URL.apiURLs.SAVE_ANNOTATION_URL;
     findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
+    userURL = API_URL.user_api_URLs.CREATE_USER;
 
     constructor(private apiCallService: ApiCallService,
         private commonService: CommonService,
         private formBuilder: FormBuilder,
+        private messageService: MessageService,
+        private validationService: ValidationService,
         private statusService: StatusService) { }
 
     public createAnnotation(data: any) {
@@ -31,7 +39,9 @@ export class DialogService {
         let millRoles = this.formBuilder.array([
             new FormControl({
                 userRoles: this.formBuilder.array([]),
-                mills: this.formBuilder.array([])
+                mills: this.formBuilder.array([]),
+                selectedMill: new FormControl(''),
+                selectedUserRole: new FormControl(''),
             })
         ]);
 
@@ -44,9 +54,11 @@ export class DialogService {
             password: new FormControl(""),
             confirmPassword: new FormControl(""),
             phone: new FormControl(""),
+            selectedCountry: new FormControl(''),
             countryList: this.formBuilder.array([]),
+            selectedDepartment: new FormControl(''),
             departmentList: this.formBuilder.array([]),
-            email: ['', [Validators.required, Validators.email]],
+            email: new FormControl("", [Validators.required, Validators.email], this.validationService.forbiddenEmail.bind(this)),
             millRoles: millRoles,
         });
 
@@ -63,7 +75,9 @@ export class DialogService {
         millRoles.controls.push(
             new FormControl({
                 userRoles: this.formBuilder.array([]),
-                mills: this.formBuilder.array([])
+                mills: this.formBuilder.array([]),
+                selectedMill: new FormControl(''),
+                selectedUserRole: new FormControl(''),
             })
         );
         this.getAllMills(userDetailForm);
@@ -124,6 +138,47 @@ export class DialogService {
                 userRoleControl.push(new FormControl(userRole));
             });
         }
+    }
+
+    createNewUser(userDetailForm: FormGroup) {
+        this.statusService.spinnerSubject.next(true);
+
+        let millRoles: MillRole[] = [];
+        let millRoleList: any = userDetailForm.controls.millRoles;
+        millRoleList.controls.forEach(control => {
+            let millRole = new MillRole();
+            millRole.selectedMill = control.value.selectedMill.value;
+            millRole.selectedUserRole = control.value.selectedUserRole.value;
+            millRoles.push(millRole);
+        });
+
+        let userDetail = new UserDetail();
+        userDetail.username = userDetailForm.controls.username.value;
+        userDetail.password = userDetailForm.controls.password.value;
+        userDetail.firstName = userDetailForm.controls.firstName.value;
+        userDetail.lastName = userDetailForm.controls.lastName.value;
+        userDetail.email = userDetailForm.controls.email.value;
+        userDetail.phone = userDetailForm.controls.phone.value;
+        userDetail.address = userDetailForm.controls.address.value;
+        userDetail.country = userDetailForm.controls.selectedCountry.value;
+        userDetail.department = userDetailForm.controls.selectedDepartment.value;
+        userDetail.millRoles = millRoles;
+        userDetail.createdBy = this.statusService.common.userDetail.username;
+        userDetail.updatedBy = this.statusService.common.userDetail.username;
+
+        this.apiCallService.callAPIwithData(this.userURL, userDetail).
+            subscribe(
+                (response: any) => {
+                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.ADD_SUCCESS });
+                    this.statusService.refreshUserList.next(true);
+                    userDetailForm.controls.show.setValue(false);
+                    this.statusService.spinnerSubject.next(false);
+                },
+                (error: any) => {
+                    console.log("Error");
+                    this.statusService.spinnerSubject.next(false);
+                }
+            );
     }
 
 }

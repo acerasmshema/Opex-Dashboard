@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { CommonService } from 'src/app/shared/service/common/common.service';
+import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 
 @Injectable()
 export class ProfileEditService {
 
     constructor(private formBuilder: FormBuilder,
         private commonService: CommonService,
+        private apiCallService: ApiCallService,
         private statusService: StatusService) { }
 
     createUserDetailForm(): FormGroup {
@@ -30,5 +32,23 @@ export class ProfileEditService {
         this.commonService.getAllDepartment(userDetailForm);
 
         return userDetailForm;
+    }
+
+    saveProfile(userDetailForm: FormGroup) {
+        const userDetail = this.statusService.common.userDetail;
+        userDetail.firstName = userDetailForm.controls.firstName.value;
+        userDetail.lastName = userDetailForm.controls.lastName.value;
+        userDetail.email = userDetailForm.controls.email.value;
+        userDetail.phone = userDetailForm.controls.phone.value;
+        userDetail.address = userDetailForm.controls.address.value;
+
+        this.apiCallService.callAPIwithData("", userDetail).
+            subscribe(() => {
+
+            },
+                (error: any) => {
+                    console.log("Error")
+                }
+            );
     }
 }

@@ -241,7 +241,7 @@
 </div>
 
 <div *ngIf="dialogName === 'addUser'">
-    <form [formGroup]='userDetailForm' (ngSubmit)="onEditProfileSave()">
+    <form [formGroup]='userDetailForm' (ngSubmit)="onCreateUser()">
         <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
             [baseZIndex]="10000" [(visible)]="userDetailForm.controls.show.value">
             <div class="row">
@@ -269,6 +269,15 @@
                     <label class="edit-label required">Email</label>
                     <div class="form-group">
                         <input type="email" class="form-control edit-input" formControlName="email">
+                        <span class="help-block"
+                            *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
+                            <span *ngIf="userDetailForm.get('email').errors['required']" class="error-text">
+                                Email is required</span>
+                            <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">
+                                Please enter valid email</span>
+                            <span *ngIf="userDetailForm.get('email').errors['emailExit']" class="error-text">
+                                Already Exist</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -282,10 +291,12 @@
                 <div class="col-sm-4">
                     <label class="edit-label">Country</label>
                     <div class="form-group">
-                        <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                        <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                            (change)="onCountryChange($event.target.value)">
                             <option class="edit-input" selected value="" disabled>Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
-                                class="edit-input"> {{country.value.countryName}}</option>
+                                class="edit-input" [value]="country.value.countryName"> {{country.value.countryName}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -294,16 +305,19 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Username</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="username">
+                        <input type="text" class="form-control edit-input" formControlName="username"
+                            autocomplete="off">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <label class="edit-label required">Department</label>
                     <div class="form-group">
-                        <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                        <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                            (change)="onDepartmentChange($event.target.value)">
                             <option class="edit-input" selected value="" disabled>Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
-                                class="edit-input"> {{department.value.departmentName}}</option>
+                                [value]="department.value.departmentId" class="edit-input">
+                                {{department.value.departmentName}}</option>
                         </select>
                     </div>
                 </div>
@@ -312,7 +326,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Password</label>
                     <div class="form-group">
-                        <input type="password" class="form-control edit-input" formControlName="password">
+                        <input type="password" class="form-control edit-input" formControlName="password"
+                            autocomplete="false">
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -340,17 +355,22 @@
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls">
                             <td style="width: 30%;">
-                                <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                                <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                                    (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
-                                    <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input">
+                                    <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
+                                        [value]="mill.value.millId">
                                         {{mill.value.millName}}</option>
                                 </select>
                             </td>
                             <td style="width: 55%;">
-                                <select name="" id="" class="form-control edit-input" style="height: 34px;">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>
                                     <option *ngFor="let userRole of millRole.value.userRoles.controls"
-                                        class="edit-input">{{userRole.value.roleName}}</option>
+                                        [value]="userRole.value.userRoleId" class="edit-input">
+                                        {{userRole.value.roleName}}
+                                    </option>
                                 </select>
                             </td>
                             <td class="text-center">

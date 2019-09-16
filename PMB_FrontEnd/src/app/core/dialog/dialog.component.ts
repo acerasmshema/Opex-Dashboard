@@ -13,6 +13,7 @@ import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { FormGroup } from '@angular/forms';
+import { Department } from 'src/app/user-management/user-detail/department.model';
 
 @Component({
   selector: 'app-dialog',
@@ -396,6 +397,29 @@ export class DialogComponent implements OnInit, OnDestroy {
   onDeleteMillRole(millRoleId: number) {
     let millRoles: any = this.userDetailForm.controls.millRoles;
     millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
+  }
+
+  onCreateUser() {
+    this.dialogService.createNewUser(this.userDetailForm);
+  }
+
+  onCountryChange(countryName: string) {
+    this.userDetailForm.controls.selectedCountry.setValue(countryName);
+  }
+
+  onDepartmentChange(departmentId: string) {
+    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+    this.userDetailForm.controls.selectedDepartment.setValue(department);
+  }
+
+  onMillChange(millId: string, millRole: FormGroup) {
+    const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+    millRole.value.selectedMill.setValue(mill);
+  }
+
+  onUserRoleChange(userRoleId: string, millRole: FormGroup) {
+    const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
+    millRole.value.selectedUserRole.setValue(userRole);
   }
 
   ngOnDestroy() {

@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserDetail } from './user-detail.model';
-import { MessageService } from 'primeng/primeng';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetailService } from './user-detail.service';
 import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit, OnDestroy {
 
   cols = [
     { field: 'username', header: 'Username' },
@@ -23,12 +23,19 @@ export class UserDetailComponent implements OnInit {
 
   users: UserDetail[] = [];
   userDetailForm: FormGroup;
+  userSubscription: Subscription;
 
   constructor(private userDetailService: UserDetailService,
     private statusService: StatusService) { }
 
   ngOnInit() {
     this.userDetailService.getUserDetailList(this.users);
+
+    this.userSubscription = this.statusService.refreshUserList.
+      subscribe((isRefresh: boolean) => {
+        this.users = [];
+        this.userDetailService.getUserDetailList(this.users);
+      })
   }
 
   expandUserDetail(userId: string) {
@@ -41,9 +48,9 @@ export class UserDetailComponent implements OnInit {
     userDetail.isReadOnly = true;
   }
 
-  onSave(userInfo: UserDetail) {
+  onUpdate(userInfo: UserDetail) {
     const userDetail = this.users.find((user) => user.userId === userInfo.userId)
-    this.userDetailService.saveUserDetail(userDetail, this.users);
+    this.userDetailService.updateUserDetail(userDetail, this.users);
     userDetail.isReadOnly = false;
   }
 
@@ -77,5 +84,9 @@ export class UserDetailComponent implements OnInit {
     else {
       return false;
     }
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 }

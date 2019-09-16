@@ -82,7 +82,7 @@ export class UserDetailService {
         );
     }
     
-    saveUserDetail(user: UserDetail, users: UserDetail[]) {
+    updateUserDetail(user: UserDetail, users: UserDetail[]) {
         // const userDetail = users.find((user) => user.userId === user.userId)
         // userDetail.isReadOnly = false;
         // this.messageService.add({ severity: "success", summary: '', detail: "Updated Successfully" });
