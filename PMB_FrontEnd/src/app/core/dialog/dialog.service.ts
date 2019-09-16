@@ -47,20 +47,23 @@ export class DialogService {
 
         let userDetailForm = this.formBuilder.group({
             show: new FormControl(true),
-            firstName: new FormControl("", [Validators.required, Validators.max(10)]),
-            lastName: new FormControl(""),
+            totalMills: new FormControl(1),
+            firstName: new FormControl("", [Validators.required]),
+            lastName: new FormControl("", [Validators.required]),
             address: new FormControl(""),
-            username: new FormControl(""),
-            password: new FormControl(""),
-            confirmPassword: new FormControl(""),
+            username: new FormControl("", [Validators.required]),
+            password: new FormControl("", [Validators.required]),
+            confirmPassword: new FormControl("", [Validators.required]),
             phone: new FormControl(""),
             selectedCountry: new FormControl(''),
             countryList: this.formBuilder.array([]),
-            selectedDepartment: new FormControl(''),
+            selectedDepartment: new FormControl('', [Validators.required]),
             departmentList: this.formBuilder.array([]),
-            email: new FormControl("", [Validators.required, Validators.email], this.validationService.forbiddenEmail.bind(this)),
+            email: new FormControl("", [Validators.required, Validators.email]),
             millRoles: millRoles,
-        });
+        },
+            { validator: this.validationService.mustMatchPassword('password', 'confirmPassword') }
+        );
 
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);
@@ -95,6 +98,7 @@ export class DialogService {
                             millControl.push(new FormControl(mill));
                         });
                         this.statusService.common.mills = mills;
+                        userDetailForm.controls.totalMills.setValue(mills.length);
                     },
                     (error: any) => {
                         this.statusService.spinnerSubject.next(false);
@@ -110,6 +114,7 @@ export class DialogService {
             millList.forEach(mill => {
                 millControl.push(new FormControl(mill));
             });
+            userDetailForm.controls.totalMills.setValue(millList.length);
         }
     }
 

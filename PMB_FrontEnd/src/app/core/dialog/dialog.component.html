@@ -249,22 +249,24 @@
                     <label class="edit-label required">First Name</label>
                     <div class="form-group">
                         <input type="text" class="form-control edit-input" formControlName="firstName">
+                        <span class="error-text"
+                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors['required']">
+                            Please enter the First Name
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <label class="edit-label required">Last Name</label>
                     <div class="form-group">
                         <input type="text" class="form-control edit-input" formControlName="lastName">
+                        <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
+                            && userDetailForm.get('lastName').errors['required']">
+                            Please enter the Last Name
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <label class="edit-label">Phone</label>
-                    <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="phone">
-                    </div>
-                </div>
                 <div class="col-sm-6">
                     <label class="edit-label required">Email</label>
                     <div class="form-group">
@@ -275,9 +277,13 @@
                                 Email is required</span>
                             <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">
                                 Please enter valid email</span>
-                            <span *ngIf="userDetailForm.get('email').errors['emailExit']" class="error-text">
-                                Already Exist</span>
                         </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label">Phone</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="phone">
                     </div>
                 </div>
             </div>
@@ -305,20 +311,30 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Username</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="username"
-                            autocomplete="off">
+                        <input type="text" class="form-control edit-input" formControlName="username">
+                        <span class="help-block"
+                            *ngIf="!userDetailForm.get('username').valid && userDetailForm.get('username').touched">
+                            <span *ngIf="userDetailForm.get('username').errors['required']" class="error-text">
+                                Username is required</span>
+                            <span *ngIf="userDetailForm.get('username').errors['usernameExit']" class="error-text">
+                                Username already exist</span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <label class="edit-label required">Department</label>
                     <div class="form-group">
-                        <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                        <select class="form-control edit-input" style="height: 34px;"
                             (change)="onDepartmentChange($event.target.value)">
                             <option class="edit-input" selected value="" disabled>Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
                                 [value]="department.value.departmentId" class="edit-input">
                                 {{department.value.departmentName}}</option>
                         </select>
+                        <span class="error-text" *ngIf="!userDetailForm.get('selectedDepartment').valid && userDetailForm.get('selectedDepartment').touched &&
+                             userDetailForm.get('selectedDepartment').errors['required']">
+                            Please select the any Department
+                        </span>
                     </div>
                 </div>
             </div>
@@ -327,13 +343,24 @@
                     <label class="edit-label required">Password</label>
                     <div class="form-group">
                         <input type="password" class="form-control edit-input" formControlName="password"
-                            autocomplete="false">
+                            autocomplete="new-password">
+                        <span *ngIf="!userDetailForm.get('password').valid && userDetailForm.get('password').touched">
+                            <span *ngIf="userDetailForm.get('password').errors.required" class="error-text">
+                                Password is required</span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <label class="edit-label required">Confirm Password</label>
                     <div class="form-group">
                         <input type="password" class="form-control edit-input" formControlName="confirmPassword">
+                        <span
+                            *ngIf="!userDetailForm.get('confirmPassword').valid && userDetailForm.get('confirmPassword').touched">
+                            <span *ngIf="userDetailForm.get('confirmPassword').errors.required" class="error-text">
+                                Confirm Password is required</span>
+                            <span *ngIf="userDetailForm.get('confirmPassword').errors.mustMatch" class="error-text">
+                                Passwords must match</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -341,7 +368,7 @@
                 <table class="table table-bordered" style="background: #f1f1f1;">
                     <div class="table-title text-center">
                         <span class="required role-head">User Role</span>
-                        <span class="float-right m-r-5" (click)="onAddMillRole()">
+                        <span *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value" class="float-right m-r-5" (click)="onAddMillRole()">
                             <em class="fa fa-user-plus fa-2x"></em>
                         </span>
                     </div>
@@ -353,7 +380,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls">
+                        <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
                             <td style="width: 30%;">
                                 <select name="" id="" class="form-control edit-input" style="height: 34px;"
                                     (change)="onMillChange($event.target.value, millRole)">
@@ -374,15 +401,16 @@
                                 </select>
                             </td>
                             <td class="text-center">
-                                <a (click)='onDeleteMillRole(millRole.millRoleId)'><i class="fa fa-trash"></i></a>
+                                <a *ngIf="(i > 0)" (click)='onDeleteMillRole(i)'><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="form-group m-t-30">
-                <button class="btn btn-primary btn-md float-right">Save</button>
-                <button type="button" class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+                <button type="submit" [disabled]="!userDetailForm.valid"
+                    class="btn btn-primary btn-md float-right">Save</button>
+                <button type="button" (click)="onUserDetailCancel()" class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
     </form>

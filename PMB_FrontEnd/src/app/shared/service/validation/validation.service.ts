@@ -5,7 +5,7 @@ import { AnnotationDialog } from 'src/app/core/dialog/annotation-dialog';
 import { SearchKpiData } from '../../models/search-kpi-data';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { API_URL } from '../../constant/API_URLs';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ApiCallService } from '../api/api-call.service';
 import { Observable } from 'rxjs';
 
@@ -94,4 +94,20 @@ export class ValidationService {
         });
     }
 
+    mustMatchPassword(controlName: string, matchingControlName: string) {
+        return (formGroup: FormGroup) => {
+            const control = formGroup.controls[controlName];
+            const matchingControl = formGroup.controls[matchingControlName];
+
+            if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+                return;
+            }
+
+            if (control.value !== matchingControl.value) {
+                matchingControl.setErrors({ mustMatch: true });
+            } else {
+                matchingControl.setErrors(null);
+            }
+        }
+    }
 }

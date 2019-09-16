@@ -78,15 +78,16 @@
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onDepartmentChange($event.target.value)">
                   <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
-                    [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
-                    class="edit-input" [value]="department.value.departmentId">
+                    [selected]="(department.value.departmentName === userDetailForm.controls.department.value)" class="edit-input"
+                    [value]="department.value.departmentId">
                     {{department.value.departmentName}}</option>
                 </select>
               </div>
             </div>
           </div>
           <div class="form-group m-t-30">
-            <button type="submit" class="btn btn-primary btn-lg float-right">Save</button>
+            <button type="submit" [disabled]="!userDetailForm.valid"
+              class="btn btn-primary btn-lg float-right">Save</button>
             <button type="button" (click)="onCancel()" class="btn btn-danger btn-lg float-right m-r-5">Cancel</button>
           </div>
         </form>

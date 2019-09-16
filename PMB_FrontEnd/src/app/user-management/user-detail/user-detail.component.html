@@ -148,7 +148,9 @@
                     <div class="col-md-6">
                       <div class="table-wrapper">
                         <div class="table-title text-center">
-                          <span class="float-right m-r-5" (click)="onAddMillRole(!rowData.isReadOnly)">
+                          <span
+                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.mills.controls.length"
+                            class="float-right m-r-5" (click)="onAddMillRole(!rowData.isReadOnly)">
                             <em class="fa fa-user-plus fa-2x" style="font-size: 21px;"
                               [style.color]="(!rowData.isReadOnly) ? '#9c9999': '#333333'  "></em>
                           </span>
@@ -165,27 +167,30 @@
                             <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i = index;">
                               <td style="width: 30%;">
                                 <select [disabled]="!rowData.isReadOnly" class="form-control edit-input"
-                                  style="height: 30px;">
+                                  style="height: 30px;" (change)="onMillChange($event.target.value, millRole)">
                                   <option *ngIf="millRole.value.selectedMill.value === null" disabled selected>
                                     Select Mill</option>
                                   <option *ngFor="let mill of userDetailForm.controls.mills.controls" class="edit-input"
+                                    [value]="mill.value.millId"
                                     [selected]="(millRole.value.selectedMill.value !== null && mill.value.millName === millRole.value.selectedMill.value.millName)">
                                     {{mill.value.millName}}</option>
                                 </select>
                               </td>
                               <td style="width: 55%;">
                                 <select [disabled]="!rowData.isReadOnly" class="form-control edit-input"
-                                  style="height: 30px;">
+                                  style="height: 30px;" (change)="onUserRoleChange($event.target.value, millRole)">
                                   <option *ngIf="millRole.value.selectedUserRole.value === null" disabled selected>
                                     Select User Role</option>
                                   <option *ngFor="let userRole of userDetailForm.controls.userRoles.controls"
+                                    class="edit-input"
                                     [selected]="(millRole.value.selectedUserRole.value !== null && userRole.value.roleName === millRole.value.selectedUserRole.value.roleName)"
-                                    class="edit-input">{{userRole.value.roleName}}</option>
+                                    [value]="userRole.value.userRoleId">{{userRole.value.roleName}}
+                                  </option>
                                 </select>
                               </td>
                               <td class="text-center">
-                                <a (click)='onDeleteMillRole(i, !rowData.isReadOnly)'><i class="fa fa-trash"
-                                    style="font-size: 21px;"
+                                <a *ngIf="(i > 0)" (click)='onDeleteMillRole(i, !rowData.isReadOnly)'>
+                                  <i class="fa fa-trash" style="font-size: 21px;"
                                     [style.color]="(!rowData.isReadOnly) ? '#9c9999': 'red'"></i></a>
                               </td>
                             </tr>
