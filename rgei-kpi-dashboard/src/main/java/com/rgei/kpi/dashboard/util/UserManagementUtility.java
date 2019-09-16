@@ -1,5 +1,8 @@
 package com.rgei.kpi.dashboard.util;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -222,5 +225,24 @@ public class UserManagementUtility {
 		}
 		return userRole;
 	}
-
+	
+	public static byte[] getSHA(String input) throws NoSuchAlgorithmException 
+    {  
+        // Static getInstance method is called with hashing SHA  
+        MessageDigest md = MessageDigest.getInstance("SHA-256");  
+        // digest() method called  
+        // to calculate message digest of an input  
+        // and return array of byte 
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
+    } 
+    
+    public static String toHexString(byte[] hash) 
+    { 
+        StringBuilder sb = new StringBuilder();  
+        for(int i=0; i< hash.length ;i++)
+        {
+        	sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();  
+    } 
 }
