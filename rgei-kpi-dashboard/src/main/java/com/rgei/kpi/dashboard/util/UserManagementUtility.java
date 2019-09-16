@@ -91,10 +91,6 @@ public class UserManagementUtility {
 			newUser.setPhone(user.getPhone());
 			newUser.setUserPassword(user.getPassword());
 			newUser.setIsActive(user.getActive());
-			newUser.setCreatedBy(user.getCreatedBy());
-			newUser.setCreatedOn(date);
-			newUser.setUpdatedBy(user.getUpdatedBy());
-			newUser.setUpdatedOn(date);
 		} catch (Exception e) {
 			throw new RecordNotCreatedException("Error while creating new user role :" + user);
 		}
@@ -108,8 +104,6 @@ public class UserManagementUtility {
 			UserRoleMill.setMillId(Integer.parseInt(millRole.getSelectedMill().getMillId()));
 			UserRoleMill.setRoleId(Long.parseLong(millRole.getSelectedUserRole().getUserRoleId()));
 			UserRoleMill.setStatus(Boolean.TRUE);
-			UserRoleMill.setCreatedDate(date);
-			UserRoleMill.setUpdatedDate(date);
 
 		} catch (Exception e) {
 			throw new RecordNotCreatedException("Error while creating new user role relation :" + millRole);
