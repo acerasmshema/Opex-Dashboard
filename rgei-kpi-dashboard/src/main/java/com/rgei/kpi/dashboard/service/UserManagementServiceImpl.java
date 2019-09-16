@@ -111,13 +111,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		Date date = new Date();
 		try {
 			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
-			userEntity.setCreatedBy(user.getCreatedBy());
-			userEntity.setCreatedOn(date);
-			userEntity.setUpdatedBy(user.getUpdatedBy());
-			userEntity.setUpdatedOn(date);
 			rgeUserEntityRepository.save(userEntity);
-
-			if (userEntity != null) {
 				user.setUserId(userEntity.getUserId().toString());
 				List<MillRole> millRoles = user.getMillRoles();
 				for (MillRole millRole : millRoles) {
@@ -129,7 +123,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 					userRoleMillEntity.setUpdatedDate(date);
 					rgeUserRoleMillRepository.save(userRoleMillEntity);
 				}
-			}
 
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating new user  :" + user);
@@ -164,11 +157,8 @@ public class UserManagementServiceImpl implements UserManagementService {
 		try {
 			if (user != null) {
 				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
-				if (null != userEntity) {
-					RgeUserEntity updatedUser = UserManagementUtility.createUserEntity(user);
-					updatedUser.setUserId(Long.parseLong(user.getUserId()));
-					updatedUser.setUpdatedBy(user.getUpdatedBy());
-					updatedUser.setUpdatedOn(date);
+				if (userEntity.isPresent()) {
+					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity.get());
 					rgeUserEntityRepository.save(updatedUser);
 					List<MillRole> millRoles = user.getMillRoles();
 					for (MillRole millRole : millRoles) {

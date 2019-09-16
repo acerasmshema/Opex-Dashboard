@@ -12,6 +12,7 @@ import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
@@ -74,11 +75,15 @@ public class UserManagementUtility {
 	}
 
 	public static UserRoleEntity updateFetchedUserRoleEntity(UserRole userRole, UserRoleEntity entity) {
+		try {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
 		entity.setStatus(userRole.getActive());
 		entity.setUpdatedDate(new java.util.Date());
+		}catch(RuntimeException e) {
+			throw new RecordNotUpdatedException("Error while updating existing user role :" + userRole);
+		}
 		return entity;
 	}
 
@@ -101,11 +106,31 @@ public class UserManagementUtility {
 			newUser.setUpdatedBy(user.getUpdatedBy());
 			newUser.setUpdatedOn(date);
 		} catch (Exception e) {
-			throw new RecordNotCreatedException("Error while creating new user role :" + user);
+			throw new RecordNotCreatedException("Error while creating new user :" + user);
 		}
 		return newUser;
 	}
 
+	public static RgeUserEntity updateFetchedUserEntity(User user, RgeUserEntity userEntity) {
+		Date date = new Date();
+		try {
+			userEntity.setFirstName(user.getFirstName());
+			userEntity.setLastName(user.getLastName());
+			userEntity.setAddress(user.getAddress());
+			userEntity.setCountry(user.getCountry());
+			userEntity.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			userEntity.setEmail(user.getEmail());
+			userEntity.setLoginId(user.getUsername());
+			userEntity.setPhone(user.getPhone());
+			userEntity.setIsActive(user.getActive());
+			userEntity.setUpdatedBy(user.getUpdatedBy());
+			userEntity.setUpdatedOn(date);
+		} catch (Exception e) {
+			throw new RecordNotUpdatedException("Error while updating existing user :" + user);
+		}
+		return userEntity;
+	}
+	
 	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
 		try {
