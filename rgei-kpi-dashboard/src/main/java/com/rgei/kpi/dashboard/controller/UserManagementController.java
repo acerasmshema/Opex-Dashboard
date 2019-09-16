@@ -105,7 +105,7 @@ public class UserManagementController {
 
 	@ApiOperation(value = "updateUser", notes = "Update User")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
-	@PostMapping("/v1/update_user")
+	@PutMapping("/v1/update_user")
 	public ResponseEntity<HttpStatus> updateUser(@RequestBody User user) {
 		logger.info("Updating user", user);
 		userManagementService.updateUser(user);

@@ -63,10 +63,11 @@
             <div class="col-sm-6">
               <label class="edit-label">Country</label>
               <div class="form-group">
-                <select name="" id="" class="form-control edit-input" style="height: 40px;">
+                <select name="" id="" class="form-control edit-input" style="height: 40px;"
+                  (change)="onCountryChange($event.target.value)">
                   <option *ngFor="let country of userDetailForm.controls.countryList.controls"
                     [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
-                    class="edit-input">
+                    class="edit-input" [value]="country.value.countryName">
                     {{country.value.countryName}}</option>
                 </select>
               </div>
@@ -74,10 +75,11 @@
             <div class="col-sm-6">
               <label class="edit-label required">Department</label>
               <div class="form-group">
-                <select name="" id="" class="form-control edit-input" style="height: 40px;">
+                <select name="" id="" class="form-control edit-input" style="height: 40px;"
+                  (change)="onDepartmentChange($event.target.value)">
                   <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
                     [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
-                    class="edit-input">
+                    class="edit-input" [value]="department.value.departmentId">
                     {{department.value.departmentName}}</option>
                 </select>
               </div>

@@ -1,14 +1,19 @@
 import { Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { StatusService } from 'src/app/shared/service/status.service';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
+import { API_URL } from 'src/app/shared/constant/API_URLs';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
 
 @Injectable()
 export class ProfileEditService {
 
+    updateUserURL = API_URL.user_api_URLs.UPDATE_USER;
+
     constructor(private formBuilder: FormBuilder,
+        private messageService: MessageService,
         private commonService: CommonService,
         private apiCallService: ApiCallService,
         private statusService: StatusService) { }
@@ -41,11 +46,15 @@ export class ProfileEditService {
         userDetail.email = userDetailForm.controls.email.value;
         userDetail.phone = userDetailForm.controls.phone.value;
         userDetail.address = userDetailForm.controls.address.value;
+        userDetail.country = userDetailForm.controls.country.value;
+        userDetail.department = userDetailForm.controls.department.value;
+        userDetail.updatedBy = userDetail.username;
 
-        this.apiCallService.callAPIwithData("", userDetail).
-            subscribe(() => {
-
-            },
+        this.apiCallService.callPutAPIwithData(this.updateUserURL, userDetail).
+            subscribe(
+                (response: any) => {
+                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                },
                 (error: any) => {
                     console.log("Error")
                 }
