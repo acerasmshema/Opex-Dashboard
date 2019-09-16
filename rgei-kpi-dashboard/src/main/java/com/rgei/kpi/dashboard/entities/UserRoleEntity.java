@@ -17,10 +17,18 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
-import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 
 @Entity
@@ -48,10 +56,10 @@ public class UserRoleEntity implements Serializable {
 	private Boolean status;
 	
 	@Column(name="created_date")
-	private Timestamp createdDate;
+	private Date createdDate;
 
 	@Column(name="updated_date")
-	private Timestamp updatedDate;
+	private Date updatedDate;
 
 	@ManyToMany
 	@JoinTable(
@@ -97,19 +105,19 @@ public class UserRoleEntity implements Serializable {
 		this.rgeUsers = rgeUsers;
 	}
 
-	public Timestamp getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Timestamp createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 	
-	public Timestamp getUpdatedDate() {
+	public Date getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(Timestamp updatedDate) {
+	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 

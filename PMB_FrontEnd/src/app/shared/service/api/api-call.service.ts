@@ -57,15 +57,4 @@ export class ApiCallService {
     return this.httpClient.post(url, data, httpOptions);
   }
 
-  errorHandler(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ProgressEvent) {    
-    alert("Server Error");
-    } else {
-      return "e";
-    }
-    
-    
-  }
-
 }

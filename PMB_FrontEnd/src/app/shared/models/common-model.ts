@@ -12,6 +12,7 @@ export class CommonModel {
     public selectedMill: MillDetail;
     public selectedRole: UserRole;
     public userRoles: UserRole[] = [];
+    public activeUserRoles: UserRole[] = [];
     public departmentList: Department[] = [];
     public countryList: Country[] = [];
 }

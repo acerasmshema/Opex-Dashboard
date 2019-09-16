@@ -87,10 +87,6 @@ export class ProductionService {
     return this.apiCallService.callAPIwithData(this.annotationDates, data)
   }
 
-  public errorMsgMaintenanceData(data: any) {
-    return this.apiCallService.errorHandler(data);
-  }
-
   public getDataForGrid(data: object) {
     return this.apiCallService.callGetAPIwithData(this.productionGridKpiUrl, data);
   }

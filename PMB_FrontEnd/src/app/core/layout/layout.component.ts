@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { Subscription } from 'rxjs';
 
@@ -15,21 +13,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   mainClass: string = "main1";
   sidebarSizeSubscription: Subscription;
 
-  constructor(private localStorageService: LocalStorageService,
-    private statusService: StatusService,
-    private router: Router) {
-  }
+  constructor( private statusService: StatusService) { }
 
   ngOnInit() {
-    let user = this.localStorageService.fetchUserDetail();
-    if (user == undefined || user == null) {
-      this.router.navigateByUrl('/login');
-    } 
-    else {
-      this.statusService.common.userDetail = user;
-      this.statusService.common.selectedMill = this.statusService.common.userDetail.millRoles[0].selectedMill;
-    }
-
     this.sidebarSizeSubscription = this.statusService.sidebarSizeSubject.
       subscribe((className: string) => {
         if (className === 'hide') {
