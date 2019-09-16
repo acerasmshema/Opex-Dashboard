@@ -1,5 +1,6 @@
 package com.rgei.kpi.dashboard.controller;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -33,57 +34,57 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/restCall")
 public class UserManagementController {
-	
+
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementController.class);
-	
+
 	@Resource
 	UserManagementService userManagementService;
-	
+
 	@ApiOperation(value = "getAllCountries", notes = "Retrieve all countries", response = CountryResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/countries")
-	public ResponseEntity<List<CountryResponse>> getAllCountries(){
+	public ResponseEntity<List<CountryResponse>> getAllCountries() {
 		logger.info("Get all countries list");
 		List<CountryResponse> responseList = userManagementService.getCountryList();
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "getRoles", notes = "Retrieve user roles based on active roles flag in header", response = UserRole.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/roles")
-	public ResponseEntity<List<UserRole>> getRoles(@RequestHeader(value = "activeRoles") Boolean activeRoles){
-		logger.info("Get roles by status : "+activeRoles);
+	public ResponseEntity<List<UserRole>> getRoles(@RequestHeader(value = "activeRoles") Boolean activeRoles) {
+		logger.info("Get roles by status : " + activeRoles);
 		List<UserRole> responseList = userManagementService.getUserRolesByStatus(activeRoles);
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "getDepartments", notes = "Retrieve active departments", response = Department.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/departments")
-	public ResponseEntity<List<Department>> getDepartments(){
+	public ResponseEntity<List<Department>> getDepartments() {
 		logger.info("Get all active departments list");
 		List<Department> responseList = userManagementService.getDepartments();
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "getUsersByMillId", notes = "Retrieve all users by Mill Id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/users")
-	public ResponseEntity<List<User>> getUsersByMillId(@RequestHeader(value = "millId") String millId){
-		logger.info("Get all users by mill Id : "+millId);
+	public ResponseEntity<List<User>> getUsersByMillId(@RequestHeader(value = "millId") String millId) {
+		logger.info("Get all users by mill Id : " + millId);
 		List<User> responseList = userManagementService.getUsersByMillId(CommonFunction.covertToInteger(millId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "createUserRole", notes = "Create new user role")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
 	@PostMapping("/v1/create_user_role")
-	public ResponseEntity<HttpStatus> createUserRole(@Valid @RequestBody UserRole userRole){
+	public ResponseEntity<HttpStatus> createUserRole(@Valid @RequestBody UserRole userRole) {
 		logger.info("Creating new user role", userRole);
 		userManagementService.createUserRole(userRole);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-		
+
 	@ApiOperation(value = "updateUserRole", notes = "Update user role")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping("/v1/update_user_role")
@@ -92,12 +93,11 @@ public class UserManagementController {
 		userManagementService.updateUserRole(userRole);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 
 	@ApiOperation(value = "createUser", notes = "Create new user")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
 	@PostMapping("/v1/create_user")
-	public ResponseEntity<HttpStatus> createUser(@RequestBody User user){
+	public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
 		logger.info("Creating new user", user);
 		userManagementService.createUser(user);
 		return new ResponseEntity<>(HttpStatus.CREATED);
@@ -111,5 +111,15 @@ public class UserManagementController {
 		userManagementService.updateUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "changePassword", notes = "Change password")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PostMapping("/v1/change_password")
+	public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "userId") String userId,
+			@RequestHeader(value = "password") String password) throws NoSuchAlgorithmException {
+		logger.info("Changing password");
+//		password = Base64.getEncoder().encodeToString(password.getBytes());
+		userManagementService.changePassword(userId, password);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
