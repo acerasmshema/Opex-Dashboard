@@ -1,6 +1,7 @@
 package com.rgei.kpi.dashboard.response.model;
 
 public class MillRole {
+	private Long millRoleId ;
 	private MillDetail selectedMill;
 	private UserRole selectedUserRole;
 
@@ -18,6 +19,14 @@ public class MillRole {
 
 	public void setSelectedUserRole(UserRole selectedUserRole) {
 		this.selectedUserRole = selectedUserRole;
+	}
+
+	public Long getMillRoleId() {
+		return millRoleId;
+	}
+
+	public void setMillRoleId(Long millRoleId) {
+		this.millRoleId = millRoleId;
 	}
 
 }

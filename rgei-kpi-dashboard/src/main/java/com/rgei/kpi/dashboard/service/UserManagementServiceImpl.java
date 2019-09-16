@@ -1,7 +1,9 @@
 package com.rgei.kpi.dashboard.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 
@@ -45,7 +47,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Resource
 	RgeUserRoleMillRepository rgeUserRoleMillRepository;
-	
+
 	@Resource
 	DepartmentRepository departmentRepository;
 
@@ -105,8 +107,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void createUser(User user) {
 		logger.info("Inside service call to get create new user for request : " + user);
+		Date date = new Date();
 		try {
 			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
+			userEntity.setCreatedBy(user.getCreatedBy());
+			userEntity.setCreatedOn(date);
+			userEntity.setUpdatedBy(user.getUpdatedBy());
+			userEntity.setUpdatedOn(date);
 			rgeUserEntityRepository.save(userEntity);
 
 			if (userEntity != null) {
@@ -116,7 +123,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 					UserRoleMillEntity userRoleMillEntity = UserManagementUtility.createUserRoleMillEntity(millRole);
 					userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
 					userRoleMillEntity.setCreatedBy(user.getCreatedBy());
+					userRoleMillEntity.setCreatedDate(date);
 					userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
+					userRoleMillEntity.setUpdatedDate(date);
 					rgeUserRoleMillRepository.save(userRoleMillEntity);
 				}
 			}
@@ -125,25 +134,59 @@ public class UserManagementServiceImpl implements UserManagementService {
 			throw new RecordNotCreatedException("Error while creating new user  :" + user);
 		}
 	}
-	
+
 	@Override
 	public List<Department> getDepartments() {
 		logger.info("Inside service call to get departments");
 		List<DepartmentEntity> entities = departmentRepository.findAllByActiveOrderByDepartmentNameAsc(true);
-		if(entities != null && !entities.isEmpty()) {
+		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToDepartmentResponse(entities);
 		}
 		throw new RecordNotFoundException("Departments list not available in database");
 	}
-	
+
 	@Override
 	public List<User> getUsersByMillId(Integer millId) {
-		logger.info("Inside service call to get users by Mill Id : "+millId);
+		logger.info("Inside service call to get users by Mill Id : " + millId);
 		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId);
-		if(userEntities != null && !userEntities.isEmpty()) {
+		if (userEntities != null && !userEntities.isEmpty()) {
 			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities);
 		}
-		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
+		throw new RecordNotFoundException("Users list not available in database for Mill Id : " + millId);
+	}
+
+	@Transactional
+	@Override
+	public void updateUser(User user) {
+		logger.info("Inside service call to update user for request : " + user);
+		Date date = new Date();
+		try {
+			if (user != null) {
+				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
+				if (null != userEntity) {
+					RgeUserEntity updatedUser = UserManagementUtility.createUserEntity(user);
+					updatedUser.setUserId(Long.parseLong(user.getUserId()));
+					updatedUser.setUpdatedBy(user.getUpdatedBy());
+					updatedUser.setUpdatedOn(date);
+					rgeUserEntityRepository.save(updatedUser);
+					List<MillRole> millRoles = user.getMillRoles();
+					for (MillRole millRole : millRoles) {
+						UserRoleMillEntity userRoleMillEntity = UserManagementUtility
+								.createUserRoleMillEntity(millRole);
+						userRoleMillEntity.setRgeUserRoleId(millRole.getMillRoleId());
+						userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
+						userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
+						userRoleMillEntity.setUpdatedDate(date);
+						rgeUserRoleMillRepository.save(userRoleMillEntity);
+					}
+				} else {
+					throw new RecordNotFoundException("User not found against user id  :" + user.getUserId());
+				}
+			}
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while updating user  :" + user);
+		}
+
 	}
 
 }
