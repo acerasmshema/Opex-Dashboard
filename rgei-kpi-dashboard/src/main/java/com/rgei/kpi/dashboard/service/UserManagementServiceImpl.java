@@ -142,7 +142,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to get users by Mill Id : "+millId);
 		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId);
 		if(userEntities != null && !userEntities.isEmpty()) {
-			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities, millId);
+			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities);
 		}
 		throw new RecordNotFoundException("Users list not available in database for Mill Id : "+millId);
 	}

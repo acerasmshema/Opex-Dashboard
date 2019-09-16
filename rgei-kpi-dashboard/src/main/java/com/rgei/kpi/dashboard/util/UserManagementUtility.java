@@ -140,7 +140,7 @@ public class UserManagementUtility {
 		return responseList;
 	}
 
-	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities, Integer millId) {
+	public static List<User> convertToUserFromRgeUserEntity(List<RgeUserEntity> entities) {
 		List<User> responseList = new ArrayList<>();
 		User user = null;
 		for (RgeUserEntity entity : entities) {
@@ -159,7 +159,7 @@ public class UserManagementUtility {
 			user.setUpdatedBy(CommonFunction.getString(entity.getUpdatedBy()));
 			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
 			user.setDepartment(getDepartment(entity.getDepartment()));
-			user.setMillRoles(getMillRoles(entity.getUserRoleMills(), millId));
+			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
 			responseList.add(user);
 		}
 		return responseList;
@@ -181,17 +181,15 @@ public class UserManagementUtility {
 		return null;
 	}
 
-	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities, Integer millId) {
+	public static List<MillRole> getMillRoles(List<UserRoleMillEntity> userRoleMillEntities) {
 		List<MillRole> millRoles = new ArrayList<>();
 		MillRole millRole = null;
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
-				if (millId.equals(entity.getMill().getMillId())) {
-					millRole.setSelectedMill(getMillDetail(entity.getMill()));
-					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
-					millRoles.add(millRole);
-				}
+				millRole.setSelectedMill(getMillDetail(entity.getMill()));
+				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
+				millRoles.add(millRole);
 			}
 		}
 		return millRoles;
