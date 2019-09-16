@@ -108,14 +108,10 @@ public class UserManagementUtility {
 
 	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
-		Date date = new Date();
 		try {
 			userRoleMill.setMillId(Integer.parseInt(millRole.getSelectedMill().getMillId()));
 			userRoleMill.setRoleId(Long.parseLong(millRole.getSelectedUserRole().getUserRoleId()));
 			userRoleMill.setStatus(Boolean.TRUE);
-			userRoleMill.setCreatedDate(date);
-			userRoleMill.setUpdatedDate(date);
-
 		} catch (Exception e) {
 			throw new RecordNotCreatedException("Error while creating new user role relation :" + millRole);
 		}

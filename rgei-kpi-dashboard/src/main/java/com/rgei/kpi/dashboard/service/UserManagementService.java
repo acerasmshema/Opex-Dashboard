@@ -22,4 +22,6 @@ public interface UserManagementService {
 	
 	List<User> getUsersByMillId(Integer millId);
 
+	void updateUser(User user);
+
 }
