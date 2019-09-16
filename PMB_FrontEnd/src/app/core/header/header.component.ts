@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
           }
         });
-        
+
     this.commonService.clearStatus();
     this.router.navigateByUrl('login');
   }
@@ -85,10 +85,18 @@ export class HeaderComponent implements OnInit {
           this.statusService.common.selectedMill = millRole.selectedMill;
           this.selectedMillName = this.statusService.common.selectedMill.millName;
           this.statusService.common.selectedRole = millRole.selectedUserRole;
-          this.isShow = (this.statusService.common.selectedRole.roleName === "Admin") ? true : false;
+          this.isShow = (this.statusService.common.selectedRole.roleName === "Admin" || this.statusService.common.selectedRole.roleName === "Senior Management") ? true : false;
         }
       });
-      this.statusService.changeMill.next();
+      if (this.isShow && window.location.pathname === '/user') {
+        this.statusService.refreshUserList.next(true);
+      }
+      else if (window.location.pathname === '/user') {
+        this.router.navigateByUrl('/home');
+      }
+      else {
+        this.statusService.changeMill.next();
+      }
     }
   }
 }
