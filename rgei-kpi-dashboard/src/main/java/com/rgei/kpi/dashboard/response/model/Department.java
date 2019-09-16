@@ -1,7 +1,7 @@
 package com.rgei.kpi.dashboard.response.model;
 
 public class Department {
-	private Integer departmentId;
+	private String departmentId;
 	private String departmentName;
 	private String departmentCode;
 	private String createdBy;
@@ -10,11 +10,11 @@ public class Department {
 	private String updatedDate;
 	private Boolean active;
 
-	public Integer getDepartmentId() {
+	public String getDepartmentId() {
 		return departmentId;
 	}
 
-	public void setDepartmentId(Integer departmentId) {
+	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
 

@@ -90,12 +90,12 @@ public class UserManagementUtility {
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
 			newUser.setCountry(user.getCountry());
-			newUser.setDepartmentId(user.getDepartment().getDepartmentId());
+			newUser.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
 			newUser.setUserPassword(user.getPassword());
-			newUser.setIsActive(user.getActive());
+			newUser.setIsActive(Boolean.TRUE);
 			newUser.setCreatedBy(user.getCreatedBy());
 			newUser.setCreatedOn(date);
 			newUser.setUpdatedBy(user.getUpdatedBy());
@@ -127,7 +127,7 @@ public class UserManagementUtility {
 		Department resp = null;
 		for (DepartmentEntity entity : entities) {
 			resp = new Department();
-			resp.setDepartmentId(entity.getDepartmentId());
+			resp.setDepartmentId(entity.getDepartmentId().toString());
 			resp.setDepartmentName(entity.getDepartmentName());
 			resp.setDepartmentCode(entity.getDepartmentCode());
 			resp.setActive(entity.getActive());
@@ -169,7 +169,7 @@ public class UserManagementUtility {
 		if (entity != null) {
 			Department department = new Department();
 			department.setDepartmentName(entity.getDepartmentName());
-			department.setDepartmentId(entity.getDepartmentId());
+			department.setDepartmentId(entity.getDepartmentId().toString());
 			department.setDepartmentCode(entity.getDepartmentCode());
 			department.setActive(entity.getActive());
 			department.setCreatedBy(CommonFunction.getString(entity.getCreatedBy()));
@@ -187,6 +187,7 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
+				millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
 				millRole.setSelectedMill(getMillDetail(entity.getMill()));
 				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
 				millRoles.add(millRole);

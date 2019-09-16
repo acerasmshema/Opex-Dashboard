@@ -1,9 +1,20 @@
 package com.rgei.kpi.dashboard.response.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserRole {
+	
+	
 	private String userRoleId;
+	
+	@NotNull(message="Role name cannot be missing or empty")
+    @Size(min=2, message="First name must not be less than 2 characters")
 	private String roleName;
+	
+	@Size(max=200, message="First name must not be less than 2 characters")
 	private String description;
+	
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;

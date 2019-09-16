@@ -2,22 +2,41 @@ package com.rgei.kpi.dashboard.response.model;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class User {
 
 	private String userId;
+	@NotNull
+	@Size(max = 50)
 	private String firstName;
+
+	@Size(max = 50)
 	private String lastName;
+
+	@Email
 	private String email;
+
 	private String phone;
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
 	private String updatedDate;
+
+	@Size(max = 200)
 	private String address;
 	private Boolean active;
 	private String country;
+
+	@NotNull
 	private String username;
+
+	@NotNull
 	private List<MillRole> millRoles;
+
+	@NotNull
 	private Department department;
 	private String password = null;
 
