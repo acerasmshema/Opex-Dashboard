@@ -48,12 +48,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     userDetail.isReadOnly = true;
   }
 
-  onUpdate(userInfo: UserDetail) {
-    const userDetail = this.users.find((user) => user.userId === userInfo.userId)
-    this.userDetailService.updateUserDetail(userDetail, this.users);
-    userDetail.isReadOnly = false;
-  }
-
   onCancel(userInfo: UserDetail) {
     const userDetail = this.users.find((user) => user.userId === userInfo.userId)
     userDetail.isReadOnly = false;
@@ -84,6 +78,35 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     else {
       return false;
     }
+  }
+
+  onCountryChange(countryName: string) {
+    this.userDetailForm.controls.country.setValue(countryName);
+  }
+
+  onDepartmentChange(departmentId: string) {
+    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+    this.userDetailForm.controls.department.setValue(department);
+  }
+
+  onMillChange(millId: string, millRole: FormGroup) {
+    const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+    millRole.value.selectedMill.setValue(mill);
+  }
+
+  onUserRoleChange(userRoleId: string, millRole: FormGroup) {
+    const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
+    millRole.value.selectedUserRole.setValue(userRole);
+  }
+
+  onUserStatusChange(status: boolean) {
+    this.userDetailForm.controls.status.setValue(status);
+  }
+
+  onUpdateUser(userId: string) {
+    const userDetail = this.users.find((user) => user.userId === userId)
+    userDetail.isReadOnly = false;
+    this.userDetailService.updateUser(this.userDetailForm, userDetail);
   }
 
   ngOnDestroy() {
