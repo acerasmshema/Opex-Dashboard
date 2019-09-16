@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MessageService, Panel } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { AnnotationDialog } from './annotation-dialog';
 import { DialogService } from './dialog.service';
@@ -11,10 +10,10 @@ import { ProductionService } from '../../dashboard/production-dashboard/producti
 import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { FormGroup } from '@angular/forms';
+import { Department } from 'src/app/user-management/user-detail/department.model';
 
 @Component({
   selector: 'app-dialog',
@@ -46,8 +45,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
-    private validationService: ValidationService,
-    private localStorageService: LocalStorageService) { }
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.dialogSubscription = this.statusService.dialogSubject.
@@ -393,18 +391,35 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onAddMillRole() {
-    let millRole = new MillRole();
-    millRole.millRoleId = Math.random();
-    millRole.mills = this.statusService.common.mills;
-    millRole.userRoles = this.statusService.common.userRoles;
-    
-    let millRoles: any = this.userDetailForm.controls.millRoles;
-    millRoles.push(millRole);
+    this.dialogService.addMillRole(this.userDetailForm);
   }
 
   onDeleteMillRole(millRoleId: number) {
     let millRoles: any = this.userDetailForm.controls.millRoles;
     millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
+  }
+
+  onCreateUser() {
+    this.dialogService.createNewUser(this.userDetailForm);
+  }
+
+  onCountryChange(countryName: string) {
+    this.userDetailForm.controls.selectedCountry.setValue(countryName);
+  }
+
+  onDepartmentChange(departmentId: string) {
+    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+    this.userDetailForm.controls.selectedDepartment.setValue(department);
+  }
+
+  onMillChange(millId: string, millRole: FormGroup) {
+    const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+    millRole.value.selectedMill.setValue(mill);
+  }
+
+  onUserRoleChange(userRoleId: string, millRole: FormGroup) {
+    const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
+    millRole.value.selectedUserRole.setValue(userRole);
   }
 
   ngOnDestroy() {

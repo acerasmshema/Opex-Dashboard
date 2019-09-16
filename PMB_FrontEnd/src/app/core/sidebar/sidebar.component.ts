@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { Subscription } from 'rxjs';
 import { SidebarRequest } from './sidebar-request';
@@ -12,7 +11,6 @@ import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consum
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 
@@ -33,7 +31,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     private consumptionService: ConsumptionService,
     private benchmarkService: BenchmarkService,
-    private localStorageService: LocalStorageService,
     private commonService: CommonService,
     private validationService: ValidationService,
     private statusService: StatusService,
@@ -66,7 +63,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
           else {
             this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
-            this.commonService.getAllMills(this.sidebarForm);
+            this.sidebarService.getMills(this.sidebarForm);
             this.commonService.getAllBuType(this.sidebarForm);
             this.getBenchmarkKpiDetail();
             this.searchKpiData = new SearchKpiData();

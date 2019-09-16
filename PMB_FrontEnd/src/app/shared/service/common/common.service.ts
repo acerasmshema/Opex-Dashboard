@@ -2,14 +2,11 @@ import { Injectable } from "@angular/core";
 import { ApiCallService } from '../api/api-call.service';
 import { StatusService } from '../status.service';
 import { API_URL } from '../../constant/API_URLs';
-import { UserRole } from 'src/app/user-management/user-role/user-role.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
 import { Department } from 'src/app/user-management/user-detail/department.model';
-import { MillDetail } from '../../models/mill-detail.model';
-import { CommonMessage } from '../../constant/Common-Message';
-import { MessageService } from 'primeng/primeng';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CommonService {
@@ -21,33 +18,13 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
-        private messageService: MessageService,
         private statusService: StatusService) { }
 
-    public getAllMills(form: any) {
-        if (this.statusService.common.mills.length === 0) {
-            const requestData = {
-                countryIds: "46,104"
-            }
-            this.apiCallService.callGetAPIwithData(this.allMills, requestData).
-                subscribe(
-                    (mills: MillDetail[]) => {
-                        this.statusService.common.mills = mills;
-                        if (form !== null)
-                            form.mills = mills;
-                    },
-                    (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                        }
-                    });
-        } else if (form !== null) {
-            form.mills = this.statusService.common.mills;
+    public getAllMills(): Observable<any> {
+        const requestData = {
+            countryIds: "1,2"
         }
-
+        return this.apiCallService.callGetAPIwithData(this.allMills, requestData);
     }
 
     public getAllBuType(sidebarForm: SidebarForm) {
@@ -97,45 +74,43 @@ export class CommonService {
         }
     }
 
-    public getAllDepartment(): any {
+    public getAllDepartment(userDetailForm: any) {
         if (this.statusService.common.departmentList.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allDepartment).
                 subscribe(
                     (departments: Department[]) => {
-
+                        if (userDetailForm instanceof FormGroup) {
+                            const departmentList: any = userDetailForm.controls.departmentList;
+                            let departmentControl = departmentList.controls;
+                            departments.forEach(department => {
+                                departmentControl.push(new FormControl(department));
+                            });
+                        }
                         this.statusService.common.departmentList = departments;
-                        console.log(departments);
                     },
                     (error: any) => {
                         console.log("Error handling")
                     }
                 );
         }
-    }
-
-    public getAllUserRole(userRoles: UserRole[], activeAll: boolean) {
-        if (this.statusService.common.userRoles.length === 0) {
-            const requestData = {
-                activeRoles: "" + activeAll
-            }
-            this.apiCallService.callGetAPIwithData(this.allUserRole, requestData)
-                .subscribe(
-                    (roleList: UserRole[]) => {
-                        userRoles.push(...roleList);
-                        this.statusService.common.userRoles = roleList;
-                    },
-                    (error: any) => {
-                        console.log("error in user role");
-                    }
-
-                );
-        }
         else {
-            userRoles.push(...this.statusService.common.userRoles);
+            const departments = this.statusService.common.departmentList;
+            const departmentList: any = userDetailForm.controls.departmentList;
+            let departmentControl = departmentList.controls;
+            departments.forEach(department => {
+                departmentControl.push(new FormControl(department));
+            });
         }
     }
 
-    clearStatus() {
+    public getAllUserRole(activeUserRoles: boolean): Observable<any> {
+        const requestData = {
+            activeRoles: "" + activeUserRoles
+        }
+        return this.apiCallService.callGetAPIwithData(this.allUserRole, requestData);
+    }
+
+    public clearStatus() {
         this.statusService.common.buTypes = [];
         this.statusService.common.countryList = [];
         this.statusService.common.userRoles = [];

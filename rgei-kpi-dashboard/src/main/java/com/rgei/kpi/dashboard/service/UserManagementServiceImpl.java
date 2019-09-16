@@ -1,5 +1,8 @@
 package com.rgei.kpi.dashboard.service;
 
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +22,7 @@ import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.repository.CountryRepository;
 import com.rgei.kpi.dashboard.repository.DepartmentRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
@@ -65,10 +69,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
 		List<UserRoleEntity> entities = null;
-		if (Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
+		if(Objects.nonNull(activeRoles) && activeRoles) {
+			entities = userRoleRepository.findAllByStatusOrderByRoleIdAsc(activeRoles);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
+			entities = userRoleRepository.findAllByOrderByRoleIdAsc();
 		}
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
@@ -78,10 +82,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public void createUserRole(UserRole userRole) {
-		logger.info("Inside service call to get create new user role for request : " + userRole);
-		UserRoleEntity entity = UserManagementUtility.fetchUserRoleEntity(userRole);
+		logger.info("Inside service call to create new user role for request : " + userRole);
+		UserRoleEntity userRoleEntity = UserManagementUtility.fetchUserRoleEntity(userRole);
 		try {
-			userRoleRepository.save(entity);
+			userRoleRepository.save(userRoleEntity);
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
 		}
@@ -89,7 +93,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public void updateUserRole(UserRole userRole) {
-		logger.info("Inside service call to get create new user role for request : " + userRole);
+		logger.info("Inside service call to update user role for request : " + userRole);
 		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
 		if (null != entity) {
 			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
@@ -99,7 +103,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		try {
 			userRoleRepository.save(entity);
 		} catch (RuntimeException e) {
-			throw new RecordNotCreatedException("Error while creating new user role :" + userRole);
+			throw new RecordNotUpdatedException("Error while updating user role :" + userRole);
 		}
 	}
 
@@ -173,7 +177,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 					for (MillRole millRole : millRoles) {
 						UserRoleMillEntity userRoleMillEntity = UserManagementUtility
 								.createUserRoleMillEntity(millRole);
-						userRoleMillEntity.setRgeUserRoleId(millRole.getMillRoleId());
+						userRoleMillEntity.setRgeUserRoleId(Long.parseLong(millRole.getMillRoleId()));
 						userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
 						userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
 						userRoleMillEntity.setUpdatedDate(date);
@@ -189,4 +193,34 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	}
 
+	@Override
+	public void changePassword(String userId, String password) throws NoSuchAlgorithmException {
+		logger.info("Inside service call to change password");
+		String decodedString = new String(Base64.getDecoder().decode(password));
+		String encodedSHAString = "";
+		try {
+			encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(decodedString));
+		} catch (Exception e) {
+			throw new NoSuchAlgorithmException();
+		}
+		RgeUserEntity rgeUserEntity = null;
+		try {
+			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(userId));
+		} catch (Exception e) {
+			throw new RecordNotFoundException("No record found for user Id : " + userId);
+		}
+		if (rgeUserEntity != null) {
+			rgeUserEntity.setUserPassword(encodedSHAString);
+			rgeUserEntity.setUpdatedOn(new Date());
+			rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
+			try {
+				rgeUserEntityRepository.save(rgeUserEntity);
+			} catch (Exception e) {
+				throw new RecordNotUpdatedException("Error while changing password for user Id : " + userId);
+			}
+		} else {
+			throw new RecordNotFoundException("No record found for user Id : " + userId);
+		}
+
+	}
 }
