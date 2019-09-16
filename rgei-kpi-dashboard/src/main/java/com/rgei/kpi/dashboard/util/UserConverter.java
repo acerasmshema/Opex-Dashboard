@@ -161,6 +161,7 @@ public class UserConverter {
 		List<MillRole> millRoles = new ArrayList<>();
 		for( UserRoleMillEntity userRoleMill: entity.getUserRoleMills()) {
 			MillRole role = new MillRole();
+			role.setMillRoleId(userRoleMill.getRgeUserRoleId().toString());
 			role.setSelectedUserRole(getUserRoleDetails(userRoleMill));
 			role.setSelectedMill(getMillDetails(userRoleMill));
 			millRoles.add(role);
@@ -196,7 +197,7 @@ public class UserConverter {
 
 	private static Department getDepartmentDetails(RgeUserEntity entity) {
 		Department department = new Department();
-		department.setDepartmentId(entity.getDepartment().getDepartmentId());
+		department.setDepartmentId(entity.getDepartment().getDepartmentId().toString());
 		department.setDepartmentName(entity.getDepartment().getDepartmentName());
 		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
 		department.setActive(entity.getDepartment().getActive());

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-role',
@@ -12,6 +11,12 @@ export class UserRoleComponent implements OnInit {
 
   public userRoles: UserRole[] = [];
   private selectedUserRole: UserRole;
+
+  cols = [
+    { field: 'roleName', header: 'User Role', width: "25%" },
+    { field: 'description', header: 'Description', width: "55%" },
+    { field: 'status', header: 'Status', width: "6%" },
+  ];
 
   constructor(private userRoleService: UserRoleService) { }
 
@@ -41,8 +46,7 @@ export class UserRoleComponent implements OnInit {
 
   onSave(userRole: UserRole) {
     this.selectedUserRole = null;
-
-    this.userRoleService.saveUserRole(userRole);
+    (!userRole.userRoleId) ? this.userRoleService.saveUserRole(userRole, this.userRoles) : this.userRoleService.updateUserRole(userRole, this.userRoles);
   }
 
 }

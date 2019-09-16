@@ -28,7 +28,7 @@ public class ValidationController {
 	@Resource
 	ValidationService validationService;
 	
-	@ApiOperation(value = "validateUsernameAndEmail", notes = "Validate username received in request, throw exception if it exists")
+	@ApiOperation(value = "validateUsername", notes = "Validate username received in request, throw exception if it exists")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK"), @ApiResponse(code = 500, message = "RecordExistException") })
 	@GetMapping("/v1/validate_user_name")
 	public ResponseEntity<HttpStatus> validateUsername(@RequestHeader(name = "username") String username) {
@@ -37,12 +37,21 @@ public class ValidationController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "validateUsernameAndEmail", notes = "Validate email received in request, throw exception if it exists")
+	@ApiOperation(value = "validateEmail", notes = "Validate email received in request, throw exception if it exists")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK"), @ApiResponse(code = 500, message = "RecordExistException") })
 	@GetMapping("/v1/validate_email")
 	public ResponseEntity<HttpStatus> validateEmail(@RequestHeader(name = "email") String email) {
 		logger.info("Validate Email for ", email);
 		validationService.validateEmail(email);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "validateRoleName", notes = "Validate mill role name received in request, throw exception if it exists")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK"), @ApiResponse(code = 500, message = "RecordExistException") })
+	@GetMapping("/v1/validate_role")
+	public ResponseEntity<HttpStatus> validateRoleName(@RequestHeader(name = "roleName") String roleName) {
+		logger.info("Validate role name", roleName);
+		validationService.validateRoleName(roleName);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

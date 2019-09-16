@@ -42,6 +42,6 @@ public class CommonFunction {
 		if(obj != null) {
 			return obj.toString();
 		}
-		return null;
+		return "";
 	}
 }

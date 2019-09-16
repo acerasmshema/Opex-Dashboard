@@ -4,9 +4,17 @@ import { CommonMessage } from '../../constant/Common-Message';
 import { AnnotationDialog } from 'src/app/core/dialog/annotation-dialog';
 import { SearchKpiData } from '../../models/search-kpi-data';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
+import { API_URL } from '../../constant/API_URLs';
+import { FormControl } from '@angular/forms';
+import { ApiCallService } from '../api/api-call.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ValidationService {
+
+    validateEmailURL = API_URL.user_api_URLs.VALIDATE_EMAIL;
+
+    constructor(private apiCallService: ApiCallService) { }
 
     targetDaysValidation(maintenanceDays: MaintenanceDays) {
         if (maintenanceDays.targetDays <= 0) {
@@ -72,4 +80,18 @@ export class ValidationService {
             sidebarForm.dateError = false;
         }
     }
+
+    forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
+        let requestData = {
+            email: control.value
+        }
+        return new Promise(resolve => {
+            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+                .subscribe(
+                    response => resolve({ 'emailExit': false }),
+                    error => resolve({ 'emailExit': true })
+                )
+        });
+    }
+
 }

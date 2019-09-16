@@ -3,7 +3,6 @@ import { ProductionRequest } from './ProductionRequest';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import * as shape from 'd3-shape';
 import { ProductionEnquiry } from './ProductionEnquiry';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { ProductionService } from './production.service';
 import { MasterData } from '../../shared/constant/MasterData';
 import { ProductionBar } from './production-bar';
@@ -44,8 +43,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   private monthlyChartRendered: boolean;
   private productionChartRendered: boolean;
 
-  constructor(private localStorageService: LocalStorageService,
-    private statusService: StatusService,
+  constructor(private statusService: StatusService,
     private productionService: ProductionService,
     private datePipe: DatePipe,
     private messageService: MessageService) {

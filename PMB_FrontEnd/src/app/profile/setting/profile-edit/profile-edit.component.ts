@@ -24,6 +24,9 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onEditProfileSave() {
-
+    if (this.userDetailForm.valid)
+      return;
+    this.profileEditService.saveProfile(this.userDetailForm);
   }
+
 }

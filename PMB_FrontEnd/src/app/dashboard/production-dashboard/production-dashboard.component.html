@@ -33,7 +33,7 @@
                   <h6>Projected Daily Target in next {{annualChart.targetDays}} Days Till {{annualChart.targetEndDate}}
                     :
                     {{annualChart.targetValue}} (ADt)
-                    <span class="m-l-5" (click)="openSettingIcon()"><em class="fa fa-cog fa-lg"
+                    <span *ngIf="annualChart.targetDays > 0" class="m-l-5" (click)="openSettingIcon()"><em class="fa fa-cog fa-lg"
                         aria-hidden="true"></em></span>
                   </h6>
                 </div>

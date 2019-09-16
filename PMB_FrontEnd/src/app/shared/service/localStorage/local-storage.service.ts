@@ -9,6 +9,7 @@ export class LocalStorageService {
      constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private router: Router) { }
 
      public storeUserDetails(userDetail: UserDetail): void {
+      localStorage.s
           const userDetails = {
                userName: userDetail,
           };
