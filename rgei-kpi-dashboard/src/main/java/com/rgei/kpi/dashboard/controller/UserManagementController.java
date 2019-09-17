@@ -118,7 +118,6 @@ public class UserManagementController {
 	public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "userId") String userId,
 			@RequestHeader(value = "password") String password) throws NoSuchAlgorithmException {
 		logger.info("Changing password");
-//		password = Base64.getEncoder().encodeToString(password.getBytes());
 		userManagementService.changePassword(userId, password);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

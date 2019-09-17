@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.controller;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -66,7 +68,7 @@ public class RgeUserController {
 	@ApiOperation(value = "getUserByName", notes = "Authenticate user by username and password", response = RgeUserResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/user_info/login")
-	public ResponseEntity<User> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) {
+	public ResponseEntity<User> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) throws NoSuchAlgorithmException {
 		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getLoginId());
 		User response = rgeUserService.loginProcess(rgeUserLoginRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
