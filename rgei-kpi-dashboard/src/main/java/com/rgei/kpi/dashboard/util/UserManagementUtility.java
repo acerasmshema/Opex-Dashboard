@@ -134,11 +134,17 @@ public class UserManagementUtility {
 		return userEntity;
 	}
 	
-	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole) {
+	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole, User user) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
+		Date date = new Date();
 		try {
 			userRoleMill.setMillId(Integer.parseInt(millRole.getSelectedMill().getMillId()));
 			userRoleMill.setRoleId(Long.parseLong(millRole.getSelectedUserRole().getUserRoleId()));
+			userRoleMill.setUserId(Long.parseLong(user.getUserId()));
+			userRoleMill.setCreatedBy(user.getCreatedBy());
+			userRoleMill.setCreatedDate(date);
+			userRoleMill.setUpdatedBy(user.getUpdatedBy());
+			userRoleMill.setUpdatedDate(date);
 			userRoleMill.setStatus(Boolean.TRUE);
 		} catch (Exception e) {
 			throw new RecordNotCreatedException("Error while creating new user role relation :" + millRole);
@@ -146,6 +152,17 @@ public class UserManagementUtility {
 		return userRoleMill;
 	}
 
+	public static UserRoleMillEntity updateUserRoleMillEntity(UserRoleMillEntity millRole) {
+		Date date = new Date();
+		try {
+			millRole.setStatus(Boolean.FALSE);
+			millRole.setUpdatedDate(date);
+		} catch (Exception e) {
+			throw new RecordNotCreatedException("Error while updating new user role relation :" + millRole);
+		}
+		return millRole;
+	}
+	
 	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities) {
 		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
@@ -211,10 +228,12 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
+				if(Boolean.TRUE.equals(entity.getStatus())) {
 				millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
 				millRole.setSelectedMill(getMillDetail(entity.getMill()));
 				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
 				millRoles.add(millRole);
+				}
 			}
 		}
 		return millRoles;

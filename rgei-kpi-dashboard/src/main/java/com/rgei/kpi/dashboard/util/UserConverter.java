@@ -68,7 +68,7 @@ public class UserConverter {
 	
 	public static List<LoginDetailResponse> convertLoginUserInfoToLoginDetailResponse(List<LoginDetailEntity> loginDetailEntityList,
 			Integer millId) {
-		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<LoginDetailResponse>();
+		List<LoginDetailResponse> loginDetailResponseList = new ArrayList<>();
 		LoginDetailResponse response = null;
 		for (LoginDetailEntity entity : loginDetailEntityList) {
 			List<UserRoleMillEntity> rolesMillList = entity.getRgeUserEntity().getUserRoleMills();
@@ -161,10 +161,12 @@ public class UserConverter {
 		List<MillRole> millRoles = new ArrayList<>();
 		for( UserRoleMillEntity userRoleMill: entity.getUserRoleMills()) {
 			MillRole role = new MillRole();
+			if(Boolean.TRUE.equals(userRoleMill.getStatus())) {
 			role.setMillRoleId(userRoleMill.getRgeUserRoleId().toString());
 			role.setSelectedUserRole(getUserRoleDetails(userRoleMill));
 			role.setSelectedMill(getMillDetails(userRoleMill));
 			millRoles.add(role);
+			}
 		}
 		return millRoles;
 	}
@@ -187,6 +189,7 @@ public class UserConverter {
 		UserRole userRole = new UserRole();
 		userRole.setUserRoleId(userRoleMill.getRoleId().toString());
 		userRole.setRoleName(userRoleMill.getRole().getRoleName());
+		userRole.setShowUserManagement(userRoleMill.getRole().getShowUserManagement());
 		userRole.setActive(userRole.getActive());
 		userRole.setCreatedBy(userRole.getCreatedBy());
 		userRole.setCreatedDate(userRole.getCreatedDate());

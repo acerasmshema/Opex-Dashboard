@@ -16,12 +16,19 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 
 @Repository
-public interface RgeUserRoleMillRepository extends JpaRepository<UserRoleMillEntity, Long>{
-	
+public interface RgeUserRoleMillRepository extends JpaRepository<UserRoleMillEntity, Long> {
+
+	@Query("Select rm from UserRoleMillEntity rm where rm.userId= :userId AND rm.status = :status")
+	List<UserRoleMillEntity> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Boolean status);
+
 }

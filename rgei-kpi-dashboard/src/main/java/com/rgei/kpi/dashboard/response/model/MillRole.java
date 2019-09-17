@@ -4,6 +4,7 @@ public class MillRole {
 	private String millRoleId;
 	private MillDetail selectedMill;
 	private UserRole selectedUserRole;
+	private Boolean active;
 
 	public String getMillRoleId() {
 		return millRoleId;
@@ -27,6 +28,14 @@ public class MillRole {
 
 	public void setSelectedUserRole(UserRole selectedUserRole) {
 		this.selectedUserRole = selectedUserRole;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }
