@@ -119,30 +119,20 @@ export class DialogService {
     }
 
     getAllUserRole(userDetailForm: FormGroup, activeUserRoles) {
-        if (this.statusService.common.activeUserRoles.length === 0) {
-            this.commonService.getAllUserRole(activeUserRoles).
-                subscribe(
-                    (roleList: UserRole[]) => {
-                        const millRoles: any = userDetailForm.controls.millRoles;
-                        const userRoleControl = millRoles.controls[0].value.userRoles.controls;
-                        roleList.forEach(userRole => {
-                            userRoleControl.push(new FormControl(userRole));
-                        });
-                        this.statusService.common.activeUserRoles = roleList;
-                    },
-                    (error: any) => {
-                        console.log("error in user role");
-                    }
-                );
-        }
-        else {
-            const roleList = this.statusService.common.activeUserRoles;
-            const millRoles: any = userDetailForm.controls.millRoles;
-            const userRoleControl = millRoles.controls[millRoles.length - 1].value.userRoles.controls;
-            roleList.forEach(userRole => {
-                userRoleControl.push(new FormControl(userRole));
-            });
-        }
+        this.commonService.getAllUserRole(activeUserRoles).
+            subscribe(
+                (roleList: UserRole[]) => {
+                    const millRoles: any = userDetailForm.controls.millRoles;
+                    const userRoleControl = millRoles.controls[0].value.userRoles.controls;
+                    roleList.forEach(userRole => {
+                        userRoleControl.push(new FormControl(userRole));
+                    });
+                    this.statusService.common.activeUserRoles = roleList;
+                },
+                (error: any) => {
+                    console.log("error in user role");
+                }
+            );
     }
 
     createNewUser(userDetailForm: FormGroup) {

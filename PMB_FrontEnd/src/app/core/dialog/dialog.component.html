@@ -288,13 +288,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                     <label class="edit-label">Address</label>
                     <div class="form-group">
                         <input type="text" class="form-control edit-input" formControlName="address">
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <label class="edit-label">Country</label>
                     <div class="form-group">
                         <select name="" id="" class="form-control edit-input" style="height: 34px;"
@@ -368,20 +368,22 @@
                 <table class="table table-bordered" style="background: #f1f1f1;">
                     <div class="table-title text-center">
                         <span class="required role-head">User Role</span>
-                        <span *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value" class="float-right m-r-5" (click)="onAddMillRole()">
+                        <span
+                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value"
+                            class="float-right m-r-5" (click)="onAddMillRole()">
                             <em class="fa fa-user-plus fa-2x"></em>
                         </span>
                     </div>
                     <thead class="m-t-5">
                         <tr>
-                            <th style="width: 30%;">Mill</th>
-                            <th style="width: 55%;">User Role</th>
-                            <th style="width: 15%;">Action</th>
+                            <th class="text-center" style="width: 43%;">Mill</th>
+                            <th class="text-center" style="width: 43%;">User Role</th>
+                            <th class="text-center" style="width: 14%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
-                            <td style="width: 30%;">
+                            <td style="width: 43%;">
                                 <select name="" id="" class="form-control edit-input" style="height: 34px;"
                                     (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
@@ -390,7 +392,7 @@
                                         {{mill.value.millName}}</option>
                                 </select>
                             </td>
-                            <td style="width: 55%;">
+                            <td style="width: 43%;">
                                 <select class="form-control edit-input" style="height: 34px;"
                                     (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>
@@ -401,7 +403,9 @@
                                 </select>
                             </td>
                             <td class="text-center">
-                                <a *ngIf="(i > 0)" (click)='onDeleteMillRole(i)'><i class="fa fa-trash"></i></a>
+                                <a (click)='onDeleteMillRole(i)'>
+                                    <i class="fa fa-trash" [style.color]="(i === 0) ? '#9c9999': 'red'"></i>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -410,7 +414,8 @@
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!userDetailForm.valid"
                     class="btn btn-primary btn-md float-right">Save</button>
-                <button type="button" (click)="onUserDetailCancel()" class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+                <button type="button" (click)="onUserDetailCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
     </form>

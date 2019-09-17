@@ -397,8 +397,10 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onDeleteMillRole(index: number) {
-    let millRoles: any = this.userDetailForm.controls.millRoles;
-    millRoles.removeAt(index);
+    if (index > 0) {
+      let millRoles: any = this.userDetailForm.controls.millRoles;
+      millRoles.removeAt(index);
+    }
   }
 
   onCreateUser() {

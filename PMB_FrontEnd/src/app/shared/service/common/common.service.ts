@@ -113,7 +113,6 @@ export class CommonService {
     public clearStatus() {
         this.statusService.common.buTypes = [];
         this.statusService.common.countryList = [];
-        this.statusService.common.userRoles = [];
         this.statusService.common.mills = [];
         this.statusService.common.departmentList = [];
         this.statusService.common.processLines = [];
