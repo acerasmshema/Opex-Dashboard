@@ -46,6 +46,9 @@ public class UserRoleEntity implements Serializable {
 	@Column(name="role_name")
 	private String roleName;
 	
+	@Column(name="show_user_management")
+	private Boolean showUserManagement;
+	
 	@Column(name="created_by")
 	private String createdBy;
 	
@@ -143,6 +146,14 @@ public class UserRoleEntity implements Serializable {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public Boolean getShowUserManagement() {
+		return showUserManagement;
+	}
+
+	public void setShowUserManagement(Boolean showUserManagement) {
+		this.showUserManagement = showUserManagement;
 	}
 
 }

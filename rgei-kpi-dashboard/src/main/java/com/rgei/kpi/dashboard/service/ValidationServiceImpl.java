@@ -32,10 +32,10 @@ public class ValidationServiceImpl implements ValidationService {
 		logger.info("Inside service call to validate user by Username : "+username);
 		RgeUserEntity entity = rgeUserEntityRepository.findByLoginId(username);
 		if(entity != null) {
-			throw new RecordExistException("User with Username "+username+" already exists");
+			throw new RecordExistException("User with Username "+username+" exists");
 		}
 		return true;
-	}
+	}	
 	
 	@Override
 	public Boolean validateEmail(String email) {
@@ -50,10 +50,10 @@ public class ValidationServiceImpl implements ValidationService {
 	@Override
 	public Boolean validateRoleName(String roleName) {
 		logger.info("Inside service call to validate role name : " + roleName);
-		List<UserRoleEntity> entity = userRoleRepository.findAllByOrderByRoleIdAsc();
+		List<UserRoleEntity> entity = userRoleRepository.findAllByOrderByRoleNameAsc();
 		if (!entity.isEmpty()) {
 			for (UserRoleEntity role : entity) {
-				if (Objects.nonNull(role.getRoleName()) && role.getRoleName().equalsIgnoreCase(roleName)) {
+				if (Objects.nonNull(role.getRoleName()) && role.getRoleName().equalsIgnoreCase(roleName) ) {
 					throw new RecordExistException("Role with name " + roleName + " already exists");
 				}
 			}

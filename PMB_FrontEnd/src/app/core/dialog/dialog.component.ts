@@ -75,6 +75,8 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.openSettingIcon(data);
         }
         else if (dialogName === 'addUser') {
+          if (this.userDetailForm !== undefined)
+            this.userDetailForm.reset();
           this.userDetailForm = this.dialogService.createUserForm();
         }
 
@@ -394,9 +396,11 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.addMillRole(this.userDetailForm);
   }
 
-  onDeleteMillRole(millRoleId: number) {
-    let millRoles: any = this.userDetailForm.controls.millRoles;
-    millRoles.filter((millRole) => millRole.millRoleId !== millRoleId);
+  onDeleteMillRole(index: number) {
+    if (index > 0) {
+      let millRoles: any = this.userDetailForm.controls.millRoles;
+      millRoles.removeAt(index);
+    }
   }
 
   onCreateUser() {
@@ -420,6 +424,10 @@ export class DialogComponent implements OnInit, OnDestroy {
   onUserRoleChange(userRoleId: string, millRole: FormGroup) {
     const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
     millRole.value.selectedUserRole.setValue(userRole);
+  }
+
+  onUserDetailCancel() {
+    this.userDetailForm.controls.show.setValue(false);
   }
 
   ngOnDestroy() {

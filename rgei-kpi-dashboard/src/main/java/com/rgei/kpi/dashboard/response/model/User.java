@@ -53,7 +53,7 @@ public class User {
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 	}
 
 	public String getLastName() {
@@ -61,7 +61,7 @@ public class User {
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 	}
 
 	public String getEmail() {
@@ -69,7 +69,7 @@ public class User {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email.trim();
 	}
 
 	public String getPhone() {
@@ -77,7 +77,7 @@ public class User {
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		this.phone = phone.trim();
 	}
 
 	public String getCreatedBy() {
@@ -117,7 +117,7 @@ public class User {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public Boolean getActive() {
