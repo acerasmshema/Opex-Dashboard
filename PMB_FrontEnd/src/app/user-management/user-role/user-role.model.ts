@@ -6,4 +6,5 @@ export class UserRole {
     isEnable: boolean;
     createdBy: string;
     updatedBy: string;
+    showUserManagement: boolean;
 }

@@ -41,8 +41,7 @@ export class HeaderComponent implements OnInit {
       this.statusService.common.selectedMill = this.mills[0];
       this.statusService.common.selectedRole = userDetail.millRoles[0].selectedUserRole;
       this.selectedMillName = this.mills[0].millName;
-      const roleName = this.statusService.common.selectedRole.roleName;
-      this.isShow = (roleName === "Admin" || roleName === 'Senior Management') ? true : false;
+      this.isShow = this.statusService.common.selectedRole.showUserManagement;
       this.user = userDetail.firstName;
     }
   }
@@ -85,7 +84,7 @@ export class HeaderComponent implements OnInit {
           this.statusService.common.selectedMill = millRole.selectedMill;
           this.selectedMillName = this.statusService.common.selectedMill.millName;
           this.statusService.common.selectedRole = millRole.selectedUserRole;
-          this.isShow = (this.statusService.common.selectedRole.roleName === "Admin" || this.statusService.common.selectedRole.roleName === "Senior Management") ? true : false;
+          this.isShow = this.isShow = this.statusService.common.selectedRole.showUserManagement;
         }
       });
       if (this.isShow && window.location.pathname === '/user') {

@@ -243,7 +243,8 @@
 <div *ngIf="dialogName === 'addUser'">
     <form [formGroup]='userDetailForm' (ngSubmit)="onCreateUser()">
         <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
-            [baseZIndex]="10000" [(visible)]="userDetailForm.controls.show.value">
+            [baseZIndex]="10000" [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true"
+            [draggable]="true" [maximizable]="true">
             <div class="row">
                 <div class="col-sm-6">
                     <label class="edit-label required">First Name</label>
@@ -251,7 +252,7 @@
                         <input type="text" class="form-control edit-input" formControlName="firstName">
                         <span class="error-text"
                             *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors['required']">
-                            Please enter the First Name
+                            First name is required
                         </span>
                     </div>
                 </div>
@@ -261,7 +262,7 @@
                         <input type="text" class="form-control edit-input" formControlName="lastName">
                         <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
                             && userDetailForm.get('lastName').errors['required']">
-                            Please enter the Last Name
+                            Last name is required
                         </span>
                     </div>
                 </div>
@@ -273,10 +274,12 @@
                         <input type="email" class="form-control edit-input" formControlName="email">
                         <span class="help-block"
                             *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
-                            <span *ngIf="userDetailForm.get('email').errors['required']" class="error-text">
+                            <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
                                 Email is required</span>
-                            <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">
-                                Please enter valid email</span>
+                            <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
+                                Invalid email</span>
+                            <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
+                                Email already exist</span>
                         </span>
                     </div>
                 </div>
@@ -314,9 +317,9 @@
                         <input type="text" class="form-control edit-input" formControlName="username">
                         <span class="help-block"
                             *ngIf="!userDetailForm.get('username').valid && userDetailForm.get('username').touched">
-                            <span *ngIf="userDetailForm.get('username').errors['required']" class="error-text">
+                            <span *ngIf="userDetailForm.get('username').errors?.required" class="error-text">
                                 Username is required</span>
-                            <span *ngIf="userDetailForm.get('username').errors['usernameExit']" class="error-text">
+                            <span *ngIf="userDetailForm.get('username').errors?.usernameExit" class="error-text">
                                 Username already exist</span>
                         </span>
                     </div>
@@ -333,7 +336,7 @@
                         </select>
                         <span class="error-text" *ngIf="!userDetailForm.get('selectedDepartment').valid && userDetailForm.get('selectedDepartment').touched &&
                              userDetailForm.get('selectedDepartment').errors['required']">
-                            Please select the any Department
+                            Department is required
                         </span>
                     </div>
                 </div>
@@ -347,6 +350,8 @@
                         <span *ngIf="!userDetailForm.get('password').valid && userDetailForm.get('password').touched">
                             <span *ngIf="userDetailForm.get('password').errors.required" class="error-text">
                                 Password is required</span>
+                            <span *ngIf="userDetailForm.get('password').hasError('minlength')" class="error-text">
+                                Password should be atleast 8 characters</span>
                         </span>
                     </div>
                 </div>
@@ -367,11 +372,14 @@
             <div class="table-wrapper">
                 <table class="table table-bordered" style="background: #f1f1f1;">
                     <div class="table-title text-center">
-                        <span class="required role-head">User Role</span>
+                        <span class="required role-head">Assign User Role</span>
                         <span
                             *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value"
                             class="float-right m-r-5" (click)="onAddMillRole()">
-                            <em class="fa fa-user-plus fa-2x"></em>
+                            <div #addMillRole style="display:inline-block;position:relative">
+                                <em class="fa fa-user-plus fa-2x" pTooltip="Add Mill Role" [appendTo]="addMillRole"
+                                    tooltipPosition="left"></em>
+                            </div>
                         </span>
                     </div>
                     <thead class="m-t-5">
@@ -384,7 +392,7 @@
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
                             <td style="width: 43%;">
-                                <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                                <select name="" id="" class="form-control edit-input"
                                     (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
                                     <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
@@ -393,7 +401,7 @@
                                 </select>
                             </td>
                             <td style="width: 43%;">
-                                <select class="form-control edit-input" style="height: 34px;"
+                                <select class="form-control edit-input"
                                     (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>
                                     <option *ngFor="let userRole of millRole.value.userRoles.controls"
@@ -404,7 +412,10 @@
                             </td>
                             <td class="text-center">
                                 <a (click)='onDeleteMillRole(i)'>
-                                    <i class="fa fa-trash" [style.color]="(i === 0) ? '#9c9999': 'red'"></i>
+                                    <div #deleteMillRole style="display:inline-block;position:relative">
+                                        <i class="fa fa-trash" [style.color]="(i === 0) ? '#9c9999': 'red'"
+                                            pTooltip="Delete" tooltipPosition="left" [appendTo]="deleteMillRole"></i>
+                                    </div>
                                 </a>
                             </td>
                         </tr>

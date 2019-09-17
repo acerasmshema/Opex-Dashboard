@@ -100,11 +100,21 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     millRole.value.selectedUserRole.setValue(userRole);
   }
 
-  onUserStatusChange(status: boolean) {
-    this.userDetailForm.controls.status.setValue(status);
+  onUserStatusChange(status: string, userInfo: UserDetail) {
+    if (this.statusService.common.userDetail.userId !== userInfo.userId) {
+      this.userDetailForm.controls.status.setValue(status);
+    }
+    else if (status === "false" && !confirm("Are you sure you want to inactivate yourself?")) {
+      let selectStatusElement: any = document.getElementById('statusSelect');
+      selectStatusElement.value = "true";
+    }
+
   }
 
   onUpdateUser(userId: string) {
+    if (this.userDetailForm.invalid)
+      return false;
+
     const userDetail = this.users.find((user) => user.userId === userId)
     userDetail.isReadOnly = false;
     this.userDetailService.updateUser(this.userDetailForm, userDetail);

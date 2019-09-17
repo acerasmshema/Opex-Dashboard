@@ -17,7 +17,7 @@ export class ProfileEditService {
         private messageService: MessageService,
         private commonService: CommonService,
         private apiCallService: ApiCallService,
-        private validateService: ValidationService,
+        private validationService: ValidationService,
         private statusService: StatusService) { }
 
     createUserDetailForm(): FormGroup {
@@ -26,7 +26,7 @@ export class ProfileEditService {
         let userDetailForm = this.formBuilder.group({
             firstName: new FormControl(userDetail.firstName, [Validators.required]),
             lastName: new FormControl(userDetail.lastName, [Validators.required]),
-            email: new FormControl(userDetail.email, [Validators.required, Validators.email]),
+            email: new FormControl(userDetail.email, { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
             country: new FormControl(userDetail.country),

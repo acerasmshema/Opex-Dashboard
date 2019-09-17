@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.statusService.spinnerSubject.next(true);
     const requestData = {
       loginId: username,
-      userPassword: password
+      userPassword: btoa(password)
     }
     this.loginService.validateUser(requestData).
       subscribe(

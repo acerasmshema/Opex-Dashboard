@@ -53,6 +53,8 @@ export class API_URL {
         CREATE_USER: API_URL.BASE_API_URL_v1 + '/create_user',
         UPDATE_USER: API_URL.BASE_API_URL_v1 + '/update_user',
         VALIDATE_EMAIL: API_URL.BASE_API_URL_v1 + '/validate_email',
+        VALIDATE_USERNAME: API_URL.BASE_API_URL_v1 + '/validate_user_name',
+        VALIDATE_USERROLE: API_URL.BASE_API_URL_v1 + '/validate_role',
     }
     
 }

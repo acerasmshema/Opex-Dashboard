@@ -13,7 +13,8 @@
                 <input type="text" class="form-control edit-input" formControlName="firstName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
-                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">First name is required</span>
+                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">First name is
+                    required</span>
                 </span>
               </div>
             </div>
@@ -23,7 +24,8 @@
                 <input type="text" class="form-control edit-input" formControlName="lastName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
-                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Last name is required</span>
+                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Last name is
+                    required</span>
                 </span>
               </div>
             </div>
@@ -35,9 +37,12 @@
                 <input type="email" class="form-control edit-input" formControlName="email">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
-                  <span *ngIf="userDetailForm.get('email').errors['required']" class="error-text">Email is
-                    required</span>
-                  <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">Invalid email</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
+                    Email is required</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
+                    Invalid email</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
+                    Email already exist</span>
                 </span>
               </div>
             </div>
