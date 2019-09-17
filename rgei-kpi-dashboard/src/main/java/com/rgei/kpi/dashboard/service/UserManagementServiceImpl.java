@@ -189,13 +189,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void changePassword(String userId, String password) throws NoSuchAlgorithmException {
 		logger.info("Inside service call to change password");
-		String decodedString = new String(Base64.getDecoder().decode(password));
 		String encodedSHAString = "";
-		try {
-			encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(decodedString));
-		} catch (Exception e) {
-			throw new NoSuchAlgorithmException();
-		}
 		RgeUserEntity rgeUserEntity = null;
 		try {
 			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(userId));
@@ -203,6 +197,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			throw new RecordNotFoundException("No record found for user Id : " + userId);
 		}
 		if (rgeUserEntity != null) {
+			String decodedString = new String(Base64.getDecoder().decode(password));
+			String passwordString = rgeUserEntity.getLoginId()+"_"+decodedString;
+			try {
+				encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
+			} catch (Exception e) {
+				throw new NoSuchAlgorithmException();
+			}
 			rgeUserEntity.setUserPassword(encodedSHAString);
 			rgeUserEntity.setUpdatedOn(new Date());
 			rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
