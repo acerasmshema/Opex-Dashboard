@@ -37,6 +37,7 @@ public class UserManagementUtility {
 			resp.setUserRoleId(entity.getRoleId().toString());
 			resp.setRoleName(entity.getRoleName());
 			resp.setActive(entity.getStatus());
+			resp.setShowUserManagement(entity.getShowUserManagement());
 			resp.setDescription(entity.getDescription());
 			resp.setCreatedBy(entity.getCreatedBy());
 			resp.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
@@ -73,6 +74,7 @@ public class UserManagementUtility {
 		newUserRole.setCreatedDate(new java.util.Date());
 		newUserRole.setUpdatedBy(userRole.getUpdatedBy());
 		newUserRole.setUpdatedDate(new java.util.Date());
+		newUserRole.setShowUserManagement(Boolean.FALSE);
 		newUserRole.setStatus(userRole.getActive());
 		return newUserRole;
 	}

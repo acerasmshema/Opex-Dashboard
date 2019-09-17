@@ -19,6 +19,7 @@ import com.rgei.kpi.dashboard.entities.DepartmentEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
@@ -39,6 +40,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementServiceImpl.class);
 
+	@Resource
+	ValidationService validationService;
+	
 	@Resource
 	CountryRepository countryRepository;
 
@@ -82,6 +86,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void createUserRole(UserRole userRole) {
 		logger.info("Inside service call to create new user role for request : " + userRole);
+		validationService.validateRoleName(userRole.getRoleName());
 		UserRoleEntity userRoleEntity = UserManagementUtility.fetchUserRoleEntity(userRole);
 		try {
 			userRoleRepository.save(userRoleEntity);
@@ -110,6 +115,8 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void createUser(User user) {
 		logger.info("Inside service call to get create new user for request : " + user);
+		validationService.validateUserName(user.getUsername());
+		validationService.validateEmail(user.getEmail());
 		try {
 			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
 			rgeUserEntityRepository.save(userEntity);
