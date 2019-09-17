@@ -38,7 +38,7 @@
           </a>
         </td>
         <td *ngFor="let col of columns">
-          <div *ngIf="col.field !== 'millRoles' && col.field !== 'active'" class="td-user">
+          <div *ngIf="col.field !== 'millRoles' && col.field !== 'active'" class="td-user pull-left">
             {{rowData[col.field]}}
           </div>
           <div *ngIf="col.field === 'millRoles'">
@@ -148,7 +148,9 @@
                     <div class="col-md-6">
                       <div class="table-wrapper">
                         <div class="table-title text-center">
-                          <span class="float-right m-r-5" (click)="onAddMillRole(!rowData.isReadOnly)">
+                          <span
+                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.mills.controls.length"
+                            class="float-right m-r-5" (click)="onAddMillRole(!rowData.isReadOnly)">
                             <em class="fa fa-user-plus fa-2x" style="font-size: 21px;"
                               [style.color]="(!rowData.isReadOnly) ? '#9c9999': '#333333'  "></em>
                           </span>
@@ -156,37 +158,40 @@
                         <table class="table table-bordered" style="background: #f1f1f1;">
                           <thead class="m-t-5">
                             <tr>
-                              <th style="width: 30%;font-size: 10pt;">Mill</th>
-                              <th style="width: 55%;font-size: 10pt;">User Role</th>
-                              <th style="width: 15%;font-size: 10pt;">Action</th>
+                              <th class="text-center" style="width: 43%;font-size: 10pt;">Mill</th>
+                              <th class="text-center" style="width: 43%;font-size: 10pt;">User Role</th>
+                              <th class="text-center" style="width: 14%;font-size: 10pt;">Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i = index;">
-                              <td style="width: 30%;">
+                              <td style="width: 43%;">
                                 <select [disabled]="!rowData.isReadOnly" class="form-control edit-input"
-                                  style="height: 30px;">
+                                  style="height: 30px;" (change)="onMillChange($event.target.value, millRole)">
                                   <option *ngIf="millRole.value.selectedMill.value === null" disabled selected>
                                     Select Mill</option>
                                   <option *ngFor="let mill of userDetailForm.controls.mills.controls" class="edit-input"
+                                    [value]="mill.value.millId"
                                     [selected]="(millRole.value.selectedMill.value !== null && mill.value.millName === millRole.value.selectedMill.value.millName)">
                                     {{mill.value.millName}}</option>
                                 </select>
                               </td>
-                              <td style="width: 55%;">
+                              <td style="width: 43%;">
                                 <select [disabled]="!rowData.isReadOnly" class="form-control edit-input"
-                                  style="height: 30px;">
+                                  style="height: 30px;" (change)="onUserRoleChange($event.target.value, millRole)">
                                   <option *ngIf="millRole.value.selectedUserRole.value === null" disabled selected>
                                     Select User Role</option>
                                   <option *ngFor="let userRole of userDetailForm.controls.userRoles.controls"
+                                    class="edit-input"
                                     [selected]="(millRole.value.selectedUserRole.value !== null && userRole.value.roleName === millRole.value.selectedUserRole.value.roleName)"
-                                    class="edit-input">{{userRole.value.roleName}}</option>
+                                    [value]="userRole.value.userRoleId">{{userRole.value.roleName}}
+                                  </option>
                                 </select>
                               </td>
                               <td class="text-center">
-                                <a (click)='onDeleteMillRole(i, !rowData.isReadOnly)'><i class="fa fa-trash"
-                                    style="font-size: 21px;"
-                                    [style.color]="(!rowData.isReadOnly) ? '#9c9999': 'red'"></i></a>
+                                <a  (click)='onDeleteMillRole(i, !rowData.isReadOnly)'>
+                                  <i class="fa fa-trash" style="font-size: 21px;"
+                                    [style.color]="(!rowData.isReadOnly || i === 0) ? '#9c9999': 'red'"></i></a>
                               </td>
                             </tr>
                           </tbody>

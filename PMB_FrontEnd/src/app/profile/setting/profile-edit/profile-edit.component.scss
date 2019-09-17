@@ -18,6 +18,7 @@
     height: 40px;
 }
 
-input.ng-invalid {
-    border: 1px solid red;
-}
+.error-text {
+    font-size: 10pt;
+    color: red;
+  }
