@@ -114,13 +114,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		Date date = new Date();
 		try {
 			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
-			userEntity.setCreatedBy(user.getCreatedBy());
-			userEntity.setCreatedOn(date);
-			userEntity.setUpdatedBy(user.getUpdatedBy());
-			userEntity.setUpdatedOn(date);
 			rgeUserEntityRepository.save(userEntity);
-
-			if (userEntity != null) {
 				user.setUserId(userEntity.getUserId().toString());
 				List<MillRole> millRoles = user.getMillRoles();
 				for (MillRole millRole : millRoles) {
@@ -132,7 +126,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 					userRoleMillEntity.setUpdatedDate(date);
 					rgeUserRoleMillRepository.save(userRoleMillEntity);
 				}
-			}
 
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating new user  :" + user);
@@ -167,11 +160,8 @@ public class UserManagementServiceImpl implements UserManagementService {
 		try {
 			if (user != null) {
 				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
-				if (null != userEntity) {
-					RgeUserEntity updatedUser = UserManagementUtility.createUserEntity(user);
-					updatedUser.setUserId(Long.parseLong(user.getUserId()));
-					updatedUser.setUpdatedBy(user.getUpdatedBy());
-					updatedUser.setUpdatedOn(date);
+				if (userEntity.isPresent()) {
+					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity.get());
 					rgeUserEntityRepository.save(updatedUser);
 					List<MillRole> millRoles = user.getMillRoles();
 					for (MillRole millRole : millRoles) {
@@ -196,13 +186,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void changePassword(String userId, String password) throws NoSuchAlgorithmException {
 		logger.info("Inside service call to change password");
-		String decodedString = new String(Base64.getDecoder().decode(password));
 		String encodedSHAString = "";
-		try {
-			encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(decodedString));
-		} catch (Exception e) {
-			throw new NoSuchAlgorithmException();
-		}
 		RgeUserEntity rgeUserEntity = null;
 		try {
 			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(userId));
@@ -210,6 +194,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			throw new RecordNotFoundException("No record found for user Id : " + userId);
 		}
 		if (rgeUserEntity != null) {
+			String decodedString = new String(Base64.getDecoder().decode(password));
+			String passwordString = rgeUserEntity.getLoginId()+"_"+decodedString;
+			try {
+				encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
+			} catch (Exception e) {
+				throw new NoSuchAlgorithmException();
+			}
 			rgeUserEntity.setUserPassword(encodedSHAString);
 			rgeUserEntity.setUpdatedOn(new Date());
 			rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
