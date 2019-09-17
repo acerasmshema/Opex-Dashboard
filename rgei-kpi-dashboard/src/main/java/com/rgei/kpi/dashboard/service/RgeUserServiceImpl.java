@@ -1,5 +1,7 @@
 package com.rgei.kpi.dashboard.service;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,7 @@ import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.util.UserConverter;
+import com.rgei.kpi.dashboard.util.UserManagementUtility;
 
 @Service
 public class RgeUserServiceImpl implements RgeUserService{
@@ -63,7 +66,7 @@ public class RgeUserServiceImpl implements RgeUserService{
 	}
 
 	@Override
-	public User loginProcess(RgeUserLoginRequest rgeUserLoginRequest) {
+	public User loginProcess(RgeUserLoginRequest rgeUserLoginRequest) throws NoSuchAlgorithmException {
 		RgeUserEntity entity = null;
 		User response = null;
 		if (rgeUserLoginRequest.getLoginId() != null) {
@@ -104,9 +107,12 @@ public class RgeUserServiceImpl implements RgeUserService{
 		loginDetailEntityRepository.save(loginDetailEntity);
 	}
 
-	private User validateCredential(RgeUserEntity entity, RgeUserLoginRequest rgeUserLoginRequest) {
+	private User validateCredential(RgeUserEntity entity, RgeUserLoginRequest rgeUserLoginRequest) throws NoSuchAlgorithmException {
 		User user = null;
-		if(entity.getLoginId().equals(rgeUserLoginRequest.getLoginId()) && entity.getUserPassword().equals(rgeUserLoginRequest.getUserPassword())) {
+		String decodedString = new String(Base64.getDecoder().decode(rgeUserLoginRequest.getUserPassword()));
+		String passwordStringForRequest = rgeUserLoginRequest.getLoginId()+"_"+decodedString;
+		String userEncryptedPasswordForRequest = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordStringForRequest));
+		if(entity.getLoginId().equals(rgeUserLoginRequest.getLoginId()) && entity.getUserPassword().equals(userEncryptedPasswordForRequest)) {
 			user = UserConverter.createUserResponse(entity);
 		}else {
 			logger.info("Invalid credential requested for login id :",rgeUserLoginRequest.getLoginId(),rgeUserLoginRequest.getUserPassword());
