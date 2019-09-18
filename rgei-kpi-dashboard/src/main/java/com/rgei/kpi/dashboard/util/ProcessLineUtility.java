@@ -299,11 +299,12 @@ public class ProcessLineUtility {
 		}else {
 			throw new RecordNotFoundException("No records for mills data");
 		}
+		sortMillResponseByMillName(response);
 		return response;
 	}
 
 	public static List<BuTypeResponse> preareBUTypeResponse(List<BusinessUnitTypeEntity> businessUnitTypeEntityList) {
-		List<BuTypeResponse> buTypeList = new ArrayList<BuTypeResponse>();
+		List<BuTypeResponse> buTypeList = new ArrayList<>();
 		BuTypeResponse buTypeResponse = null;
 		if (buTypeList != null) {
 			for (BusinessUnitTypeEntity businessUnitTypeEntity : businessUnitTypeEntityList) {
@@ -321,6 +322,16 @@ public class ProcessLineUtility {
 		return buTypeList;
 	}
 
+	private static void sortMillResponseByMillName(List<MillDetail> mills) {
+		Collections.sort(mills, (o1, o2) -> {
+			int value1 = o1.getMillName().compareTo(o2.getMillName());
+			if (value1 == 0) {
+				return o1.getMillName().compareTo(o2.getMillName());
+			}
+			return value1;
+		});
+	}
+	
 	private static void sortBuTypeResponse(List<BuTypeResponse> buTypeList) {
 		Collections.sort(buTypeList, (o1, o2) -> {
 			int value1 = o1.getBuTypeId().compareTo(o2.getBuTypeId());

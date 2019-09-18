@@ -6,6 +6,7 @@ import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/primeng';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Injectable()
 export class ProfileEditService {
@@ -16,6 +17,7 @@ export class ProfileEditService {
         private messageService: MessageService,
         private commonService: CommonService,
         private apiCallService: ApiCallService,
+        private validateService: ValidationService,
         private statusService: StatusService) { }
 
     createUserDetailForm(): FormGroup {

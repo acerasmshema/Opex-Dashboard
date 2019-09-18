@@ -13,7 +13,7 @@ export class UserRoleComponent implements OnInit {
   private selectedUserRole: UserRole;
 
   cols = [
-    { field: 'roleName', header: 'User Role', width: "25%" },
+    { field: 'roleName', header: 'Role Name', width: "25%" },
     { field: 'description', header: 'Description', width: "55%" },
     { field: 'status', header: 'Status', width: "6%" },
   ];

@@ -1,6 +1,5 @@
 package com.rgei.kpi.dashboard.service;
 
-
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
@@ -20,6 +19,7 @@ import com.rgei.kpi.dashboard.entities.DepartmentEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
@@ -41,6 +41,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(UserManagementServiceImpl.class);
 
 	@Resource
+	ValidationService validationService;
+	
+	@Resource
 	CountryRepository countryRepository;
 
 	@Resource
@@ -58,7 +61,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<CountryResponse> getCountryList() {
 		logger.info("Inside service call to get all countries");
-		List<CountryEntity> entities = countryRepository.findAllByActiveOrderByCountryNameAsc(true);
+		List<CountryEntity> entities = countryRepository.findAllByActiveOrderByCountryNameAsc(Boolean.TRUE);
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToCountryResponse(entities);
 		}
@@ -69,10 +72,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
 		List<UserRoleEntity> entities = null;
-		if(Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleIdAsc(activeRoles);
+		if (Objects.nonNull(activeRoles) && activeRoles) {
+			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleIdAsc();
+			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
 		}
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
@@ -83,6 +86,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void createUserRole(UserRole userRole) {
 		logger.info("Inside service call to create new user role for request : " + userRole);
+		validationService.validateRoleName(userRole.getRoleName());
 		UserRoleEntity userRoleEntity = UserManagementUtility.fetchUserRoleEntity(userRole);
 		try {
 			userRoleRepository.save(userRoleEntity);
@@ -111,21 +115,17 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void createUser(User user) {
 		logger.info("Inside service call to get create new user for request : " + user);
-		Date date = new Date();
+		validationService.validateUserName(user.getUsername());
+		validationService.validateEmail(user.getEmail());
 		try {
 			RgeUserEntity userEntity = UserManagementUtility.createUserEntity(user);
 			rgeUserEntityRepository.save(userEntity);
-				user.setUserId(userEntity.getUserId().toString());
-				List<MillRole> millRoles = user.getMillRoles();
-				for (MillRole millRole : millRoles) {
-					UserRoleMillEntity userRoleMillEntity = UserManagementUtility.createUserRoleMillEntity(millRole);
-					userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
-					userRoleMillEntity.setCreatedBy(user.getCreatedBy());
-					userRoleMillEntity.setCreatedDate(date);
-					userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
-					userRoleMillEntity.setUpdatedDate(date);
-					rgeUserRoleMillRepository.save(userRoleMillEntity);
-				}
+			user.setUserId(userEntity.getUserId().toString());
+			List<MillRole> millRoles = user.getMillRoles();
+			for (MillRole millRole : millRoles) {
+				UserRoleMillEntity userRoleMillEntity = UserManagementUtility.createUserRoleMillEntity(millRole, user);
+				rgeUserRoleMillRepository.save(userRoleMillEntity);
+			}
 
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating new user  :" + user);
@@ -145,7 +145,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<User> getUsersByMillId(Integer millId) {
 		logger.info("Inside service call to get users by Mill Id : " + millId);
-		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId);
+		List<RgeUserEntity> userEntities = rgeUserEntityRepository.findAllUsersByMillId(millId, Boolean.TRUE);
 		if (userEntities != null && !userEntities.isEmpty()) {
 			return UserManagementUtility.convertToUserFromRgeUserEntity(userEntities);
 		}
@@ -156,21 +156,25 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void updateUser(User user) {
 		logger.info("Inside service call to update user for request : " + user);
-		Date date = new Date();
 		try {
 			if (user != null) {
 				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
 				if (userEntity.isPresent()) {
 					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity.get());
 					rgeUserEntityRepository.save(updatedUser);
-					List<MillRole> millRoles = user.getMillRoles();
-					for (MillRole millRole : millRoles) {
-						UserRoleMillEntity userRoleMillEntity = UserManagementUtility
-								.createUserRoleMillEntity(millRole);
-						userRoleMillEntity.setRgeUserRoleId(Long.parseLong(millRole.getMillRoleId()));
-						userRoleMillEntity.setUserId(Long.parseLong(user.getUserId()));
-						userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
-						userRoleMillEntity.setUpdatedDate(date);
+					Optional<List<UserRoleMillEntity>> millRoles = Optional.ofNullable(rgeUserRoleMillRepository
+							.findAllByUserIdAndStatus(Long.parseLong(user.getUserId()), Boolean.TRUE));
+					if (millRoles.isPresent()) {
+						for (UserRoleMillEntity entity : millRoles.get()) {
+							UserRoleMillEntity userRoleMillEntity = UserManagementUtility
+									.updateUserRoleMillEntity(entity);
+							userRoleMillEntity.setUpdatedBy(user.getUpdatedBy());
+							rgeUserRoleMillRepository.save(userRoleMillEntity);
+						}
+					}
+					for (MillRole millRole : user.getMillRoles()) {
+						UserRoleMillEntity userRoleMillEntity = UserManagementUtility.createUserRoleMillEntity(millRole,
+								user);
 						rgeUserRoleMillRepository.save(userRoleMillEntity);
 					}
 				} else {
@@ -180,7 +184,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while updating user  :" + user);
 		}
-
 	}
 
 	@Override

@@ -19,21 +19,16 @@ export class UserRoleService {
         private apiCallService: ApiCallService) { }
 
     getUserRoles(userRoles: UserRole[]) {
-        if (this.statusService.common.userRoles.length === 0) {  
-            this.commonService.getAllUserRole(false)
-                .subscribe(
-                    (roleList: UserRole[]) => {
-                        userRoles.push(...roleList);
-                        this.statusService.common.userRoles = roleList;
-                    },
-                    (error: any) => {
-                        console.log("error in user role");
-                    }
-                );
-        }
-        else {
-            userRoles.push(...this.statusService.common.userRoles);
-        }
+        this.commonService.getAllUserRole(false)
+            .subscribe(
+                (roleList: UserRole[]) => {
+                    userRoles.push(...roleList);
+                    this.statusService.common.userRoles = roleList;
+                },
+                (error: any) => {
+                    console.log("error in user role");
+                }
+            );
     }
 
     createUserRole(userRoles: UserRole[]) {

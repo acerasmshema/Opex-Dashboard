@@ -15,11 +15,21 @@ public class UserRole {
 	@Size(max=200, message="First name must not be less than 2 characters")
 	private String description;
 	
+	private Boolean showUserManagement;
+	
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
 	private String updatedDate;
 	private Boolean active;
+
+	public Boolean getShowUserManagement() {
+		return showUserManagement;
+	}
+
+	public void setShowUserManagement(Boolean showUserManagement) {
+		this.showUserManagement = showUserManagement;
+	}
 
 	public String getDescription() {
 		return description;
