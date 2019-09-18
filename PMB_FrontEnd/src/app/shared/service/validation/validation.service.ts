@@ -8,11 +8,10 @@ import { API_URL } from '../../constant/API_URLs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApiCallService } from '../api/api-call.service';
 import { Observable } from 'rxjs';
+import { UserRole } from 'src/app/user-management/user-role/user-role.model';
 
 @Injectable()
 export class ValidationService {
-
-    validateEmailURL = API_URL.user_api_URLs.VALIDATE_EMAIL;
 
     constructor(private apiCallService: ApiCallService) { }
 
@@ -86,12 +85,54 @@ export class ValidationService {
             email: control.value
         }
         return new Promise(resolve => {
-            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+            if (control.parent !== undefined) {
+                let userControl: any = control.parent.controls;
+                if (userControl.validateEmail.value !== control.value) {
+                    this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+                        .subscribe(
+                            response => resolve(null),
+                            error => resolve({ 'emailExit': true })
+                        )
+                }
+                else {
+                    resolve(null);
+                }
+            }
+            else {
+                resolve(null);
+            }
+        });
+    }
+
+    forbiddenUsername(control: FormControl): Promise<any> | Observable<any> {
+        let requestData = {
+            username: control.value
+        }
+        return new Promise(resolve => {
+            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERNAME, requestData)
                 .subscribe(
-                    response => resolve({ 'emailExit': false }),
-                    error => resolve({ 'emailExit': true })
+                    response => resolve(null),
+                    error => resolve({ 'usernameExit': true })
                 )
         });
+    }
+
+    forbiddenUserRole(roleNameRef: any, userRole: UserRole) {
+        let requestData = {
+            roleName: roleNameRef.value
+        }
+
+        this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
+            .subscribe(
+                response => {
+                    userRole.invalidRoleName = false;
+                    roleNameRef.hasError(null);
+                },
+                error => {
+                    userRole.invalidRoleName = true;
+                    roleNameRef.hasError({'incorrect': true});
+                }
+            )
     }
 
     mustMatchPassword(controlName: string, matchingControlName: string) {

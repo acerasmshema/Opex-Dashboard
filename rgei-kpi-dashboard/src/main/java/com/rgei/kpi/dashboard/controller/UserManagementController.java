@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.User;
@@ -115,10 +116,18 @@ public class UserManagementController {
 	@ApiOperation(value = "changePassword", notes = "Change password")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping("/v1/change_password")
-	public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "userId") String userId,
-			@RequestHeader(value = "password") String password) throws NoSuchAlgorithmException {
+	public ResponseEntity<HttpStatus> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) throws NoSuchAlgorithmException {
 		logger.info("Changing password");
-		userManagementService.changePassword(userId, password);
+		userManagementService.changePassword(changePasswordRequest);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "encryptAllPassword", notes = "Encrypt password for all users")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PostMapping("/v1/encrypt_all_password")
+	public ResponseEntity<HttpStatus> encryptAllPassword() throws NoSuchAlgorithmException {
+		logger.info("Changing password");
+		userManagementService.encryptPasswordForAllUsers();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

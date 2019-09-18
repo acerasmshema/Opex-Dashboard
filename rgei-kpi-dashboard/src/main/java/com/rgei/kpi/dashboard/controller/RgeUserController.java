@@ -69,7 +69,7 @@ public class RgeUserController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/user_info/login")
 	public ResponseEntity<User> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) throws NoSuchAlgorithmException {
-		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getLoginId());
+		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getUsername());
 		User response = rgeUserService.loginProcess(rgeUserLoginRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -78,7 +78,7 @@ public class RgeUserController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping(value = "/v1/user_info/logout")
 	public ResponseEntity<HttpStatus> logout(@RequestBody RgeUserLogoutRequest rgeUserLogoutRequest) {
-		logger.info("Entering into the logout process by the requsted id", rgeUserLogoutRequest.getLoginId());
+		logger.info("Entering into the logout process by the requsted id", rgeUserLogoutRequest.getUsername());
 		rgeUserService.logoutProcess(rgeUserLogoutRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

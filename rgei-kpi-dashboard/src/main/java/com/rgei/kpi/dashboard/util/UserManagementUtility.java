@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
+import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
@@ -104,7 +106,7 @@ public class UserManagementUtility {
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
-			newUser.setUserPassword(user.getPassword());
+			newUser.setUserPassword(encryptPassword(user));
 			newUser.setIsActive(Boolean.TRUE);
 			newUser.setCreatedBy(user.getCreatedBy());
 			newUser.setCreatedOn(date);
@@ -116,6 +118,25 @@ public class UserManagementUtility {
 		return newUser;
 	}
 
+	private static String encryptPassword(User user) throws NoSuchAlgorithmException {
+		String decodedString = new String(Base64.getDecoder().decode(user.getPassword()));
+		String passwordStringForRequest = user.getUsername() + "_" + decodedString;
+		return toHexString(getSHA(passwordStringForRequest));
+	}
+
+	public static String encryptPassword(ChangePasswordRequest changePasswordRequest, RgeUserEntity rgeUserEntity)
+			throws NoSuchAlgorithmException {
+		String newPassword = null;
+		String decodedString = new String(Base64.getDecoder().decode(changePasswordRequest.getNewPassword()));
+		String passwordString = rgeUserEntity.getLoginId() + "_" + decodedString;
+		try {
+			newPassword = toHexString(UserManagementUtility.getSHA(passwordString));
+		} catch (Exception e) {
+			throw new NoSuchAlgorithmException();
+		}
+		return newPassword;
+	}
+	
 	public static RgeUserEntity updateFetchedUserEntity(User user, RgeUserEntity userEntity) {
 		Date date = new Date();
 		try {

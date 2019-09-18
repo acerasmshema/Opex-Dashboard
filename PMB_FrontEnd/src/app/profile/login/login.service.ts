@@ -15,8 +15,8 @@ export class LoginService {
 
   createLoginForm(): FormGroup {
     return this.fb.group({
-      loginId: new FormControl(""),
-      userPassword: new FormControl("")
+      username: new FormControl(""),
+      password: new FormControl("")
     });
   }
 

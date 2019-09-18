@@ -81,9 +81,9 @@ export class CommonService {
                     (departments: Department[]) => {
                         if (userDetailForm instanceof FormGroup) {
                             const departmentList: any = userDetailForm.controls.departmentList;
-                            let departmentControl = departmentList.controls;
+                            let departmentControls = departmentList.controls;
                             departments.forEach(department => {
-                                departmentControl.push(new FormControl(department));
+                                departmentControls.push(new FormControl(department));
                             });
                         }
                         this.statusService.common.departmentList = departments;
@@ -96,9 +96,9 @@ export class CommonService {
         else {
             const departments = this.statusService.common.departmentList;
             const departmentList: any = userDetailForm.controls.departmentList;
-            let departmentControl = departmentList.controls;
+            let departmentControls = departmentList.controls;
             departments.forEach(department => {
-                departmentControl.push(new FormControl(department));
+                departmentControls.push(new FormControl(department));
             });
         }
     }

@@ -145,6 +145,8 @@ public class GlobalExceptionHandler {
 		apiResponse = new ApiErrorResponse(StatusCodes.MAINTENANCE_DAY_CREATE_RECORD_ERROR, exception.getMessage(), MessageConstant.CREATE_RECORD_ERROR, request.getDescription(false));
 		}else if(request.getDescription(false).contains(DashboardConstant.ANNOTATION)) {
 		apiResponse = new ApiErrorResponse(StatusCodes.ANNOTATION_CREATE_RECORD_ERROR, exception.getMessage(), MessageConstant.CREATE_RECORD_ERROR, request.getDescription(false));
+		}else {
+			apiResponse = new ApiErrorResponse(StatusCodes.RECORD_NOT_CREATED, exception.getMessage(), MessageConstant.CREATE_RECORD_ERROR, request.getDescription(false));
 		}
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -156,6 +158,8 @@ public class GlobalExceptionHandler {
 		apiResponse = new ApiErrorResponse(StatusCodes.MAINTENANCE_DAY_UPDATE_RECORD_ERROR, exception.getMessage(), MessageConstant.UPDATE_RECORD_ERROR, request.getDescription(false));
 		}else if(request.getDescription(false).contains(DashboardConstant.TARGET)) {
 		apiResponse = new ApiErrorResponse(StatusCodes.TARGET_DAYS_UPDATE_ERROR, exception.getMessage(), MessageConstant.UPDATE_RECORD_ERROR, request.getDescription(false));
+		}else {
+			apiResponse = new ApiErrorResponse(StatusCodes.RECORD_NOT_UPDATED, exception.getMessage(), MessageConstant.UPDATE_RECORD_ERROR, request.getDescription(false));
 		}
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -167,6 +171,8 @@ public class GlobalExceptionHandler {
 		apiResponse = new ApiErrorResponse(StatusCodes.MAINTENANCE_DAY_DELETE_RECORD_ERROR, exception.getMessage(), MessageConstant.DELETE_RECORD_ERROR, request.getDescription(false));
 		}else if(request.getDescription(false).contains(DashboardConstant.ANNOTATION)) {
 		apiResponse = new ApiErrorResponse(StatusCodes.ANNOTATION_DELETE_RECORD_ERROR, exception.getMessage(), MessageConstant.DELETE_RECORD_ERROR, request.getDescription(false));
+		}else {
+			apiResponse = new ApiErrorResponse(StatusCodes.RECORD_NOT_DELETED, exception.getMessage(), MessageConstant.DELETE_RECORD_ERROR, request.getDescription(false));
 		}
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

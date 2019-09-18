@@ -13,7 +13,8 @@
                 <input type="text" class="form-control edit-input" formControlName="firstName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
-                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">First name is required</span>
+                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">First name is
+                    required</span>
                 </span>
               </div>
             </div>
@@ -23,7 +24,8 @@
                 <input type="text" class="form-control edit-input" formControlName="lastName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
-                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Last name is required</span>
+                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Last name is
+                    required</span>
                 </span>
               </div>
             </div>
@@ -35,9 +37,12 @@
                 <input type="email" class="form-control edit-input" formControlName="email">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
-                  <span *ngIf="userDetailForm.get('email').errors['required']" class="error-text">Email is
-                    required</span>
-                  <span *ngIf="userDetailForm.get('email').errors['email']" class="error-text">Invalid email</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
+                    Email is required</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
+                    Invalid email</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
+                    Email already exist</span>
                 </span>
               </div>
             </div>
@@ -62,7 +67,7 @@
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onCountryChange($event.target.value)">
-                  <option *ngFor="let country of userDetailForm.controls.countryList.controls"
+                  <option *ngFor="let country of userDetailForm.get('countryList')['controls']"
                     [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
                     class="edit-input" [value]="country.value.countryName">
                     {{country.value.countryName}}</option>
@@ -74,7 +79,7 @@
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onDepartmentChange($event.target.value)">
-                  <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
+                  <option *ngFor="let department of userDetailForm.get('departmentList')['controls']"
                     [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
                     class="edit-input" [value]="department.value.departmentId">
                     {{department.value.departmentName}}</option>
