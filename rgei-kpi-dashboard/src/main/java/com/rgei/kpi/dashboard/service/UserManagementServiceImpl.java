@@ -19,7 +19,6 @@ import com.rgei.kpi.dashboard.entities.DepartmentEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
-import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
@@ -232,5 +231,28 @@ public class UserManagementServiceImpl implements UserManagementService {
 			isCurrentPasswordSame= true;
 		}
 		return isCurrentPasswordSame;
+	}
+	
+	@Override
+	public void encryptPasswordForAllUsers() throws NoSuchAlgorithmException {
+		logger.info("Inside service call to encrypt password for all users");
+		List<RgeUserEntity> users = rgeUserEntityRepository.findAll();
+		for (RgeUserEntity usr : users) {
+			String passwordString = usr.getLoginId() + "_" + usr.getUserPassword();
+			String encodedSHAString = "";
+			try {
+				encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
+			} catch (Exception e) {
+				throw new NoSuchAlgorithmException();
+			}
+			usr.setUserPassword(encodedSHAString);
+			usr.setUpdatedOn(new Date());
+			usr.setUpdatedBy(usr.getLoginId());
+			try {
+				rgeUserEntityRepository.save(usr);
+			} catch (Exception e) {
+				throw new RecordNotUpdatedException("Error while changing password for user Id : " + usr.getUserId());
+			}
+		}
 	}
 }

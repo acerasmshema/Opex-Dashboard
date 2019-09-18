@@ -28,4 +28,6 @@ public interface UserManagementService {
 
 	void updateUser(User user);
 
+	void encryptPasswordForAllUsers() throws NoSuchAlgorithmException;
+
 }
