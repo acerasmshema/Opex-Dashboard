@@ -10,9 +10,9 @@ import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long>{
 
-	public List<UserRoleEntity> findAllByStatusOrderByRoleIdAsc(Boolean active);
+	public List<UserRoleEntity> findAllByStatusOrderByRoleNameAsc(Boolean active);
 	
-	public List<UserRoleEntity> findAllByOrderByRoleIdAsc();
+	public List<UserRoleEntity> findAllByOrderByRoleNameAsc();
 	
 	public UserRoleEntity findByRoleId(Long roleId);
 	

@@ -37,6 +37,7 @@ public class UserManagementUtility {
 			resp.setUserRoleId(entity.getRoleId().toString());
 			resp.setRoleName(entity.getRoleName());
 			resp.setActive(entity.getStatus());
+			resp.setShowUserManagement(entity.getShowUserManagement());
 			resp.setDescription(entity.getDescription());
 			resp.setCreatedBy(entity.getCreatedBy());
 			resp.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
@@ -73,6 +74,7 @@ public class UserManagementUtility {
 		newUserRole.setCreatedDate(new java.util.Date());
 		newUserRole.setUpdatedBy(userRole.getUpdatedBy());
 		newUserRole.setUpdatedDate(new java.util.Date());
+		newUserRole.setShowUserManagement(Boolean.FALSE);
 		newUserRole.setStatus(userRole.getActive());
 		return newUserRole;
 	}
@@ -134,11 +136,17 @@ public class UserManagementUtility {
 		return userEntity;
 	}
 	
-	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole) {
+	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole, User user) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
+		Date date = new Date();
 		try {
 			userRoleMill.setMillId(Integer.parseInt(millRole.getSelectedMill().getMillId()));
 			userRoleMill.setRoleId(Long.parseLong(millRole.getSelectedUserRole().getUserRoleId()));
+			userRoleMill.setUserId(Long.parseLong(user.getUserId()));
+			userRoleMill.setCreatedBy(user.getCreatedBy());
+			userRoleMill.setCreatedDate(date);
+			userRoleMill.setUpdatedBy(user.getUpdatedBy());
+			userRoleMill.setUpdatedDate(date);
 			userRoleMill.setStatus(Boolean.TRUE);
 		} catch (Exception e) {
 			throw new RecordNotCreatedException("Error while creating new user role relation :" + millRole);
@@ -146,6 +154,17 @@ public class UserManagementUtility {
 		return userRoleMill;
 	}
 
+	public static UserRoleMillEntity updateUserRoleMillEntity(UserRoleMillEntity millRole) {
+		Date date = new Date();
+		try {
+			millRole.setStatus(Boolean.FALSE);
+			millRole.setUpdatedDate(date);
+		} catch (Exception e) {
+			throw new RecordNotCreatedException("Error while updating new user role relation :" + millRole);
+		}
+		return millRole;
+	}
+	
 	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities) {
 		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
@@ -211,10 +230,12 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
+				if(Boolean.TRUE.equals(entity.getStatus())) {
 				millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
 				millRole.setSelectedMill(getMillDetail(entity.getMill()));
 				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
 				millRoles.add(millRole);
+				}
 			}
 		}
 		return millRoles;

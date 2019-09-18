@@ -115,30 +115,20 @@ export class UserDetailService {
     }
 
     getAllUserRole(userDetailForm: FormGroup) {
-        if (this.statusService.common.activeUserRoles.length === 0) {
-            this.commonService.getAllUserRole(true).
-                subscribe(
-                    (roleList: UserRole[]) => {
-                        const userRoles: any = userDetailForm.controls.userRoles;
-                        const userRoleControl = userRoles.controls;
-                        roleList.forEach(userRole => {
-                            userRoleControl.push(new FormControl(userRole));
-                        });
-                        this.statusService.common.activeUserRoles = roleList;
-                    },
-                    (error: any) => {
-                        console.log("error in user role");
-                    }
-                );
-        }
-        else {
-            const roleList = this.statusService.common.activeUserRoles;
-            const userRoles: any = userDetailForm.controls.userRoles;
-            const userRoleControl = userRoles.controls;
-            roleList.forEach(userRole => {
-                userRoleControl.push(new FormControl(userRole));
-            });
-        }
+        this.commonService.getAllUserRole(true).
+            subscribe(
+                (roleList: UserRole[]) => {
+                    const userRoles: any = userDetailForm.controls.userRoles;
+                    const userRoleControl = userRoles.controls;
+                    roleList.forEach(userRole => {
+                        userRoleControl.push(new FormControl(userRole));
+                    });
+                    this.statusService.common.activeUserRoles = roleList;
+                },
+                (error: any) => {
+                    console.log("error in user role");
+                }
+            );
     }
 
     updateUser(userDetailForm: FormGroup, userDetail: UserDetail) {

@@ -40,6 +40,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   expandUserDetail(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId);
+    userDetail.isReadOnly = false;
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
   }
 
@@ -71,7 +72,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   onDeleteMillRole(index: number, isReadOnly: boolean) {
-    if (!isReadOnly) {
+    if (!isReadOnly && index > 0) {
       let millRoles: any = this.userDetailForm.controls.millRoles;
       millRoles.removeAt(index);
     }
