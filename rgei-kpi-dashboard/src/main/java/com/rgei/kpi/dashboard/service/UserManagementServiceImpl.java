@@ -28,6 +28,7 @@ import com.rgei.kpi.dashboard.repository.DepartmentRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserRoleMillRepository;
 import com.rgei.kpi.dashboard.repository.UserRoleRepository;
+import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.MillRole;
@@ -187,34 +188,49 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public void changePassword(String userId, String password) throws NoSuchAlgorithmException {
+	public void changePassword(ChangePasswordRequest changePasswordRequest) throws NoSuchAlgorithmException {
 		logger.info("Inside service call to change password");
 		String encodedSHAString = "";
 		RgeUserEntity rgeUserEntity = null;
 		try {
-			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(userId));
+			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(changePasswordRequest.getUserId()));
 		} catch (Exception e) {
-			throw new RecordNotFoundException("No record found for user Id : " + userId);
+			throw new RecordNotFoundException("No record found for user Id : " + changePasswordRequest.getUserId());
 		}
 		if (rgeUserEntity != null) {
-			String decodedString = new String(Base64.getDecoder().decode(password));
-			String passwordString = rgeUserEntity.getLoginId()+"_"+decodedString;
-			try {
-				encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
-			} catch (Exception e) {
-				throw new NoSuchAlgorithmException();
-			}
-			rgeUserEntity.setUserPassword(encodedSHAString);
+			Boolean isCurrentPasswordSame = validateCurrentPassword(changePasswordRequest, encodedSHAString, rgeUserEntity);
+			if(isCurrentPasswordSame) {
+			String newPassword = UserManagementUtility.encryptPassword(changePasswordRequest, rgeUserEntity);
+			rgeUserEntity.setUserPassword(newPassword);
 			rgeUserEntity.setUpdatedOn(new Date());
 			rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
 			try {
 				rgeUserEntityRepository.save(rgeUserEntity);
 			} catch (Exception e) {
-				throw new RecordNotUpdatedException("Error while changing password for user Id : " + userId);
+				throw new RecordNotUpdatedException("Error while changing password for user Id : " + changePasswordRequest.getUserId());
+			}
+			}else {
+				throw new RecordNotFoundException("Current password don't match for user id: " + changePasswordRequest.getUserId());
 			}
 		} else {
-			throw new RecordNotFoundException("No record found for user Id : " + userId);
+			throw new RecordNotFoundException("No record found for user Id : " + changePasswordRequest.getUserId());
 		}
 
+	}
+
+	private Boolean validateCurrentPassword(ChangePasswordRequest changePasswordRequest, String encodedSHAString,
+			RgeUserEntity rgeUserEntity) throws NoSuchAlgorithmException {
+		Boolean isCurrentPasswordSame = false;
+		String decodedString = new String(Base64.getDecoder().decode(changePasswordRequest.getCurrentPassword()));
+		String passwordString = rgeUserEntity.getLoginId()+"_"+decodedString;
+		try {
+			encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
+		} catch (Exception e) {
+			throw new NoSuchAlgorithmException();
+		}
+		if(encodedSHAString.equals(rgeUserEntity.getUserPassword())){
+			isCurrentPasswordSame= true;
+		}
+		return isCurrentPasswordSame;
 	}
 }
