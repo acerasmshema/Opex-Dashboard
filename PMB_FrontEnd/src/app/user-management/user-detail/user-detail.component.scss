@@ -37,6 +37,14 @@ label {
 }
 
 .error-text {
-  color: red;
   margin-left: 34%;
+  color: red;
+}
+
+.invalid {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
 }

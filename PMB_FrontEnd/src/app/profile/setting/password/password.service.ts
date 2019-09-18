@@ -27,7 +27,10 @@ export class PasswordService {
             newPassword: new FormControl("", [Validators.required, Validators.minLength(8)]),
             confirmPassword: new FormControl("", [Validators.required]),
         },
-            { validator: this.validationService.mustMatchPassword('newPassword', 'confirmPassword') }
+            {
+                validator: [this.validationService.mustMatchPassword('newPassword', 'confirmPassword'),
+                this.validationService.newPasswordValidation('currentPassword', 'newPassword')]
+            }
         );
     }
 

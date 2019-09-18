@@ -17,7 +17,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },
     { field: 'email', header: 'Email' },
-    { field: 'millRoles', header: 'Role' },
+    { field: 'millRoleSortName', header: 'Role' },
     { field: 'active', header: 'Status' }
   ];
 
@@ -95,11 +95,13 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   onMillChange(millId: string, millRole: FormGroup) {
     const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
     millRole.value.selectedMill.setValue(mill);
+    millRole.value.millError.setValue("");
   }
 
   onUserRoleChange(userRoleId: string, millRole: FormGroup) {
     const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
     millRole.value.selectedUserRole.setValue(userRole);
+    millRole.value.roleError.setValue("");
   }
 
   onUserStatusChange(status: string, userInfo: UserDetail) {
@@ -117,9 +119,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     if (this.userDetailForm.invalid)
       return false;
 
-    const userDetail = this.users.find((user) => user.userId === userId)
-    this.userDetailService.updateUser(this.userDetailForm, userDetail);
-    this.userDetailForm.disable();
+    this.userDetailService.updateUser(this.userDetailForm, this.users, userId);;
   }
 
   ngOnDestroy() {

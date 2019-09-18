@@ -130,7 +130,7 @@ export class ValidationService {
                 },
                 error => {
                     userRole.invalidRoleName = true;
-                    roleNameRef.hasError({'incorrect': true});
+                    roleNameRef.hasError({ 'incorrect': true });
                 }
             )
     }
@@ -150,5 +150,40 @@ export class ValidationService {
                 matchingControl.setErrors(null);
             }
         }
+    }
+
+    newPasswordValidation(controlName: string, matchingControlName: string) {
+        return (formGroup: FormGroup) => {
+            const control = formGroup.controls[controlName];
+            const matchingControl = formGroup.controls[matchingControlName];
+
+            if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+                return;
+            }
+
+            if (control.value === matchingControl.value) {
+                matchingControl.setErrors({ notMatch: true });
+            } else {
+                matchingControl.setErrors(null);
+            }
+        }
+    }
+
+    valdiateUserMillRole(userDetailForm: FormGroup): boolean {
+        let inValid = false;
+
+        let millRoles: any = userDetailForm.controls.millRoles;
+        let millControls = millRoles.controls;
+
+        if (millControls[millControls.length - 1].value.selectedMill.value === '') {
+            millControls[millControls.length - 1].value.millError.setValue("1");
+            inValid = true;
+        }
+        if (millControls[millControls.length - 1].value.selectedUserRole.value === '') {
+            millControls[millControls.length - 1].value.roleError.setValue("1");
+            inValid = true;
+        }
+
+        return inValid;
     }
 }

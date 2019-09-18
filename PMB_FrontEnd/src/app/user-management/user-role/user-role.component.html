@@ -1,5 +1,5 @@
 <div *ngIf="userRoles.length  > 0">
-    <p-table #userRole [columns]="cols" [value]="userRoles" [paginator]="true" [rows]="10" dataKey="userRoleId"
+    <p-table #userRole id="userRoleTable" [columns]="cols" [value]="userRoles" [paginator]="true" [rows]="10" dataKey="userRoleId"
         [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="roleName" sortOrder="1">
         <ng-template pTemplate="caption">
             <div class="text-right">

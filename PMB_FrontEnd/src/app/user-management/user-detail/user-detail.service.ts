@@ -26,13 +26,23 @@ export class UserDetailService {
         private apiCallService: ApiCallService) { }
 
     getUserDetailList(userList: UserDetail[]) {
+        let millId = this.statusService.common.selectedMill.millId;
         const requestData = {
-            millId: this.statusService.common.selectedMill.millId
+            millId: millId
         }
 
         this.apiCallService.callGetAPIwithData(this.userListUrl, requestData).
             subscribe(
                 (users: UserDetail[]) => {
+                    users.forEach(user => {
+                        const millRoles = user.millRoles;
+                        for (let index = 0; index < millRoles.length; index++) {
+                            const millRole = millRoles[index];
+                            if (millRole.selectedMill.millId === millId) {
+                                user.millRoleSortName = millRole.selectedUserRole.roleName;
+                            }
+                        }
+                    });
                     userList.push(...users);
                 },
                 (error: any) => {
@@ -49,6 +59,10 @@ export class UserDetailService {
                     millRoleId: new FormControl(millRole.millRoleId),
                     selectedMill: new FormControl(millRole.selectedMill),
                     selectedUserRole: new FormControl(millRole.selectedUserRole),
+                    userRoles: this.formBuilder.array([]),
+                    mills: this.formBuilder.array([]),
+                    millError: new FormControl(''),
+                    roleError: new FormControl(''),
                 })
             )
         });
@@ -66,8 +80,7 @@ export class UserDetailService {
             countryList: this.formBuilder.array([]),
             department: new FormControl(userDetail.department),
             departmentList: this.formBuilder.array([]),
-            userRoles: this.formBuilder.array([]),
-            mills: this.formBuilder.array([]),
+            totalMills: new FormControl(1),
             millRoles: millRoles
         });
 
@@ -81,48 +94,38 @@ export class UserDetailService {
 
     addMillRole(userDetailForm: FormGroup) {
         let millRoles: any = userDetailForm.controls.millRoles;
-        millRoles.controls.push(
+        let millControls = millRoles.controls;
+        millControls.push(
             new FormControl({
-                selectedMill: new FormControl(null),
-                selectedUserRole: new FormControl(null),
+                userRoles: this.formBuilder.array([]),
+                mills: this.formBuilder.array([]),
+                selectedMill: new FormControl(''),
+                selectedUserRole: new FormControl(''),
+                millError: new FormControl(''),
+                roleError: new FormControl(''),
             })
         );
+        this.getAllMills1(userDetailForm);
+        this.getAllUserRole1(userDetailForm);
     }
 
-    getAllMills(userDetailForm: FormGroup) {
-        if (this.statusService.common.mills.length === 0) {
-            this.commonService.getAllMills().
-                subscribe(
-                    (mills: MillDetail[]) => {
-                        const millList: any = userDetailForm.controls.mills;
-                        const millControl = millList.controls;
-                        mills.forEach(mill => {
-                            millControl.push(new FormControl(mill));
-                        });
-                        this.statusService.common.mills = mills;
-                    },
-                    (error: any) => {
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        }
-                    });
-        }
-        else {
-            const millList = this.statusService.common.mills;
-            const mills: any = userDetailForm.controls.mills;
-            const millControl = mills.controls;
-            millList.forEach(mill => {
+    getAllMills1(userDetailForm: FormGroup) {
+        const millList = this.statusService.common.mills;
+        const millRoles: any = userDetailForm.controls.millRoles;
+        const millControl: any = millRoles.controls[millRoles.length - 1].value.mills.controls;
+        millList.forEach(mill => {
+            if (millRoles.controls[0].value.selectedMill.value.millId !== mill.millId)
                 millControl.push(new FormControl(mill));
-            });
-        }
+        });
+        userDetailForm.controls.totalMills.setValue(millList.length);
     }
 
-    getAllUserRole(userDetailForm: FormGroup) {
+    getAllUserRole1(userDetailForm: FormGroup) {
         this.commonService.getAllUserRole(true).
             subscribe(
                 (roleList: UserRole[]) => {
-                    const userRoles: any = userDetailForm.controls.userRoles;
-                    const userRoleControl = userRoles.controls;
+                    const millRoles: any = userDetailForm.controls.millRoles;
+                    const userRoleControl = millRoles.controls[millRoles.controls.length - 1].value.userRoles.controls;
                     roleList.forEach(userRole => {
                         userRoleControl.push(new FormControl(userRole));
                     });
@@ -134,41 +137,103 @@ export class UserDetailService {
             );
     }
 
-    updateUser(userDetailForm: FormGroup, userDetail: UserDetail) {
-        this.statusService.spinnerSubject.next(true);
+    getAllMills(userDetailForm: FormGroup) {
+        if (this.statusService.common.mills.length === 0) {
+            this.commonService.getAllMills().
+                subscribe(
+                    (mills: MillDetail[]) => {
+                        const millRoles: any = userDetailForm.controls.millRoles;
+                        const millControls = millRoles.controls;
+                        millControls.forEach(millControl => {
+                            let controls = millControl.value.mills.controls;
+                            mills.forEach(mill => {
+                                controls.push(new FormControl(mill));
+                            });
+                        });
 
-        let millRoles: MillRole[] = [];
-        let millRoleList: any = userDetailForm.controls.millRoles;
-        millRoleList.controls.forEach(control => {
-            let millRole = new MillRole();
-            millRole.millRoleId = (control.value.millRoleId != undefined) ? control.value.millRoleId.value: null;
-            millRole.selectedMill = control.value.selectedMill.value;
-            millRole.selectedUserRole = control.value.selectedUserRole.value;
-            millRoles.push(millRole);
-        });
+                        this.statusService.common.mills = mills;
+                        userDetailForm.controls.totalMills.setValue(mills.length);
+                    },
+                    (error: any) => {
+                        if (error.status == "0") {
+                            alert(CommonMessage.ERROR.SERVER_ERROR)
+                        }
+                    });
+        }
+        else {
+            const millList = this.statusService.common.mills;
+            const millRoles: any = userDetailForm.controls.millRoles;
+            const millControls = millRoles.controls;
+            millControls.forEach(millControl => {
+                let controls = millControl.value.mills.controls;
+                millList.forEach(mill => {
+                    controls.push(new FormControl(mill));
+                });
+            });
+            userDetailForm.controls.totalMills.setValue(millList.length);
+        }
+    }
 
-        userDetail.firstName = userDetailForm.controls.firstName.value;
-        userDetail.lastName = userDetailForm.controls.lastName.value;
-        userDetail.email = userDetailForm.controls.email.value;
-        userDetail.phone = userDetailForm.controls.phone.value;
-        userDetail.address = userDetailForm.controls.address.value;
-        userDetail.country = userDetailForm.controls.country.value;
-        userDetail.millRoles = millRoles;
-        userDetail.department = userDetailForm.controls.department.value;
-        userDetail.updatedBy = this.statusService.common.userDetail.username;
-        userDetail.active = userDetailForm.controls.status.value;
-
-        this.apiCallService.callPutAPIwithData(this.updateUserURL, userDetail).
+    getAllUserRole(userDetailForm: FormGroup) {
+        this.commonService.getAllUserRole(true).
             subscribe(
-                (response: any) => {
-                    this.statusService.spinnerSubject.next(false);
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                (roleList: UserRole[]) => {
+                    const millRoles: any = userDetailForm.controls.millRoles;
+                    const userRoleControls = millRoles.controls;
+                    userRoleControls.forEach(userRoleControl => {
+                        let controls = userRoleControl.value.userRoles.controls;
+                        roleList.forEach(userRole => {
+                            controls.push(new FormControl(userRole));
+                        });
+                    });
+                    this.statusService.common.activeUserRoles = roleList;
                 },
                 (error: any) => {
-                    this.statusService.spinnerSubject.next(false);
-                    console.log("Error")
+                    console.log("error in user role");
                 }
             );
+    }
+
+    updateUser(userDetailForm: FormGroup, users: UserDetail[], userId: string) {
+        if (!this.validationService.valdiateUserMillRole(userDetailForm)) {
+            const userDetail = users.find((user) => user.userId === userId)
+            userDetailForm.disable()
+
+            this.statusService.spinnerSubject.next(true);
+
+            let millRoles: MillRole[] = [];
+            let millRoleList: any = userDetailForm.controls.millRoles;
+            millRoleList.controls.forEach(control => {
+                let millRole = new MillRole();
+                millRole.millRoleId = (control.value.millRoleId != undefined) ? control.value.millRoleId.value : null;
+                millRole.selectedMill = control.value.selectedMill.value;
+                millRole.selectedUserRole = control.value.selectedUserRole.value;
+                millRoles.push(millRole);
+            });
+
+            userDetail.firstName = userDetailForm.controls.firstName.value;
+            userDetail.lastName = userDetailForm.controls.lastName.value;
+            userDetail.email = userDetailForm.controls.email.value;
+            userDetail.phone = userDetailForm.controls.phone.value;
+            userDetail.address = userDetailForm.controls.address.value;
+            userDetail.country = userDetailForm.controls.country.value;
+            userDetail.millRoles = millRoles;
+            userDetail.department = userDetailForm.controls.department.value;
+            userDetail.updatedBy = this.statusService.common.userDetail.username;
+            userDetail.active = userDetailForm.controls.status.value;
+
+            this.apiCallService.callPutAPIwithData(this.updateUserURL, userDetail).
+                subscribe(
+                    (response: any) => {
+                        this.statusService.spinnerSubject.next(false);
+                        this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                    },
+                    (error: any) => {
+                        this.statusService.spinnerSubject.next(false);
+                        console.log("Error")
+                    }
+                );
+        }
     }
 
 }

@@ -242,9 +242,10 @@
 
 <div *ngIf="dialogName === 'addUser'">
     <form [formGroup]='userDetailForm' (ngSubmit)="onCreateUser()">
-        <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
-            [baseZIndex]="10000" [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true"
-            [draggable]="true" [maximizable]="true">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header">Add New User</span> </p-header>
             <div class="row">
                 <div class="col-sm-6">
                     <label class="edit-label required">First Name</label>
@@ -388,16 +389,20 @@
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
                             <td style="width: 43%;">
-                                <select name="" id="" class="form-control edit-input"
+                                <select name="" id=""
+                                    [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
                                     <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
                                         [value]="mill.value.millId">
                                         {{mill.value.millName}}</option>
                                 </select>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value !== '')">Mill is
+                                    required</span>
                             </td>
                             <td style="width: 43%;">
-                                <select class="form-control edit-input"
+                                <select
+                                    [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>
                                     <option *ngFor="let userRole of millRole.value.userRoles.controls"
@@ -405,6 +410,8 @@
                                         {{userRole.value.roleName}}
                                     </option>
                                 </select>
+                                <span class="error-text" *ngIf="(millRole.value.roleError.value !== '')">User role is
+                                    required</span>
                             </td>
                             <td class="text-center">
                                 <a (click)='onDeleteMillRole(i)'>
