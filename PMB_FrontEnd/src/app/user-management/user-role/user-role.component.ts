@@ -44,9 +44,11 @@ export class UserRoleComponent implements OnInit {
     this.selectedUserRole = null;
   }
 
-  onSave(userRole: UserRole) {
-    this.selectedUserRole = null;
-    (!userRole.userRoleId) ? this.userRoleService.saveUserRole(userRole, this.userRoles) : this.userRoleService.updateUserRole(userRole, this.userRoles);
+  onSave(userRole: UserRole, isInValidForm: boolean) {
+    if (!isInValidForm) {
+      this.selectedUserRole = null;
+      (!userRole.userRoleId) ? this.userRoleService.saveUserRole(userRole, this.userRoles) : this.userRoleService.updateUserRole(userRole, this.userRoles);
+    }
   }
 
 }

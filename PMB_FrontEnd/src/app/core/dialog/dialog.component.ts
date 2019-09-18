@@ -123,7 +123,6 @@ export class DialogComponent implements OnInit, OnDestroy {
   public createAnnotation() {
     let isError = false;
     this.annotationDialog.annotationLines = "";
-    const loginId = this.statusService.common.userDetail.userId;
     if (this.annotationDialog.annotationProcessLines.length === 0) {
       this.annotationDialog.isProcessLineError = true;
       this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
@@ -151,7 +150,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         annotationDate: this.annotationDialog.annotationDate,
         processLines: this.annotationDialog.annotationLines,
         description: this.annotationDialog.annotationDescription,
-        userLoginId: loginId
+        userLoginId: this.statusService.common.userDetail.userId
       };
 
       this.dialogService.createAnnotation(data).
@@ -404,6 +403,8 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onCreateUser() {
+    if (this.userDetailForm.invalid)
+      return;
     this.dialogService.createNewUser(this.userDetailForm);
   }
 

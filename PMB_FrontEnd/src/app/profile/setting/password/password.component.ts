@@ -19,6 +19,8 @@ export class PasswordComponent implements OnInit {
   }
 
   onChangePassword() {
-    this.passwordDetailService.changePassword();
+    if (this.passwordForm.invalid)
+      return;
+    this.passwordDetailService.changePassword(this.passwordForm);
   }
 }

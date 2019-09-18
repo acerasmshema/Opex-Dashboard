@@ -12,8 +12,6 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ValidationService {
 
-    validateEmailURL = API_URL.user_api_URLs.VALIDATE_EMAIL;
-
     constructor(private apiCallService: ApiCallService) { }
 
     targetDaysValidation(maintenanceDays: MaintenanceDays) {
@@ -86,10 +84,47 @@ export class ValidationService {
             email: control.value
         }
         return new Promise(resolve => {
-            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+            if (control.parent !== undefined) {
+                let userControl: any = control.parent.controls;
+                if (userControl.validateEmail.value !== control.value) {
+                    this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+                        .subscribe(
+                            response => resolve(null),
+                            error => resolve({ 'emailExit': true })
+                        )
+                }
+                else {
+                    resolve(null);
+                }
+            }
+            else {
+                resolve(null);
+            }
+        });
+    }
+
+    forbiddenUsername(control: FormControl): Promise<any> | Observable<any> {
+        let requestData = {
+            username: control.value
+        }
+        return new Promise(resolve => {
+            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERNAME, requestData)
                 .subscribe(
-                    response => resolve({ 'emailExit': false }),
-                    error => resolve({ 'emailExit': true })
+                    response => resolve(null),
+                    error => resolve({ 'usernameExit': true })
+                )
+        });
+    }
+
+    forbiddenUserRole(control: FormControl): Promise<any> | Observable<any> {
+        let requestData = {
+            roleName: control.value
+        }
+        return new Promise(resolve => {
+            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
+                .subscribe(
+                    response => resolve(null),
+                    error => resolve({ 'userRoleExit': true })
                 )
         });
     }
