@@ -18,6 +18,5 @@ export class UserDetail {
     createdBy: string;
     updatedBy: string;
     role: string;
-    isReadOnly: boolean;
     showDialog: boolean;
 }

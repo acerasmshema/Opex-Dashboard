@@ -51,15 +51,16 @@ export class DialogService {
             firstName: new FormControl("", [Validators.required]),
             lastName: new FormControl("", [Validators.required]),
             address: new FormControl(""),
-            username: new FormControl("", [Validators.required]),
-            password: new FormControl("", [Validators.required]),
+            username: new FormControl("", { validators: [Validators.required], asyncValidators: [this.validationService.forbiddenUsername.bind(this)], updateOn: 'blur' }),
+            password: new FormControl("", [Validators.required, Validators.minLength(8)]),
             confirmPassword: new FormControl("", [Validators.required]),
             phone: new FormControl(""),
             selectedCountry: new FormControl(''),
             countryList: this.formBuilder.array([]),
-            selectedDepartment: new FormControl('', [Validators.required]),
+            selectedDepartment: new FormControl(''),
             departmentList: this.formBuilder.array([]),
-            email: new FormControl("", [Validators.required, Validators.email]),
+            email: new FormControl("", { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
+            validateEmail: new FormControl(""),
             millRoles: millRoles,
         },
             { validator: this.validationService.mustMatchPassword('password', 'confirmPassword') }
@@ -123,7 +124,7 @@ export class DialogService {
             subscribe(
                 (roleList: UserRole[]) => {
                     const millRoles: any = userDetailForm.controls.millRoles;
-                    const userRoleControl = millRoles.controls[0].value.userRoles.controls;
+                    const userRoleControl = millRoles.controls[millRoles.controls.length - 1].value.userRoles.controls;
                     roleList.forEach(userRole => {
                         userRoleControl.push(new FormControl(userRole));
                     });
@@ -149,7 +150,7 @@ export class DialogService {
 
         let userDetail = new UserDetail();
         userDetail.username = userDetailForm.controls.username.value;
-        userDetail.password = userDetailForm.controls.password.value;
+        userDetail.password = btoa(userDetailForm.controls.password.value);
         userDetail.firstName = userDetailForm.controls.firstName.value;
         userDetail.lastName = userDetailForm.controls.lastName.value;
         userDetail.email = userDetailForm.controls.email.value;

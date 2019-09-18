@@ -17,16 +17,15 @@
 package com.rgei.kpi.dashboard.response.model;
 
 public class RgeUserLogoutRequest {
-	
-	private String loginId;
 
-	public String getLoginId() {
-		return loginId;
+	private String username;
+
+	public String getUsername() {
+		return username;
 	}
 
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	
 }

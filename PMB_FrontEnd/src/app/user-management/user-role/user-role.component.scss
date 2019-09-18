@@ -1,22 +1,30 @@
 th {
-    font-size: 11pt;
+  font-size: 11pt;
 }
 
-.td-role {    
-    font-family: arial;
-    font-size: 11pt;
+.td-role {
+  font-family: arial;
+  font-size: 11pt;
 }
 
 .card-table {
-    margin-left: 15%;
-    width: 70%;
+  margin-left: 15%;
+  width: 70%;
 }
 
 .input-read {
-    background: white;
-    border: none;
+  background: white;
+  border: none;
 }
 
 input {
-    width: 100%;
+  width: 100%;
+}
+
+.error-text {
+  color: red;
+}
+
+.font-17 {
+  font-size: 17px;
 }

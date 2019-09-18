@@ -15,7 +15,7 @@ body .ui-table .ui-table-thead > tr > th {
 .edit-input {
   margin-top: -5px;
   font-size: 10pt;
-  height: 34px;
+  height: 30px;
 }
 
 .fa-edit {
@@ -42,12 +42,11 @@ thead,
 tbody tr {
   display: table;
   width: 100%;
-  table-layout: fixed; /* even columns width , fix width of table too*/
+  table-layout: fixed;
 }
 
 .role-head {
   font-size: 12pt;
-  font-family: Arial;
 }
 
 .error-text {
