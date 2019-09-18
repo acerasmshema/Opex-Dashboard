@@ -60,6 +60,7 @@ export class DialogService {
             selectedDepartment: new FormControl('', [Validators.required]),
             departmentList: this.formBuilder.array([]),
             email: new FormControl("", { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
+            validateEmail: new FormControl(""),
             millRoles: millRoles,
         },
             { validator: this.validationService.mustMatchPassword('password', 'confirmPassword') }
@@ -110,18 +111,9 @@ export class DialogService {
         else {
             const millList = this.statusService.common.mills;
             const millRoles: any = userDetailForm.controls.millRoles;
-            let millControls = millRoles.controls;
-            const millControl: any = millControls[millRoles.length - 1].value.mills.controls;
+            const millControl: any = millRoles.controls[millRoles.length - 1].value.mills.controls;
             millList.forEach(mill => {
-                let isExist = false;
-                for (let index = 0; index < millControls.length - 1; index++) {
-                    if (millControls[index].value.selectedMill.value.millId === mill.millId) {
-                        isExist = true;
-                        break;
-                    }
-                }
-                if (!isExist)
-                    millControl.push(new FormControl(mill));
+                millControl.push(new FormControl(mill));
             });
             userDetailForm.controls.totalMills.setValue(millList.length);
         }
@@ -158,7 +150,7 @@ export class DialogService {
 
         let userDetail = new UserDetail();
         userDetail.username = userDetailForm.controls.username.value;
-        userDetail.password = userDetailForm.controls.password.value;
+        userDetail.password = btoa(userDetailForm.controls.password.value);
         userDetail.firstName = userDetailForm.controls.firstName.value;
         userDetail.lastName = userDetailForm.controls.lastName.value;
         userDetail.email = userDetailForm.controls.email.value;

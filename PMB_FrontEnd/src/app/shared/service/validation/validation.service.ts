@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ValidationService {
-    
+
     constructor(private apiCallService: ApiCallService) { }
 
     targetDaysValidation(maintenanceDays: MaintenanceDays) {
@@ -84,11 +84,22 @@ export class ValidationService {
             email: control.value
         }
         return new Promise(resolve => {
-            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
-                .subscribe(
-                    response => resolve(null),
-                    error => resolve({ 'emailExit': true })
-                )
+            if (control.parent !== undefined) {
+                let userControl: any = control.parent.controls;
+                if (userControl.validateEmail.value !== control.value) {
+                    this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
+                        .subscribe(
+                            response => resolve(null),
+                            error => resolve({ 'emailExit': true })
+                        )
+                }
+                else {
+                    resolve(null);
+                }
+            }
+            else {
+                resolve(null);
+            }
         });
     }
 

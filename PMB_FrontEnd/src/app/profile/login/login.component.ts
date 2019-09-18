@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    const username = this.loginForm.controls.loginId.value;
-    const password = this.loginForm.controls.userPassword.value;
+    const username = this.loginForm.controls.username.value;
+    const password = this.loginForm.controls.password.value;
     if (username === "") {
       this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR.USERNAME_VALIDATION });
       return null;
@@ -45,8 +45,8 @@ export class LoginComponent implements OnInit {
 
     this.statusService.spinnerSubject.next(true);
     const requestData = {
-      loginId: username,
-      userPassword: btoa(password)
+      username: username,
+      password: btoa(password)
     }
     this.loginService.validateUser(requestData).
       subscribe(

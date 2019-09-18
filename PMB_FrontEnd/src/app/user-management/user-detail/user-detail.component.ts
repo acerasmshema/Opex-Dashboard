@@ -40,19 +40,21 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   expandUserDetail(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId);
-    userDetail.isReadOnly = false;
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
+    this.userDetailForm.disable();
   }
 
   onEdit(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId)
-    userDetail.isReadOnly = true;
+    this.userDetailForm.enable();
   }
 
   onCancel(userInfo: UserDetail) {
     const userDetail = this.users.find((user) => user.userId === userInfo.userId)
-    userDetail.isReadOnly = false;
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
+    setTimeout(() => {
+      this.userDetailForm.disable();
+  }, 10);
   }
 
   onCreateUser() {
@@ -62,8 +64,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     this.statusService.dialogSubject.next(data);
   }
 
-  onAddMillRole(isReadOnly: boolean) {
-    if (!isReadOnly) {
+  onAddMillRole() {
+    if (this.userDetailForm.enabled) {
       this.userDetailService.addMillRole(this.userDetailForm);
     }
     else {
@@ -71,8 +73,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDeleteMillRole(index: number, isReadOnly: boolean) {
-    if (!isReadOnly && index > 0) {
+  onDeleteMillRole(index: number) {
+    if (this.userDetailForm.enabled && index > 0) {
       let millRoles: any = this.userDetailForm.controls.millRoles;
       millRoles.removeAt(index);
     }
@@ -116,8 +118,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       return false;
 
     const userDetail = this.users.find((user) => user.userId === userId)
-    userDetail.isReadOnly = false;
     this.userDetailService.updateUser(this.userDetailForm, userDetail);
+    this.userDetailForm.disable();
   }
 
   ngOnDestroy() {

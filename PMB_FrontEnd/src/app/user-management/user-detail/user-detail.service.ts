@@ -56,6 +56,7 @@ export class UserDetailService {
         let userDetailForm = this.formBuilder.group({
             firstName: new FormControl(userDetail.firstName, [Validators.required]),
             lastName: new FormControl(userDetail.lastName, [Validators.required]),
+            validateEmail: new FormControl(userDetail.email),
             email: new FormControl(userDetail.email, { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),

@@ -52,6 +52,7 @@ export class API_URL {
         UPDATE_USER_ROLE: API_URL.BASE_API_URL_v1 + '/update_user_role',
         CREATE_USER: API_URL.BASE_API_URL_v1 + '/create_user',
         UPDATE_USER: API_URL.BASE_API_URL_v1 + '/update_user',
+        CHANGE_PASSWORD: API_URL.BASE_API_URL_v1 + '/change_password',
         VALIDATE_EMAIL: API_URL.BASE_API_URL_v1 + '/validate_email',
         VALIDATE_USERNAME: API_URL.BASE_API_URL_v1 + '/validate_user_name',
         VALIDATE_USERROLE: API_URL.BASE_API_URL_v1 + '/validate_role',

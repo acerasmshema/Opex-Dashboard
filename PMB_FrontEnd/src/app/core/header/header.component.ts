@@ -18,7 +18,6 @@ import { CommonService } from 'src/app/shared/service/common/common.service';
 export class HeaderComponent implements OnInit {
 
   user: any;
-  loginId: any;
   mills: MillDetail[] = [];
   selectedMillName: string;
   isShow: boolean;
@@ -51,9 +50,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logOut() {
-    this.loginId = this.statusService.common.userDetail.username;
     const requestData = {
-      loginId: this.loginId
+      username: this.statusService.common.userDetail.username
     }
     this.loginService.logOut(requestData).
       subscribe(
