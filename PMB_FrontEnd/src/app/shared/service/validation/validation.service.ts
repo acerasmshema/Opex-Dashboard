@@ -8,6 +8,7 @@ import { API_URL } from '../../constant/API_URLs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApiCallService } from '../api/api-call.service';
 import { Observable } from 'rxjs';
+import { UserRole } from 'src/app/user-management/user-role/user-role.model';
 
 @Injectable()
 export class ValidationService {
@@ -116,17 +117,22 @@ export class ValidationService {
         });
     }
 
-    forbiddenUserRole(control: FormControl): Promise<any> | Observable<any> {
+    forbiddenUserRole(roleNameRef: any, userRole: UserRole) {
         let requestData = {
-            roleName: control.value
+            roleName: roleNameRef.value
         }
-        return new Promise(resolve => {
-            this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
-                .subscribe(
-                    response => resolve(null),
-                    error => resolve({ 'userRoleExit': true })
-                )
-        });
+
+        this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
+            .subscribe(
+                response => {
+                    userRole.invalidRoleName = false;
+                    roleNameRef.hasError(null);
+                },
+                error => {
+                    userRole.invalidRoleName = true;
+                    roleNameRef.hasError({'incorrect': true});
+                }
+            )
     }
 
     mustMatchPassword(controlName: string, matchingControlName: string) {

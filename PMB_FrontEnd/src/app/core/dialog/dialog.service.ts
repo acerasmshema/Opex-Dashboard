@@ -57,7 +57,7 @@ export class DialogService {
             phone: new FormControl(""),
             selectedCountry: new FormControl(''),
             countryList: this.formBuilder.array([]),
-            selectedDepartment: new FormControl('', [Validators.required]),
+            selectedDepartment: new FormControl(''),
             departmentList: this.formBuilder.array([]),
             email: new FormControl("", { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             validateEmail: new FormControl(""),

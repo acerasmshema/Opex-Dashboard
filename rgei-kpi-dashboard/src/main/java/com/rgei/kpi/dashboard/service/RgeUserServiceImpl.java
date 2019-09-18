@@ -133,7 +133,7 @@ public class RgeUserServiceImpl implements RgeUserService {
 			if (loginEntity == null) {
 				throw new LogoutException("Invalid user id requested or user is not logged in.");
 			}
-			loginEntity.setLogoutTime(new java.util.Date());
+			loginEntity.setLogoutTime(new java.util.Date());	
 			loginEntity.setStatus(Boolean.FALSE);
 			loginDetailEntityRepository.save(loginEntity);
 			logger.info("User logged out successfully.", rgeUserLogoutRequest.getUsername());

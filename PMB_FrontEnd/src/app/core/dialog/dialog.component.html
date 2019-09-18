@@ -325,7 +325,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <label class="edit-label required">Department</label>
+                    <label class="edit-label">Department</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onDepartmentChange($event.target.value)">
@@ -334,10 +334,6 @@
                                 [value]="department.value.departmentId" class="edit-input">
                                 {{department.value.departmentName}}</option>
                         </select>
-                        <span class="error-text" *ngIf="!userDetailForm.get('selectedDepartment').valid && userDetailForm.get('selectedDepartment').touched &&
-                             userDetailForm.get('selectedDepartment').errors['required']">
-                            Department is required
-                        </span>
                     </div>
                 </div>
             </div>

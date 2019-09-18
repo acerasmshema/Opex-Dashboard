@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { PasswordDetail } from './password-detail.model';
 import { Router } from '@angular/router';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
@@ -24,7 +23,7 @@ export class PasswordService {
 
     createPasswordForm(): FormGroup {
         return this.formBuilder.group({
-            currentPassword: new FormControl("", [Validators.required, Validators.minLength(8)]),
+            currentPassword: new FormControl("", [Validators.required]),
             newPassword: new FormControl("", [Validators.required, Validators.minLength(8)]),
             confirmPassword: new FormControl("", [Validators.required]),
         },
@@ -38,8 +37,8 @@ export class PasswordService {
 
         let passwordChangeModel = new PasswordChangeModel();
         passwordChangeModel.userId = this.statusService.common.userDetail.userId;
-        passwordChangeModel.newPassword = passwordForm.controls.confirmPassword.value;
-        passwordChangeModel.currentPassword = passwordForm.controls.confirmPassword.value;
+        passwordChangeModel.newPassword = btoa(passwordForm.controls.confirmPassword.value);
+        passwordChangeModel.currentPassword = btoa(passwordForm.controls.currentPassword.value);
 
         this.apiCallService.callAPIwithData(this.chnagePasswordURL, passwordChangeModel).
             subscribe(
