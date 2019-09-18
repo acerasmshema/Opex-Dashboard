@@ -37,11 +37,12 @@
                 <td>
                     <input type="text" [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'"
                         id="name" name="name" [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName" required
-                        #name="ngModel" [ngModelOptions]="{updateOn: 'blur'}">
+                        #name="ngModel" [ngModelOptions]="{updateOn: 'blur'}" (focusout)="onRoleNameValidation(name, rowData)">
                     <span *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required"
                         class="error-text">
                         Role name is required.
                     </span>
+                    <span *ngIf="rowData.invalidRoleName" class="error-text">Role name already exist</span>
                 </td>
                 <td>
                     <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'" type="text"

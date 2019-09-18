@@ -1,6 +1,7 @@
 export class UserRole {
     userRoleId: string;
     roleName: string;
+    invalidRoleName: boolean;
     description: string;
     active: boolean;
     isEnable: boolean;

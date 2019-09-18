@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Component({
   selector: 'app-user-role',
@@ -18,7 +19,8 @@ export class UserRoleComponent implements OnInit {
     { field: 'status', header: 'Status', width: "6%" },
   ];
 
-  constructor(private userRoleService: UserRoleService) { }
+  constructor(private userRoleService: UserRoleService,
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.userRoleService.getUserRoles(this.userRoles);
@@ -51,4 +53,8 @@ export class UserRoleComponent implements OnInit {
     }
   }
 
+  onRoleNameValidation(roleNameRef: any, userRole: UserRole) {
+    if (roleNameRef.valid && userRole.isEnable)
+      this.validationService.forbiddenUserRole(roleNameRef, userRole);
+  }
 }

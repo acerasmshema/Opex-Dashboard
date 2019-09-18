@@ -35,10 +35,8 @@ export class UserRoleService {
         let userRole = new UserRole();
         userRole.active = true;
         userRole.isEnable = true;
+        userRole.invalidRoleName = false;       
         userRoles.push(userRole);
-
-        userRoles = [];
-        this.getUserRoles(userRoles);
     }
 
     saveUserRole(userRole: UserRole, roles: UserRole[]) {
