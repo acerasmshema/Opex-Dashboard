@@ -121,4 +121,13 @@ public class UserManagementController {
 		userManagementService.changePassword(userId, password);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "encryptAllPassword", notes = "Encrypt password for all users")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PostMapping("/v1/encrypt_all_password")
+	public ResponseEntity<HttpStatus> encryptAllPassword() throws NoSuchAlgorithmException {
+		logger.info("Changing password");
+		userManagementService.encryptPasswordForAllUsers();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
