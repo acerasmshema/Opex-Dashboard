@@ -1,6 +1,5 @@
 import { MillRole } from './mill-role.model';
 import { Department } from './department.model';
-import { Country } from 'src/app/shared/models/country.model';
 
 export class UserDetail {
     userId: string;
@@ -19,4 +18,5 @@ export class UserDetail {
     updatedBy: string;
     role: string;
     showDialog: boolean;
+    millRoleSortName: string;
 }

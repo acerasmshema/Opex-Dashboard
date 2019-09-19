@@ -11,7 +11,6 @@ import { UserDetail } from 'src/app/user-management/user-detail/user-detail.mode
 import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { MessageService } from 'primeng/primeng';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class DialogService {
@@ -42,6 +41,8 @@ export class DialogService {
                 mills: this.formBuilder.array([]),
                 selectedMill: new FormControl(''),
                 selectedUserRole: new FormControl(''),
+                millError: new FormControl(''),
+                roleError: new FormControl(''),
             })
         ]);
 
@@ -75,17 +76,30 @@ export class DialogService {
     }
 
     addMillRole(userDetailForm: FormGroup) {
+
         let millRoles: any = userDetailForm.controls.millRoles;
-        millRoles.controls.push(
-            new FormControl({
-                userRoles: this.formBuilder.array([]),
-                mills: this.formBuilder.array([]),
-                selectedMill: new FormControl(''),
-                selectedUserRole: new FormControl(''),
-            })
-        );
-        this.getAllMills(userDetailForm);
-        this.getAllUserRole(userDetailForm, true);
+        let millControls = millRoles.controls;
+
+        if (millControls[0].value.selectedMill.value === '') {
+            millControls[0].value.millError.setValue("1");
+        }
+        if (millControls[0].value.selectedUserRole.value === '') {
+            millControls[0].value.roleError.setValue("1");
+        }
+        if (millControls[0].value.selectedMill.value !== '' && millControls[0].value.selectedUserRole.value !== '') {
+            millControls.push(
+                new FormControl({
+                    userRoles: this.formBuilder.array([]),
+                    mills: this.formBuilder.array([]),
+                    selectedMill: new FormControl(''),
+                    selectedUserRole: new FormControl(''),
+                    millError: new FormControl(''),
+                    roleError: new FormControl(''),
+                })
+            );
+            this.getAllMills(userDetailForm);
+            this.getAllUserRole(userDetailForm, true);
+        }
     }
 
     getAllMills(userDetailForm: FormGroup) {
@@ -113,7 +127,8 @@ export class DialogService {
             const millRoles: any = userDetailForm.controls.millRoles;
             const millControl: any = millRoles.controls[millRoles.length - 1].value.mills.controls;
             millList.forEach(mill => {
-                millControl.push(new FormControl(mill));
+                if (millRoles.controls[0].value.selectedMill.value.millId !== mill.millId)
+                    millControl.push(new FormControl(mill));
             });
             userDetailForm.controls.totalMills.setValue(millList.length);
         }
@@ -137,44 +152,47 @@ export class DialogService {
     }
 
     createNewUser(userDetailForm: FormGroup) {
-        this.statusService.spinnerSubject.next(true);
+        if (!this.validationService.valdiateUserMillRole(userDetailForm)) {
+            this.statusService.spinnerSubject.next(true);
 
-        let millRoles: MillRole[] = [];
-        let millRoleList: any = userDetailForm.controls.millRoles;
-        millRoleList.controls.forEach(control => {
-            let millRole = new MillRole();
-            millRole.selectedMill = control.value.selectedMill.value;
-            millRole.selectedUserRole = control.value.selectedUserRole.value;
-            millRoles.push(millRole);
-        });
+            let millRoles: MillRole[] = [];
+            let millRoleList: any = userDetailForm.controls.millRoles;
+            millRoleList.controls.forEach(control => {
+                let millRole = new MillRole();
+                millRole.selectedMill = control.value.selectedMill.value;
+                millRole.selectedUserRole = control.value.selectedUserRole.value;
+                millRoles.push(millRole);
+            });
 
-        let userDetail = new UserDetail();
-        userDetail.username = userDetailForm.controls.username.value;
-        userDetail.password = btoa(userDetailForm.controls.password.value);
-        userDetail.firstName = userDetailForm.controls.firstName.value;
-        userDetail.lastName = userDetailForm.controls.lastName.value;
-        userDetail.email = userDetailForm.controls.email.value;
-        userDetail.phone = userDetailForm.controls.phone.value;
-        userDetail.address = userDetailForm.controls.address.value;
-        userDetail.country = userDetailForm.controls.selectedCountry.value;
-        userDetail.department = userDetailForm.controls.selectedDepartment.value;
-        userDetail.millRoles = millRoles;
-        userDetail.createdBy = this.statusService.common.userDetail.username;
-        userDetail.updatedBy = this.statusService.common.userDetail.username;
+            let userDetail = new UserDetail();
+            userDetail.username = userDetailForm.controls.username.value;
+            userDetail.password = btoa(userDetailForm.controls.password.value);
+            userDetail.firstName = userDetailForm.controls.firstName.value;
+            userDetail.lastName = userDetailForm.controls.lastName.value;
+            userDetail.email = userDetailForm.controls.email.value;
+            userDetail.phone = userDetailForm.controls.phone.value;
+            userDetail.address = userDetailForm.controls.address.value;
+            userDetail.country = userDetailForm.controls.selectedCountry.value;
+            userDetail.department = userDetailForm.controls.selectedDepartment.value;
+            userDetail.millRoles = millRoles;
+            userDetail.createdBy = this.statusService.common.userDetail.username;
+            userDetail.updatedBy = this.statusService.common.userDetail.username;
 
-        this.apiCallService.callAPIwithData(this.userURL, userDetail).
-            subscribe(
-                (response: any) => {
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.ADD_SUCCESS });
-                    this.statusService.refreshUserList.next(true);
-                    userDetailForm.controls.show.setValue(false);
-                    this.statusService.spinnerSubject.next(false);
-                },
-                (error: any) => {
-                    console.log("Error");
-                    this.statusService.spinnerSubject.next(false);
-                }
-            );
+            this.apiCallService.callAPIwithData(this.userURL, userDetail).
+                subscribe(
+                    (response: any) => {
+                        this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.ADD_SUCCESS });
+                        this.statusService.refreshUserList.next(true);
+                        userDetailForm.controls.show.setValue(false);
+                        this.statusService.spinnerSubject.next(false);
+                    },
+                    (error: any) => {
+                        console.log("Error");
+                        this.statusService.spinnerSubject.next(false);
+                    }
+                );
+
+        }
     }
 
 }

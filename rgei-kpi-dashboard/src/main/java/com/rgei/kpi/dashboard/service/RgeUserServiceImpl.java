@@ -13,7 +13,6 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.LoginDetailEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
-import com.rgei.kpi.dashboard.exception.InActiveUserException;
 import com.rgei.kpi.dashboard.exception.InvalidCredentialsException;
 import com.rgei.kpi.dashboard.exception.LogoutException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
@@ -80,7 +79,7 @@ public class RgeUserServiceImpl implements RgeUserService {
 				populateLoginDetails(entity);
 			} else {
 				logger.info("User is not active.", rgeUserLoginRequest.getUsername());
-				throw new InActiveUserException("User is not active :" + entity.getLoginId());
+				throw new InvalidCredentialsException("User is not active :" + entity.getLoginId());
 			}
 		}
 		logger.info("User logged in successfully.", rgeUserLoginRequest.getUsername());

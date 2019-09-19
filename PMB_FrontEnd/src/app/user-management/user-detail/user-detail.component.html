@@ -4,9 +4,9 @@
     rowExpandMode="single">
     <ng-template pTemplate="caption">
       <div class="text-right">
-        <span class="m-r-20" (click)="user.exportCSV()">
+        <!-- <span class="m-r-20" (click)="user.exportCSV()">
           <em class="fa fa-download fa-2x" style="color: #333333" pTooltip="Download" tooltipPosition="top"></em>
-        </span>
+        </span> -->
         <span class="m-l-5" (click)="onCreateUser()">
           <em class="fa fa-user-plus fa-2x" pTooltip="Add User" tooltipPosition="top"></em>
         </span>
@@ -39,11 +39,11 @@
           </a>
         </td>
         <td *ngFor="let col of columns">
-          <div *ngIf="col.field !== 'millRoles' && col.field !== 'active'" class="td-user pull-left">
+          <div *ngIf="col.field !== 'millRoleSortName' && col.field !== 'active'" class="td-user pull-left">
             {{rowData[col.field]}}
           </div>
-          <div *ngIf="col.field === 'millRoles'">
-            <span class="label label-info td-user">{{rowData[col.field][0].selectedUserRole.roleName}}</span>
+          <div *ngIf="col.field === 'millRoleSortName'">
+            <span class="label label-info td-user">{{rowData[col.field]}}</span>
           </div>
           <div *ngIf="col.field === 'active' " class="td-user" [style.color]="(rowData[col.field]) ? '#28a745' : 'red'">
             <i class="fa fa-circle font-10 m-r-10 "></i>
@@ -63,8 +63,8 @@
                 <span *ngIf="!userDetailForm.disabled" class="font-20 m-r-20"
                   [style.color]="(userDetailForm.invalid) ? '#9c9999':'#398bf7'" pTooltip="Save"
                   tooltipPosition="top"><i class="fa fa-save" (click)="onUpdateUser(rowData.userId)"></i></span>
-                <span *ngIf="!userDetailForm.disabled" class="font-20 m-r-20" style="color: red;"><i class="fa fa-remove"
-                    pTooltip="Cancel" tooltipPosition="top" (click)="onCancel(rowData)"></i></span>
+                <span *ngIf="!userDetailForm.disabled" class="font-20 m-r-20" style="color: red;"><i
+                    class="fa fa-remove" pTooltip="Cancel" tooltipPosition="top" (click)="onCancel(rowData)"></i></span>
               </div>
               <div *ngIf="userDetailForm !== undefined" class="m-t-5">
                 <form [formGroup]='userDetailForm'>
@@ -83,8 +83,7 @@
                       </div>
                       <div class="form-group">
                         <div class="row">
-                          <label class="col-md-4 table-label" style="padding-right: 0"
-                            for="role">Department</label>
+                          <label class="col-md-4 table-label" style="padding-right: 0" for="role">Department</label>
                           <select class="col-md-8 form-control" [disabled]="userDetailForm.disabled"
                             (change)="onDepartmentChange($event.target.value)">
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
@@ -168,10 +167,11 @@
                       <div class="table-wrapper">
                         <div class="table-title text-center">
                           <span
-                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.mills.controls.length"
+                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value"
                             class="float-right m-r-5" (click)="onAddMillRole()">
                             <em class="fa fa-user-plus fa-2x" style="font-size: 21px;" pTooltip="Add Mill Role"
-                              tooltipPosition="right" [style.color]="(userDetailForm.disabled) ? '#9c9999': '#333333'"></em>
+                              tooltipPosition="right"
+                              [style.color]="(userDetailForm.disabled) ? '#9c9999': '#333333'"></em>
                           </span>
                         </div>
                         <table class="table table-bordered" style="background: #f1f1f1;">
@@ -185,27 +185,30 @@
                           <tbody>
                             <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i = index;">
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.disabled" class="form-control edit-input"
+                                <select [disabled]="userDetailForm.disabled"
+                                  [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onMillChange($event.target.value, millRole)">
-                                  <option *ngIf="millRole.value.selectedMill.value === null" disabled selected>
-                                    Select Mill</option>
-                                  <option *ngFor="let mill of userDetailForm.controls.mills.controls" class="edit-input"
+                                  <option disabled selected>Select Mill</option>
+                                  <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
                                     [value]="mill.value.millId"
                                     [selected]="(millRole.value.selectedMill.value !== null && mill.value.millName === millRole.value.selectedMill.value.millName)">
                                     {{mill.value.millName}}</option>
                                 </select>
+                                <span class="error-message" *ngIf="(millRole.value.millError.value !== '')">Mill is
+                                  required</span>
                               </td>
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.disabled" class="form-control edit-input"
+                                <select [disabled]="userDetailForm.disabled"
+                                  [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onUserRoleChange($event.target.value, millRole)">
-                                  <option *ngIf="millRole.value.selectedUserRole.value === null" disabled selected>
-                                    Select User Role</option>
-                                  <option *ngFor="let userRole of userDetailForm.controls.userRoles.controls"
-                                    class="edit-input"
+                                  <option disabled selected>Select User Role</option>
+                                  <option *ngFor="let userRole of millRole.value.userRoles.controls" class="edit-input"
                                     [selected]="(millRole.value.selectedUserRole.value !== null && userRole.value.roleName === millRole.value.selectedUserRole.value.roleName)"
                                     [value]="userRole.value.userRoleId">{{userRole.value.roleName}}
                                   </option>
                                 </select>
+                                <span class="error-message" *ngIf="(millRole.value.roleError.value !== '')">User role is
+                                  required</span>
                               </td>
                               <td class="text-center">
                                 <a (click)='onDeleteMillRole(i)'>
