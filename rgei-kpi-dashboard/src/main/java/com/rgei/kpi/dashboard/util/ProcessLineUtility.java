@@ -293,7 +293,7 @@ public class ProcessLineUtility {
 				millObject.setMillId(millEntity.getMillId().toString());
 				millObject.setMillCode(millEntity.getMillCode());
 				millObject.setMillName(millEntity.getMillName());
-				millObject.setCountryId(millEntity.getCountry().getCountryId().toString());
+				millObject.setCountry(CommonFunction.convertCountryEntityToResponse(millEntity.getCountry()));
 				response.add(millObject);
 			}
 		}else {
