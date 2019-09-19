@@ -12,6 +12,7 @@ import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { FormGroup } from '@angular/forms';
+import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
 
 @Component({
   selector: 'app-dialog',
@@ -30,6 +31,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
   public userDetailForm: FormGroup;
+  public userRoleForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -43,6 +45,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
+    private userRoleService: UserRoleService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -77,7 +80,11 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.userDetailForm.reset();
           this.userDetailForm = this.dialogService.createUserForm();
         }
-
+        else if (dialogName === 'userRole') {
+          if (this.userRoleForm !== undefined)
+            this.userRoleForm.reset();
+          this.userRoleForm = this.dialogService.createUserRoleForm(data.userRole);
+        }
         this.dialogName = dialogName;
       },
         (error: any) => {
@@ -357,7 +364,6 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.viewMaintenanceDays();
   }
 
-
   public openSettingIcon(maintenanceData: any) {
     this.viewMaintenanceDays();
     this.maintenanceDays = new MaintenanceDays();
@@ -429,6 +435,22 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   onUserDetailCancel() {
     this.userDetailForm.controls.show.setValue(false);
+  }
+
+  onUserRoleCancel() {
+    this.userRoleForm.controls.show.setValue(false);
+  }
+
+  onUserRole() {
+    if (this.userRoleForm.invalid)
+      return;
+
+    if (this.userRoleForm.controls.operation.value === "Add") {
+      this.userRoleService.addUserRole(this.userRoleForm);
+    } else {
+      this.userRoleService.updateUserRole(this.userRoleForm);
+    }
+
   }
 
   ngOnDestroy() {

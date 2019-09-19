@@ -5,8 +5,8 @@ export class CommonMessage {
 
     static SUCCESS = {
         ANNOTATION_SAVED: "Annotation saved successfully.",
-        ADD_SUCCESS: "Added Successfully.",
-        UPDATE_SUCCESS: "Updated Successfully.",
+        ADD_SUCCESS: "Added successfully.",
+        UPDATE_SUCCESS: "Updated successfully.",
         DELETE_SUCCESS: "Deleted sucessfully",
         TARGET_CHANGED_SUCCESS: "Target days changed successfully"
     };

@@ -87,7 +87,7 @@ export class ValidationService {
         return new Promise(resolve => {
             if (control.parent !== undefined) {
                 let userControl: any = control.parent.controls;
-                if (userControl.validateEmail.value !== control.value) {
+                if (userControl.validateEmail.value.toLowerCase() !== control.value.toLowerCase()) {
                     this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_EMAIL, requestData)
                         .subscribe(
                             response => resolve(null),
@@ -117,22 +117,28 @@ export class ValidationService {
         });
     }
 
-    forbiddenUserRole(roleNameRef: any, userRole: UserRole) {
+    forbiddenUserRole(control: FormControl): Promise<any> | Observable<any> {
         let requestData = {
-            roleName: roleNameRef.value
+            roleName: control.value
         }
-
-        this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
-            .subscribe(
-                response => {
-                    userRole.invalidRoleName = false;
-                    roleNameRef.hasError(null);
-                },
-                error => {
-                    userRole.invalidRoleName = true;
-                    roleNameRef.hasError({ 'incorrect': true });
+        return new Promise(resolve => {
+            if (control.parent !== undefined) {
+                let roleControl: any = control.parent.controls;
+                if (roleControl.validateRole.value.toLowerCase() !== control.value.toLowerCase()) {
+                    this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERROLE, requestData)
+                        .subscribe(
+                            response => resolve(null),
+                            error => resolve({ 'userRoleExit': true })
+                        )
                 }
-            )
+                else {
+                    resolve(null);
+                }
+            }
+            else {
+                resolve(null);
+            }
+        });
     }
 
     mustMatchPassword(controlName: string, matchingControlName: string) {

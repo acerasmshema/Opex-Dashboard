@@ -23,4 +23,8 @@ export class PasswordComponent implements OnInit {
       return;
     this.passwordDetailService.changePassword(this.passwordForm);
   }
+
+  onReset() {
+    this.passwordForm = this.passwordDetailService.createPasswordForm();
+  }
 }

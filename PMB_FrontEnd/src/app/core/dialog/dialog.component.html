@@ -427,8 +427,55 @@
             </div>
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!userDetailForm.valid"
-                    class="btn btn-primary btn-md float-right">Save</button>
+                    class="btn btn-primary btn-md float-right">Submit</button>
                 <button type="button" (click)="onUserDetailCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'userRole'">
+    <form [formGroup]='userRoleForm' (ngSubmit)="onUserRole()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userRoleForm.controls.show.value" [blockScroll]="true" [draggable]="true" [maximizable]="true">
+            <p-header> <span class="dialog-header">{{userRoleForm.controls.operation.value}} User Role</span> </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Role Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-role" formControlName="roleName">
+                        <span class="help-block"
+                            *ngIf="!userRoleForm.get('roleName').valid && userRoleForm.get('roleName').touched">
+                            <span *ngIf="userRoleForm.get('roleName').errors?.required" class="error-text">
+                                Role name is required</span>
+                            <span *ngIf="userRoleForm.get('roleName').errors?.userRoleExit" class="error-text">
+                                Role name already exists</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label">Description</label>
+                    <div class="form-group">
+                        <textarea type="text" class="form-control edit-role" rows="4"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Status</label>
+                    <div class="form-group">
+                        <input class="form-control" type="checkbox" class="edit-label" formControlName="active">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!userRoleForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onUserRoleCancel()"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
