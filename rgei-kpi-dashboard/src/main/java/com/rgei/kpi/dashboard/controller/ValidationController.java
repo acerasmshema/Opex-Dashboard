@@ -33,7 +33,7 @@ public class ValidationController {
 	@GetMapping("/v1/validate_user_name")
 	public ResponseEntity<HttpStatus> validateUsername(@RequestHeader(name = "username") String username) {
 		logger.info("Validate Username for ", username);
-		validationService.validateUserName(username);
+		validationService.validateUserName(username.toLowerCase());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -42,7 +42,7 @@ public class ValidationController {
 	@GetMapping("/v1/validate_email")
 	public ResponseEntity<HttpStatus> validateEmail(@RequestHeader(name = "email") String email) {
 		logger.info("Validate Email for ", email);
-		validationService.validateEmail(email);
+		validationService.validateEmail(email.toLowerCase());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

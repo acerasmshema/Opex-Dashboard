@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { DataTable } from 'primeng/primeng';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-user-role',
@@ -28,6 +30,9 @@ export class UserRoleComponent implements OnInit {
 
   onCreateUserRole() {
     this.userRoleService.createUserRole(this.userRoles);
+    let userRoleTable = document.getElementById('userRoleTable');
+    let lastPage: any = userRoleTable.getElementsByClassName("ui-paginator-last ui-paginator-element ui-state-default ui-corner-all")[0];
+    lastPage.click();
   }
 
   onEdit(userRoleId: string) {
