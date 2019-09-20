@@ -145,7 +145,7 @@ public class UserConverter {
 		userResponse.setPhone(entity.getPhone());
 		userResponse.setUsername(entity.getLoginId());
 		userResponse.setAddress(entity.getAddress());
-		userResponse.setCountry(entity.getCountry());
+		userResponse.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
 		userResponse.setActive(entity.getIsActive());
 		userResponse.setCreatedBy(entity.getCreatedBy());
 		userResponse.setCreatedDate(CommonFunction.getString(entity.getCreatedOn()));
@@ -176,7 +176,7 @@ public class UserConverter {
 		millDetail.setMillName(userRoleMill.getMill().getMillName());
 		millDetail.setMillCode(userRoleMill.getMill().getMillCode());
 		millDetail.setActive(userRoleMill.getMill().getActive());
-		millDetail.setCountryId(CommonFunction.getString(userRoleMill.getMill().getCountry().getCountryId()));
+		millDetail.setCountry(CommonFunction.convertCountryEntityToResponse(userRoleMill.getMill().getCountry()));
 		millDetail.setCreatedBy(userRoleMill.getMill().getCreatedBy());
 		millDetail.setCreatedDate(CommonFunction.getString(userRoleMill.getMill().getCreatedDate()));
 		millDetail.setUpdatedBy(userRoleMill.getMill().getUpdatedBy());
