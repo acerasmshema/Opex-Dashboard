@@ -199,14 +199,17 @@ public class UserConverter {
 
 	private static Department getDepartmentDetails(RgeUserEntity entity) {
 		Department department = new Department();
-		department.setDepartmentId(CommonFunction.getString(entity.getDepartment().getDepartmentId()));
-		department.setDepartmentName(entity.getDepartment().getDepartmentName());
-		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
-		department.setActive(entity.getDepartment().getActive());
-		department.setCreatedBy(entity.getDepartment().getCreatedBy());
-		department.setCreatedDate(CommonFunction.getString(entity.getDepartment().getCreatedDate()));
-		department.setUpdatedBy(entity.getDepartment().getUpdatedBy());
-		department.setUpdatedDate(CommonFunction.getString(entity.getDepartment().getUpdatedDate()));
+		if(entity.getDepartment()!=null) {
+			department.setDepartmentId(CommonFunction.getString(entity.getDepartment().getDepartmentId()));
+			department.setDepartmentName(entity.getDepartment().getDepartmentName());
+			department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
+			department.setActive(entity.getDepartment().getActive());
+			department.setCreatedBy(entity.getDepartment().getCreatedBy());
+			department.setCreatedDate(CommonFunction.getString(entity.getDepartment().getCreatedDate()));
+			department.setUpdatedBy(entity.getDepartment().getUpdatedBy());
+			department.setUpdatedDate(CommonFunction.getString(entity.getDepartment().getUpdatedDate()));	
+		}
+		
 		return department;
 	}
 	
