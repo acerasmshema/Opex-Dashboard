@@ -51,7 +51,7 @@ public class RgeUserEntity implements Serializable {
 
 	private String address;
 
-	private String country;
+	private Integer country;
 
 	@Column(name = "created_by")
 	private String createdBy;
@@ -134,11 +134,11 @@ public class RgeUserEntity implements Serializable {
 		this.address = address;
 	}
 
-	public String getCountry() {
+	public Integer getCountry() {
 		return this.country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Integer country) {
 		this.country = country;
 	}
 

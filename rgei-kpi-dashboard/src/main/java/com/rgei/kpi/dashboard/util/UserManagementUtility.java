@@ -104,7 +104,7 @@ public class UserManagementUtility {
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
 			newUser.setDepartmentId((user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
-			newUser.setCountry(user.getCountry().getCountryId());
+			newUser.setCountry((user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()):null);
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
@@ -145,8 +145,8 @@ public class UserManagementUtility {
 			userEntity.setFirstName(user.getFirstName());
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
-			userEntity.setCountry(user.getCountry().getCountryId());
-			userEntity.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			userEntity.setCountry((user.getCountry().getCountryId() != null)?Integer.parseInt(user.getCountry().getCountryId()):null);
+			userEntity.setDepartmentId((user.getDepartment() != null)?Integer.parseInt(user.getDepartment().getDepartmentId()):null);
 			userEntity.setEmail(user.getEmail());
 			userEntity.setLoginId(user.getUsername());
 			userEntity.setPhone(user.getPhone());
