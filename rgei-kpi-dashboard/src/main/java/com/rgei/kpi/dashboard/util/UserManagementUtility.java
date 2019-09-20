@@ -15,6 +15,7 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
@@ -82,15 +83,16 @@ public class UserManagementUtility {
 	}
 
 	public static UserRoleEntity updateFetchedUserRoleEntity(UserRole userRole, UserRoleEntity entity) {
-		try {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
+		if (entity.getRgeUsers().isEmpty()) {
 		entity.setStatus(userRole.getActive());
-		entity.setUpdatedDate(new java.util.Date());
-		}catch(RuntimeException e) {
-			throw new RecordNotUpdatedException("Error while updating existing user role :" + userRole);
+		}else {
+			throw new RecordExistException("Users exists for this role :" + userRole);
 		}
+		entity.setUpdatedDate(new java.util.Date());
+		
 		return entity;
 	}
 
@@ -101,8 +103,8 @@ public class UserManagementUtility {
 			newUser.setFirstName(user.getFirstName());
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
-			newUser.setCountry(user.getCountry().getCountryId());
-			newUser.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			newUser.setDepartmentId((user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
+			newUser.setCountry((user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()):null);
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
@@ -143,8 +145,8 @@ public class UserManagementUtility {
 			userEntity.setFirstName(user.getFirstName());
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
-			userEntity.setCountry(user.getCountry().getCountryId());
-			userEntity.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			userEntity.setCountry((user.getCountry().getCountryId() != null)?Integer.parseInt(user.getCountry().getCountryId()):null);
+			userEntity.setDepartmentId((user.getDepartment() != null)?Integer.parseInt(user.getDepartment().getDepartmentId()):null);
 			userEntity.setEmail(user.getEmail());
 			userEntity.setLoginId(user.getUsername());
 			userEntity.setPhone(user.getPhone());

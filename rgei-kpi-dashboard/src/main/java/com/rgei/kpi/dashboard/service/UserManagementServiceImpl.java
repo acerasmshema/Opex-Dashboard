@@ -98,14 +98,15 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void updateUserRole(UserRole userRole) {
 		logger.info("Inside service call to update user role for request : " + userRole);
-		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
-		if (null != entity) {
-			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
+		UserRoleEntity updateEntity = null;
+		Optional<UserRoleEntity> entity = Optional.ofNullable(userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId())));
+		if (entity.isPresent()) {
+			updateEntity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity.get());
 		} else {
 			throw new RecordNotFoundException("User Role not found against role id  :" + userRole.getUserRoleId());
 		}
 		try {
-			userRoleRepository.save(entity);
+			userRoleRepository.save(updateEntity);
 		} catch (RuntimeException e) {
 			throw new RecordNotUpdatedException("Error while updating user role :" + userRole);
 		}

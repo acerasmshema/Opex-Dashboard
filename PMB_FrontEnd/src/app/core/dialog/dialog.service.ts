@@ -58,7 +58,7 @@ export class DialogService {
             phone: new FormControl(""),
             selectedCountry: new FormControl(''),
             countryList: this.formBuilder.array([]),
-            selectedDepartment: new FormControl(''),
+            selectedDepartment: new FormControl(null),
             departmentList: this.formBuilder.array([]),
             email: new FormControl("", { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             validateEmail: new FormControl(""),
@@ -75,8 +75,22 @@ export class DialogService {
         return userDetailForm;
     }
 
-    addMillRole(userDetailForm: FormGroup) {
+    createUserRoleForm(userRole: UserRole) {
+        let userRoleForm = this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(userRole.operation),
+            userRoleId: new FormControl(userRole.userRoleId),
+            createdBy: new FormControl(userRole.createdBy),
+            validateRole: new FormControl(userRole.roleName),
+            roleName: new FormControl(userRole.roleName, { validators: [Validators.required], asyncValidators: [this.validationService.forbiddenUserRole.bind(this)], updateOn: 'blur' }),
+            description: new FormControl(userRole.description),
+            active: new FormControl(userRole.active),
+        });
 
+        return userRoleForm;
+    }
+
+    addMillRole(userDetailForm: FormGroup) {
         let millRoles: any = userDetailForm.controls.millRoles;
         let millControls = millRoles.controls;
 

@@ -142,9 +142,9 @@ public class UserConverter {
 		userResponse.setFirstName(entity.getFirstName());
 		userResponse.setLastName(CommonFunction.getString(entity.getLastName()));
 		userResponse.setEmail(CommonFunction.getString(entity.getEmail()));
-		userResponse.setPhone(entity.getPhone());
+		userResponse.setPhone(CommonFunction.getString(entity.getPhone()));
 		userResponse.setUsername(entity.getLoginId());
-		userResponse.setAddress(entity.getAddress());
+		userResponse.setAddress(CommonFunction.getString(entity.getAddress()));
 		userResponse.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
 		userResponse.setActive(entity.getIsActive());
 		userResponse.setCreatedBy(entity.getCreatedBy());
@@ -199,6 +199,7 @@ public class UserConverter {
 
 	private static Department getDepartmentDetails(RgeUserEntity entity) {
 		Department department = new Department();
+		if(Objects.nonNull(entity.getDepartment())) {
 		department.setDepartmentId(CommonFunction.getString(entity.getDepartment().getDepartmentId()));
 		department.setDepartmentName(entity.getDepartment().getDepartmentName());
 		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
@@ -207,6 +208,7 @@ public class UserConverter {
 		department.setCreatedDate(CommonFunction.getString(entity.getDepartment().getCreatedDate()));
 		department.setUpdatedBy(entity.getDepartment().getUpdatedBy());
 		department.setUpdatedDate(CommonFunction.getString(entity.getDepartment().getUpdatedDate()));
+		}
 		return department;
 	}
 	
