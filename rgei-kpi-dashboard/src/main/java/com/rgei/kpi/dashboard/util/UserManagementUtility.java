@@ -103,8 +103,8 @@ public class UserManagementUtility {
 			newUser.setFirstName(user.getFirstName());
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
-			newUser.setCountry(user.getCountry());
 			newUser.setDepartmentId((user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
+			newUser.setCountry(user.getCountry().getCountryId());
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
@@ -145,7 +145,7 @@ public class UserManagementUtility {
 			userEntity.setFirstName(user.getFirstName());
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
-			userEntity.setCountry(user.getCountry());
+			userEntity.setCountry(user.getCountry().getCountryId());
 			userEntity.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
 			userEntity.setEmail(user.getEmail());
 			userEntity.setLoginId(user.getUsername());
@@ -215,7 +215,7 @@ public class UserManagementUtility {
 			user.setFirstName(CommonFunction.getString(entity.getFirstName()));
 			user.setLastName(CommonFunction.getString(entity.getLastName()));
 			user.setUsername(CommonFunction.getString(entity.getLoginId()));
-			user.setCountry(CommonFunction.getString(entity.getCountry()));
+			user.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
 			user.setAddress(CommonFunction.getString(entity.getAddress()));
 			user.setActive(entity.getIsActive());
 			user.setEmail(CommonFunction.getString(entity.getEmail()));
@@ -269,7 +269,7 @@ public class UserManagementUtility {
 		if (millEntity != null) {
 			millDetail.setMillName(millEntity.getMillName());
 			millDetail.setActive(millEntity.getActive());
-			millDetail.setCountryId(CommonFunction.getString(millEntity.getCountry().getCountryId()));
+			millDetail.setCountry(CommonFunction.convertCountryEntityToResponse(millEntity.getCountry()));
 			millDetail.setMillCode(millEntity.getMillCode());
 			millDetail.setMillId(CommonFunction.getString(millEntity.getMillId()));
 			millDetail.setCreatedBy(millEntity.getCreatedBy());

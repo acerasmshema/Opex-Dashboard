@@ -159,9 +159,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to update user for request : " + user);
 		try {
 			if (user != null) {
-				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
-				if (userEntity.isPresent()) {
-					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity.get());
+				RgeUserEntity userEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(user.getUserId()));
+				if (userEntity != null) {
+					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity);
 					rgeUserEntityRepository.save(updatedUser);
 					Optional<List<UserRoleMillEntity>> millRoles = Optional.ofNullable(rgeUserRoleMillRepository
 							.findAllByUserIdAndStatus(Long.parseLong(user.getUserId()), Boolean.TRUE));
