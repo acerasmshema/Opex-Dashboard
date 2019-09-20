@@ -1,37 +1,42 @@
 table {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 th {
-    font-size: 11pt;
+  font-size: 11pt;
 }
 
-.td-user {    
-    font-family: arial;
-    font-size: 11pt;
+.td-user {
+  font-family: arial;
+  font-size: 11pt;
 }
 
 label {
-    display: inline-block;
+  display: inline-block;
 }
 
 .label-danger {
-    background-color: #ef5350;
+  background-color: #ef5350;
 }
 
 .label-info {
-    background-color: #398bf7;
+  background-color: #398bf7;
 }
 
 .label {
-    padding: 3px 10px;
-    line-height: 13px;
-    color: #ffffff;
-    font-weight: 400;
-    border-radius: 4px;
-    font-size: 9pt;
+  padding: 3px 10px;
+  line-height: 13px;
+  color: #ffffff;
+  font-weight: 400;
+  border-radius: 4px;
+  font-size: 9pt;
 }
 
 .form-control {
-    font-weight: 500;
+  font-weight: 500;
+}
+
+.error-text {
+  color: red;
+  margin-left: 34%;
 }

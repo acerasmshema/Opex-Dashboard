@@ -3,6 +3,7 @@ package com.rgei.kpi.dashboard.service;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.Department;
 import com.rgei.kpi.dashboard.response.model.User;
@@ -23,7 +24,7 @@ public interface UserManagementService {
 	
 	List<User> getUsersByMillId(Integer millId);
 	
-	void changePassword(String userId, String password) throws NoSuchAlgorithmException;
+	void changePassword(ChangePasswordRequest changePasswordRequest) throws NoSuchAlgorithmException;
 
 	void updateUser(User user);
 

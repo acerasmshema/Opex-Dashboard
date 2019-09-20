@@ -10,6 +10,7 @@ import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { UserRole } from '../user-role/user-role.model';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MillRole } from './mill-role.model';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Injectable()
 export class UserDetailService {
@@ -21,6 +22,7 @@ export class UserDetailService {
         private messageService: MessageService,
         private commonService: CommonService,
         private formBuilder: FormBuilder,
+        private validationService: ValidationService,
         private apiCallService: ApiCallService) { }
 
     getUserDetailList(userList: UserDetail[]) {
@@ -54,7 +56,8 @@ export class UserDetailService {
         let userDetailForm = this.formBuilder.group({
             firstName: new FormControl(userDetail.firstName, [Validators.required]),
             lastName: new FormControl(userDetail.lastName, [Validators.required]),
-            email: new FormControl(userDetail.email, [Validators.required, Validators.email]),
+            validateEmail: new FormControl(userDetail.email),
+            email: new FormControl(userDetail.email, { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
             status: new FormControl(userDetail.active),
@@ -138,7 +141,7 @@ export class UserDetailService {
         let millRoleList: any = userDetailForm.controls.millRoles;
         millRoleList.controls.forEach(control => {
             let millRole = new MillRole();
-            millRole.millRoleId = control.value.millRoleId.value;
+            millRole.millRoleId = (control.value.millRoleId != undefined) ? control.value.millRoleId.value: null;
             millRole.selectedMill = control.value.selectedMill.value;
             millRole.selectedUserRole = control.value.selectedUserRole.value;
             millRoles.push(millRole);

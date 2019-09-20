@@ -4,7 +4,7 @@ public class MillDetail {
 	private String millId;
 	private String millName;
 	private String millCode;
-	private String countryId;
+	private CountryResponse country;
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
@@ -33,14 +33,6 @@ public class MillDetail {
 
 	public void setMillCode(String millCode) {
 		this.millCode = millCode;
-	}
-
-	public String getCountryId() {
-		return countryId;
-	}
-
-	public void setCountryId(String countryId) {
-		this.countryId = countryId;
 	}
 
 	public String getCreatedBy() {
@@ -81,6 +73,14 @@ public class MillDetail {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public CountryResponse getCountry() {
+		return country;
+	}
+
+	public void setCountry(CountryResponse country) {
+		this.country = country;
 	}
 
 }

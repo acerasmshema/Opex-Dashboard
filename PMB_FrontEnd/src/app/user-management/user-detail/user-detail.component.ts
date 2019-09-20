@@ -40,19 +40,21 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   expandUserDetail(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId);
-    userDetail.isReadOnly = false;
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
+    this.userDetailForm.disable();
   }
 
   onEdit(userId: string) {
     const userDetail = this.users.find((user) => user.userId === userId)
-    userDetail.isReadOnly = true;
+    this.userDetailForm.enable();
   }
 
   onCancel(userInfo: UserDetail) {
     const userDetail = this.users.find((user) => user.userId === userInfo.userId)
-    userDetail.isReadOnly = false;
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
+    setTimeout(() => {
+      this.userDetailForm.disable();
+  }, 10);
   }
 
   onCreateUser() {
@@ -62,8 +64,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     this.statusService.dialogSubject.next(data);
   }
 
-  onAddMillRole(isReadOnly: boolean) {
-    if (!isReadOnly) {
+  onAddMillRole() {
+    if (this.userDetailForm.enabled) {
       this.userDetailService.addMillRole(this.userDetailForm);
     }
     else {
@@ -71,8 +73,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDeleteMillRole(index: number, isReadOnly: boolean) {
-    if (!isReadOnly && index > 0) {
+  onDeleteMillRole(index: number) {
+    if (this.userDetailForm.enabled && index > 0) {
       let millRoles: any = this.userDetailForm.controls.millRoles;
       millRoles.removeAt(index);
     }
@@ -100,14 +102,24 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     millRole.value.selectedUserRole.setValue(userRole);
   }
 
-  onUserStatusChange(status: boolean) {
-    this.userDetailForm.controls.status.setValue(status);
+  onUserStatusChange(status: string, userInfo: UserDetail) {
+    if (this.statusService.common.userDetail.userId !== userInfo.userId) {
+      this.userDetailForm.controls.status.setValue(status);
+    }
+    else if (status === "false" && !confirm("Are you sure you want to inactivate yourself?")) {
+      let selectStatusElement: any = document.getElementById('statusSelect');
+      selectStatusElement.value = "true";
+    }
+
   }
 
   onUpdateUser(userId: string) {
+    if (this.userDetailForm.invalid)
+      return false;
+
     const userDetail = this.users.find((user) => user.userId === userId)
-    userDetail.isReadOnly = false;
     this.userDetailService.updateUser(this.userDetailForm, userDetail);
+    this.userDetailForm.disable();
   }
 
   ngOnDestroy() {
