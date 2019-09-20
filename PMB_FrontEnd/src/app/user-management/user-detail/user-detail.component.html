@@ -86,8 +86,9 @@
                           <label class="col-md-4 table-label" style="padding-right: 0" for="role">Department</label>
                           <select class="col-md-8 form-control" [disabled]="userDetailForm.disabled"
                             (change)="onDepartmentChange($event.target.value)">
+                            <option disabled selected>Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
-                              [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
+                              [selected]="(userDetailForm.controls.department.value !== null && department.value.departmentId === userDetailForm.controls.department.value.departmentId)"
                               class="edit-input" [value]="department.value.departmentId">
                               {{department.value.departmentName}}</option>
                           </select>
@@ -134,6 +135,7 @@
                           <label class="col-md-4 table-label" for="country">Country:</label>
                           <select class="col-md-8 form-control" name="" [disabled]="userDetailForm.disabled"
                             (change)="onCountryChange($event.target.value)">
+                            <option disabled selected>Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
                               [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
                               class="edit-input" [value]="country.value.countryName">{{country.value.countryName}}

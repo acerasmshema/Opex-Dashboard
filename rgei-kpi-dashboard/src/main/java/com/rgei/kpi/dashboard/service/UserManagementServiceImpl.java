@@ -98,14 +98,15 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void updateUserRole(UserRole userRole) {
 		logger.info("Inside service call to update user role for request : " + userRole);
-		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
-		if (null != entity) {
-			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
+		UserRoleEntity updateEntity = null;
+		Optional<UserRoleEntity> entity = Optional.ofNullable(userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId())));
+		if (entity.isPresent()) {
+			updateEntity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity.get());
 		} else {
 			throw new RecordNotFoundException("User Role not found against role id  :" + userRole.getUserRoleId());
 		}
 		try {
-			userRoleRepository.save(entity);
+			userRoleRepository.save(updateEntity);
 		} catch (RuntimeException e) {
 			throw new RecordNotUpdatedException("Error while updating user role :" + userRole);
 		}
@@ -158,9 +159,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to update user for request : " + user);
 		try {
 			if (user != null) {
-				Optional<RgeUserEntity> userEntity = rgeUserEntityRepository.findById(Long.parseLong(user.getUserId()));
-				if (userEntity.isPresent()) {
-					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity.get());
+				RgeUserEntity userEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(user.getUserId()));
+				if (userEntity != null) {
+					RgeUserEntity updatedUser = UserManagementUtility.updateFetchedUserEntity(user, userEntity);
 					rgeUserEntityRepository.save(updatedUser);
 					Optional<List<UserRoleMillEntity>> millRoles = Optional.ofNullable(rgeUserRoleMillRepository
 							.findAllByUserIdAndStatus(Long.parseLong(user.getUserId()), Boolean.TRUE));

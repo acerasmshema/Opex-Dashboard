@@ -142,10 +142,10 @@ public class UserConverter {
 		userResponse.setFirstName(entity.getFirstName());
 		userResponse.setLastName(CommonFunction.getString(entity.getLastName()));
 		userResponse.setEmail(CommonFunction.getString(entity.getEmail()));
-		userResponse.setPhone(entity.getPhone());
+		userResponse.setPhone(CommonFunction.getString(entity.getPhone()));
 		userResponse.setUsername(entity.getLoginId());
-		userResponse.setAddress(entity.getAddress());
-		userResponse.setCountry(entity.getCountry());
+		userResponse.setAddress(CommonFunction.getString(entity.getAddress()));
+		userResponse.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
 		userResponse.setActive(entity.getIsActive());
 		userResponse.setCreatedBy(entity.getCreatedBy());
 		userResponse.setCreatedDate(CommonFunction.getString(entity.getCreatedOn()));
@@ -176,7 +176,7 @@ public class UserConverter {
 		millDetail.setMillName(userRoleMill.getMill().getMillName());
 		millDetail.setMillCode(userRoleMill.getMill().getMillCode());
 		millDetail.setActive(userRoleMill.getMill().getActive());
-		millDetail.setCountryId(CommonFunction.getString(userRoleMill.getMill().getCountry().getCountryId()));
+		millDetail.setCountry(CommonFunction.convertCountryEntityToResponse(userRoleMill.getMill().getCountry()));
 		millDetail.setCreatedBy(userRoleMill.getMill().getCreatedBy());
 		millDetail.setCreatedDate(CommonFunction.getString(userRoleMill.getMill().getCreatedDate()));
 		millDetail.setUpdatedBy(userRoleMill.getMill().getUpdatedBy());
@@ -199,6 +199,7 @@ public class UserConverter {
 
 	private static Department getDepartmentDetails(RgeUserEntity entity) {
 		Department department = new Department();
+		if(Objects.nonNull(entity.getDepartment())) {
 		department.setDepartmentId(CommonFunction.getString(entity.getDepartment().getDepartmentId()));
 		department.setDepartmentName(entity.getDepartment().getDepartmentName());
 		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
@@ -207,6 +208,7 @@ public class UserConverter {
 		department.setCreatedDate(CommonFunction.getString(entity.getDepartment().getCreatedDate()));
 		department.setUpdatedBy(entity.getDepartment().getUpdatedBy());
 		department.setUpdatedDate(CommonFunction.getString(entity.getDepartment().getUpdatedDate()));
+		}
 		return department;
 	}
 	

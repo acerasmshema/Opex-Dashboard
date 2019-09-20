@@ -51,7 +51,7 @@ public class RgeUserEntity implements Serializable {
 
 	private String address;
 
-	private String country;
+	private Integer country;
 
 	@Column(name = "created_by")
 	private String createdBy;
@@ -104,6 +104,10 @@ public class RgeUserEntity implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "department_id",insertable=false, updatable=false)
 	private DepartmentEntity department;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "country", referencedColumnName = "country_id",insertable=false, updatable=false)
+	private CountryEntity countryEntity;
 
 	@ManyToMany(mappedBy = "rgeUsers", fetch = FetchType.EAGER)
 	private List<UserRoleEntity> userRoles;
@@ -130,11 +134,11 @@ public class RgeUserEntity implements Serializable {
 		this.address = address;
 	}
 
-	public String getCountry() {
+	public Integer getCountry() {
 		return this.country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Integer country) {
 		this.country = country;
 	}
 
@@ -256,6 +260,14 @@ public class RgeUserEntity implements Serializable {
 
 	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
+	}
+
+	public CountryEntity getCountryEntity() {
+		return countryEntity;
+	}
+
+	public void setCountryEntity(CountryEntity countryEntity) {
+		this.countryEntity = countryEntity;
 	}
 }
 

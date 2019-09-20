@@ -28,7 +28,7 @@ public class User {
 	@Size(max = 200)
 	private String address;
 	private Boolean active;
-	private String country;
+	private CountryResponse country;
 
 	@NotNull
 	private String username;
@@ -36,7 +36,6 @@ public class User {
 	@NotNull
 	private List<MillRole> millRoles;
 
-	@NotNull
 	private Department department;
 	private String password = null;
 
@@ -128,11 +127,11 @@ public class User {
 		this.active = active;
 	}
 
-	public String getCountry() {
+	public CountryResponse getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(CountryResponse country) {
 		this.country = country;
 	}
 
