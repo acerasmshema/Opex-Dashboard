@@ -36,7 +36,6 @@ public class User {
 	@NotNull
 	private List<MillRole> millRoles;
 
-	@NotNull
 	private Department department;
 	private String password = null;
 
