@@ -13,7 +13,7 @@
                 <input type="text" class="form-control edit-input" formControlName="firstName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
-                  <span *ngIf="userDetailForm.get('firstName').errors['required']" class="error-text">First name is
+                  <span *ngIf="userDetailForm.get('firstName').errors?.required" class="error-text">First name is
                     required</span>
                 </span>
               </div>
@@ -24,7 +24,7 @@
                 <input type="text" class="form-control edit-input" formControlName="lastName">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
-                  <span *ngIf="userDetailForm.get('lastName').errors['required']" class="error-text">Last name is
+                  <span *ngIf="userDetailForm.get('lastName').errors?.required" class="error-text">Last name is
                     required</span>
                 </span>
               </div>
@@ -42,7 +42,7 @@
                   <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
                     Invalid email</span>
                   <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
-                    Email already exist</span>
+                    Email already exists</span>
                 </span>
               </div>
             </div>
@@ -69,8 +69,8 @@
                   (change)="onCountryChange($event.target.value)">
                   <option disabled selected>Select Country</option>
                   <option *ngFor="let country of userDetailForm.get('countryList')['controls']"
-                    [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
-                    class="edit-input" [value]="country.value.countryName">
+                    [selected]="(userDetailForm.controls.country.value !== null && country.value.countryId === userDetailForm.controls.country.value.countryId)"
+                    class="edit-input" [value]="country.value.countryId">
                     {{country.value.countryName}}</option>
                 </select>
               </div>

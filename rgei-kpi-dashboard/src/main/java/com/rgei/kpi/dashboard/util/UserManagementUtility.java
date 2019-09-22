@@ -87,12 +87,12 @@ public class UserManagementUtility {
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
 		if (entity.getRgeUsers().isEmpty()) {
-		entity.setStatus(userRole.getActive());
-		}else {
+			entity.setStatus(userRole.getActive());
+		} else {
 			throw new RecordExistException("Users exists for this role :" + userRole);
 		}
 		entity.setUpdatedDate(new java.util.Date());
-		
+
 		return entity;
 	}
 
@@ -103,8 +103,9 @@ public class UserManagementUtility {
 			newUser.setFirstName(user.getFirstName());
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
-			newUser.setDepartmentId((user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
-			newUser.setCountry((user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()):null);
+			newUser.setDepartmentId(
+					(user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
+			newUser.setCountry((user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
@@ -138,15 +139,17 @@ public class UserManagementUtility {
 		}
 		return newPassword;
 	}
-	
+
 	public static RgeUserEntity updateFetchedUserEntity(User user, RgeUserEntity userEntity) {
 		Date date = new Date();
 		try {
 			userEntity.setFirstName(user.getFirstName());
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
-			userEntity.setCountry((user.getCountry().getCountryId() != null)?Integer.parseInt(user.getCountry().getCountryId()):null);
-			userEntity.setDepartmentId((user.getDepartment() != null)?Integer.parseInt(user.getDepartment().getDepartmentId()):null);
+			userEntity.setCountry(
+					(user.getCountry().getCountryId() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
+			userEntity.setDepartmentId(
+					(user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
 			userEntity.setEmail(user.getEmail());
 			userEntity.setLoginId(user.getUsername());
 			userEntity.setPhone(user.getPhone());
@@ -158,7 +161,7 @@ public class UserManagementUtility {
 		}
 		return userEntity;
 	}
-	
+
 	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole, User user) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
 		Date date = new Date();
@@ -187,7 +190,7 @@ public class UserManagementUtility {
 		}
 		return millRole;
 	}
-	
+
 	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities) {
 		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
@@ -253,11 +256,11 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
-				if(Boolean.TRUE.equals(entity.getStatus())) {
-				millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
-				millRole.setSelectedMill(getMillDetail(entity.getMill()));
-				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
-				millRoles.add(millRole);
+				if (Boolean.TRUE.equals(entity.getStatus())) {
+					millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
+					millRole.setSelectedMill(getMillDetail(entity.getMill()));
+					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
+					millRoles.add(millRole);
 				}
 			}
 		}
@@ -294,24 +297,21 @@ public class UserManagementUtility {
 		}
 		return userRole;
 	}
-	
-	public static byte[] getSHA(String input) throws NoSuchAlgorithmException 
-    {  
-        // Static getInstance method is called with hashing SHA  
-        MessageDigest md = MessageDigest.getInstance("SHA-256");  
-        // digest() method called  
-        // to calculate message digest of an input  
-        // and return array of byte 
-        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
-    } 
-    
-    public static String toHexString(byte[] hash) 
-    { 
-        StringBuilder sb = new StringBuilder();  
-        for(int i=0; i< hash.length ;i++)
-        {
-        	sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();  
-    } 
+
+	public static byte[] getSHA(String input) throws NoSuchAlgorithmException {
+		// Static getInstance method is called with hashing SHA
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		// digest() method called
+		// to calculate message digest of an input
+		// and return array of byte
+		return md.digest(input.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static String toHexString(byte[] hash) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < hash.length; i++) {
+			sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		return sb.toString();
+	}
 }

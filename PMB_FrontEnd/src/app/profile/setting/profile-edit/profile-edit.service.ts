@@ -36,6 +36,11 @@ export class ProfileEditService {
             departmentList: this.formBuilder.array([])
         });
 
+        userDetailForm.controls.email.valueChanges.
+        subscribe((event) => {
+            userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+        });
+
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);
 

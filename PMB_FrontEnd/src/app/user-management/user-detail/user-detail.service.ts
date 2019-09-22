@@ -74,15 +74,20 @@ export class UserDetailService {
             email: new FormControl(userDetail.email, { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             phone: new FormControl(userDetail.phone),
             address: new FormControl(userDetail.address),
-            status: new FormControl(userDetail.active),
             active: new FormControl(userDetail.active),
             country: new FormControl(userDetail.country),
             countryList: this.formBuilder.array([]),
             department: new FormControl(userDetail.department),
             departmentList: this.formBuilder.array([]),
+            disableSelect: new FormControl(true),
             totalMills: new FormControl(1),
             millRoles: millRoles
         });
+
+        userDetailForm.controls.email.valueChanges.
+            subscribe((event) => {
+                userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+            });
 
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);
@@ -105,36 +110,8 @@ export class UserDetailService {
                 roleError: new FormControl(''),
             })
         );
-        this.getAllMills1(userDetailForm);
-        this.getAllUserRole1(userDetailForm);
-    }
-
-    getAllMills1(userDetailForm: FormGroup) {
-        const millList = this.statusService.common.mills;
-        const millRoles: any = userDetailForm.controls.millRoles;
-        const millControl: any = millRoles.controls[millRoles.length - 1].value.mills.controls;
-        millList.forEach(mill => {
-            if (millRoles.controls[0].value.selectedMill.value.millId !== mill.millId)
-                millControl.push(new FormControl(mill));
-        });
-        userDetailForm.controls.totalMills.setValue(millList.length);
-    }
-
-    getAllUserRole1(userDetailForm: FormGroup) {
-        this.commonService.getAllUserRole(true).
-            subscribe(
-                (roleList: UserRole[]) => {
-                    const millRoles: any = userDetailForm.controls.millRoles;
-                    const userRoleControl = millRoles.controls[millRoles.controls.length - 1].value.userRoles.controls;
-                    roleList.forEach(userRole => {
-                        userRoleControl.push(new FormControl(userRole));
-                    });
-                    this.statusService.common.activeUserRoles = roleList;
-                },
-                (error: any) => {
-                    console.log("error in user role");
-                }
-            );
+        this.getAllMills(userDetailForm);
+        this.getAllUserRole(userDetailForm);
     }
 
     getAllMills(userDetailForm: FormGroup) {
@@ -196,9 +173,6 @@ export class UserDetailService {
 
     updateUser(userDetailForm: FormGroup, users: UserDetail[], userId: string) {
         if (!this.validationService.valdiateUserMillRole(userDetailForm)) {
-            const userDetail = users.find((user) => user.userId === userId)
-            userDetailForm.disable()
-
             this.statusService.spinnerSubject.next(true);
 
             let millRoles: MillRole[] = [];
@@ -211,6 +185,7 @@ export class UserDetailService {
                 millRoles.push(millRole);
             });
 
+            const userDetail = users.find((user) => user.userId === userId)
             userDetail.firstName = userDetailForm.controls.firstName.value;
             userDetail.lastName = userDetailForm.controls.lastName.value;
             userDetail.email = userDetailForm.controls.email.value;
@@ -220,11 +195,13 @@ export class UserDetailService {
             userDetail.millRoles = millRoles;
             userDetail.department = userDetailForm.controls.department.value;
             userDetail.updatedBy = this.statusService.common.userDetail.username;
-            userDetail.active = userDetailForm.controls.status.value;
+            userDetail.active = userDetailForm.controls.active.value;
 
             this.apiCallService.callPutAPIwithData(this.updateUserURL, userDetail).
                 subscribe(
                     (response: any) => {
+                        userDetailForm.disable();
+                        userDetailForm.controls.disableSelect.setValue(true);
                         this.statusService.spinnerSubject.next(false);
                         this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     },

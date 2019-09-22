@@ -29,14 +29,15 @@ export class CommonMessage {
 
     static ERROR_CODES ={
         1001 : 'Invalid user credentials',
-        1002 : 'Maintenance Day Could not be Added',
-        1003 : 'Target Days Could not be Updated',
-        1004 : 'Maintenance Day Remark Could not be Updated',
-        1005 : 'Maintenance Day(s) Could not be Deleted',
-        1006 : 'Annotation Could not be Added/Saved',
-        1007 : 'Annotation Could not be Deleted',
+        1002 : 'Maintenance day could not be added',
+        1003 : 'Target Days could not be updated',
+        1004 : 'Maintenance day remark could not be updated',
+        1005 : 'Maintenance Day(s) could not be deleted',
+        1006 : 'Annotation could not be saved',
+        1007 : 'Annotation could not be deleted',
         1008 : 'User not exist',
         1009 : 'Error during logout',
-        1010 : 'Record Not Found'
+        1010 : 'Record not found',
+        1012 : 'role is associated with another users'
     }
 }

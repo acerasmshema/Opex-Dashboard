@@ -56,7 +56,7 @@ export class DialogService {
             password: new FormControl("", [Validators.required, Validators.minLength(8)]),
             confirmPassword: new FormControl("", [Validators.required]),
             phone: new FormControl(""),
-            selectedCountry: new FormControl(''),
+            selectedCountry: new FormControl(null),
             countryList: this.formBuilder.array([]),
             selectedDepartment: new FormControl(null),
             departmentList: this.formBuilder.array([]),
@@ -66,6 +66,16 @@ export class DialogService {
         },
             { validator: this.validationService.mustMatchPassword('password', 'confirmPassword') }
         );
+
+        userDetailForm.controls.email.valueChanges.
+            subscribe((event) => {
+                userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+            });
+
+        userDetailForm.controls.username.valueChanges.
+            subscribe((event) => {
+                userDetailForm.get('username').setValue(event.toLowerCase(), { emitEvent: false });
+            });
 
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);
@@ -84,6 +94,7 @@ export class DialogService {
             validateRole: new FormControl(userRole.roleName),
             roleName: new FormControl(userRole.roleName, { validators: [Validators.required], asyncValidators: [this.validationService.forbiddenUserRole.bind(this)], updateOn: 'blur' }),
             description: new FormControl(userRole.description),
+            userExistError: new FormControl(''),
             active: new FormControl(userRole.active),
         });
 

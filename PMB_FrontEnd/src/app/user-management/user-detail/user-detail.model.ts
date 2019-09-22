@@ -1,5 +1,6 @@
 import { MillRole } from './mill-role.model';
 import { Department } from './department.model';
+import { Country } from 'src/app/shared/models/country.model';
 
 export class UserDetail {
     userId: string;
@@ -11,7 +12,7 @@ export class UserDetail {
     phone: string;
     address: string;
     active: boolean;
-    country: string;
+    country: Country;
     department: Department;
     millRoles: MillRole[] = [];
     createdBy: string;

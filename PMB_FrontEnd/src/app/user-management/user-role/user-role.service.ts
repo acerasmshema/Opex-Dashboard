@@ -51,7 +51,12 @@ export class UserRoleService {
                 },
                 error => {
                     this.statusService.spinnerSubject.next(false);
-                    this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
+                    if (error.error.status === '1012') {
+                        userRoleForm.controls.active.setValue(true);
+                        userRoleForm.controls.userExistError.setValue(userRole.roleName + ' ' + CommonMessage.ERROR_CODES[1012]);
+                    } else {
+                        this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
+                    }
                 }
             );
     }
@@ -77,7 +82,12 @@ export class UserRoleService {
                 },
                 error => {
                     this.statusService.spinnerSubject.next(false);
-                    this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
+                    if (error.error.status === '1012') {
+                        userRoleForm.controls.active.setValue(true);
+                        userRoleForm.controls.userExistError.setValue(userRole.roleName + ' ' + CommonMessage.ERROR_CODES[1012]);
+                    } else {
+                        this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
+                    }
                 }
             );
     }
