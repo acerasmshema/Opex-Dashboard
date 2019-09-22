@@ -209,6 +209,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.searchKpiData.processLines = [];
         }
         this.statusService.benchmarkSubject.next(this.searchKpiData);
+        this.sidebarForm.showBenchmarkMessage = false;
       }
     }
   }

@@ -412,8 +412,9 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.createNewUser(this.userDetailForm);
   }
 
-  onCountryChange(countryName: string) {
-    this.userDetailForm.controls.selectedCountry.setValue(countryName);
+  onCountryChange(countryId: string) {
+    let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+    this.userDetailForm.controls.selectedCountry.setValue(country);
   }
 
   onDepartmentChange(departmentId: string) {

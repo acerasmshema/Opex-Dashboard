@@ -37,7 +37,7 @@
                     <div *ngIf="col.field !== 'active'" class="td-role">{{rowData[col.field]}}</div>
                     <div *ngIf="col.field === 'active' " class="td-role text-center"
                         [style.color]="(rowData[col.field]) ? '#28a745' : 'red'">
-                        <i class="fa fa-circle font-10 m-r-10 "></i>
+                        <i class="fa fa-circle font-10 m-r-10" [pTooltip]="(rowData[col.field]) ? 'Active' : 'InActive'" tooltipPosition="top"></i>
                     </div>
                 </td>
                 <td class="text-center">

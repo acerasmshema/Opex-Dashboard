@@ -18,7 +18,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     { field: 'lastName', header: 'Last Name' },
     { field: 'email', header: 'Email' },
     { field: 'millRoleSortName', header: 'Role' },
-    { field: 'active', header: 'Status' }
+    { field: 'active', header: 'Active' }
   ];
 
   users: UserDetail[] = [];
@@ -42,11 +42,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     const userDetail = this.users.find((user) => user.userId === userId);
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
     this.userDetailForm.disable();
+    this.userDetailForm.controls.disableSelect.setValue(true);
   }
 
   onEdit(userId: string) {
-    const userDetail = this.users.find((user) => user.userId === userId)
     this.userDetailForm.enable();
+    this.userDetailForm.controls.disableSelect.setValue(false);
   }
 
   onCancel(userInfo: UserDetail) {
@@ -54,7 +55,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
     setTimeout(() => {
       this.userDetailForm.disable();
-  }, 10);
+      
+    }, 10);
   }
 
   onCreateUser() {
@@ -83,8 +85,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCountryChange(countryName: string) {
-    this.userDetailForm.controls.country.setValue(countryName);
+  onCountryChange(countryId: string) {
+    let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+    this.userDetailForm.controls.country.setValue(country);
   }
 
   onDepartmentChange(departmentId: string) {
@@ -106,13 +109,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   onUserStatusChange(status: string, userInfo: UserDetail) {
     if (this.statusService.common.userDetail.userId !== userInfo.userId) {
-      this.userDetailForm.controls.status.setValue(status);
+      this.userDetailForm.controls.active.setValue((status !== "false") ? true : false);
     }
     else if (status === "false" && !confirm("Are you sure you want to inactivate yourself?")) {
       let selectStatusElement: any = document.getElementById('statusSelect');
       selectStatusElement.value = "true";
     }
-
+    else {
+      this.userDetailForm.controls.active.setValue((status !== "false") ? true : false);
+    }
   }
 
   onUpdateUser(userId: string) {
