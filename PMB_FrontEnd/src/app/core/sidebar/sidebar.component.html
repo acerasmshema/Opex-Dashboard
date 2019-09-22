@@ -118,7 +118,10 @@
                                 style="background-color: #007ad9;height:30px;">Apply</button>
                         </div>
                     </div>
-                </form>`
+                </form>
+                <div *ngIf="sidebarForm.showBenchmarkMessage && !sidebarForm.hide" class="m-t-5">
+                    <label class="labelClass m-l-20">Please select the filter to load Benchmark KPI</label>
+                </div>
             </div>
         </nav>
     </div>

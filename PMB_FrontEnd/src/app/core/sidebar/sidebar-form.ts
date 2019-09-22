@@ -18,4 +18,5 @@ export class SidebarForm {
     millsError: boolean;
     dateErrorMessage: string;
     millsErrorMessage: string;
+    showBenchmarkMessage: boolean;
 }

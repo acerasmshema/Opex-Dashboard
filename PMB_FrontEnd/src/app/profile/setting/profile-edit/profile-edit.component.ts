@@ -31,8 +31,9 @@ export class ProfileEditComponent implements OnInit {
     this.profileEditService.saveProfile(this.userDetailForm);
   }
 
-  onCountryChange(countryName: string) {
-    this.userDetailForm.controls.country.setValue(countryName);
+  onCountryChange(countryId: string) {
+    let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+    this.userDetailForm.controls.country.setValue(country);
   }
 
   onDepartmentChange(departmentId: string) {
