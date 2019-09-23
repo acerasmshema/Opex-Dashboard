@@ -67,7 +67,7 @@ export class ConsumptionService {
     consumptionRequest.kpiId = searchKpiData.kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
     consumptionRequest.millId = this.statusService.common.selectedMill.millId;
-    consumptionRequest.countryId = this.statusService.common.selectedMill.countryId;
+    consumptionRequest.countryId = this.statusService.common.selectedMill.country.countryId;
     consumptionRequest.frequency = searchKpiData.frequency["code"];
     consumptionRequest.processLines = processLinesHeads;
 

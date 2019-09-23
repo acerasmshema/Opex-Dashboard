@@ -65,9 +65,10 @@ export class ValidationService {
 
     millValidation(searchKpiData: SearchKpiData, sidebarForm: SidebarForm) {
         let mills = searchKpiData.mills;
-        if (mills !== undefined) {
+        if (mills !== undefined && mills.length > 0) {
             if (mills.length < 2 && !sidebarForm.millsError) {
                 sidebarForm.millsError = true;
+                sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
             } else {
                 sidebarForm.millsError = false;
             }
@@ -78,7 +79,7 @@ export class ValidationService {
         const datePicker: any = document.getElementById("daterangepicker_input");
         if (datePicker !== null && datePicker.value !== "" && sidebarForm.dateError) {
             sidebarForm.dateError = false;
-        }
+        } 
     }
 
     forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
