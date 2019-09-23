@@ -49,8 +49,9 @@ public class CommonFunction {
 	}
 	
 	public static CountryResponse convertCountryEntityToResponse(CountryEntity countryEntity) {
-		CountryResponse countryResponse=new CountryResponse();
+		CountryResponse countryResponse= null;
 		if(countryEntity!=null) {
+			countryResponse = new CountryResponse();
 			countryResponse.setCountryId(countryEntity.getCountryId().toString());
 			countryResponse.setCountryCode(countryEntity.getCountryCode());
 			countryResponse.setCountryName(countryEntity.getCountryName());
