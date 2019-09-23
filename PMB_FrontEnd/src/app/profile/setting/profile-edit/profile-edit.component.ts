@@ -32,13 +32,22 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onCountryChange(countryId: string) {
-    let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
-    this.userDetailForm.controls.country.setValue(country);
+    if (countryId !== '') {
+      let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+      this.userDetailForm.controls.country.setValue(country);
+    } else {
+      this.userDetailForm.controls.country.setValue(null);
+    }
   }
 
   onDepartmentChange(departmentId: string) {
-    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
-    this.userDetailForm.controls.department.setValue(department);
+    if(departmentId !== '') {
+      const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+      this.userDetailForm.controls.department.setValue(department);
+    } else {
+      this.userDetailForm.controls.department.setValue(null);
+    }
+    
   }
 
 }

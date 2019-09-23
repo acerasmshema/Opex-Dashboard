@@ -147,7 +147,7 @@ public class UserManagementUtility {
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
 			userEntity.setCountry(
-					(user.getCountry().getCountryId() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
+					(user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
 			userEntity.setDepartmentId(
 					(user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
 			userEntity.setEmail(user.getEmail());

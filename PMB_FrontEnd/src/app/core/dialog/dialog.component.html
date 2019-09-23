@@ -303,7 +303,7 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onCountryChange($event.target.value)">
-                            <option class="edit-input" selected value="" disabled>Select Country</option>
+                            <option class="edit-input" selected value="">Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
                                 class="edit-input" [value]="country.value.countryId"> {{country.value.countryName}}
                             </option>
@@ -330,7 +330,7 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onDepartmentChange($event.target.value)">
-                            <option class="edit-input" selected value="" disabled>Select Department</option>
+                            <option class="edit-input" selected value="">Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
                                 [value]="department.value.departmentId" class="edit-input">
                                 {{department.value.departmentName}}</option>
@@ -389,7 +389,7 @@
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
                             <td style="width: 43%;">
-                                <select name="" id=""
+                                <select [disabled]="millRole.value.selectedMill.disabled"
                                     [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
@@ -397,11 +397,13 @@
                                         [value]="mill.value.millId">
                                         {{mill.value.millName}}</option>
                                 </select>
-                                <span class="error-text" *ngIf="(millRole.value.millError.value !== '')">Mill is
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '1')">Mill is
                                     required</span>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '2')">Mill is
+                                    already selected</span>
                             </td>
                             <td style="width: 43%;">
-                                <select
+                                <select [disabled]="millRole.value.selectedUserRole.disabled"
                                     [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>

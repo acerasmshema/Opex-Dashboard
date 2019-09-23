@@ -9,6 +9,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ApiCallService } from '../api/api-call.service';
 import { Observable } from 'rxjs';
 import { UserRole } from 'src/app/user-management/user-role/user-role.model';
+import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Injectable()
 export class ValidationService {
@@ -64,9 +65,10 @@ export class ValidationService {
 
     millValidation(searchKpiData: SearchKpiData, sidebarForm: SidebarForm) {
         let mills = searchKpiData.mills;
-        if (mills !== undefined) {
+        if (mills !== undefined && mills.length > 0) {
             if (mills.length < 2 && !sidebarForm.millsError) {
                 sidebarForm.millsError = true;
+                sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
             } else {
                 sidebarForm.millsError = false;
             }
@@ -77,7 +79,7 @@ export class ValidationService {
         const datePicker: any = document.getElementById("daterangepicker_input");
         if (datePicker !== null && datePicker.value !== "" && sidebarForm.dateError) {
             sidebarForm.dateError = false;
-        }
+        } 
     }
 
     forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
@@ -180,16 +182,36 @@ export class ValidationService {
 
         let millRoles: any = userDetailForm.controls.millRoles;
         let millControls = millRoles.controls;
+        let millValue = millControls[millControls.length - 1].value;
 
-        if (millControls[millControls.length - 1].value.selectedMill.value === '') {
-            millControls[millControls.length - 1].value.millError.setValue("1");
+        if (millValue.selectedMill.value === '' && millValue.millError.value === "") {
+            millValue.millError.setValue("1");
             inValid = true;
         }
-        if (millControls[millControls.length - 1].value.selectedUserRole.value === '') {
-            millControls[millControls.length - 1].value.roleError.setValue("1");
+        if (millValue.selectedUserRole.value === '') {
+            millValue.roleError.setValue("1");
+            inValid = true;
+        }
+        if (millValue.millError.value === "2") {
             inValid = true;
         }
 
         return inValid;
+    }
+
+    validateMillExist(userDetailForm: FormGroup, millId: string): boolean {
+        let isExist = false;
+
+        let millRoles: any = userDetailForm.controls.millRoles;
+        let millControls = millRoles.controls;
+        for (let index = 0; index < millControls.length - 1; index++) {
+            const millControl = millControls[index];
+            if (millControl.value.selectedMill.value.millId === millId) {
+                isExist = true;
+                break;
+            }
+        }
+
+        return isExist;
     }
 }
