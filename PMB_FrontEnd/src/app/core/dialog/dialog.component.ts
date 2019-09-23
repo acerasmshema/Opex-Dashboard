@@ -403,6 +403,9 @@ export class DialogComponent implements OnInit, OnDestroy {
     if (index > 0) {
       let millRoles: any = this.userDetailForm.controls.millRoles;
       millRoles.removeAt(index);
+      let millControls = millRoles.controls;
+      millControls[millControls.length - 1].value.selectedMill.enable();
+      millControls[millControls.length - 1].value.selectedUserRole.enable();
     }
   }
 
@@ -413,19 +416,32 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onCountryChange(countryId: string) {
-    let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
-    this.userDetailForm.controls.selectedCountry.setValue(country);
+    if (countryId !== '') {
+      let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+      this.userDetailForm.controls.selectedCountry.setValue(country);
+    } else {
+      this.userDetailForm.controls.selectedCountry.setValue(null);
+    }
   }
 
   onDepartmentChange(departmentId: string) {
-    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
-    this.userDetailForm.controls.selectedDepartment.setValue(department);
+    if (departmentId !== '') {
+      const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+      this.userDetailForm.controls.selectedDepartment.setValue(department);
+    } else {
+      this.userDetailForm.controls.selectedDepartment.setValue(null);
+    }
   }
 
   onMillChange(millId: string, millRole: FormGroup) {
-    const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
-    millRole.value.selectedMill.setValue(mill);
-    millRole.value.millError.setValue("");
+    if (!this.validationService.validateMillExist(this.userDetailForm, millId)) {
+      const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+      millRole.value.selectedMill.setValue(mill);
+      millRole.value.millError.setValue("");
+    }
+    else {
+      millRole.value.millError.setValue("2");
+    }
   }
 
   onUserRoleChange(userRoleId: string, millRole: FormGroup) {
@@ -451,7 +467,6 @@ export class DialogComponent implements OnInit, OnDestroy {
     } else {
       this.userRoleService.updateUserRole(this.userRoleForm);
     }
-
   }
 
   ngOnDestroy() {

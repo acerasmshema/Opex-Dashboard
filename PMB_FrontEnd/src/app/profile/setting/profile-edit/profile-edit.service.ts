@@ -37,9 +37,10 @@ export class ProfileEditService {
         });
 
         userDetailForm.controls.email.valueChanges.
-        subscribe((event) => {
-            userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
-        });
+            subscribe((event) => {
+                if (event !== null)
+                    userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+            });
 
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);

@@ -87,7 +87,7 @@
                           <label class="col-md-4 table-label" style="padding-right: 0" for="role">Department</label>
                           <select class="col-md-8 form-control" [disabled]="userDetailForm.controls.disableSelect.value"
                             (change)="onDepartmentChange($event.target.value)">
-                            <option disabled selected>Select Department</option>
+                            <option class="edit-input" selected value="">Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
                               [selected]="(userDetailForm.controls.department.value !== null && department.value.departmentId === userDetailForm.controls.department.value.departmentId)"
                               class="edit-input" [value]="department.value.departmentId">
@@ -137,7 +137,7 @@
                           <select class="col-md-8 form-control" name=""
                             [disabled]="userDetailForm.controls.disableSelect.value"
                             (change)="onCountryChange($event.target.value)">
-                            <option disabled selected>Select Country</option>
+                            <option class="edit-input" selected value="">Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
                               [selected]="(userDetailForm.controls.country.value !== null && country.value.countryId === userDetailForm.controls.country.value.countryId)"
                               class="edit-input" [value]="country.value.countryId">{{country.value.countryName}}
@@ -189,23 +189,27 @@
                           <tbody>
                             <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i = index;">
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.controls.disableSelect.value"
+                                <select
+                                  [disabled]="userDetailForm.controls.disableSelect.value || millRole.value.selectedMill.disabled"
                                   [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onMillChange($event.target.value, millRole)">
-                                  <option disabled selected>Select Mill</option>
+                                  <option class="edit-input" disabled selected>Select Mill</option>
                                   <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
                                     [value]="mill.value.millId"
                                     [selected]="(millRole.value.selectedMill.value !== null && mill.value.millName === millRole.value.selectedMill.value.millName)">
                                     {{mill.value.millName}}</option>
                                 </select>
-                                <span class="error-message" *ngIf="(millRole.value.millError.value !== '')">Mill is
+                                <span class="error-message" *ngIf="(millRole.value.millError.value === '1')">Mill is
                                   required</span>
+                                <span class="error-message" *ngIf="(millRole.value.millError.value === '2')">Mill is
+                                  already selected</span>
                               </td>
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.controls.disableSelect.value"
+                                <select
+                                  [disabled]="userDetailForm.controls.disableSelect.value || millRole.value.selectedUserRole.disabled"
                                   [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onUserRoleChange($event.target.value, millRole)">
-                                  <option disabled selected>Select User Role</option>
+                                  <option class="edit-input" disabled selected>Select User Role</option>
                                   <option *ngFor="let userRole of millRole.value.userRoles.controls" class="edit-input"
                                     [selected]="(millRole.value.selectedUserRole.value !== null && userRole.value.roleName === millRole.value.selectedUserRole.value.roleName)"
                                     [value]="userRole.value.userRoleId">{{userRole.value.roleName}}
