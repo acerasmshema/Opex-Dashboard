@@ -67,7 +67,7 @@
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onCountryChange($event.target.value)">
-                  <option disabled selected>Select Country</option>
+                  <option class="edit-input" selected value="">Select Country</option>
                   <option *ngFor="let country of userDetailForm.get('countryList')['controls']"
                     [selected]="(userDetailForm.controls.country.value !== null && country.value.countryId === userDetailForm.controls.country.value.countryId)"
                     class="edit-input" [value]="country.value.countryId">
@@ -80,7 +80,7 @@
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onDepartmentChange($event.target.value)">
-                  <option disabled selected>Select Department</option>
+                  <option class="edit-input" selected value="">Select Department</option>
                   <option *ngFor="let department of userDetailForm.get('departmentList')['controls']"
                     [selected]="(userDetailForm.controls.department.value !== null && department.value.departmentId === userDetailForm.controls.department.value.departmentId)"
                     class="edit-input" [value]="department.value.departmentId">
