@@ -377,7 +377,10 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
                 if (error.status == "0") {
                   alert(CommonMessage.ERROR.SERVER_ERROR)
                 } else {
-                  this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+                  this.annotationDates = [];
+                  this.prodLineChart.productionLineData = prodLineResponse;
+                  this.productionChartRendered = true;
+                  this.enableTabs();
                 }
               });
         } else {
