@@ -17,7 +17,6 @@ import com.rgei.kpi.dashboard.exception.InActiveUserException;
 import com.rgei.kpi.dashboard.exception.InvalidCredentialsException;
 import com.rgei.kpi.dashboard.exception.LogoutException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
-import com.rgei.kpi.dashboard.exception.UserNotExistException;
 import com.rgei.kpi.dashboard.repository.LoginDetailEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
@@ -39,12 +38,12 @@ public class RgeUserServiceImpl implements RgeUserService {
 	LoginDetailEntityRepository loginDetailEntityRepository;
 
 	@Override
-	public RgeUserResponse getUserById(Long userId) {
+	public User getUserById(Long userId) {
 		logger.info("Get user by userId ", userId);
 		Optional<RgeUserEntity> userObject = rgeUserEntityRepository.findById(userId);
-		RgeUserResponse response = null;
+		User response = null;
 		if (userObject.isPresent()) {
-			response = UserConverter.convertToResponse(userObject.get());
+			response = UserManagementUtility.convertToUserFromRgeUserEntity(userObject.get());
 		} else {
 			throw new RecordNotFoundException("User not found for user Id : " + userId);
 		}
@@ -72,7 +71,7 @@ public class RgeUserServiceImpl implements RgeUserService {
 			entity = rgeUserEntityRepository.findByLoginId(rgeUserLoginRequest.getUsername());
 			if (entity == null) {
 				logger.info("User not found against the requested username", rgeUserLoginRequest.getUsername());
-				throw new UserNotExistException(
+				throw new InvalidCredentialsException(
 						"Requested user not exist in the system:" + rgeUserLoginRequest.getUsername());
 			}
 			if (Boolean.TRUE.equals(entity.getIsActive())) {

@@ -12,11 +12,12 @@ export class UserDetail {
     phone: string;
     address: string;
     active: boolean;
-    country: string;
+    country: Country;
     department: Department;
     millRoles: MillRole[] = [];
     createdBy: string;
     updatedBy: string;
     role: string;
     showDialog: boolean;
+    millRoleSortName: string;
 }

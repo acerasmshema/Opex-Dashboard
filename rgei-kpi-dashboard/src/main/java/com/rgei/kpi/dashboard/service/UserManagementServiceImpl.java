@@ -71,11 +71,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
+		
 		List<UserRoleEntity> entities = null;
 		if (Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
+			entities = userRoleRepository.findAllByStatusAndAceAdminOrderByRoleNameAsc(activeRoles,Boolean.FALSE);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
+			entities = userRoleRepository.findAllByAceAdminOrderByRoleNameAsc(Boolean.FALSE);
 		}
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
@@ -98,14 +99,15 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void updateUserRole(UserRole userRole) {
 		logger.info("Inside service call to update user role for request : " + userRole);
-		UserRoleEntity entity = userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId()));
-		if (null != entity) {
-			entity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity);
+		UserRoleEntity updateEntity = null;
+		Optional<UserRoleEntity> entity = Optional.ofNullable(userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId())));
+		if (entity.isPresent()) {
+			updateEntity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity.get());
 		} else {
 			throw new RecordNotFoundException("User Role not found against role id  :" + userRole.getUserRoleId());
 		}
 		try {
-			userRoleRepository.save(entity);
+			userRoleRepository.save(updateEntity);
 		} catch (RuntimeException e) {
 			throw new RecordNotUpdatedException("Error while updating user role :" + userRole);
 		}
@@ -238,6 +240,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to encrypt password for all users");
 		List<RgeUserEntity> users = rgeUserEntityRepository.findAll();
 		for (RgeUserEntity usr : users) {
+			if(usr.getUserId()==188) {
 			String passwordString = usr.getLoginId() + "_" + usr.getUserPassword();
 			String encodedSHAString = "";
 			try {
@@ -252,6 +255,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 				rgeUserEntityRepository.save(usr);
 			} catch (Exception e) {
 				throw new RecordNotUpdatedException("Error while changing password for user Id : " + usr.getUserId());
+			}
 			}
 		}
 	}

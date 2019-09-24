@@ -1,5 +1,5 @@
 <div class="mainContainer">
-    <div *ngIf="isShowBenchmark" class="card">
+    <div class="card">
         <div class="card-body">
             <div *ngFor="let benchmark of benchmarkList" class="row m-t-5">
                 <div class="col-md-12">
@@ -47,19 +47,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="!isShowBenchmark" class="" style="margin-top: 18%">
-        <div class="arrow bounce">
-            <div class="row">
-                <div class="col-sm-1">
-                    <em class="fa fa-arrow-left fa-2x" style="color: red"></em>
-                </div>
-                <div class="col-sm-11" style="margin-left: -6%;">
-                    <h2>Please select the filter to load Benchmark KPI...</h2>
                 </div>
             </div>
         </div>

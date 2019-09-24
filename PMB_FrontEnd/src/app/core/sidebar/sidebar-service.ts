@@ -45,7 +45,8 @@ export class SidebarService {
         sidebarForm.isActive = false;
         sidebarForm.pushRightClass = 'push-right';
         sidebarForm.kpiCategoryId = sidebarRequestData.kpiCategoryId;
-
+        sidebarForm.showBenchmarkMessage = true;
+        
         sidebarForm.frequencies = [
             { name: 'Monthly', code: '1' },
             { name: 'Quarterly', code: '2' },

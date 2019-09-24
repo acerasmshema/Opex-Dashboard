@@ -1,6 +1,7 @@
 <div *ngIf="userRoles.length  > 0">
-    <p-table #userRole [columns]="cols" [value]="userRoles" [paginator]="true" [rows]="10" dataKey="userRoleId"
-        [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="roleName" sortOrder="1">
+    <p-table #userRole id="userRoleTable" [columns]="cols" [value]="userRoles" [paginator]="true" [rows]="10"
+        dataKey="userRoleId" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false"
+        sortField="roleName" sortOrder="1">
         <ng-template pTemplate="caption">
             <div class="text-right">
                 <span class="m-l-5" (click)="onCreateUserRole()">
@@ -13,7 +14,7 @@
                 <th class="text-center" style="width: 4%;"></th>
                 <th class="text-center" *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn
                     pReorderableColumn [style.width]="col.width">
-                    <p-sortIcon *ngIf="col.field !== 'status'" [field]="col.field" pTooltip="Sort"
+                    <p-sortIcon *ngIf="col.field !== 'active'" [field]="col.field" pTooltip="Sort"
                         tooltipPosition="top"></p-sortIcon>
                     {{col.header}}
                 </th>
@@ -22,7 +23,7 @@
             <tr class="text-center">
                 <th style="width: 4%;"><i class="fa fa-search"></i></th>
                 <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
-                    <input *ngIf="col.field !== 'status'" pInputText type="text"
+                    <input *ngIf="col.field !== 'active'" pInputText type="text"
                         (input)="userRole.filter($event.target.value, col.field, col.filterMatchMode)"
                         [value]="userRole.filters[col.field]?.value">
                 </th>
@@ -30,39 +31,21 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-ri="rowIndex" let-columns="columns">
-            <tr>
-                <td class="td-role text-center" style="width: 4%;">
-                    {{ri + 1}}
+            <tr [pSelectableRow]="rowData">
+                <td class="td-role">{{ri + 1}}</td>
+                <td *ngFor="let col of columns">
+                    <div *ngIf="col.field !== 'active'" class="td-role">{{rowData[col.field]}}</div>
+                    <div *ngIf="col.field === 'active' " class="td-role text-center"
+                        [style.color]="(rowData[col.field]) ? '#28a745' : 'red'">
+                        <i class="fa fa-circle font-10 m-r-10" [pTooltip]="(rowData[col.field]) ? 'Active' : 'InActive'" tooltipPosition="top"></i>
+                    </div>
                 </td>
-                <td>
-                    <input type="text" [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'"
-                        id="name" name="name" [readonly]="!rowData.isEnable" [(ngModel)]="rowData.roleName" required
-                        #name="ngModel" [ngModelOptions]="{updateOn: 'blur'}" (focusout)="onRoleNameValidation(name, rowData)">
-                    <span *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required"
-                        class="error-text">
-                        Role name is required.
-                    </span>
-                    <span *ngIf="rowData.invalidRoleName" class="error-text">Role name already exist</span>
-                </td>
-                <td>
-                    <input [class]="(!rowData.isEnable) ? 'input-read td-role': 'form-control td-role'" type="text"
-                        [readonly]="!rowData.isEnable" [(ngModel)]="rowData.description">
-                </td>
-                <td>
-                    <input class="form-control" style="font-size: 5px;" type="checkbox" [checked]="rowData.active"
-                        [disabled]="!rowData.isEnable" [(ngModel)]="rowData.active">
-                </td>
-                <td class="text-center" style="width: 10%">
-                    <span *ngIf="!rowData.isEnable" class="font-17" style="color: #3e3e3e;"
-                        (click)="onEdit(rowData.userRoleId)"><i class="fa fa-edit" pTooltip="Edit"
-                            tooltipPosition="top"></i></span>
-                    <span *ngIf="rowData.isEnable" class="font-17 m-r-20"
-                        [style.color]="(name.invalid) ? '#9c9999':'#398bf7'"><i class="fa fa-save" pTooltip="Save"
-                            tooltipPosition="top" (click)="onSave(rowData, name.invalid)"></i></span>
-                    <span *ngIf="rowData.isEnable" class="font-17" style="color: red;"><i class="fa fa-remove"
-                            pTooltip="Cancel" tooltipPosition="top" (click)="onCancel(rowData)"></i></span>
+                <td class="text-center">
+                    <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.userRoleId)"><i
+                            class="fa fa-edit" pTooltip="Edit" tooltipPosition="top"></i></span>
                 </td>
             </tr>
+
         </ng-template>
     </p-table>
 </div>

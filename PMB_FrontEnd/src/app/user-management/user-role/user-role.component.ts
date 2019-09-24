@@ -1,60 +1,68 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { StatusService } from 'src/app/shared/service/status.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.scss']
 })
-export class UserRoleComponent implements OnInit {
+export class UserRoleComponent implements OnInit, OnDestroy {
 
   public userRoles: UserRole[] = [];
-  private selectedUserRole: UserRole;
+  roleSubscription: Subscription;
 
   cols = [
     { field: 'roleName', header: 'Role Name', width: "25%" },
     { field: 'description', header: 'Description', width: "55%" },
-    { field: 'status', header: 'Status', width: "6%" },
+    { field: 'active', header: 'Status', width: "6%" },
   ];
 
   constructor(private userRoleService: UserRoleService,
+    private statusService: StatusService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
     this.userRoleService.getUserRoles(this.userRoles);
+
+    this.roleSubscription = this.statusService.refreshUserList.
+      subscribe((isRefresh: boolean) => {
+        this.userRoles = [];
+        this.userRoleService.getUserRoles(this.userRoles);
+      })
   }
 
   onCreateUserRole() {
-    this.userRoleService.createUserRole(this.userRoles);
+    let userRole = new UserRole();
+    userRole.roleName = '';
+    userRole.description = ''
+    userRole.active = true;
+    userRole.createdBy = this.statusService.common.userDetail.username;
+    userRole.updatedBy = this.statusService.common.userDetail.username;
+    userRole.operation = "Add";
+
+    const data = {
+      dialogName: "userRole",
+      userRole: userRole
+    }
+    this.statusService.dialogSubject.next(data);
   }
 
   onEdit(userRoleId: string) {
     const userRole = this.userRoles.find((userRole) => userRole.userRoleId === userRoleId)
-    this.selectedUserRole = new UserRole();
-    this.selectedUserRole.roleName = userRole.roleName;
-    this.selectedUserRole.active = userRole.active;
+    userRole.operation = "Edit";
 
-    userRole.isEnable = true;
-  }
-
-  onCancel(userRole: UserRole) {
-    userRole.roleName = this.selectedUserRole.roleName;
-    userRole.active = this.selectedUserRole.active;
-    userRole.isEnable = false;
-    this.selectedUserRole = null;
-  }
-
-  onSave(userRole: UserRole, isInValidForm: boolean) {
-    if (!isInValidForm) {
-      this.selectedUserRole = null;
-      (!userRole.userRoleId) ? this.userRoleService.saveUserRole(userRole, this.userRoles) : this.userRoleService.updateUserRole(userRole, this.userRoles);
+    const data = {
+      dialogName: "userRole",
+      userRole: userRole
     }
+    this.statusService.dialogSubject.next(data);
   }
 
-  onRoleNameValidation(roleNameRef: any, userRole: UserRole) {
-    if (roleNameRef.valid && userRole.isEnable)
-      this.validationService.forbiddenUserRole(roleNameRef, userRole);
+  ngOnDestroy() {
+    this.roleSubscription.unsubscribe();
   }
 }

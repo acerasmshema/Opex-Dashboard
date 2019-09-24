@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,8 +64,12 @@ public class UserRoleEntity implements Serializable {
 
 	@Column(name="updated_date")
 	private Date updatedDate;
+	
+	@Column(name="is_aceadmin")
+	private Boolean aceAdmin;
+	
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name="rge_user_role"
 		, joinColumns={
@@ -154,6 +159,14 @@ public class UserRoleEntity implements Serializable {
 
 	public void setShowUserManagement(Boolean showUserManagement) {
 		this.showUserManagement = showUserManagement;
+	}
+
+	public Boolean getAceAdmin() {
+		return aceAdmin;
+	}
+
+	public void setAceAdmin(Boolean aceAdmin) {
+		this.aceAdmin = aceAdmin;
 	}
 
 }

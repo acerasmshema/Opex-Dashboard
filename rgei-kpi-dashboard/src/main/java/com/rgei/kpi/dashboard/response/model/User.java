@@ -36,7 +36,6 @@ public class User {
 	@NotNull
 	private List<MillRole> millRoles;
 
-	@NotNull
 	private Department department;
 	private String password = null;
 
@@ -69,7 +68,7 @@ public class User {
 	}
 
 	public void setEmail(String email) {
-		this.email = email.trim();
+		this.email = email.toLowerCase().trim();
 	}
 
 	public String getPhone() {
@@ -141,7 +140,7 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.toLowerCase().trim();
 	}
 
 	public List<MillRole> getMillRoles() {

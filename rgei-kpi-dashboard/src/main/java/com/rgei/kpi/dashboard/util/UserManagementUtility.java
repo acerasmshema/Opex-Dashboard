@@ -15,6 +15,7 @@ import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.entities.UserRoleMillEntity;
+import com.rgei.kpi.dashboard.exception.RecordExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.response.model.ChangePasswordRequest;
@@ -82,15 +83,16 @@ public class UserManagementUtility {
 	}
 
 	public static UserRoleEntity updateFetchedUserRoleEntity(UserRole userRole, UserRoleEntity entity) {
-		try {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
-		entity.setStatus(userRole.getActive());
-		entity.setUpdatedDate(new java.util.Date());
-		}catch(RuntimeException e) {
-			throw new RecordNotUpdatedException("Error while updating existing user role :" + userRole);
+		if (entity.getRgeUsers().isEmpty()) {
+			entity.setStatus(userRole.getActive());
+		} else {
+			throw new RecordExistException("Users exists for this role :" + userRole);
 		}
+		entity.setUpdatedDate(new java.util.Date());
+
 		return entity;
 	}
 
@@ -101,8 +103,9 @@ public class UserManagementUtility {
 			newUser.setFirstName(user.getFirstName());
 			newUser.setLastName(user.getLastName());
 			newUser.setAddress(user.getAddress());
-			newUser.setCountry(user.getCountry().getCountryId());
-			newUser.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			newUser.setDepartmentId(
+					(user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
+			newUser.setCountry((user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
 			newUser.setEmail(user.getEmail());
 			newUser.setLoginId(user.getUsername());
 			newUser.setPhone(user.getPhone());
@@ -136,15 +139,17 @@ public class UserManagementUtility {
 		}
 		return newPassword;
 	}
-	
+
 	public static RgeUserEntity updateFetchedUserEntity(User user, RgeUserEntity userEntity) {
 		Date date = new Date();
 		try {
 			userEntity.setFirstName(user.getFirstName());
 			userEntity.setLastName(user.getLastName());
 			userEntity.setAddress(user.getAddress());
-			userEntity.setCountry(user.getCountry().getCountryId());
-			userEntity.setDepartmentId(Integer.parseInt(user.getDepartment().getDepartmentId()));
+			userEntity.setCountry(
+					(user.getCountry() != null) ? Integer.parseInt(user.getCountry().getCountryId()) : null);
+			userEntity.setDepartmentId(
+					(user.getDepartment() != null) ? Integer.parseInt(user.getDepartment().getDepartmentId()) : null);
 			userEntity.setEmail(user.getEmail());
 			userEntity.setLoginId(user.getUsername());
 			userEntity.setPhone(user.getPhone());
@@ -156,7 +161,7 @@ public class UserManagementUtility {
 		}
 		return userEntity;
 	}
-	
+
 	public static UserRoleMillEntity createUserRoleMillEntity(MillRole millRole, User user) {
 		UserRoleMillEntity userRoleMill = new UserRoleMillEntity();
 		Date date = new Date();
@@ -185,7 +190,7 @@ public class UserManagementUtility {
 		}
 		return millRole;
 	}
-	
+
 	public static List<Department> convertToDepartmentResponse(List<DepartmentEntity> entities) {
 		List<Department> responseList = new ArrayList<>();
 		Department resp = null;
@@ -224,7 +229,9 @@ public class UserManagementUtility {
 			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
 			user.setDepartment(getDepartment(entity.getDepartment()));
 			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
+			if(!user.getMillRoles().isEmpty()) {
 			responseList.add(user);
+			}
 		}
 		return responseList;
 	}
@@ -251,11 +258,12 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
-				if(Boolean.TRUE.equals(entity.getStatus())) {
-				millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
-				millRole.setSelectedMill(getMillDetail(entity.getMill()));
-				millRole.setSelectedUserRole(getUserRole(entity.getRole()));
-				millRoles.add(millRole);
+				if (Boolean.TRUE.equals(entity.getStatus()) && Boolean.FALSE.equals(entity.getRole().getAceAdmin())) {
+					millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
+					millRole.setSelectedMill(getMillDetail(entity.getMill()));
+					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
+					millRole.setActive(entity.getStatus());
+					millRoles.add(millRole);
 				}
 			}
 		}
@@ -292,24 +300,45 @@ public class UserManagementUtility {
 		}
 		return userRole;
 	}
+
+	public static byte[] getSHA(String input) throws NoSuchAlgorithmException {
+		// Static getInstance method is called with hashing SHA
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		// digest() method called
+		// to calculate message digest of an input
+		// and return array of byte
+		return md.digest(input.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static String toHexString(byte[] hash) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < hash.length; i++) {
+			sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		return sb.toString();
+	}
 	
-	public static byte[] getSHA(String input) throws NoSuchAlgorithmException 
-    {  
-        // Static getInstance method is called with hashing SHA  
-        MessageDigest md = MessageDigest.getInstance("SHA-256");  
-        // digest() method called  
-        // to calculate message digest of an input  
-        // and return array of byte 
-        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
-    } 
-    
-    public static String toHexString(byte[] hash) 
-    { 
-        StringBuilder sb = new StringBuilder();  
-        for(int i=0; i< hash.length ;i++)
-        {
-        	sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();  
-    } 
+	public static User convertToUserFromRgeUserEntity(RgeUserEntity entity) {
+		User user = null;
+		if (Objects.nonNull(entity)) {
+			user = new User();
+			user.setUserId(CommonFunction.getString(entity.getUserId()));
+			user.setFirstName(CommonFunction.getString(entity.getFirstName()));
+			user.setLastName(CommonFunction.getString(entity.getLastName()));
+			user.setUsername(CommonFunction.getString(entity.getLoginId()));
+			user.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
+			user.setAddress(CommonFunction.getString(entity.getAddress()));
+			user.setActive(entity.getIsActive());
+			user.setEmail(CommonFunction.getString(entity.getEmail()));
+			user.setPhone(CommonFunction.getString(entity.getPhone()));
+			user.setCreatedBy(CommonFunction.getString(entity.getCreatedBy()));
+			user.setCreatedDate(CommonFunction.getString(entity.getCreatedOn()));
+			user.setUpdatedBy(CommonFunction.getString(entity.getUpdatedBy()));
+			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
+			user.setDepartment(getDepartment(entity.getDepartment()));
+			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
+		}
+		return user;
+	}
+
 }

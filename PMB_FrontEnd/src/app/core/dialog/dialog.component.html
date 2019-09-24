@@ -242,16 +242,17 @@
 
 <div *ngIf="dialogName === 'addUser'">
     <form [formGroup]='userDetailForm' (ngSubmit)="onCreateUser()">
-        <p-dialog modal="true" header="Add New User" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}"
-            [baseZIndex]="10000" [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true"
-            [draggable]="true" [maximizable]="true">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header">Add New User</span> </p-header>
             <div class="row">
                 <div class="col-sm-6">
                     <label class="edit-label required">First Name</label>
                     <div class="form-group">
                         <input type="text" class="form-control edit-input" formControlName="firstName">
                         <span class="error-text"
-                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors['required']">
+                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
                         </span>
                     </div>
@@ -261,7 +262,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control edit-input" formControlName="lastName">
                         <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
-                            && userDetailForm.get('lastName').errors['required']">
+                            && userDetailForm.get('lastName').errors?.required">
                             Last name is required
                         </span>
                     </div>
@@ -279,7 +280,7 @@
                             <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
                                 Invalid email</span>
                             <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
-                                Email already exist</span>
+                                Email already exists</span>
                         </span>
                     </div>
                 </div>
@@ -300,11 +301,11 @@
                 <div class="col-sm-6">
                     <label class="edit-label">Country</label>
                     <div class="form-group">
-                        <select name="" id="" class="form-control edit-input" style="height: 34px;"
+                        <select class="form-control edit-input" style="height: 34px;"
                             (change)="onCountryChange($event.target.value)">
-                            <option class="edit-input" selected value="" disabled>Select Country</option>
+                            <option class="edit-input" selected value="">Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
-                                class="edit-input" [value]="country.value.countryName"> {{country.value.countryName}}
+                                class="edit-input" [value]="country.value.countryId"> {{country.value.countryName}}
                             </option>
                         </select>
                     </div>
@@ -320,7 +321,7 @@
                             <span *ngIf="userDetailForm.get('username').errors?.required" class="error-text">
                                 Username is required</span>
                             <span *ngIf="userDetailForm.get('username').errors?.usernameExit" class="error-text">
-                                Username already exist</span>
+                                Username already exists</span>
                         </span>
                     </div>
                 </div>
@@ -329,7 +330,7 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onDepartmentChange($event.target.value)">
-                            <option class="edit-input" selected value="" disabled>Select Department</option>
+                            <option class="edit-input" selected value="">Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
                                 [value]="department.value.departmentId" class="edit-input">
                                 {{department.value.departmentName}}</option>
@@ -388,16 +389,22 @@
                     <tbody>
                         <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
                             <td style="width: 43%;">
-                                <select name="" id="" class="form-control edit-input"
+                                <select [disabled]="millRole.value.selectedMill.disabled"
+                                    [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onMillChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select Mill</option>
                                     <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
                                         [value]="mill.value.millId">
                                         {{mill.value.millName}}</option>
                                 </select>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '1')">Mill is
+                                    required</span>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '2')">Mill is
+                                    already selected</span>
                             </td>
                             <td style="width: 43%;">
-                                <select class="form-control edit-input"
+                                <select [disabled]="millRole.value.selectedUserRole.disabled"
+                                    [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                     (change)="onUserRoleChange($event.target.value, millRole)">
                                     <option class="edit-input" value="" disabled selected>Select User Role</option>
                                     <option *ngFor="let userRole of millRole.value.userRoles.controls"
@@ -405,6 +412,8 @@
                                         {{userRole.value.roleName}}
                                     </option>
                                 </select>
+                                <span class="error-text" *ngIf="(millRole.value.roleError.value !== '')">User role is
+                                    required</span>
                             </td>
                             <td class="text-center">
                                 <a (click)='onDeleteMillRole(i)'>
@@ -420,8 +429,59 @@
             </div>
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!userDetailForm.valid"
-                    class="btn btn-primary btn-md float-right">Save</button>
+                    class="btn btn-primary btn-md float-right">Submit</button>
                 <button type="button" (click)="onUserDetailCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'userRole'">
+    <form [formGroup]='userRoleForm' (ngSubmit)="onUserRole()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userRoleForm.controls.show.value" [blockScroll]="true" [draggable]="true" [maximizable]="true">
+            <p-header> <span class="dialog-header">{{userRoleForm.controls.operation.value}} User Role</span>
+            </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Role Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-role" formControlName="roleName">
+                        <span class="help-block"
+                            *ngIf="!userRoleForm.get('roleName').valid && userRoleForm.get('roleName').touched">
+                            <span *ngIf="userRoleForm.get('roleName').errors?.required" class="error-text">
+                                Role name is required</span>
+                            <span *ngIf="userRoleForm.get('roleName').errors?.userRoleExit" class="error-text">
+                                Role name already exists</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label">Description</label>
+                    <div class="form-group">
+                        <textarea type="text" class="form-control edit-role" rows="4"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="statusSwitch" formControlName="active">
+                        <label class="custom-control-label edit-label" for="statusSwitch">Status</label>
+                    </div>
+                    <span *ngIf="userRoleForm.controls.userExistError.value !== ''" class="error-text">
+                        {{userRoleForm.controls.userExistError.value}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!userRoleForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onUserRoleCancel()"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>

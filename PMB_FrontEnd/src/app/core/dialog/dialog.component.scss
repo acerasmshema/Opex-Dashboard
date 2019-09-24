@@ -45,12 +45,26 @@ tbody tr {
   table-layout: fixed;
 }
 
-.role-head {
+.dialog-header {
   font-size: 12pt;
+  padding-left: 41%;
+}
+
+.role-head {
+  font-size: 10pt;
+  font-weight: 500;
 }
 
 .error-text {
   font-weight: 400;
   color: red;
   font-size: 9pt;
+}
+
+.invalid {
+  border: 1px solid red;
+}
+
+.edit-role {
+  font-size: 11pt;
 }

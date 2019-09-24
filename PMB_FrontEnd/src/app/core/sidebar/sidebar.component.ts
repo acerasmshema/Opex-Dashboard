@@ -43,7 +43,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         if (sidebarRequestData.isShow) {
           if (sidebarRequestData.type === "dashboard") {
             this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
-
+            this.commonService.getAllBuType(this.sidebarForm);
+            
             let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
             if (kpiTypes === undefined || kpiTypes === null)
               this.getKpiDetails(sidebarRequestData.kpiCategoryId);
@@ -209,6 +210,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.searchKpiData.processLines = [];
         }
         this.statusService.benchmarkSubject.next(this.searchKpiData);
+        this.sidebarForm.showBenchmarkMessage = false;
       }
     }
   }

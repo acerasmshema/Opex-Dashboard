@@ -14,7 +14,6 @@ import { MessageService } from 'primeng/components/common/messageservice';
   styleUrls: ['./benchmark.component.scss']
 })
 export class BenchmarkComponent implements OnInit, OnDestroy {
-  public isShowBenchmark: boolean = false;
   public benchmarkList: ConsumptionModel[] = [];
   benchmarkSubscription: Subscription;
 
@@ -36,7 +35,6 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
           this.statusService.benchmarkList = [];
           this.benchmarkList = this.statusService.benchmarkList;
           this.becnhmarkService.filterCharts(searchKpiData);
-          this.isShowBenchmark = true;
         },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
