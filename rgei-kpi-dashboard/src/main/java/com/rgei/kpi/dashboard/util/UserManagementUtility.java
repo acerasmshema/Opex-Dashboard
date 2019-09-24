@@ -260,6 +260,7 @@ public class UserManagementUtility {
 					millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
 					millRole.setSelectedMill(getMillDetail(entity.getMill()));
 					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
+					millRole.setActive(entity.getStatus());
 					millRoles.add(millRole);
 				}
 			}
@@ -314,4 +315,28 @@ public class UserManagementUtility {
 		}
 		return sb.toString();
 	}
+	
+	public static User convertToUserFromRgeUserEntity(RgeUserEntity entity) {
+		User user = null;
+		if (Objects.nonNull(entity)) {
+			user = new User();
+			user.setUserId(CommonFunction.getString(entity.getUserId()));
+			user.setFirstName(CommonFunction.getString(entity.getFirstName()));
+			user.setLastName(CommonFunction.getString(entity.getLastName()));
+			user.setUsername(CommonFunction.getString(entity.getLoginId()));
+			user.setCountry(CommonFunction.convertCountryEntityToResponse(entity.getCountryEntity()));
+			user.setAddress(CommonFunction.getString(entity.getAddress()));
+			user.setActive(entity.getIsActive());
+			user.setEmail(CommonFunction.getString(entity.getEmail()));
+			user.setPhone(CommonFunction.getString(entity.getPhone()));
+			user.setCreatedBy(CommonFunction.getString(entity.getCreatedBy()));
+			user.setCreatedDate(CommonFunction.getString(entity.getCreatedOn()));
+			user.setUpdatedBy(CommonFunction.getString(entity.getUpdatedBy()));
+			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
+			user.setDepartment(getDepartment(entity.getDepartment()));
+			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
+		}
+		return user;
+	}
+
 }
