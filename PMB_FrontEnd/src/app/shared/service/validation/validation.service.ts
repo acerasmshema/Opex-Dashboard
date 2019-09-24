@@ -84,7 +84,7 @@ export class ValidationService {
 
     forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
         let requestData = {
-            email: control.value
+            email: control.value.trim()
         }
         return new Promise(resolve => {
             if (control.parent !== undefined) {
@@ -108,7 +108,7 @@ export class ValidationService {
 
     forbiddenUsername(control: FormControl): Promise<any> | Observable<any> {
         let requestData = {
-            username: control.value
+            username: control.value.trim()
         }
         return new Promise(resolve => {
             this.apiCallService.callGetAPIwithData(API_URL.user_api_URLs.VALIDATE_USERNAME, requestData)
@@ -121,7 +121,7 @@ export class ValidationService {
 
     forbiddenUserRole(control: FormControl): Promise<any> | Observable<any> {
         let requestData = {
-            roleName: control.value
+            roleName: control.value.trim()
         }
         return new Promise(resolve => {
             if (control.parent !== undefined) {

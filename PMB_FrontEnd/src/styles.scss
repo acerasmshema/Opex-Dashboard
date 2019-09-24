@@ -6,13 +6,11 @@ html {
 }
 h1 {
   color: #369;
-  font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
   font-size: 250%;
 }
 h2,
 h3 {
   color: rgb(8, 8, 8);
-  font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
   font-weight: lighter;
 }
 body {
@@ -23,7 +21,6 @@ body,
 input[text],
 button {
   color: rgb(10, 10, 10);
-  font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
   font-size: 12px;
   /* Full height */
   height: 100%;
@@ -89,7 +86,6 @@ button {
 }
 
 .chart-error {
-  font-family: Arial;
   text-align: center;
   color: #636161;
 }

@@ -41,6 +41,7 @@ export class API_URL {
         ANNOTATION_DATES_URL: API_URL.BASE_API_URL_v1 + '/kpi_annotation/get_annotation_date',
         ALL_PROCESS_LINES_URL: API_URL.BASE_API_URL_v1 + '/process_line/get_all_process_lines',
         BENCHMARK_FILTER_URL: API_URL.BASE_API_URL_v1 + '/benchmarking/get_selected_data',
+        USER_PROFILE: API_URL.BASE_API_URL_v1 + '/user_info/user_by_id',
     };
 
     static user_api_URLs = {
