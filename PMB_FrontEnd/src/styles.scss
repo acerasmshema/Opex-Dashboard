@@ -144,7 +144,7 @@ button {
 }
 
 .dashboard-container {
-  height: 76vh;
+  height: 78.2vh;
   overflow-y: scroll;
 }
 
@@ -184,4 +184,8 @@ button {
 
 input.ng-invalid.ng-touched {
   border: 1px solid red;
+}
+
+.ui-tabview-panels {
+  padding: 0 !important;
 }

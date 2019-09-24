@@ -20,14 +20,18 @@ export class UserRoleService {
         private apiCallService: ApiCallService) { }
 
     getUserRoles(userRoles: UserRole[]) {
+        this.statusService.spinnerSubject.next(true);
+        
         this.commonService.getAllUserRole(false)
             .subscribe(
                 (roleList: UserRole[]) => {
                     userRoles.push(...roleList);
                     this.statusService.common.userRoles = roleList;
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     console.log("error in user role");
+                    this.statusService.spinnerSubject.next(false);
                 }
             );
     }
