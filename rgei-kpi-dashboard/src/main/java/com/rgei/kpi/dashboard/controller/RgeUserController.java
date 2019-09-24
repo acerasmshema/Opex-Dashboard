@@ -38,7 +38,7 @@ public class RgeUserController {
 	@Resource
 	RgeUserService rgeUserService;
 
-	@ApiOperation(value = "getUserById", notes = "Retrieve user by id", response = RgeUserResponse.class)
+	@ApiOperation(value = "getUserById", notes = "Retrieve user by id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping(value = "/v1/user_info/user_by_id")
 	public ResponseEntity<User> getUserById(@RequestHeader(value = "userId") String userId) {
