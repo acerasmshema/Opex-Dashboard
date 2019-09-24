@@ -33,11 +33,15 @@ export class CommonService {
                 .subscribe(
                     (buTypes: any) => {
                         this.statusService.common.buTypes = buTypes;
-                        if (sidebarForm !== null)
+                        if (sidebarForm !== null) {
                             sidebarForm.buisnessUnits = buTypes;
+                            setTimeout(() => {
+                                this.setDropDownFont();
+                            }, 100);
+                        }
                     },
                     (error: any) => {
-
+                        console.log("Error in Buisness unit")
                     });
         }
         else if (sidebarForm !== null) {
@@ -119,5 +123,15 @@ export class CommonService {
         this.statusService.common.selectedMill = null;
         this.statusService.common.selectedRole = null;
         this.statusService.common.userDetail = null;
+    }
+
+    setDropDownFont() {
+        let elements: any = document.getElementsByClassName("ui-dropdown-label ui-inputtext ui-corner-all");
+        if (elements !== undefined) {
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+                element.style.fontSize = "12px";
+            }
+        }
     }
 }

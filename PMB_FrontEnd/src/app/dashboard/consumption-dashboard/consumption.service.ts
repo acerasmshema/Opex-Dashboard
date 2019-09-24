@@ -19,7 +19,7 @@ export class ConsumptionService {
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
     private datePipe: DatePipe,
-    private messageService:MessageService) { }
+    private messageService: MessageService) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
@@ -98,14 +98,14 @@ export class ConsumptionService {
             this.statusService.spinnerSubject.next(false);
         }
       },
-      (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
-    });
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   public changeChartType(event: any, kpiId: number, kpiCategoryId: string) {

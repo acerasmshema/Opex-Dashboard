@@ -26,6 +26,7 @@ export class UserDetailService {
         private apiCallService: ApiCallService) { }
 
     getUserDetailList(userList: UserDetail[]) {
+        this.statusService.spinnerSubject.next(true);
         let millId = this.statusService.common.selectedMill.millId;
         const requestData = {
             millId: millId
@@ -44,9 +45,11 @@ export class UserDetailService {
                         }
                     });
                     userList.push(...users);
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     console.log("Error in UserDetail");
+                    this.statusService.spinnerSubject.next(false);
                 });
 
     }

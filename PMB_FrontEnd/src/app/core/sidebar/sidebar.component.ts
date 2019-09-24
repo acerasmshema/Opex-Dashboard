@@ -39,55 +39,52 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sidebarSubscription = this.statusService.sidebarSubject.
-      subscribe((sidebarRequestData: SidebarRequest) => {
-        if (sidebarRequestData.isShow) {
-          if (sidebarRequestData.type === "dashboard") {
-            this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
-            this.commonService.getAllBuType(this.sidebarForm);
-            
-            let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
-            if (kpiTypes === undefined || kpiTypes === null)
-              this.getKpiDetails(sidebarRequestData.kpiCategoryId);
-            else
-              this.sidebarForm.kpiTypes = kpiTypes;
+      subscribe(
+        (sidebarRequestData: SidebarRequest) => {
+          if (sidebarRequestData.isShow) {
+            if (sidebarRequestData.type === "dashboard") {
+              this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
+              this.commonService.getAllBuType(this.sidebarForm);
 
-            const consumptionDetail = this.statusService.consumptionDetailMap.get(sidebarRequestData.kpiCategoryId);
-            if (consumptionDetail !== undefined && consumptionDetail.searchKpiData !== undefined) {
-              this.searchKpiData = consumptionDetail.searchKpiData;
+              let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
+              if (kpiTypes === undefined || kpiTypes === null)
+                this.getKpiDetails(sidebarRequestData.kpiCategoryId);
+              else
+                this.sidebarForm.kpiTypes = kpiTypes;
+
+              const consumptionDetail = this.statusService.consumptionDetailMap.get(sidebarRequestData.kpiCategoryId);
+              if (consumptionDetail !== undefined && consumptionDetail.searchKpiData !== undefined) {
+                this.searchKpiData = consumptionDetail.searchKpiData;
+              }
+              else {
+                this.searchKpiData = new SearchKpiData();
+                this.searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
+                  this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
+                  this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+              }
             }
             else {
+              this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+              this.sidebarService.getMills(this.sidebarForm);
+              this.commonService.getAllBuType(this.sidebarForm);
+              this.getBenchmarkKpiDetail();
               this.searchKpiData = new SearchKpiData();
-              this.searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
-                this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
-                this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+              this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+
+              setTimeout(() => {
+                this.toggleCollapsed();
+              }, 20);
             }
+            this.sidebarForm.type = sidebarRequestData.type;
           }
-          else {
-            this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
-            this.sidebarService.getMills(this.sidebarForm);
-            this.commonService.getAllBuType(this.sidebarForm);
-            this.getBenchmarkKpiDetail();
-            this.searchKpiData = new SearchKpiData();
-            this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
 
-            setTimeout(() => {
-              this.toggleCollapsed();
-            }, 20);
-          }
-          this.sidebarForm.type = sidebarRequestData.type;
-        }
+          let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
+          this.statusService.sidebarSizeSubject.next(sidebarSize);
+          this.showSidebar = sidebarRequestData.isShow;
 
-        let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
-        this.statusService.sidebarSizeSubject.next(sidebarSize);
-        this.showSidebar = sidebarRequestData.isShow;
-      },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          setTimeout(() => {
+            this.commonService.setDropDownFont();
+          }, 100);
         });
 
     this.router.events.subscribe(val => {
@@ -210,7 +207,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.searchKpiData.processLines = [];
         }
         this.statusService.benchmarkSubject.next(this.searchKpiData);
-        this.sidebarForm.showBenchmarkMessage = false;
       }
     }
   }
