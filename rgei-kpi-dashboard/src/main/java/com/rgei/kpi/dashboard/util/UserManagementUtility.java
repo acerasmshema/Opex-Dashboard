@@ -86,12 +86,16 @@ public class UserManagementUtility {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
-		if (entity.getRgeUsers().isEmpty()) {
-			entity.setStatus(userRole.getActive());
-		} else {
-			throw new RecordExistException("Users exists for this role :" + userRole);
-		}
 		entity.setUpdatedDate(new java.util.Date());
+		if (!entity.getRgeUsers().isEmpty()) {
+			for (RgeUserEntity user : entity.getRgeUsers()) {
+				if (!user.getIsActive()) {
+					entity.setStatus(userRole.getActive());
+				} else {
+					throw new RecordExistException("Users exists for this role :" + userRole);
+				}
+			}
+		}
 
 		return entity;
 	}
@@ -229,8 +233,8 @@ public class UserManagementUtility {
 			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
 			user.setDepartment(getDepartment(entity.getDepartment()));
 			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
-			if(!user.getMillRoles().isEmpty()) {
-			responseList.add(user);
+			if (!user.getMillRoles().isEmpty()) {
+				responseList.add(user);
 			}
 		}
 		return responseList;
@@ -271,8 +275,9 @@ public class UserManagementUtility {
 	}
 
 	public static MillDetail getMillDetail(MillEntity millEntity) {
-		MillDetail millDetail = new MillDetail();
+		MillDetail millDetail = null;
 		if (millEntity != null) {
+			millDetail = new MillDetail();
 			millDetail.setMillName(millEntity.getMillName());
 			millDetail.setActive(millEntity.getActive());
 			millDetail.setCountry(CommonFunction.convertCountryEntityToResponse(millEntity.getCountry()));
@@ -287,8 +292,9 @@ public class UserManagementUtility {
 	}
 
 	public static UserRole getUserRole(UserRoleEntity roleEntity) {
-		UserRole userRole = new UserRole();
-		if (roleEntity != null) {
+		UserRole userRole = null;
+		if (roleEntity != null && Boolean.TRUE.equals(roleEntity.getStatus())) {
+			userRole = new UserRole();
 			userRole.setRoleName(roleEntity.getRoleName());
 			userRole.setActive(roleEntity.getStatus());
 			userRole.setUserRoleId(CommonFunction.getString(roleEntity.getRoleId()));
@@ -317,7 +323,7 @@ public class UserManagementUtility {
 		}
 		return sb.toString();
 	}
-	
+
 	public static User convertToUserFromRgeUserEntity(RgeUserEntity entity) {
 		User user = null;
 		if (Objects.nonNull(entity)) {
