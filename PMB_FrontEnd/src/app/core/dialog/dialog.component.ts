@@ -12,6 +12,7 @@ import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { FormGroup } from '@angular/forms';
+import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
 
 @Component({
   selector: 'app-dialog',
@@ -30,6 +31,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
   public userDetailForm: FormGroup;
+  public userRoleForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -43,6 +45,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
+    private userRoleService: UserRoleService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -77,7 +80,11 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.userDetailForm.reset();
           this.userDetailForm = this.dialogService.createUserForm();
         }
-
+        else if (dialogName === 'userRole') {
+          if (this.userRoleForm !== undefined)
+            this.userRoleForm.reset();
+          this.userRoleForm = this.dialogService.createUserRoleForm(data.userRole);
+        }
         this.dialogName = dialogName;
       },
         (error: any) => {
@@ -357,7 +364,6 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.viewMaintenanceDays();
   }
 
-
   public openSettingIcon(maintenanceData: any) {
     this.viewMaintenanceDays();
     this.maintenanceDays = new MaintenanceDays();
@@ -397,6 +403,9 @@ export class DialogComponent implements OnInit, OnDestroy {
     if (index > 0) {
       let millRoles: any = this.userDetailForm.controls.millRoles;
       millRoles.removeAt(index);
+      let millControls = millRoles.controls;
+      millControls[millControls.length - 1].value.selectedMill.enable();
+      millControls[millControls.length - 1].value.selectedUserRole.enable();
     }
   }
 
@@ -406,19 +415,33 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.createNewUser(this.userDetailForm);
   }
 
-  onCountryChange(countryName: string) {
-    this.userDetailForm.controls.selectedCountry.setValue(countryName);
+  onCountryChange(countryId: string) {
+    if (countryId !== '') {
+      let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+      this.userDetailForm.controls.selectedCountry.setValue(country);
+    } else {
+      this.userDetailForm.controls.selectedCountry.setValue(null);
+    }
   }
 
   onDepartmentChange(departmentId: string) {
-    const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
-    this.userDetailForm.controls.selectedDepartment.setValue(department);
+    if (departmentId !== '') {
+      const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+      this.userDetailForm.controls.selectedDepartment.setValue(department);
+    } else {
+      this.userDetailForm.controls.selectedDepartment.setValue(null);
+    }
   }
 
   onMillChange(millId: string, millRole: FormGroup) {
-    const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
-    millRole.value.selectedMill.setValue(mill);
-    millRole.value.millError.setValue("");
+    if (!this.validationService.validateMillExist(this.userDetailForm, millId)) {
+      const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+      millRole.value.selectedMill.setValue(mill);
+      millRole.value.millError.setValue("");
+    }
+    else {
+      millRole.value.millError.setValue("2");
+    }
   }
 
   onUserRoleChange(userRoleId: string, millRole: FormGroup) {
@@ -429,6 +452,21 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   onUserDetailCancel() {
     this.userDetailForm.controls.show.setValue(false);
+  }
+
+  onUserRoleCancel() {
+    this.userRoleForm.controls.show.setValue(false);
+  }
+
+  onUserRole() {
+    if (this.userRoleForm.invalid)
+      return;
+
+    if (this.userRoleForm.controls.operation.value === "Add") {
+      this.userRoleService.addUserRole(this.userRoleForm);
+    } else {
+      this.userRoleService.updateUserRole(this.userRoleForm);
+    }
   }
 
   ngOnDestroy() {

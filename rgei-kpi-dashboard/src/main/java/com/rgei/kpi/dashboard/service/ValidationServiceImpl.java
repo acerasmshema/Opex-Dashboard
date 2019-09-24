@@ -50,7 +50,7 @@ public class ValidationServiceImpl implements ValidationService {
 	@Override
 	public Boolean validateRoleName(String roleName) {
 		logger.info("Inside service call to validate role name : " + roleName);
-		List<UserRoleEntity> entity = userRoleRepository.findAllByOrderByRoleNameAsc();
+		List<UserRoleEntity> entity = userRoleRepository.findAllByAceAdminOrderByRoleNameAsc(Boolean.FALSE);
 		if (!entity.isEmpty()) {
 			for (UserRoleEntity role : entity) {
 				if (Objects.nonNull(role.getRoleName()) && role.getRoleName().equalsIgnoreCase(roleName) ) {

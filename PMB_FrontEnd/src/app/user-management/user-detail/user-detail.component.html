@@ -4,9 +4,9 @@
     rowExpandMode="single">
     <ng-template pTemplate="caption">
       <div class="text-right">
-        <!-- <span class="m-r-20" (click)="user.exportCSV()">
+        <span class="m-r-20" (click)="user.exportCSV()">
           <em class="fa fa-download fa-2x" style="color: #333333" pTooltip="Download" tooltipPosition="top"></em>
-        </span> -->
+        </span>
         <span class="m-l-5" (click)="onCreateUser()">
           <em class="fa fa-user-plus fa-2x" pTooltip="Add User" tooltipPosition="top"></em>
         </span>
@@ -16,7 +16,7 @@
       <tr class="text-center">
         <th style="width: 6%;"></th>
         <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn pReorderableColumn
-          [style.width]="(col.header === 'Status') ? '8%' : ''">
+          [style.width]="(col.header === 'Active') ? '8%' : ''">
           <p-sortIcon [field]="col.field" pTooltip="Sort" tooltipPosition="top"></p-sortIcon>
           {{col.header}}
         </th>
@@ -46,7 +46,8 @@
             <span class="label label-info td-user">{{rowData[col.field]}}</span>
           </div>
           <div *ngIf="col.field === 'active' " class="td-user" [style.color]="(rowData[col.field]) ? '#28a745' : 'red'">
-            <i class="fa fa-circle font-10 m-r-10 "></i>
+            <i class="fa fa-circle font-10 m-r-10 " [pTooltip]="(rowData[col.field]) ? 'Active' : 'InActive'"
+              tooltipPosition="top"></i>
           </div>
         </td>
       </tr>
@@ -76,7 +77,7 @@
                             Name:</label>
                           <input class="col-md-8 form-control" type="text" id="firstName" formControlName="firstName">
                           <span class="error-text"
-                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors['required']">
+                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
                           </span>
                         </div>
@@ -84,10 +85,11 @@
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" style="padding-right: 0" for="role">Department</label>
-                          <select class="col-md-8 form-control" [disabled]="userDetailForm.disabled"
+                          <select class="col-md-8 form-control" [disabled]="userDetailForm.controls.disableSelect.value"
                             (change)="onDepartmentChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Department</option>
                             <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
-                              [selected]="(department.value.departmentName === userDetailForm.controls.department.value)"
+                              [selected]="(userDetailForm.controls.department.value !== null && department.value.departmentId === userDetailForm.controls.department.value.departmentId)"
                               class="edit-input" [value]="department.value.departmentId">
                               {{department.value.departmentName}}</option>
                           </select>
@@ -101,7 +103,7 @@
                             Name:</label>
                           <input class="col-md-8 form-control" type="text" id="lastName" formControlName="lastName">
                           <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
-                            && userDetailForm.get('lastName').errors['required']">
+                            && userDetailForm.get('lastName').errors?.required">
                             Last name is required
                           </span>
                         </div>
@@ -125,18 +127,20 @@
                             <span *ngIf="userDetailForm.get('email').errors?.email">
                               Invalid email</span>
                             <span *ngIf="userDetailForm.get('email').errors?.emailExit">
-                              Email already exist</span>
+                              Email already exists</span>
                           </span>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" for="country">Country:</label>
-                          <select class="col-md-8 form-control" name="" [disabled]="userDetailForm.disabled"
+                          <select class="col-md-8 form-control" name=""
+                            [disabled]="userDetailForm.controls.disableSelect.value"
                             (change)="onCountryChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Country</option>
                             <option *ngFor="let country of userDetailForm.controls.countryList.controls"
-                              [selected]="(country.value.countryName === userDetailForm.controls.country.value)"
-                              class="edit-input" [value]="country.value.countryName">{{country.value.countryName}}
+                              [selected]="(userDetailForm.controls.country.value !== null && country.value.countryId === userDetailForm.controls.country.value.countryId)"
+                              class="edit-input" [value]="country.value.countryId">{{country.value.countryName}}
                             </option>
                           </select>
                         </div>
@@ -153,10 +157,10 @@
                         <div class="row">
                           <label class="col-md-4 table-label" for="status">Status:</label>
                           <select class="col-md-7 form-control" name="" id="statusSelect"
-                            [disabled]="userDetailForm.disabled"
+                            [disabled]="userDetailForm.controls.disableSelect.value"
                             (change)="onUserStatusChange($event.target.value, rowData)">
-                            <option [selected]="userDetailForm.controls.status.value" value="true">Active</option>
-                            <option [selected]="!userDetailForm.controls.status.value" value="false">InActive</option>
+                            <option [selected]="userDetailForm.controls.active.value" value="true">Active</option>
+                            <option [selected]="!userDetailForm.controls.active.value" value="false">InActive</option>
                           </select>
                         </div>
                       </div>
@@ -185,23 +189,27 @@
                           <tbody>
                             <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i = index;">
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.disabled"
+                                <select
+                                  [disabled]="userDetailForm.controls.disableSelect.value || millRole.value.selectedMill.disabled"
                                   [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onMillChange($event.target.value, millRole)">
-                                  <option disabled selected>Select Mill</option>
+                                  <option class="edit-input" disabled selected>Select Mill</option>
                                   <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
                                     [value]="mill.value.millId"
                                     [selected]="(millRole.value.selectedMill.value !== null && mill.value.millName === millRole.value.selectedMill.value.millName)">
                                     {{mill.value.millName}}</option>
                                 </select>
-                                <span class="error-message" *ngIf="(millRole.value.millError.value !== '')">Mill is
+                                <span class="error-message" *ngIf="(millRole.value.millError.value === '1')">Mill is
                                   required</span>
+                                <span class="error-message" *ngIf="(millRole.value.millError.value === '2')">Mill is
+                                  already selected</span>
                               </td>
                               <td style="width: 43%;">
-                                <select [disabled]="userDetailForm.disabled"
+                                <select
+                                  [disabled]="userDetailForm.controls.disableSelect.value || millRole.value.selectedUserRole.disabled"
                                   [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
                                   style="height: 30px;" (change)="onUserRoleChange($event.target.value, millRole)">
-                                  <option disabled selected>Select User Role</option>
+                                  <option class="edit-input" disabled selected>Select User Role</option>
                                   <option *ngFor="let userRole of millRole.value.userRoles.controls" class="edit-input"
                                     [selected]="(millRole.value.selectedUserRole.value !== null && userRole.value.roleName === millRole.value.selectedUserRole.value.roleName)"
                                     [value]="userRole.value.userRoleId">{{userRole.value.roleName}}

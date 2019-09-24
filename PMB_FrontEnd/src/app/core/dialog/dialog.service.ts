@@ -39,8 +39,8 @@ export class DialogService {
             new FormControl({
                 userRoles: this.formBuilder.array([]),
                 mills: this.formBuilder.array([]),
-                selectedMill: new FormControl(''),
-                selectedUserRole: new FormControl(''),
+                selectedMill: new FormControl({ value: '', disabled: false }),
+                selectedUserRole: new FormControl({ value: '', disabled: false }),
                 millError: new FormControl(''),
                 roleError: new FormControl(''),
             })
@@ -56,9 +56,9 @@ export class DialogService {
             password: new FormControl("", [Validators.required, Validators.minLength(8)]),
             confirmPassword: new FormControl("", [Validators.required]),
             phone: new FormControl(""),
-            selectedCountry: new FormControl(''),
+            selectedCountry: new FormControl(null),
             countryList: this.formBuilder.array([]),
-            selectedDepartment: new FormControl(''),
+            selectedDepartment: new FormControl(null),
             departmentList: this.formBuilder.array([]),
             email: new FormControl("", { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
             validateEmail: new FormControl(""),
@@ -66,6 +66,18 @@ export class DialogService {
         },
             { validator: this.validationService.mustMatchPassword('password', 'confirmPassword') }
         );
+
+        userDetailForm.controls.email.valueChanges.
+            subscribe((event) => {
+                if (event !== null)
+                    userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+            });
+
+        userDetailForm.controls.username.valueChanges.
+            subscribe((event) => {
+                if (event !== null)
+                    userDetailForm.get('username').setValue(event.toLowerCase(), { emitEvent: false });
+            });
 
         this.commonService.getAllCountry(userDetailForm);
         this.commonService.getAllDepartment(userDetailForm);
@@ -75,30 +87,48 @@ export class DialogService {
         return userDetailForm;
     }
 
-    addMillRole(userDetailForm: FormGroup) {
+    createUserRoleForm(userRole: UserRole) {
+        let userRoleForm = this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(userRole.operation),
+            userRoleId: new FormControl(userRole.userRoleId),
+            createdBy: new FormControl(userRole.createdBy),
+            validateRole: new FormControl(userRole.roleName),
+            roleName: new FormControl(userRole.roleName, { validators: [Validators.required], asyncValidators: [this.validationService.forbiddenUserRole.bind(this)], updateOn: 'blur' }),
+            description: new FormControl(userRole.description),
+            userExistError: new FormControl(''),
+            active: new FormControl(userRole.active),
+        });
 
+        return userRoleForm;
+    }
+
+    addMillRole(userDetailForm: FormGroup) {
         let millRoles: any = userDetailForm.controls.millRoles;
         let millControls = millRoles.controls;
 
-        if (millControls[0].value.selectedMill.value === '') {
-            millControls[0].value.millError.setValue("1");
+        if (millControls[millControls.length - 1].value.selectedMill.value === '') {
+            millControls[millControls.length - 1].value.millError.setValue("1");
         }
-        if (millControls[0].value.selectedUserRole.value === '') {
-            millControls[0].value.roleError.setValue("1");
+        if (millControls[millControls.length - 1].value.selectedUserRole.value === '') {
+            millControls[millControls.length - 1].value.roleError.setValue("1");
         }
-        if (millControls[0].value.selectedMill.value !== '' && millControls[0].value.selectedUserRole.value !== '') {
+        if (millControls[millControls.length - 1].value.selectedMill.value !== '' && millControls[millControls.length - 1].value.selectedUserRole.value !== '') {
             millControls.push(
                 new FormControl({
                     userRoles: this.formBuilder.array([]),
                     mills: this.formBuilder.array([]),
-                    selectedMill: new FormControl(''),
-                    selectedUserRole: new FormControl(''),
+                    selectedMill: new FormControl({ value: '', disabled: false }),
+                    selectedUserRole: new FormControl({ value: '', disabled: false }),
                     millError: new FormControl(''),
                     roleError: new FormControl(''),
                 })
             );
             this.getAllMills(userDetailForm);
             this.getAllUserRole(userDetailForm, true);
+
+            millControls[millControls.length - 2].value.selectedMill.disable();
+            millControls[millControls.length - 2].value.selectedUserRole.disable();
         }
     }
 
@@ -127,8 +157,7 @@ export class DialogService {
             const millRoles: any = userDetailForm.controls.millRoles;
             const millControl: any = millRoles.controls[millRoles.length - 1].value.mills.controls;
             millList.forEach(mill => {
-                if (millRoles.controls[0].value.selectedMill.value.millId !== mill.millId)
-                    millControl.push(new FormControl(mill));
+                millControl.push(new FormControl(mill));
             });
             userDetailForm.controls.totalMills.setValue(millList.length);
         }
