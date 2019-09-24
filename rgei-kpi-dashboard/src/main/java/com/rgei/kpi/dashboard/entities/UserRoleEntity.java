@@ -64,6 +64,10 @@ public class UserRoleEntity implements Serializable {
 
 	@Column(name="updated_date")
 	private Date updatedDate;
+	
+	@Column(name="is_aceadmin")
+	private Boolean aceAdmin;
+	
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -155,6 +159,14 @@ public class UserRoleEntity implements Serializable {
 
 	public void setShowUserManagement(Boolean showUserManagement) {
 		this.showUserManagement = showUserManagement;
+	}
+
+	public Boolean getAceAdmin() {
+		return aceAdmin;
+	}
+
+	public void setAceAdmin(Boolean aceAdmin) {
+		this.aceAdmin = aceAdmin;
 	}
 
 }

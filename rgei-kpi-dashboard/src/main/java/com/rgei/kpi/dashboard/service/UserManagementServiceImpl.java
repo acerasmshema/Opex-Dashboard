@@ -71,11 +71,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
+		
 		List<UserRoleEntity> entities = null;
 		if (Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
+			entities = userRoleRepository.findAllByStatusAndAceAdminOrderByRoleNameAsc(activeRoles,Boolean.FALSE);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
+			entities = userRoleRepository.findAllByAceAdminOrderByRoleNameAsc(Boolean.FALSE);
 		}
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
@@ -239,6 +240,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to encrypt password for all users");
 		List<RgeUserEntity> users = rgeUserEntityRepository.findAll();
 		for (RgeUserEntity usr : users) {
+			if(usr.getUserId()==188) {
 			String passwordString = usr.getLoginId() + "_" + usr.getUserPassword();
 			String encodedSHAString = "";
 			try {
@@ -253,6 +255,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 				rgeUserEntityRepository.save(usr);
 			} catch (Exception e) {
 				throw new RecordNotUpdatedException("Error while changing password for user Id : " + usr.getUserId());
+			}
 			}
 		}
 	}
