@@ -71,11 +71,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
+		
 		List<UserRoleEntity> entities = null;
 		if (Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusOrderByRoleNameAsc(activeRoles);
+			entities = userRoleRepository.findAllByStatusAndAceAdminOrderByRoleNameAsc(activeRoles,Boolean.FALSE);
 		} else {
-			entities = userRoleRepository.findAllByOrderByRoleNameAsc();
+			entities = userRoleRepository.findAllByAceAdminOrderByRoleNameAsc(Boolean.FALSE);
 		}
 		if (entities != null && !entities.isEmpty()) {
 			return UserManagementUtility.convertToUserRoleResponse(entities);
