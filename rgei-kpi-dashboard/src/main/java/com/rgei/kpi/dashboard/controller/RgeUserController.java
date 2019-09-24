@@ -40,10 +40,10 @@ public class RgeUserController {
 
 	@ApiOperation(value = "getUserById", notes = "Retrieve user by id", response = RgeUserResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
-	@GetMapping(value = "/v1/user_info/get_by_id")
-	public ResponseEntity<RgeUserResponse> getUserById(@RequestHeader(value = "userId") String userId) {
+	@GetMapping(value = "/v1/user_info/user_by_id")
+	public ResponseEntity<User> getUserById(@RequestHeader(value = "userId") String userId) {
 		logger.info("Entering into the find user by Id:{}", userId);
-		RgeUserResponse response = rgeUserService.getUserById(CommonFunction.covertToLong(userId));
+		User response = rgeUserService.getUserById(CommonFunction.covertToLong(userId));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
