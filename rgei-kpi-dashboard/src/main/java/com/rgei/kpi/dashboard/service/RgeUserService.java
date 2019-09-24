@@ -25,7 +25,7 @@ import com.rgei.kpi.dashboard.response.model.User;
 
 public interface RgeUserService {
 	
-	public RgeUserResponse getUserById(Long userId);
+	public User getUserById(Long userId);
 	
 	public RgeUserResponse getUserByName(String name);
 	
