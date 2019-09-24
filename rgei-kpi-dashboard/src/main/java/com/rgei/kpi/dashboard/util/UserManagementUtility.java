@@ -78,6 +78,7 @@ public class UserManagementUtility {
 		newUserRole.setUpdatedBy(userRole.getUpdatedBy());
 		newUserRole.setUpdatedDate(new java.util.Date());
 		newUserRole.setShowUserManagement(Boolean.FALSE);
+		newUserRole.setAceAdmin(Boolean.FALSE);
 		newUserRole.setStatus(userRole.getActive());
 		return newUserRole;
 	}
@@ -95,6 +96,8 @@ public class UserManagementUtility {
 					throw new RecordExistException("Users exists for this role :" + userRole);
 				}
 			}
+		} else {
+			entity.setStatus(userRole.getActive());
 		}
 
 		return entity;
