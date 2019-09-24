@@ -38,7 +38,7 @@ export class CommonMessage {
         1008: 'User not exist',
         1009: 'Error during logout',
         1010: 'Record not found',
-        1011: 'Inactive user. Please contact your admin',
-        1012: 'role is associated with another users'
+        1011: 'User is inactive. Please contact administrator',
+        1012: 'Users are associated with this role so cannot be deactivated. Users must be assigned a new role'
     }
 }

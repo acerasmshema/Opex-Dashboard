@@ -68,3 +68,13 @@ tbody tr {
 .edit-role {
   font-size: 11pt;
 }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  height: 13px;
+  width: 22px;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  opacity: 0.3;
+}
