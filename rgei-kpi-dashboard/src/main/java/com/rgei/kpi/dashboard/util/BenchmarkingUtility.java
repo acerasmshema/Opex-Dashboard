@@ -54,8 +54,6 @@ public class BenchmarkingUtility {
 		benchmarkingResponse.setKpiUnit(kpi.getKpiUnit());
 		if (!resultList.isEmpty()) {
 			benchmarkingResponse.setKpiData(resultList);
-		} else {
-			throw new RecordNotFoundException("Data not found for the current request for kpi id: " + kpi.getKpiId());
 		}
 		return benchmarkingResponse;
 

@@ -198,8 +198,9 @@ public class UserConverter {
 	}
 
 	private static Department getDepartmentDetails(RgeUserEntity entity) {
-		Department department = new Department();
+		Department department = null;
 		if(Objects.nonNull(entity.getDepartment())) {
+		department = new Department();
 		department.setDepartmentId(CommonFunction.getString(entity.getDepartment().getDepartmentId()));
 		department.setDepartmentName(entity.getDepartment().getDepartmentName());
 		department.setDepartmentCode(entity.getDepartment().getDepartmentCode());
