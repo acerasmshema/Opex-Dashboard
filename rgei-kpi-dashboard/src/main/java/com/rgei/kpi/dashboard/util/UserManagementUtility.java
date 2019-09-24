@@ -229,7 +229,9 @@ public class UserManagementUtility {
 			user.setUpdatedDate(CommonFunction.getString(entity.getUpdatedOn()));
 			user.setDepartment(getDepartment(entity.getDepartment()));
 			user.setMillRoles(getMillRoles(entity.getUserRoleMills()));
+			if(!user.getMillRoles().isEmpty()) {
 			responseList.add(user);
+			}
 		}
 		return responseList;
 	}
@@ -256,7 +258,7 @@ public class UserManagementUtility {
 		if (Objects.nonNull(userRoleMillEntities)) {
 			for (UserRoleMillEntity entity : userRoleMillEntities) {
 				millRole = new MillRole();
-				if (Boolean.TRUE.equals(entity.getStatus())) {
+				if (Boolean.TRUE.equals(entity.getStatus()) && Boolean.FALSE.equals(entity.getRole().getAceAdmin())) {
 					millRole.setMillRoleId(entity.getRgeUserRoleId().toString());
 					millRole.setSelectedMill(getMillDetail(entity.getMill()));
 					millRole.setSelectedUserRole(getUserRole(entity.getRole()));
