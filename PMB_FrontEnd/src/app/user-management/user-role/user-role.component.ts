@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
-import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { Subscription } from 'rxjs';
 
@@ -18,12 +17,11 @@ export class UserRoleComponent implements OnInit, OnDestroy {
   cols = [
     { field: 'roleName', header: 'Role Name', width: "25%" },
     { field: 'description', header: 'Description', width: "55%" },
-    { field: 'active', header: 'Status', width: "6%" },
+    { field: 'active', header: 'Active', width: "6%" },
   ];
 
   constructor(private userRoleService: UserRoleService,
-    private statusService: StatusService,
-    private validationService: ValidationService) { }
+    private statusService: StatusService) { }
 
   ngOnInit() {
     this.userRoleService.getUserRoles(this.userRoles);
