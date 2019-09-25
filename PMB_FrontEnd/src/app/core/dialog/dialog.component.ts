@@ -348,6 +348,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
 
     this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
+      this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
     },
       (error: any) => {
         this.statusService.spinnerSubject.next(false);

@@ -158,7 +158,7 @@
         <p-panel header="List of Maintenance Days " [collapsed]="maintenanceDays.collapsed" [toggleable]="true"
             (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
-                <div class="row" style="height: 260px;width:700px; " class="list_maintenances_remarks">
+                <div class="row" style="height: 400px;width:700px; " class="list_maintenances_remarks">
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
@@ -187,12 +187,11 @@
                                     <td class=".ng-invalid.ng-dirty text-center" style="width: 90px;">
                                         {{rowData.maintainceDates}}
                                     </td>
-                                    <td>
+                                    <td style="width: 400px;">
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <textarea [rows]="2" [cols]="30" [(ngModel)]="rowData.remarks"
-                                                    style="width:100%; max-width:300px;" pInputTextarea
-                                                    autoResize="autoResize"></textarea>
+                                                <textarea [rows]="2" [cols]="40" [(ngModel)]="rowData.remarks"
+                                                    style="width:100%; max-width:300px;" pInputTextarea></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData.remarks}}
