@@ -404,8 +404,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   }
 
   public getProdGrid(prodLineResponse: any) {
-    this.productionLineView.rows = 10;
-    this.productionLineView.scrollable = true;
+    this.productionLineView.rows = 5;
+    this.productionLineView.scrollable = false;
     this.productionLineView.paginator = true;
     this.productionLineView.productionLines = [];
     this.productionLineView.columnNames = [];

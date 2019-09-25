@@ -1,8 +1,8 @@
-<div class="container" style="height: 81vh">
-  <div class="edit">
+<div *ngIf="userDetailForm !== undefined" class="container" style="height: 83vh">
+  <div class="edit m-t-5">
     <div class="card" style="background: #f7f7f7bd">
       <div class="card-title text-center m-t-5">
-        <h3 class="title">Profile Settings</h3>
+        <h3>Profile Settings</h3>
       </div>
       <div class="card-body">
         <form [formGroup]='userDetailForm' (ngSubmit)="onEditProfileSave()">
@@ -10,7 +10,7 @@
             <div class="col-sm-6">
               <label class="edit-label required">First Name</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input" formControlName="firstName">
+                <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
                   <span *ngIf="userDetailForm.get('firstName').errors?.required" class="error-text">First name is
@@ -21,7 +21,7 @@
             <div class="col-sm-6">
               <label class="edit-label required">Last Name</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input" formControlName="lastName">
+                <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
                   <span *ngIf="userDetailForm.get('lastName').errors?.required" class="error-text">Last name is
@@ -34,7 +34,7 @@
             <div class="col-sm-6">
               <label class="edit-label required">Email</label>
               <div class="form-group">
-                <input type="email" class="form-control edit-input" formControlName="email">
+                <input type="email" class="form-control edit-input" formControlName="email" maxlength="100">
                 <span class="help-block"
                   *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
                   <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
@@ -49,7 +49,7 @@
             <div class="col-sm-6">
               <label class="edit-label">Phone</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input" formControlName="phone">
+                <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20">
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
             <div class="col-sm-12">
               <label class="edit-label">Address</label>
               <div class="form-group">
-                <input type="text" class="form-control edit-input" formControlName="address">
+                <input type="text" class="form-control edit-input" formControlName="address" maxlength="200">
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label class="edit-label required">Department</label>
+              <label class="edit-label">Department</label>
               <div class="form-group">
                 <select name="" id="" class="form-control edit-input" style="height: 40px;"
                   (change)="onDepartmentChange($event.target.value)">
