@@ -76,7 +76,7 @@ export class DialogService {
         userDetailForm.controls.username.valueChanges.
             subscribe((event) => {
                 if (event !== null)
-                    userDetailForm.get('username').setValue(event.toLowerCase(), { emitEvent: false });
+                    userDetailForm.get('username').setValue(event.toLowerCase().trim(), { emitEvent: false });
             });
 
         this.commonService.getAllCountry(userDetailForm);
@@ -210,7 +210,7 @@ export class DialogService {
             this.apiCallService.callAPIwithData(this.userURL, userDetail).
                 subscribe(
                     (response: any) => {
-                        this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.ADD_SUCCESS });
+                        this.messageService.add({ severity: "success", summary: '', detail: 'User created ' + CommonMessage.SUCCESS.ADD_SUCCESS });
                         this.statusService.refreshUserList.next(true);
                         userDetailForm.controls.show.setValue(false);
                         this.statusService.spinnerSubject.next(false);

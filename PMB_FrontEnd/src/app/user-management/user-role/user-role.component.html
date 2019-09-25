@@ -14,7 +14,7 @@
                 <th class="text-center" style="width: 4%;"></th>
                 <th class="text-center" *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn
                     pReorderableColumn [style.width]="col.width">
-                    <p-sortIcon *ngIf="col.field !== 'active'" [field]="col.field" pTooltip="Sort"
+                    <p-sortIcon [field]="col.field" pTooltip="Sort"
                         tooltipPosition="top"></p-sortIcon>
                     {{col.header}}
                 </th>

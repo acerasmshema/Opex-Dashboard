@@ -90,7 +90,7 @@ export class UserDetailService {
         userDetailForm.controls.email.valueChanges.
             subscribe((event) => {
                 if (event !== null)
-                    userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+                    userDetailForm.get('email').setValue(event.toLowerCase().trim(), { emitEvent: false });
             });
 
         this.commonService.getAllCountry(userDetailForm);
@@ -212,7 +212,7 @@ export class UserDetailService {
                         userDetailForm.disable();
                         userDetailForm.controls.disableSelect.setValue(true);
                         this.statusService.spinnerSubject.next(false);
-                        this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                        this.messageService.add({ severity: "success", summary: '', detail: 'User details ' + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     },
                     (error: any) => {
                         this.statusService.spinnerSubject.next(false);
