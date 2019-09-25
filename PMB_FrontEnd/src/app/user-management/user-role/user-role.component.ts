@@ -16,8 +16,8 @@ export class UserRoleComponent implements OnInit, OnDestroy {
 
   cols = [
     { field: 'roleName', header: 'Role Name', width: "25%" },
-    { field: 'description', header: 'Description', width: "55%" },
-    { field: 'active', header: 'Active', width: "6%" },
+    { field: 'description', header: 'Description', width: "54%" },
+    { field: 'active', header: 'Active', width: "7%" },
   ];
 
   constructor(private userRoleService: UserRoleService,

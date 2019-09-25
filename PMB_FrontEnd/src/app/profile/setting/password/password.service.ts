@@ -46,9 +46,9 @@ export class PasswordService {
         this.apiCallService.callAPIwithData(this.chnagePasswordURL, passwordChangeModel).
             subscribe(
                 response => {
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                    this.messageService.add({ severity: "success", summary: '', detail: 'Password ' + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     setTimeout(() => {
-                        this.router.navigateByUrl('login');    
+                        this.router.navigateByUrl('login');
                     }, 1500);
                 },
                 error => {

@@ -11,7 +11,7 @@ import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
 
 @Component({
@@ -226,7 +226,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.productionService.saveMaintenanceDays(requestData).
         subscribe((response: any) => {
           if (response == null) {
-            this.showMessage("success", "", CommonMessage.SUCCESS.ADD_SUCCESS);
+            this.showMessage("success", "", "Maintenance date " + CommonMessage.SUCCESS.ADD_SUCCESS);
             this.maintenanceDays.textAreaValue = "";
             this.maintenanceDays.dateValue = null;
             this.viewMaintenanceDays();
@@ -458,7 +458,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.userRoleForm.controls.show.setValue(false);
   }
 
-  onUserRole() {
+  onUserRoleSubmit() {
     if (this.userRoleForm.invalid)
       return;
 
@@ -467,6 +467,11 @@ export class DialogComponent implements OnInit, OnDestroy {
     } else {
       this.userRoleService.updateUserRole(this.userRoleForm);
     }
+  }
+
+  onInputChange(value: any) {
+    let formControl: any = this.userDetailForm.get(value);
+    this.validationService.trimValue(formControl);
   }
 
   ngOnDestroy() {

@@ -1,12 +1,10 @@
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ApiCallService {
 
-  constructor(private httpClient: HttpClient, private _router: Router) { }
+  constructor(private httpClient: HttpClient) { }
 
   public callGetAPIwithOutData(url: string) {
     const httpOptions = {

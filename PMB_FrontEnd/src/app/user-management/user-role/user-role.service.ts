@@ -21,7 +21,7 @@ export class UserRoleService {
 
     getUserRoles(userRoles: UserRole[]) {
         this.statusService.spinnerSubject.next(true);
-        
+
         this.commonService.getAllUserRole(false)
             .subscribe(
                 (roleList: UserRole[]) => {
@@ -48,7 +48,7 @@ export class UserRoleService {
         this.apiCallService.callAPIwithData(this.addUserRoleURL, userRole).
             subscribe(
                 response => {
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.ADD_SUCCESS });
+                    this.messageService.add({ severity: "success", summary: '', detail: 'User Role ' + CommonMessage.SUCCESS.ADD_SUCCESS });
                     this.statusService.refreshUserList.next(true);
                     userRoleForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
@@ -79,7 +79,7 @@ export class UserRoleService {
         this.apiCallService.callPutAPIwithData(this.updateRoleURL, userRole).
             subscribe(
                 response => {
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                    this.messageService.add({ severity: "success", summary: '', detail: "User Role " + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     this.statusService.refreshUserList.next(true);
                     userRoleForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);

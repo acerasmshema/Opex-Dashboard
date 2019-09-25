@@ -5,6 +5,7 @@ import { StatusService } from 'src/app/shared/service/status.service';
 import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -21,6 +22,7 @@ export class ProfileEditComponent implements OnInit {
     private commonService: CommonService,
     private formBuilder: FormBuilder,
     private validationService: ValidationService,
+    private apiCallService: ApiCallService,
     private statusService: StatusService) { }
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class ProfileEditComponent implements OnInit {
     this.userDetailForm.controls.email.valueChanges.
       subscribe((event) => {
         if (event !== null)
-          this.userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+          this.userDetailForm.get('email').setValue(event.toLowerCase().trim(), { emitEvent: false });
       });
 
     this.commonService.getAllCountry(this.userDetailForm);
@@ -90,6 +92,11 @@ export class ProfileEditComponent implements OnInit {
           console.log("Error")
         }
       );
+  }
+
+  onInputChange(value: any) {
+    let formControl: any = this.userDetailForm.get(value);
+    this.validationService.trimValue(formControl);
   }
 
 }
