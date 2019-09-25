@@ -1,4 +1,4 @@
-<div class="mainContainer">
+<div *ngIf="benchmarkList.length > 0" class="mainContainer">
     <div class="card">
         <div class="card-body">
             <div *ngFor="let benchmark of benchmarkList" class="row m-t-5">

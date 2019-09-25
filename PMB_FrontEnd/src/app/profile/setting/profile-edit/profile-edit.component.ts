@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ProfileEditService } from './profile-edit.service';
 import { StatusService } from 'src/app/shared/service/status.service';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { CommonService } from 'src/app/shared/service/common/common.service';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -12,17 +15,20 @@ import { StatusService } from 'src/app/shared/service/status.service';
 export class ProfileEditComponent implements OnInit {
 
   userDetailForm: FormGroup;
+  private userDetail: UserDetail;
 
   constructor(private profileEditService: ProfileEditService,
+    private commonService: CommonService,
+    private formBuilder: FormBuilder,
+    private validationService: ValidationService,
     private statusService: StatusService) { }
 
   ngOnInit() {
-    this.userDetailForm = null;
-    this.userDetailForm = this.profileEditService.createUserDetailForm();
+    this.onGetProfile();
   }
 
   onCancel() {
-    this.userDetailForm = this.profileEditService.createUserDetailForm();
+    this.createUserDetailForm();
   }
 
   onEditProfileSave() {
@@ -41,13 +47,49 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onDepartmentChange(departmentId: string) {
-    if(departmentId !== '') {
+    if (departmentId !== '') {
       const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
       this.userDetailForm.controls.department.setValue(department);
     } else {
       this.userDetailForm.controls.department.setValue(null);
     }
-    
+  }
+
+  createUserDetailForm() {
+    this.userDetailForm = this.formBuilder.group({
+      firstName: new FormControl(this.userDetail.firstName, [Validators.required]),
+      lastName: new FormControl(this.userDetail.lastName, [Validators.required]),
+      validateEmail: new FormControl(this.userDetail.email),
+      email: new FormControl(this.userDetail.email, { validators: [Validators.required, Validators.email], asyncValidators: [this.validationService.forbiddenEmail.bind(this)], updateOn: 'blur' }),
+      phone: new FormControl(this.userDetail.phone),
+      address: new FormControl(this.userDetail.address),
+      country: new FormControl(this.userDetail.country),
+      countryList: this.formBuilder.array([]),
+      department: new FormControl(this.userDetail.department),
+      departmentList: this.formBuilder.array([])
+    });
+
+    this.userDetailForm.controls.email.valueChanges.
+      subscribe((event) => {
+        if (event !== null)
+          this.userDetailForm.get('email').setValue(event.toLowerCase(), { emitEvent: false });
+      });
+
+    this.commonService.getAllCountry(this.userDetailForm);
+    this.commonService.getAllDepartment(this.userDetailForm);
+  }
+
+  onGetProfile() {
+    this.profileEditService.getProfile().
+      subscribe(
+        (userDetail: UserDetail) => {
+          this.userDetail = userDetail;
+          this.createUserDetailForm();
+        },
+        (error: any) => {
+          console.log("Error")
+        }
+      );
   }
 
 }

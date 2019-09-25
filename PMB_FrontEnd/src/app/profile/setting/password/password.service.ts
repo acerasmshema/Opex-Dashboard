@@ -47,7 +47,9 @@ export class PasswordService {
             subscribe(
                 response => {
                     this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
-                    this.router.navigateByUrl('login');
+                    setTimeout(() => {
+                        this.router.navigateByUrl('login');    
+                    }, 1500);
                 },
                 error => {
                     passwordForm.controls.currentPassword.setErrors({ inCorrect: 'true' });

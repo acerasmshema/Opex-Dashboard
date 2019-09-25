@@ -19,7 +19,7 @@ export class BenchmarkService {
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService,
         private datePipe: DatePipe,
-    private messageService:MessageService) { }
+        private messageService: MessageService) { }
 
 
     public filterCharts(searchKpiData: SearchKpiData) {
@@ -75,6 +75,7 @@ export class BenchmarkService {
         benchmarkRequest.millId = millIds;
         benchmarkRequest.frequency = searchKpiData.frequency["code"];
 
+        const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
         this.getDataforBenchmart(benchmarkRequest).
             subscribe((response: any) => {
                 const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
@@ -91,22 +92,13 @@ export class BenchmarkService {
                     benchmark.yScaleMax = Math.round(maxValue + (maxValue * 0.2));
                     this.resetDataLabel(benchmark, benchmark.data.length);
                     benchmark.error = false;
-                }
-                else {
-                    benchmark.error = true;
-                }
-
-                if (this.statusService.isSpin)
+                    if (this.statusService.isSpin)
+                        this.statusService.spinnerSubject.next(false);
+                }},
+                (error: any) => {
                     this.statusService.spinnerSubject.next(false);
-            },
-            (error: any) => {
-              this.statusService.spinnerSubject.next(false);
-              if(error.status=="0"){
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-              }else{
-                this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
-          });
+                    benchmark.error = true;
+                });
     }
 
     downloadBenchmarkData(kpiId: number, kpiName: string, isDaily: boolean) {
@@ -134,14 +126,14 @@ export class BenchmarkService {
                     this.download(kpiData, kpiName);
                     this.statusService.spinnerSubject.next(false);
                 },
-                (error: any) => {
-                  this.statusService.spinnerSubject.next(false);
-                  if(error.status=="0"){
-                  alert(CommonMessage.ERROR.SERVER_ERROR)
-                  }else{
-                    this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                }
-              });
+                    (error: any) => {
+                        this.statusService.spinnerSubject.next(false);
+                        if (error.status == "0") {
+                            alert(CommonMessage.ERROR.SERVER_ERROR)
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+                        }
+                    });
         }
     }
 

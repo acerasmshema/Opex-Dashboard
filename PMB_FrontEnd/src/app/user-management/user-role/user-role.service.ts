@@ -20,14 +20,18 @@ export class UserRoleService {
         private apiCallService: ApiCallService) { }
 
     getUserRoles(userRoles: UserRole[]) {
+        this.statusService.spinnerSubject.next(true);
+        
         this.commonService.getAllUserRole(false)
             .subscribe(
                 (roleList: UserRole[]) => {
                     userRoles.push(...roleList);
                     this.statusService.common.userRoles = roleList;
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     console.log("error in user role");
+                    this.statusService.spinnerSubject.next(false);
                 }
             );
     }
@@ -53,7 +57,7 @@ export class UserRoleService {
                     this.statusService.spinnerSubject.next(false);
                     if (error.error.status === '1012') {
                         userRoleForm.controls.active.setValue(true);
-                        userRoleForm.controls.userExistError.setValue(userRole.roleName + ' ' + CommonMessage.ERROR_CODES[1012]);
+                        userRoleForm.controls.userExistError.setValue(CommonMessage.ERROR_CODES[1012]);
                     } else {
                         this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
                     }
@@ -84,7 +88,7 @@ export class UserRoleService {
                     this.statusService.spinnerSubject.next(false);
                     if (error.error.status === '1012') {
                         userRoleForm.controls.active.setValue(true);
-                        userRoleForm.controls.userExistError.setValue(userRole.roleName + ' ' + CommonMessage.ERROR_CODES[1012]);
+                        userRoleForm.controls.userExistError.setValue(CommonMessage.ERROR_CODES[1012]);
                     } else {
                         this.messageService.add({ severity: "error", summary: '', detail: CommonMessage.ERROR.SERVER_ERROR });
                     }

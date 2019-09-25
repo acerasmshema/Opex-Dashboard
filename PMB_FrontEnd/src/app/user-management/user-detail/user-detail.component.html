@@ -75,7 +75,8 @@
                         <div class="row">
                           <label class="col-md-4 table-label required" style="padding-right: 0" for="firstName">First
                             Name:</label>
-                          <input class="col-md-8 form-control" type="text" id="firstName" formControlName="firstName">
+                          <input class="col-md-8 form-control" type="text" id="firstName" formControlName="firstName"
+                            maxlength="50">
                           <span class="error-text"
                             *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
@@ -101,7 +102,8 @@
                         <div class="row">
                           <label class="col-md-4 table-label required" style="padding-right: 0" for="lastName">Last
                             Name:</label>
-                          <input class="col-md-8 form-control" type="text" id="lastName" formControlName="lastName">
+                          <input class="col-md-8 form-control" type="text" id="lastName" formControlName="lastName"
+                            maxlength="50">
                           <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
                             && userDetailForm.get('lastName').errors?.required">
                             Last name is required
@@ -111,7 +113,8 @@
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" for="address">Address:</label>
-                          <input class="col-md-8 form-control" type="text" id="address" formControlName="address">
+                          <input class="col-md-8 form-control" type="text" id="address" formControlName="address"
+                            maxlength="200">
                         </div>
                       </div>
                     </div>
@@ -119,7 +122,8 @@
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label required" for="email">Email:</label>
-                          <input class="col-md-8 form-control" type="text" id="email" formControlName="email">
+                          <input class="col-md-8 form-control" type="text" id="email" formControlName="email"
+                            maxlength="100">
                           <span class="error-text"
                             *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
                             <span *ngIf="userDetailForm.get('email').errors?.required">
@@ -150,7 +154,7 @@
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" for="phone">Phone:</label>
-                          <input class="col-md-7 form-control" type="text" formControlName="phone">
+                          <input class="col-md-7 form-control" type="text" formControlName="phone" maxlength="20">
                         </div>
                       </div>
                       <div class="form-group">
