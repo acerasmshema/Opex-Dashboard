@@ -104,6 +104,9 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 				getDailyFrequencyResponse(kpiDashboardCategoryRequest, resultList, finalKpiProcessLines);
 			}
 		}
+		if(resultList.size()==0) {
+			throw new RecordNotFoundException("Records not found for Kpi Category Data");
+		}
 		return resultList;
 	}
 
