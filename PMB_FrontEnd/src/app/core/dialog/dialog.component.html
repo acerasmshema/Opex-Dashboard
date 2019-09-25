@@ -190,7 +190,7 @@
                                     <td style="width: 400px;">
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <textarea [rows]="2" [cols]="40" [(ngModel)]="rowData.remarks"
+                                                <textarea [rows]="2" maxlength="500" [cols]="40" [(ngModel)]="rowData.remarks"
                                                     style="width:100%; max-width:300px;" pInputTextarea></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
