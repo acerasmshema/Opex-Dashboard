@@ -57,7 +57,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     this.userDetailForm = this.userDetailService.createUserDetailForm(userDetail);
     setTimeout(() => {
       this.userDetailForm.disable();
-
+      this.userDetailForm.controls.disableSelect.setValue(true);
     }, 10);
   }
 
@@ -143,6 +143,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       return false;
 
     this.userDetailService.updateUser(this.userDetailForm, this.users, userId);;
+  }
+
+  onInputChange(value: any) {
+    let formControl: any = this.userDetailForm.get(value);
+    this.validationService.trimValue(formControl);
   }
 
   ngOnDestroy() {

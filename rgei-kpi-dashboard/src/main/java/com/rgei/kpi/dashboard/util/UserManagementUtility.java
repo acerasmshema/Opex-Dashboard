@@ -78,7 +78,6 @@ public class UserManagementUtility {
 		newUserRole.setUpdatedBy(userRole.getUpdatedBy());
 		newUserRole.setUpdatedDate(new java.util.Date());
 		newUserRole.setShowUserManagement(Boolean.FALSE);
-		newUserRole.setAceAdmin(Boolean.FALSE);
 		newUserRole.setStatus(userRole.getActive());
 		return newUserRole;
 	}
@@ -87,19 +86,21 @@ public class UserManagementUtility {
 		entity.setRoleName(userRole.getRoleName());
 		entity.setDescription(userRole.getDescription());
 		entity.setUpdatedBy(userRole.getUpdatedBy());
-		entity.setUpdatedDate(new java.util.Date());
-		if (!entity.getRgeUsers().isEmpty()) {
+		if (!entity.getRgeUsers().isEmpty() && !userRole.getActive().equals(entity.getStatus())) {
 			for (RgeUserEntity user : entity.getRgeUsers()) {
-				if (!user.getIsActive()) {
-					entity.setStatus(userRole.getActive());
-				} else {
-					throw new RecordExistException("Users exists for this role :" + userRole);
+				for (UserRoleMillEntity userRoleMill : user.getUserRoleMills()) {
+					if (String.valueOf(userRoleMill.getRole().getRoleId()).equals(userRole.getUserRoleId())
+							&& Boolean.TRUE.equals(userRoleMill.getStatus())) {
+						throw new RecordExistException("Users exists for this role :" + userRole);
+					} else {
+						entity.setStatus(userRole.getActive());
+					}
 				}
 			}
 		} else {
 			entity.setStatus(userRole.getActive());
 		}
-
+		entity.setUpdatedDate(new java.util.Date());
 		return entity;
 	}
 
@@ -278,9 +279,8 @@ public class UserManagementUtility {
 	}
 
 	public static MillDetail getMillDetail(MillEntity millEntity) {
-		MillDetail millDetail = null;
+		MillDetail millDetail = new MillDetail();
 		if (millEntity != null) {
-			millDetail = new MillDetail();
 			millDetail.setMillName(millEntity.getMillName());
 			millDetail.setActive(millEntity.getActive());
 			millDetail.setCountry(CommonFunction.convertCountryEntityToResponse(millEntity.getCountry()));
@@ -295,9 +295,8 @@ public class UserManagementUtility {
 	}
 
 	public static UserRole getUserRole(UserRoleEntity roleEntity) {
-		UserRole userRole = null;
-		if (roleEntity != null && Boolean.TRUE.equals(roleEntity.getStatus())) {
-			userRole = new UserRole();
+		UserRole userRole = new UserRole();
+		if (roleEntity != null) {
 			userRole.setRoleName(roleEntity.getRoleName());
 			userRole.setActive(roleEntity.getStatus());
 			userRole.setUserRoleId(CommonFunction.getString(roleEntity.getRoleId()));

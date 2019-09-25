@@ -8,8 +8,6 @@ import { API_URL } from '../../constant/API_URLs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApiCallService } from '../api/api-call.service';
 import { Observable } from 'rxjs';
-import { UserRole } from 'src/app/user-management/user-role/user-role.model';
-import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Injectable()
 export class ValidationService {
@@ -79,7 +77,7 @@ export class ValidationService {
         const datePicker: any = document.getElementById("daterangepicker_input");
         if (datePicker !== null && datePicker.value !== "" && sidebarForm.dateError) {
             sidebarForm.dateError = false;
-        } 
+        }
     }
 
     forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
@@ -213,5 +211,9 @@ export class ValidationService {
         }
 
         return isExist;
+    }
+
+    trimValue(formControl: any): any {
+        return formControl.setValue(formControl.value.trim());
     }
 }

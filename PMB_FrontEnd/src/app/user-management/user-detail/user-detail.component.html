@@ -76,7 +76,7 @@
                           <label class="col-md-4 table-label required" style="padding-right: 0" for="firstName">First
                             Name:</label>
                           <input class="col-md-8 form-control" type="text" id="firstName" formControlName="firstName"
-                            maxlength="50">
+                            maxlength="50" (change)="onInputChange('firstName')">
                           <span class="error-text"
                             *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
@@ -103,7 +103,7 @@
                           <label class="col-md-4 table-label required" style="padding-right: 0" for="lastName">Last
                             Name:</label>
                           <input class="col-md-8 form-control" type="text" id="lastName" formControlName="lastName"
-                            maxlength="50">
+                            maxlength="50" (change)="onInputChange('lastName')">
                           <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
                             && userDetailForm.get('lastName').errors?.required">
                             Last name is required
@@ -114,7 +114,7 @@
                         <div class="row">
                           <label class="col-md-4 table-label" for="address">Address:</label>
                           <input class="col-md-8 form-control" type="text" id="address" formControlName="address"
-                            maxlength="200">
+                            maxlength="200" (change)="onInputChange('address')">
                         </div>
                       </div>
                     </div>
@@ -154,7 +154,8 @@
                       <div class="form-group">
                         <div class="row">
                           <label class="col-md-4 table-label" for="phone">Phone:</label>
-                          <input class="col-md-7 form-control" type="text" formControlName="phone" maxlength="20">
+                          <input class="col-md-7 form-control" type="text" formControlName="phone" maxlength="20"
+                            (change)="onInputChange('phone')">
                         </div>
                       </div>
                       <div class="form-group">
