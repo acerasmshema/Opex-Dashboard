@@ -77,8 +77,10 @@ export class BenchmarkService {
 
         const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
         this.getDataforBenchmart(benchmarkRequest).
-            subscribe(
-                (response: any) => {
+            subscribe((response: any) => {
+                const benchmark = this.statusService.benchmarkList.find((con) => con.kpiId === benchmarkRequest.kpiId);
+
+                if (response.kpiData != null && response.kpiData.length > 0) {
                     benchmark.data = response.kpiData;
                     let maxValue = 0;
                     benchmark.data.forEach(kpiData => {
@@ -92,7 +94,7 @@ export class BenchmarkService {
                     benchmark.error = false;
                     if (this.statusService.isSpin)
                         this.statusService.spinnerSubject.next(false);
-                },
+                }},
                 (error: any) => {
                     this.statusService.spinnerSubject.next(false);
                     benchmark.error = true;
