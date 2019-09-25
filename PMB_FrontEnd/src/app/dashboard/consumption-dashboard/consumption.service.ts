@@ -72,38 +72,38 @@ export class ConsumptionService {
     consumptionRequest.processLines = processLinesHeads;
 
     this.getDataforKpi(consumptionRequest).
-      subscribe((response: any) => {
-        let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
-        const consumptions = consumptionDetail.consumptions;
+      subscribe(
+        (response: any) => {
+          let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
+          const consumptions = consumptionDetail.consumptions;
 
-        if (consumptions != undefined) {
-          let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
+          if (consumptions != undefined) {
+            let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
 
-          if (consumption !== undefined && response.length > 0) {
-            let domains = [];
-            let processLines = this.statusService.common.processLines;
-            response[0].series.forEach(plData => {
-              let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
-              domains.push(legendColor);
-            });
-            consumption.colorScheme = { domain: domains };
-            consumption.data = response;
-            consumption.error = false;
+            if (consumption !== undefined && response.length > 0) {
+              let domains = [];
+              let processLines = this.statusService.common.processLines;
+              response[0].series.forEach(plData => {
+                let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+                domains.push(legendColor);
+              });
+              consumption.colorScheme = { domain: domains };
+              consumption.data = response;
+              consumption.error = false;
+            }
+
+            if (this.statusService.isSpin)
+              this.statusService.spinnerSubject.next(false);
           }
-          else {
-            consumption.error = true;
-          }
-
-          if (this.statusService.isSpin)
-            this.statusService.spinnerSubject.next(false);
-        }
-      },
+        },
         (error: any) => {
           this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
+          const consumptions = consumptionDetail.consumptions;
+
+          if (consumptions != undefined) {
+            let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
+            consumption.error = true;
           }
         });
   }

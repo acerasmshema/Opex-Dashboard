@@ -190,7 +190,7 @@
                                     <td style="width: 400px;">
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <textarea [rows]="2" [cols]="40" [(ngModel)]="rowData.remarks"
+                                                <textarea [rows]="2" maxlength="500" [cols]="40" [(ngModel)]="rowData.remarks"
                                                     style="width:100%; max-width:300px;" pInputTextarea></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
@@ -249,7 +249,7 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">First Name</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50">
+                        <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50" (change)="onInputChange('firstName')">
                         <span class="error-text"
                             *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
@@ -259,7 +259,7 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Last Name</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50">
+                        <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50" (change)="onInputChange('lastName')">
                         <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
                             && userDetailForm.get('lastName').errors?.required">
                             Last name is required
@@ -286,7 +286,7 @@
                 <div class="col-sm-6">
                     <label class="edit-label">Phone</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20">
+                        <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20" (change)="onInputChange('phone')">
                     </div>
                 </div>
             </div>
@@ -294,7 +294,7 @@
                 <div class="col-sm-6">
                     <label class="edit-label">Address</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="address" maxlength="200">
+                        <input type="text" class="form-control edit-input" formControlName="address" maxlength="200" (change)="onInputChange('address')">
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -438,7 +438,7 @@
 </div>
 
 <div *ngIf="dialogName === 'userRole'">
-    <form [formGroup]='userRoleForm' (ngSubmit)="onUserRole()">
+    <form [formGroup]='userRoleForm' (ngSubmit)="onUserRoleSubmit()">
         <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
             [(visible)]="userRoleForm.controls.show.value" [blockScroll]="true" [draggable]="true" [maximizable]="true">
             <p-header> <span class="dialog-header">{{userRoleForm.controls.operation.value}} User Role</span>

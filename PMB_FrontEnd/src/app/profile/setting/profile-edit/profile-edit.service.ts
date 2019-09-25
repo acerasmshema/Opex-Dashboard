@@ -37,7 +37,7 @@ export class ProfileEditService {
         this.apiCallService.callPutAPIwithData(this.updateUserURL, userDetail).
             subscribe(
                 (response: any) => {
-                    this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+                    this.messageService.add({ severity: "success", summary: '', detail: 'User details ' + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                 },
                 (error: any) => {
                     console.log("Error")
