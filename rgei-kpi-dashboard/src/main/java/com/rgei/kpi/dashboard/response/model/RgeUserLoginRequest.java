@@ -18,19 +18,21 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class RgeUserLoginRequest {
 	
-	private String loginId;
-	private String userPassword;
+	private String username;
+	private String password;
 	
-	public String getLoginId() {
-		return loginId;
+	public String getUsername() {
+		return username;
 	}
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
+	public void setUsername(String username) {
+		this.username = username.toLowerCase().trim();
 	}
-	public String getUserPassword() {
-		return userPassword;
+	public String getPassword() {
+		return password;
 	}
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+	
+	
 }

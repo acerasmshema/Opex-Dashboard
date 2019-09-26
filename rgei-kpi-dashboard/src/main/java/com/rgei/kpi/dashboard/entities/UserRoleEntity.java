@@ -17,10 +17,19 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
-import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 
 @Entity
@@ -38,13 +47,29 @@ public class UserRoleEntity implements Serializable {
 	@Column(name="role_name")
 	private String roleName;
 	
+	@Column(name="show_user_management")
+	private Boolean showUserManagement;
+	
+	@Column(name="created_by")
+	private String createdBy;
+	
+	@Column(name="updated_by")
+	private String updatedBy;
+	
+	@Column(name="active")
+	private Boolean status;
+	
 	@Column(name="created_date")
-	private Timestamp createdDate;
+	private Date createdDate;
 
 	@Column(name="updated_date")
-	private String updatedBy;
+	private Date updatedDate;
+	
+	@Column(name="is_aceadmin")
+	private Boolean aceAdmin;
+	
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name="rge_user_role"
 		, joinColumns={
@@ -88,12 +113,20 @@ public class UserRoleEntity implements Serializable {
 		this.rgeUsers = rgeUsers;
 	}
 
-	public Timestamp getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Timestamp createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+	
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 	public String getUpdatedBy() {
@@ -102,6 +135,38 @@ public class UserRoleEntity implements Serializable {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public Boolean getShowUserManagement() {
+		return showUserManagement;
+	}
+
+	public void setShowUserManagement(Boolean showUserManagement) {
+		this.showUserManagement = showUserManagement;
+	}
+
+	public Boolean getAceAdmin() {
+		return aceAdmin;
+	}
+
+	public void setAceAdmin(Boolean aceAdmin) {
+		this.aceAdmin = aceAdmin;
 	}
 
 }

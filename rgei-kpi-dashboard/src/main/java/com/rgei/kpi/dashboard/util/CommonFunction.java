@@ -19,6 +19,9 @@ package com.rgei.kpi.dashboard.util;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import com.rgei.kpi.dashboard.entities.CountryEntity;
+import com.rgei.kpi.dashboard.response.model.CountryResponse;
+
 public class CommonFunction {
 	
 	private CommonFunction() {
@@ -38,4 +41,26 @@ public class CommonFunction {
 		return Date.valueOf(yesterdayDate.toString());
 	}
 
+	public static String getString(Object obj) {
+		if(obj != null) {
+			return obj.toString();
+		}
+		return "";
+	}
+	
+	public static CountryResponse convertCountryEntityToResponse(CountryEntity countryEntity) {
+		CountryResponse countryResponse= null;
+		if(countryEntity!=null) {
+			countryResponse = new CountryResponse();
+			countryResponse.setCountryId(countryEntity.getCountryId().toString());
+			countryResponse.setCountryCode(countryEntity.getCountryCode());
+			countryResponse.setCountryName(countryEntity.getCountryName());
+			countryResponse.setActive(countryEntity.getActive());
+			countryResponse.setCreatedBy(countryEntity.getCreatedBy());
+			countryResponse.setCreatedDate(countryEntity.getCreatedDate().toString());
+			countryResponse.setUpdatedBy(countryEntity.getUpdatedBy());
+			countryResponse.setUpdatedDate(countryEntity.getUpdatedDate().toString());
+		}
+		return countryResponse;
+		}
 }

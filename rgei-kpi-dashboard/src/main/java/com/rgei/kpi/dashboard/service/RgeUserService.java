@@ -16,19 +16,22 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.service;
 
+import java.security.NoSuchAlgorithmException;
+
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
+import com.rgei.kpi.dashboard.response.model.User;
 
 public interface RgeUserService {
 	
-	public RgeUserResponse getUserById(Long userId);
+	public User getUserById(Long userId);
 	
 	public RgeUserResponse getUserByName(String name);
 	
 	public RgeUserResponse getUserByEmail(String email);
 	
-	public RgeUserResponse loginProcess(RgeUserLoginRequest  rgeUserLoginRequest);
+	public User loginProcess(RgeUserLoginRequest  rgeUserLoginRequest) throws NoSuchAlgorithmException;
 
 	public void logoutProcess(RgeUserLogoutRequest rgeUserLogoutRequest);
 

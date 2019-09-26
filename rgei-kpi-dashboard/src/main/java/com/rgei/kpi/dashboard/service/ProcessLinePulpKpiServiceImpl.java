@@ -35,6 +35,7 @@ import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineFrequencyRepository;
@@ -103,6 +104,8 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
 			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
+		}else {
+			throw new RecordNotFoundException("Record not found of process line for mill Id : "+productionRequest.getMillId());
 		}
 		Optional<List<DailyKpiPulpEntity>> dailyKpiEntity = Optional.ofNullable(
 				dailyKpiPulpEntityRepository.fetchData(yesterdayDate, productionRequest.getMillId(), productionRequest.getKpiCategoryId(),
@@ -124,13 +127,21 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<DateRangeResponse> getDailyKpiPulpDataForBarChart(ProcessLineRequest productionRequest) {
 		logger.info("Getting daily kpi pulp data for bar charts", productionRequest);
 		List<DateRangeResponse> dateRangeResponse = null;
-		List<DailyKpiPulpEntity> dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDate(Utility.stringToDateConvertor(productionRequest.getStartDate(), DashboardConstant.FORMAT), 
-				Utility.stringToDateConvertor(productionRequest.getEndDate(),DashboardConstant.FORMAT),
-				productionRequest.getMillId(),
-				productionRequest.getBuId(),
-				productionRequest.getBuTypeId(),
-				productionRequest.getKpiCategoryId(),
-				productionRequest.getKpiId());
+		List<DailyKpiPulpEntity> dailyKpiPulpEntities;
+		try {
+			dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDate(Utility.stringToDateConvertor(productionRequest.getStartDate(), DashboardConstant.FORMAT), 
+					Utility.stringToDateConvertor(productionRequest.getEndDate(),DashboardConstant.FORMAT),
+					productionRequest.getMillId(),
+					productionRequest.getBuId(),
+					productionRequest.getBuTypeId(),
+					productionRequest.getKpiCategoryId(),
+					productionRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Record not found for Daily Kpi Entities for bar chart of mill Id : "+productionRequest.getMillId());
+		}
+		if(dailyKpiPulpEntities == null || dailyKpiPulpEntities.isEmpty()) {
+			throw new RecordNotFoundException("Record not found for Daily Kpi Entities for bar chart of mill Id : "+productionRequest.getMillId());
+		}
 		if(DashboardConstant.KRC.equals(productionRequest.getMillId().toString())) {
 			dateRangeResponse = DailyKpiPulpConverter.createDailyKpiPulpResponseForBarChart(dailyKpiPulpEntities);
 		}
@@ -144,13 +155,22 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<DateRangeResponse> getDailyKpiPulpDataForAreaChart(ProcessLineRequest productionRequest) {
 		logger.info("Getting daily kpi pulp data for area chart", productionRequest);
 		List<DateRangeResponse> dateRangeResponse = null;
-		List<DailyKpiPulpEntity> dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDate(Utility.stringToDateConvertor(productionRequest.getStartDate(), DashboardConstant.FORMAT), 
-				Utility.stringToDateConvertor(productionRequest.getEndDate(),DashboardConstant.FORMAT),
-				productionRequest.getMillId(),
-				productionRequest.getBuId(),
-				productionRequest.getBuTypeId(),
-				productionRequest.getKpiCategoryId(),
-				productionRequest.getKpiId());
+		List<DailyKpiPulpEntity> dailyKpiPulpEntities;
+		try {
+			dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDate(Utility.stringToDateConvertor(productionRequest.getStartDate(), DashboardConstant.FORMAT), 
+					Utility.stringToDateConvertor(productionRequest.getEndDate(),DashboardConstant.FORMAT),
+					productionRequest.getMillId(),
+					productionRequest.getBuId(),
+					productionRequest.getBuTypeId(),
+					productionRequest.getKpiCategoryId(),
+					productionRequest.getKpiId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new RecordNotFoundException("Record not found for Daily Kpi Entities for area chart of mill Id : "+productionRequest.getMillId());
+		}
+		if(dailyKpiPulpEntities == null || dailyKpiPulpEntities.isEmpty()) {
+			throw new RecordNotFoundException("Record not found for Daily Kpi Entities for area chart of mill Id : "+productionRequest.getMillId());
+		}
 		if(DashboardConstant.KRC.equals(productionRequest.getMillId().toString())) {
 			dateRangeResponse = DailyKpiPulpConverter.createDailyKpiPulpResponseForAreaChart(dailyKpiPulpEntities);
 		}
@@ -197,11 +217,19 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		if (processLineEntity.isPresent()) {
 			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
-		List<DailyKpiPulpEntity> dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDateForLineCharts(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(),DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(),DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getKpiId());
+		List<DailyKpiPulpEntity> dailyKpiPulpEntities;
+		try {
+			dailyKpiPulpEntities = dailyKpiPulpEntityRepository.findByDateForLineCharts(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(),DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(),DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Record not found for Daily Target Line data of mill Id : "+processLineRequest.getMillId());
+		}
+		if(dailyKpiPulpEntities == null || dailyKpiPulpEntities.isEmpty()) {
+			throw new RecordNotFoundException("Record not found for Daily Target Line data of mill Id : "+processLineRequest.getMillId());
+		}
 		if(DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())){
 			dateRangeResponse = ProcessLineUtility.createDailyTargetLineResponse(processLine, dailyKpiPulpEntities);
 		}else if(DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
@@ -231,13 +259,21 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public TargetProceessLine getAnnualTargetProcessLineV2(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Getting annual target for process lines");
-		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
-				CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-		
-		List<DailyKpiPulpEntity> dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
-				DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
-				DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
-		
+		MillBuKpiCategoryEntity millBuKpiCategoryEntity;
+		List<DailyKpiPulpEntity> dailyKpiEntities;
+		try {
+			millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
+					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
+			
+			dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
+					DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
+					DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
+		}
+		if(millBuKpiCategoryEntity == null) {
+			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
+		}
 		return ProcessLineExtendedUtil.generateTargetResponseV2(millBuKpiCategoryEntity, dailyKpiEntities);
 	}
 	
@@ -379,11 +415,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	private void getYearlyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
 		logger.info("Creating yearly frequency response for process line request ", processLineRequest);
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for yearly frequency response");
+		}
 
 		for (String processLine : lineList) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -400,11 +441,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	private void getQuarterlyFrequencyResponse(ProcessLineRequest processLineRequest,
 			List<DateRangeResponse> resultList, List<String> lineList) {
 		logger.info("Creating quarterly frequency response for process line request ", processLineRequest);
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for quarterly frequency response");
+		}
 
 		for (String processLine : lineList) {
 			DateRangeResponse val = new DateRangeResponse();
@@ -421,11 +467,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	private void getMonthlyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
 		logger.info("Creating monthly frequency response for process line request ", processLineRequest);
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for monthly frequency response");
+		}
 		for (String processLine : lineList) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
@@ -441,11 +492,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	private void getDailyFrequencyResponse(ProcessLineRequest processLineRequest, List<DateRangeResponse> resultList,
 			List<String> lineList) {
 		logger.info("Creating daily frequency response for process line request ", processLineRequest);
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesDailyTotal(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesDailyTotal(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for daily frequency response");
+		}
 		for (String processLine : lineList) {
 			DateRangeResponse val = new DateRangeResponse();
 			val.setName(processLine);
@@ -462,11 +518,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 			List<List<Map<String, Object>>> responseData) {
 		logger.info("Creating yearly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalYearly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for yearly frequency grid data");
+		}
 		if(DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())){
 		response = ProcessLineFrequencyDataGridUtility.getGridDataYearly(lineList, responseEntity);
 		}else if(DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
@@ -479,11 +540,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 			List<List<Map<String, Object>>> responseData) {
 		logger.info("Creating quarterly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalQuarterly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for quarterly frequency grid data");
+		}
 		if(DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())){
 		response = ProcessLineFrequencyDataGridUtility.getGridDataQuarterly(lineList, responseEntity);
 		}else if(DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
@@ -496,11 +562,16 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 			List<List<Map<String, Object>>> responseData) {
 		logger.info("Creating monthly frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response = null;
-		List<Object[]> responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
-				Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-				Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-				processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-				processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		List<Object[]> responseEntity;
+		try {
+			responseEntity = processLineFrequencyRepository.getProcessLinesTotalMonthly(
+					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for monthly frequency grid data");
+		}
 		if(DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())){
 		response = ProcessLineFrequencyDataGridUtility.getGridDataMonthly(lineList, responseEntity);
 		}else if(DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
@@ -514,18 +585,28 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		logger.info("Creating daily frequency grid data for process line request ", processLineRequest);
 		List<Map<String, Object>> response= null;
 		if (DashboardConstant.KRC.equals(processLineRequest.getMillId().toString())) {
-			List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGrid(
-					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			List<Map<String, Object>> responseEntity;
+			try {
+				responseEntity = processLineFrequencyRepository.findByDateForDataGrid(
+						Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+						processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+						processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Error while fetching records for daily frequency grid data");
+			}
 			response = ProcessLineFrequencyDataGridUtility.getGridDataDailyResponse(lineList, responseEntity);
 		} else if (DashboardConstant.RZ.equals(processLineRequest.getMillId().toString())) {
-			List<Map<String, Object>> responseEntity = processLineFrequencyRepository.findByDateForDataGridRZ(
-					Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
-					Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
-					processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
-					processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			List<Map<String, Object>> responseEntity;
+			try {
+				responseEntity = processLineFrequencyRepository.findByDateForDataGridRZ(
+						Utility.stringToDateConvertor(processLineRequest.getStartDate(), DashboardConstant.FORMAT),
+						Utility.stringToDateConvertor(processLineRequest.getEndDate(), DashboardConstant.FORMAT),
+						processLineRequest.getMillId(), processLineRequest.getBuTypeId(),
+						processLineRequest.getKpiCategoryId(), processLineRequest.getBuId(), processLineRequest.getKpiId());
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Error while fetching records for daily frequency grid data");
+			}
 			response = ProcessLineFrequencyDataGridUtilityRZ.getGridDataDailyResponse(lineList, responseEntity);
 		}
 		responseData.add(response);

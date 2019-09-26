@@ -34,6 +34,10 @@ import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.MillBuMaintenanceDayEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.RgeUserEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
+import com.rgei.kpi.dashboard.exception.RecordNotDeletedException;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.repository.MillBuMaintenanceDayEntityRepository;
 import com.rgei.kpi.dashboard.response.model.DeleteRequest;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysRequest;
@@ -60,6 +64,7 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 			processMaintenanceDaysSaveRequest(maintenanceDaysRequest);
 			}catch(DataIntegrityViolationException e) {
 				logger.error("Error while saving maintenance days", e, maintenanceDaysRequest);
+				throw new DataIntegrityViolationException("");
 			}
 		}
 		
@@ -85,10 +90,16 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 				millBuMaintenanceDayEntity.setMaintenanceDays(Utility.stringToDateConvertor(date, DashboardConstant.FORMAT));
 				millBuMaintenanceDayEntity.setActive(Boolean.TRUE);
 				millBuMaintenanceDayEntity.setRemarks(maintenanceDaysRequest.getRemarks());
+				try {
 				millBuMaintenanceDayEntityRepository.save(millBuMaintenanceDayEntity);
+				}catch(RuntimeException e) {
+					throw new RecordNotCreatedException("Error while saving maintenance days for date :"+ maintenanceDaysRequest.getMaintenanceDays());
+				}
+				
 			}
 		}else {
 			logger.info("Maintenance dates are empty", dates);
+			throw new RecordNotCreatedException("Error while saving maintenance days for date :"+ maintenanceDaysRequest.getMaintenanceDays());
 		}
 	}
 
@@ -111,9 +122,13 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 	public List<MaintenanceDaysResponse> getMaintainanceDayDetails(String millId, String buId) {
 		logger.info("Getting maintenance days details");
 		List<MaintenanceDaysResponse> response =null;
-		List<MillBuMaintenanceDayEntity> entities = millBuMaintenanceDayEntityRepository.findByMillAndbuId(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buId));
-			if(entities != null && !entities.isEmpty()) {
-			return MaintenanceDaysUtil.convertIntoResponse(entities);
+		try {
+			List<MillBuMaintenanceDayEntity> entities = millBuMaintenanceDayEntityRepository.findByMillAndbuId(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buId));
+				if(entities != null && !entities.isEmpty()) {
+				return MaintenanceDaysUtil.convertIntoResponse(entities);
+			}
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while fetching records for maitainence days");
 		}
 		return response;
 	}
@@ -127,12 +142,16 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 				ids.add(CommonFunction.covertToLong(id));
 			}
 			List<MillBuMaintenanceDayEntity> entities = millBuMaintenanceDayEntityRepository.findBymillBuMdIdIn(ids);
+			if(entities.isEmpty()) {
+				throw new RecordNotFoundException("Records with id(s) not found to delete "+ request.getIds());
+			}
 			for(MillBuMaintenanceDayEntity entity:entities) {
 				entity.setActive(Boolean.FALSE);
 				try {
 					millBuMaintenanceDayEntityRepository.save(entity);
-				}catch(EmptyResultDataAccessException e) {
+				}catch(Exception e) {
 					logger.error("Error while deleting maintenane days", e, entity);
+					throw new RecordNotDeletedException("Exception while deleting maintenance days for Id(s)"+ request.getIds());
 				}
 			}
 		}
@@ -148,6 +167,9 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 				ids.add(CommonFunction.covertToLong(id));
 			}
 			List<MillBuMaintenanceDayEntity> entities = millBuMaintenanceDayEntityRepository.findBymillBuMdIdIn(ids);
+			if(entities.isEmpty()) {
+				throw new RecordNotFoundException("Record not found for remark Ids :  "+ request.getIds());
+			}
 			for(MillBuMaintenanceDayEntity entity:entities) {
 				RgeUserEntity user = new RgeUserEntity();
 				user.setUserId(request.getUpdatedBy());
@@ -159,13 +181,16 @@ public class MaintenanceDaysServiceImpl implements MaintenanceDaysService{
 				}
 				catch(EmptyResultDataAccessException e) {
 					logger.error("Error while updating maintenane days remarks for existing ids", e, entity);
+					throw new RecordNotUpdatedException("Exception while updating maintenance day remarks");
 				}
 				catch(JpaObjectRetrievalFailureException e) {
 					logger.error("Invalid user id passed", e, entity);
+					throw new RecordNotUpdatedException("Invalid user id passed while updating maintenance day remarks for Id(s)"+ request.getIds());
 				}
 			}
 		}else {
 			logger.info("No ids or empty remarks found in the request", request);
+			throw new RecordNotUpdatedException("Exception while updating maintenance day remarks");
 		}
 	}
 

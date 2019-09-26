@@ -17,75 +17,105 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="rge_user")
+@Table(name = "rge_user")
 public class RgeUserEntity implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id",unique = true, nullable = false)
+	@Column(name = "user_id", unique = true, nullable = false)
 	private Long userId;
-	
-	@Column(name="user_password")
+
+	@Column(name = "user_password")
 	private String userPassword;
-	
-	@Column(name="login_id")
+
+	@Column(name = "login_id")
 	private String loginId;
-	
+
 	private String address;
 
-	private String country;
+	private Integer country;
 
-	@Column(name="created_by")
+	@Column(name = "created_by")
 	private String createdBy;
-	
-	@Column(name="updated_by")
+
+	@Column(name = "updated_by")
 	private String updatedBy;
 
-	@Column(name="created_date")
-	private Time createdOn;
+	@Column(name = "created_date")
+	private Date createdOn;
 
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	@Column(name = "email")
 	private String email;
 
-	@Column(name="first_name")
+	@Column(name = "first_name")
 	private String firstName;
 
-	@Column(name="is_active")
+	@Column(name = "is_active")
 	private Boolean isActive;
 
-	@Column(name="last_name")
+	@Column(name = "last_name")
 	private String lastName;
 
-	@Column(name="middle_name")
+	@Column(name = "middle_name")
 	private String middleName;
 
 	private String phone;
 
-	@Column(name="updated_date")
-	private Time updatedOn;
+	@Column(name = "updated_date")
+	private Date updatedOn;
+	
+	@Column(name = "department_id")
+	private Integer departmentId;
 
-	@ManyToMany(mappedBy="rgeUsers", fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id",insertable=false, updatable=false)
+	private DepartmentEntity department;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "country", referencedColumnName = "country_id",insertable=false, updatable=false)
+	private CountryEntity countryEntity;
+
+	@ManyToMany(mappedBy = "rgeUsers", fetch = FetchType.EAGER)
 	private List<UserRoleEntity> userRoles;
-	
-	@OneToMany(mappedBy="rgeUserEntity", fetch = FetchType.LAZY)
+
+	@OneToMany(mappedBy = "rgeUserEntity", fetch = FetchType.LAZY)
 	private List<LoginDetailEntity> loginDetails;
-	
-	@OneToMany(mappedBy="user", fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<UserRoleMillEntity> userRoleMills;
 
 	public Long getUserId() {
@@ -104,11 +134,11 @@ public class RgeUserEntity implements Serializable {
 		this.address = address;
 	}
 
-	public String getCountry() {
+	public Integer getCountry() {
 		return this.country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Integer country) {
 		this.country = country;
 	}
 
@@ -118,14 +148,6 @@ public class RgeUserEntity implements Serializable {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
-	}
-
-	public Time getCreatedOn() {
-		return this.createdOn;
-	}
-
-	public void setCreatedOn(Time createdOn) {
-		this.createdOn = createdOn;
 	}
 
 	public String getEmail() {
@@ -176,14 +198,6 @@ public class RgeUserEntity implements Serializable {
 		this.phone = phone;
 	}
 
-	public Time getUpdatedOn() {
-		return this.updatedOn;
-	}
-
-	public void setUpdatedOn(Time updatedOn) {
-		this.updatedOn = updatedOn;
-	}
-
 	public List<UserRoleEntity> getUserRoles() {
 		return this.userRoles;
 	}
@@ -231,4 +245,29 @@ public class RgeUserEntity implements Serializable {
 	public void setUserRoleMills(List<UserRoleMillEntity> userRoleMills) {
 		this.userRoleMills = userRoleMills;
 	}
+
+	public DepartmentEntity getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(DepartmentEntity department) {
+		this.department = department;
+	}
+
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public CountryEntity getCountryEntity() {
+		return countryEntity;
+	}
+
+	public void setCountryEntity(CountryEntity countryEntity) {
+		this.countryEntity = countryEntity;
+	}
 }
+

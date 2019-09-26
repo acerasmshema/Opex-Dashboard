@@ -28,6 +28,9 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiAnnotationEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
+import com.rgei.kpi.dashboard.exception.RecordNotDeletedException;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.KpiAnnotationEntityRepository;
 import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.KpiAnnotationDateRangeSerach;
@@ -40,84 +43,96 @@ import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.KpiAnnotationUtil;
 import com.rgei.kpi.dashboard.util.Utility;
 
-
-
 @Service
-public class KpiAnnotationServiceImpl implements KpiAnnotationService{
+public class KpiAnnotationServiceImpl implements KpiAnnotationService {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KpiAnnotationServiceImpl.class);
-	
+
 	@Resource
 	private KpiAnnotationEntityRepository kpiAnnotationEntityRepository;
 	@Resource
 	private RgeUserEntityRepository rgeUserEntityRepository;
 
-
 	@Override
 	public void saveKpiAnnotationRequest(KpiAnnotationRequest kpiAnnotationRequest) {
 		logger.info("Saving kpi annotation", kpiAnnotationRequest);
-		boolean status=Boolean.TRUE;
+		boolean status = Boolean.TRUE;
 		try {
-			kpiAnnotationEntityRepository.saveAll(KpiAnnotationUtil.convertToEntity(kpiAnnotationRequest,status));
-		}catch(Exception e) {
+			kpiAnnotationEntityRepository.saveAll(KpiAnnotationUtil.convertToEntity(kpiAnnotationRequest, status));
+		} catch (Exception e) {
 			logger.error("Exception in saving the annotation.", e);
+			throw new RecordNotCreatedException(
+					"Error while storing Kpi Annotation Request for Kpi Id : " + kpiAnnotationRequest.getKpiId());
 		}
-	}  
+	}
 
 	@Override
 	public List<KpiAnnotationResponse> getAnnotationDetails(KpiAnnotationSearchRequest kpiAnnotationSearchRequest) {
 		logger.info("Get annotation details for search request", kpiAnnotationSearchRequest);
 		List<KpiAnnotationResponse> response = null;
 		try {
-			List<KpiAnnotationEntity>  kpiAnnotationEntities  = kpiAnnotationEntityRepository.getAnnotationDetails(CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getKpiId()),
-					CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getMillId()), CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getBuTypeId()),
-					(Utility.stringToDateConvertor(kpiAnnotationSearchRequest.getAnnotationDate(), DashboardConstant.FORMAT)));
+			List<KpiAnnotationEntity> kpiAnnotationEntities = kpiAnnotationEntityRepository.getAnnotationDetails(
+					CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getKpiId()),
+					CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getMillId()),
+					CommonFunction.covertToInteger(kpiAnnotationSearchRequest.getBuTypeId()),
+					(Utility.stringToDateConvertor(kpiAnnotationSearchRequest.getAnnotationDate(),
+							DashboardConstant.FORMAT)));
 			logger.info("KpiAnnotion entity data", kpiAnnotationEntities);
 			response = prePareSearchResponse(kpiAnnotationEntities);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception in retrieving annotations details.", e);
+			throw new RecordNotFoundException(
+					"Error while retrieving annotations details for Kpi Id : " + kpiAnnotationSearchRequest.getKpiId());
 		}
 		return response;
 	}
 
-	public  List<KpiAnnotationResponse> prePareSearchResponse(List<KpiAnnotationEntity> kpiAnnotationEntities) {
+	public List<KpiAnnotationResponse> prePareSearchResponse(List<KpiAnnotationEntity> kpiAnnotationEntities) {
 		List<KpiAnnotationResponse> responsList = new ArrayList<>();
-		KpiAnnotationResponse  annotationResponse = null;
-		if(kpiAnnotationEntities != null && !kpiAnnotationEntities.isEmpty()) {
-			for(KpiAnnotationEntity entity:kpiAnnotationEntities) {
-			annotationResponse = new KpiAnnotationResponse();
-			annotationResponse.setAnnotationId(entity.getKpiAnnotationId());
-			annotationResponse.setUserId(getUserDetails(entity.getCreatedBy().trim()));
-			annotationResponse.setProcessLines(entity.getProcessLines());
-			annotationResponse.setAnnotationDate(Utility.dateToStringConvertor(entity.getAnnotationDate(), DashboardConstant.FORMAT));
-			annotationResponse.setDescription(entity.getDescription());
-			responsList.add(annotationResponse);
+		KpiAnnotationResponse annotationResponse = null;
+		if (kpiAnnotationEntities != null && !kpiAnnotationEntities.isEmpty()) {
+			for (KpiAnnotationEntity entity : kpiAnnotationEntities) {
+				annotationResponse = new KpiAnnotationResponse();
+				annotationResponse.setAnnotationId(entity.getKpiAnnotationId());
+				annotationResponse.setUserId(getUserDetails(entity.getCreatedBy().trim()));
+				annotationResponse.setProcessLines(entity.getProcessLines());
+				annotationResponse.setAnnotationDate(
+						Utility.dateToStringConvertor(entity.getAnnotationDate(), DashboardConstant.FORMAT));
+				annotationResponse.setDescription(entity.getDescription());
+				responsList.add(annotationResponse);
 			}
 		}
 		logger.info("Kpi annotation search response", responsList);
 		return responsList;
 	}
-	private String getUserDetails(String  loginId) {
-			return rgeUserEntityRepository.findByLoginId(loginId).getFirstName();
+
+	private String getUserDetails(String loginId) {
+		return rgeUserEntityRepository.findByLoginId(loginId).getFirstName();
 	}
 
 	@Override
 	public KpiAnnotationDateSerachRes kpiAnnotationDateRangeSerach(
 			KpiAnnotationDateRangeSerach kpiAnnotationDateRangeSerach) {
 		logger.info("Kpi annotation date range search", kpiAnnotationDateRangeSerach);
-		List<KpiAnnotationEntity>  annotationEntity = kpiAnnotationEntityRepository.getAnnotationByDateRange(
+		List<KpiAnnotationEntity> annotationEntity = kpiAnnotationEntityRepository.getAnnotationByDateRange(
 				CommonFunction.covertToInteger(kpiAnnotationDateRangeSerach.getKpiId()),
 				CommonFunction.covertToInteger(kpiAnnotationDateRangeSerach.getMillId()),
 				CommonFunction.covertToInteger(kpiAnnotationDateRangeSerach.getBuTypeId()),
 				Utility.stringToDateConvertor(kpiAnnotationDateRangeSerach.getStartDate(), DashboardConstant.FORMAT),
-		        Utility.stringToDateConvertor(kpiAnnotationDateRangeSerach.getEndDate(), DashboardConstant.FORMAT));
+				Utility.stringToDateConvertor(kpiAnnotationDateRangeSerach.getEndDate(), DashboardConstant.FORMAT));
 		KpiAnnotationDateSerachRes response = new KpiAnnotationDateSerachRes();
 		List<String> dates = new ArrayList<>();
-		if(annotationEntity != null && !annotationEntity.isEmpty()) {
-			for(KpiAnnotationEntity entity:annotationEntity) {
-				dates.add(Utility.dateToStringConvertor(entity.getAnnotationDate(),DashboardConstant.FORMAT));
+		if (annotationEntity != null && !annotationEntity.isEmpty()) {
+			for (KpiAnnotationEntity entity : annotationEntity) {
+				dates.add(Utility.dateToStringConvertor(entity.getAnnotationDate(), DashboardConstant.FORMAT));
 				response.setAnnotationDates(dates);
 			}
+		} else {
+			throw new RecordNotFoundException("Error while retrieving KPI Annotation for date range, From : "
+					+ Utility.stringToDateConvertor(kpiAnnotationDateRangeSerach.getStartDate(),
+							DashboardConstant.FORMAT)
+					+ " To : " + Utility.stringToDateConvertor(kpiAnnotationDateRangeSerach.getEndDate(),
+							DashboardConstant.FORMAT));
 		}
 		return response;
 	}
@@ -130,9 +145,10 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 			try {
 				kpiAnnotationEntity = kpiAnnotationEntityRepository
 						.findById(Integer.parseInt(annotationDeleteRequest.getAnnotationId())).orElse(null);
-			
+
 			} catch (Exception e) {
 				logger.error("Exception in fetching the annotation.", e);
+				throw new RecordNotFoundException("Record with Annotation Id "+annotationDeleteRequest.getAnnotationId()+" not found to delete");
 			}
 
 			if (kpiAnnotationEntity != null) {
@@ -143,10 +159,11 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService{
 						kpiAnnotationEntityRepository.save(kpiAnnotationEntity);
 					} catch (Exception e) {
 						logger.error("Exception in deleting the annotation.", e);
+						throw new RecordNotDeletedException("Error while deleting Annotation for Kpi Annotation Id : "+kpiAnnotationEntity.getKpiAnnotationId());
 					}
 				}
 			}
 		}
 	}
-	
+
 }

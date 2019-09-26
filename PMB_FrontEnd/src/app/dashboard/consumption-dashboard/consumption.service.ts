@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { ConsumptionModel } from '../../shared/models/consumption-model';
 import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { DatePipe } from '@angular/common';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ConsumptionService {
 
   consumptionKpiUrl = API_URL.apiURLs.CONSUMPTION_API_URL;
@@ -20,7 +19,7 @@ export class ConsumptionService {
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
     private datePipe: DatePipe,
-    private localStorageService: LocalStorageService) { }
+    private messageService: MessageService) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
@@ -49,7 +48,7 @@ export class ConsumptionService {
     searchKpiData.kpiName = kpiName;
     searchKpiData.kpiId = kpiId;
     searchKpiData.processLines = [];
-    searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
+    searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
       { name: "Daily", code: "0" } :
       { name: "Monthly", code: "1" };
 
@@ -68,37 +67,45 @@ export class ConsumptionService {
     consumptionRequest.kpiId = searchKpiData.kpiId;
     consumptionRequest.kpiCategoryId = kpiCategoryId;
     consumptionRequest.millId = this.statusService.common.selectedMill.millId;
-    consumptionRequest.countryId = this.statusService.common.selectedMill.countryId;
+    consumptionRequest.countryId = this.statusService.common.selectedMill.country.countryId;
     consumptionRequest.frequency = searchKpiData.frequency["code"];
     consumptionRequest.processLines = processLinesHeads;
 
     this.getDataforKpi(consumptionRequest).
-      subscribe((response: any) => {
-        let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
-        const consumptions = consumptionDetail.consumptions;
+      subscribe(
+        (response: any) => {
+          let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
+          const consumptions = consumptionDetail.consumptions;
 
-        if (consumptions != undefined) {
-          let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
+          if (consumptions != undefined) {
+            let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
 
-          if (consumption !== undefined && response.length > 0) {
-            let domains = [];
-            let processLines = this.statusService.common.processLines;
-            response[0].series.forEach(plData => {
-              let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
-              domains.push(legendColor);
-            });
-            consumption.colorScheme = { domain: domains };
-            consumption.data = response;
-            consumption.error = false;
+            if (consumption !== undefined && response.length > 0) {
+              let domains = [];
+              let processLines = this.statusService.common.processLines;
+              response[0].series.forEach(plData => {
+                let legendColor = processLines.find((line) => line.processLineCode === plData.name).legendColor;
+                domains.push(legendColor);
+              });
+              consumption.colorScheme = { domain: domains };
+              consumption.data = response;
+              consumption.error = false;
+            }
+
+            if (this.statusService.isSpin)
+              this.statusService.spinnerSubject.next(false);
           }
-          else {
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          let consumptionDetail = this.statusService.consumptionDetailMap.get(kpiCategoryId);
+          const consumptions = consumptionDetail.consumptions;
+
+          if (consumptions != undefined) {
+            let consumption = consumptions.find((con) => con.kpiId === consumptionRequest.kpiId);
             consumption.error = true;
           }
-
-          if (this.statusService.isSpin)
-            this.statusService.spinnerSubject.next(false);
-        }
-      });
+        });
   }
 
   public changeChartType(event: any, kpiId: number, kpiCategoryId: string) {

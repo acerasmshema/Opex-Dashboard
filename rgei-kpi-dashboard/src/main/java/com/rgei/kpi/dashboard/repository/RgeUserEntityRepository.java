@@ -16,7 +16,10 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +36,10 @@ public interface RgeUserEntityRepository extends JpaRepository<RgeUserEntity, Lo
 	
 	public RgeUserEntity findByFirstNameOrLastName(@Param("firstName") String firstName, @Param("lastName")String lastName);
 	
-
+	@Query("Select ru from RgeUserEntity ru, IN (ru.userRoleMills) AS urm WHERE urm.millId = :millId AND urm.status = :status Order By ru.firstName Asc")
+	public List<RgeUserEntity> findAllUsersByMillId(@Param("millId") Integer millId, @Param("status") Boolean status);
+	
+	public RgeUserEntity findByUserId(@Param("userId") Long userId);
+//	@Query("Select ru from RgeUserEntity ru WHERE ru.userId = :userId")
+//	public RgeUserEntity findByUserId(@Param("userId") Long userId);
 }

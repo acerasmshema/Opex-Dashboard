@@ -20,7 +20,6 @@ import { GaugeChartModule } from 'angular-gauge-chart';
 import { CommonModule, DatePipe } from '@angular/common';
 import { StorageServiceModule } from 'ngx-webstorage-service';
 import { TranslateService } from './shared/service/translate/translate.service';
-import { LoginComponent } from './shared/login/login.component';
 import { CoreModule } from './core/core.module';
 import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
 import { StatusService } from './shared/service/status.service';
@@ -32,10 +31,14 @@ import { ProductionService } from './dashboard/production-dashboard/production.s
 import { ConsumptionService } from './dashboard/consumption-dashboard/consumption.service';
 import { DialogService } from './core/dialog/dialog.service';
 import { SidebarService } from './core/sidebar/sidebar-service';
-import { LoginService } from './shared/login/login.service';
 import { BenchmarkService } from './benchmark/benchmark.service';
-import { HeaderService } from './core/header/header.service';
 import { DashboardService } from './dashboard/dashboard.service';
+import { LoginComponent } from './profile/login/login.component';
+import { LoginService } from './profile/login/login.service';
+import { UserDetailService } from './user-management/user-detail/user-detail.service';
+import { UserRoleService } from './user-management/user-role/user-role.service';
+import { ValidationService } from './shared/service/validation/validation.service';
+import { CommonService } from './shared/service/common/common.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,6 @@ import { DashboardService } from './dashboard/dashboard.service';
     BrowserModule,
     SidebarModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     CoreModule,
     CommonModule,
     GaugeChartModule,
@@ -70,7 +72,7 @@ import { DashboardService } from './dashboard/dashboard.service';
     }),
   ],
   providers: [
-    HeaderService,
+    CommonService,
     LoginService,
     DashboardService,
     ProductionService,
@@ -83,7 +85,11 @@ import { DashboardService } from './dashboard/dashboard.service';
     MessageService,
     LocalStorageService,
     TranslateService,
-    StatusService],
+    StatusService,
+    UserDetailService,
+    UserRoleService,
+    ValidationService
+  ],
   bootstrap: [AppComponent]
 })
 

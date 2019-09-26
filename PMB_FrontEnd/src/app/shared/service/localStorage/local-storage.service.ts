@@ -1,25 +1,28 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Router } from '@angular/router';
+import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
 
 @Injectable()
 export class LocalStorageService {
-     anotherTodolist = [];
+
      constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private router: Router) { }
 
-     public storeUserDetails(userName: string, userRole: string, loginId: string): void {
+     public storeUserDetails(userDetail: UserDetail): void {
+      localStorage.s
           const userDetails = {
-               userName: userName,
-               userRole: userRole,
-               loginId: loginId
+               userName: userDetail,
           };
           this.storage.set('userDetails', userDetails);
      }
 
-
-     public fetchUserRole(): string {
-          const userDetails = this.storage.get('userDetails');
-          return userDetails['userRole'];
+     public fetchUserDetail(): UserDetail {
+          if (this.storage.get('userDetails') == undefined) {
+               return null;
+          } else {
+               const userDetails = this.storage.get('userDetails');
+               return userDetails['userName'];
+          }
      }
 
      public removeUserDetail(): boolean {
@@ -33,23 +36,4 @@ export class LocalStorageService {
           return flag;
      }
 
-
-     public fetchUserName(): string {
-          if (this.storage.get('userDetails') == undefined) {
-               return null;
-          } else {
-               const userDetails = this.storage.get('userDetails');
-               return userDetails['userName'];
-          }
-     }
-
-     public fetchloginId(): string {
-          const userDetails = this.storage.get('userDetails');
-          return userDetails['loginId'];
-     }
-
-
-     public emptyLocalStorage(): void {
-          this.storage.remove('userDetails');
-     }
 }

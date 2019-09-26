@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MessageService, Panel } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { AnnotationDialog } from './annotation-dialog';
 import { DialogService } from './dialog.service';
@@ -11,6 +10,9 @@ import { ProductionService } from '../../dashboard/production-dashboard/producti
 import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
 
 @Component({
   selector: 'app-dialog',
@@ -28,6 +30,8 @@ export class DialogComponent implements OnInit, OnDestroy {
   public annotationDialog: AnnotationDialog;
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
+  public userDetailForm: FormGroup;
+  public userRoleForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -41,7 +45,8 @@ export class DialogComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private messageService: MessageService,
     private productionService: ProductionService,
-    private localStorageService: LocalStorageService) { }
+    private userRoleService: UserRoleService,
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.dialogSubscription = this.statusService.dialogSubject.
@@ -70,8 +75,26 @@ export class DialogComponent implements OnInit, OnDestroy {
         else if (dialogName === 'maintenanceDays') {
           this.openSettingIcon(data);
         }
+        else if (dialogName === 'addUser') {
+          if (this.userDetailForm !== undefined)
+            this.userDetailForm.reset();
+          this.userDetailForm = this.dialogService.createUserForm();
+        }
+        else if (dialogName === 'userRole') {
+          if (this.userRoleForm !== undefined)
+            this.userRoleForm.reset();
+          this.userRoleForm = this.dialogService.createUserRoleForm(data.userRole);
+        }
         this.dialogName = dialogName;
-      });
+      },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   annotationCollapse() {
@@ -92,13 +115,19 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.dialogService.fetchAnnotation(kpiData).
       subscribe((annotationsLines: any) => {
         this.annotationDialog.annotationsLines = annotationsLines;
-      });
+      },
+        (error: any) => {
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
+          }
+        });
   }
 
   public createAnnotation() {
     let isError = false;
     this.annotationDialog.annotationLines = "";
-    const loginId = this.localStorageService.fetchloginId();
     if (this.annotationDialog.annotationProcessLines.length === 0) {
       this.annotationDialog.isProcessLineError = true;
       this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
@@ -126,7 +155,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         annotationDate: this.annotationDialog.annotationDate,
         processLines: this.annotationDialog.annotationLines,
         description: this.annotationDialog.annotationDescription,
-        userLoginId: loginId
+        userLoginId: this.statusService.common.userDetail.userId
       };
 
       this.dialogService.createAnnotation(data).
@@ -146,7 +175,15 @@ export class DialogComponent implements OnInit, OnDestroy {
           } else {
             this.showMessage("error", "", CommonMessage.ERROR.ANNOTATION_ERROR);
           }
-        });
+        },
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
     }
   }
 
@@ -154,7 +191,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
-  public add() {
+  public onAddMaintenanceDays() {
     let isError = false;
     if (this.maintenanceDays.dateValue == undefined) {
       this.maintenanceDays.isDateError = true;
@@ -189,13 +226,21 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.productionService.saveMaintenanceDays(requestData).
         subscribe((response: any) => {
           if (response == null) {
-            this.showMessage("success", "", CommonMessage.SUCCESS.ADD_SUCCESS);
+            this.showMessage("success", "", "Maintenance date " + CommonMessage.SUCCESS.ADD_SUCCESS);
             this.maintenanceDays.textAreaValue = "";
             this.maintenanceDays.dateValue = null;
             this.viewMaintenanceDays();
             this.statusService.projectTargetSubject.next();
           }
-        });
+        },
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
+          });
     }
   }
 
@@ -208,8 +253,16 @@ export class DialogComponent implements OnInit, OnDestroy {
       subscribe(
         (response: any) => {
           this.maintenanceDays.maintanenceDayModel = response;
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
         }
-      )
+      );
   }
 
   public delMaintanenceDays() {
@@ -227,6 +280,14 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.showMessage("success", "", CommonMessage.SUCCESS.DELETE_SUCCESS);
           this.viewMaintenanceDays();
           this.statusService.projectTargetSubject.next();
+        },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
         });
   }
 
@@ -258,35 +319,51 @@ export class DialogComponent implements OnInit, OnDestroy {
               this.showMessage("success", "", CommonMessage.SUCCESS.TARGET_CHANGED_SUCCESS);
               this.statusService.projectTargetSubject.next();
             }
+          },
+          (error: any) => {
+            this.statusService.spinnerSubject.next(false);
+            if (error.status == "0") {
+              alert(CommonMessage.ERROR.SERVER_ERROR)
+            } else {
+              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+            }
           });
     }
   }
 
 
-  public onRowEditInit(rowData){  
+  public onRowEditInit(rowData) {
     return rowData.remarks;
   }
 
-  public onRowEditSave(rowData){
-    let rowData_ID =[];
-    let  rowDataIds = rowData.id.toString();
+  public onRowEditSave(rowData) {
+    let rowData_ID = [];
+    let rowDataIds = rowData.id.toString();
     rowData_ID.push(rowDataIds);
 
-    const datas ={
-     "ids":rowData_ID,
-     "remarks":rowData.remarks,
-     "updatedBy":1
-   }
+    const datas = {
+      "ids": rowData_ID,
+      "remarks": rowData.remarks,
+      "updatedBy": 1
+    }
 
     this.productionService.updateMaintenanceDaysRemarks(datas).subscribe((datas: any) => {
-    });
+      this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
+    },
+      (error: any) => {
+        this.statusService.spinnerSubject.next(false);
+        if (error.status == "0") {
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+        } else {
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        }
+      });
 
   }
 
-  public onRowEditCancel(){
+  public onRowEditCancel() {
     this.viewMaintenanceDays();
   }
-
 
   public openSettingIcon(maintenanceData: any) {
     this.viewMaintenanceDays();
@@ -300,50 +377,102 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onTargetDaysValidation() {
-    if (this.maintenanceDays.targetDays <= 0) {
-      this.maintenanceDays.targetDaysErrorMessage = CommonMessage.ERROR.TARGET_DAYS_GREATER_THAN_ZERO;
-      this.maintenanceDays.isTargetDaysError = true;
-    }
-    else {
-      this.maintenanceDays.isTargetDaysError = false;
-    }
+    this.validationService.targetDaysValidation(this.maintenanceDays);
   }
 
   onRemarksValidation() {
-    if (this.maintenanceDays.textAreaValue == undefined || this.maintenanceDays.textAreaValue == null || this.maintenanceDays.textAreaValue === '') {
-      this.maintenanceDays.remarksErrorMessage = CommonMessage.ERROR.REMARKS_ERROR;
-      this.maintenanceDays.isRemarksError = true;
-    }
-    else {
-      this.maintenanceDays.isRemarksError = false;
-    }
+    this.validationService.remarksValidation(this.maintenanceDays);
   }
 
   onDateValidation() {
-    const datePicker: any = document.getElementById("daterangepicker_input");
-    if (datePicker !== null && datePicker.value !== "" && this.maintenanceDays.isDateError) {
-      this.maintenanceDays.isDateError = false;
-    }
+    this.validationService.dateValidation(this.maintenanceDays);
   }
 
   onPorocessLineValidation() {
-    if (this.annotationDialog.annotationProcessLines.length === 0) {
-      this.annotationDialog.isProcessLineError = true;
-      this.annotationDialog.processLineErrorMessage = CommonMessage.ERROR.PROCESS_LINE_VALIDATION;
-    }
-    else {
-      this.annotationDialog.isProcessLineError = false;
-    }
+    this.validationService.processLineValidation(this.annotationDialog);
   }
 
   onDescriptionValidation() {
-    if (this.annotationDialog.annotationDescription == undefined || this.annotationDialog.annotationDescription == null || this.annotationDialog.annotationDescription === '') {
-      this.annotationDialog.descriptionErrorMessage = CommonMessage.ERROR.ADD_DESCRIPTION_VALIDATION;
-      this.annotationDialog.isDescriptionError = true;
+    this.validationService.descriptionValidation(this.annotationDialog);
+  }
+
+  onAddMillRole() {
+    this.dialogService.addMillRole(this.userDetailForm);
+  }
+
+  onDeleteMillRole(index: number) {
+    if (index > 0) {
+      let millRoles: any = this.userDetailForm.controls.millRoles;
+      millRoles.removeAt(index);
+      let millControls = millRoles.controls;
+      millControls[millControls.length - 1].value.selectedMill.enable();
+      millControls[millControls.length - 1].value.selectedUserRole.enable();
+    }
+  }
+
+  onCreateUser() {
+    if (this.userDetailForm.invalid)
+      return;
+    this.dialogService.createNewUser(this.userDetailForm);
+  }
+
+  onCountryChange(countryId: string) {
+    if (countryId !== '') {
+      let country = this.statusService.common.countryList.find(country => country.countryId === countryId);
+      this.userDetailForm.controls.selectedCountry.setValue(country);
+    } else {
+      this.userDetailForm.controls.selectedCountry.setValue(null);
+    }
+  }
+
+  onDepartmentChange(departmentId: string) {
+    if (departmentId !== '') {
+      const department = this.statusService.common.departmentList.find(department => department.departmentId === departmentId);
+      this.userDetailForm.controls.selectedDepartment.setValue(department);
+    } else {
+      this.userDetailForm.controls.selectedDepartment.setValue(null);
+    }
+  }
+
+  onMillChange(millId: string, millRole: FormGroup) {
+    if (!this.validationService.validateMillExist(this.userDetailForm, millId)) {
+      const mill = this.statusService.common.mills.find(mill => mill.millId === millId);
+      millRole.value.selectedMill.setValue(mill);
+      millRole.value.millError.setValue("");
     }
     else {
-      this.annotationDialog.isDescriptionError = false;
+      millRole.value.millError.setValue("2");
     }
+  }
+
+  onUserRoleChange(userRoleId: string, millRole: FormGroup) {
+    const userRole = this.statusService.common.activeUserRoles.find(role => role.userRoleId === userRoleId);
+    millRole.value.selectedUserRole.setValue(userRole);
+    millRole.value.roleError.setValue("");
+  }
+
+  onUserDetailCancel() {
+    this.userDetailForm.controls.show.setValue(false);
+  }
+
+  onUserRoleCancel() {
+    this.userRoleForm.controls.show.setValue(false);
+  }
+
+  onUserRoleSubmit() {
+    if (this.userRoleForm.invalid)
+      return;
+
+    if (this.userRoleForm.controls.operation.value === "Add") {
+      this.userRoleService.addUserRole(this.userRoleForm);
+    } else {
+      this.userRoleService.updateUserRole(this.userRoleForm);
+    }
+  }
+
+  onInputChange(value: any) {
+    let formControl: any = this.userDetailForm.get(value);
+    this.validationService.trimValue(formControl);
   }
 
   ngOnDestroy() {

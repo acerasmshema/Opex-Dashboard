@@ -28,6 +28,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.KPICategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.KpiTypeExtendedResponse;
@@ -40,13 +41,13 @@ import com.rgei.kpi.dashboard.util.KPICategoryConverter;
 public class KPICategoryServiceImpl implements KPICategoryService {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(KPICategoryServiceImpl.class);
-	
+
 	@Resource
 	private KPICategoryEntityRepository kpiCategoryEntityRepository;
-	
+
 	@Resource
 	private ProcessLineRepository processLineRepository;
-	
+
 	@Override
 	public List<KpiTypeResponse> getKPICategory(Integer kpiCategoryId) {
 		logger.info("Fetching KPI Category for id", kpiCategoryId);
@@ -57,9 +58,13 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 	@Override
 	public List<ProcessLinesResponse> getProcessLines(Integer kpiId, Integer millId) {
 		logger.info("Fetching Process Lines KPI id", kpiId);
-		boolean status=Boolean.TRUE;
-		List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId, status, millId);
-		return KPICategoryConverter.covertToProcessLineResponse(processLinesEntities);
+		boolean status = Boolean.TRUE;
+		try {
+			List<ProcessLineEntity> processLinesEntities = processLineRepository.findByKpiId(kpiId, status, millId);
+			return KPICategoryConverter.covertToProcessLineResponse(processLinesEntities);
+		} catch (Exception e) {
+			throw new RecordNotFoundException("Error while retrieving process lines not found for Kpi Id : "+kpiId+" and Mill Id : "+millId);
+		}
 	}
 
 	@Override
@@ -67,9 +72,17 @@ public class KPICategoryServiceImpl implements KPICategoryService {
 		logger.info("Fetching KPI Category for ids", kpiCategoryId);
 		List<KpiTypeEntity> kpiTypes = new ArrayList<>();
 		Collections.sort(kpiCategoryId);
-		for(String categoryId: kpiCategoryId) {
-		List<KpiTypeEntity> findByKpiCategoryId = kpiCategoryEntityRepository.findByKpiCategoryId(DailyKpiPulpConverter.covertToInteger(categoryId));
-		kpiTypes.addAll(findByKpiCategoryId);
+		for (String categoryId : kpiCategoryId) {
+			try {
+				List<KpiTypeEntity> findByKpiCategoryId = kpiCategoryEntityRepository
+						.findByKpiCategoryId(DailyKpiPulpConverter.covertToInteger(categoryId));
+				kpiTypes.addAll(findByKpiCategoryId);
+			} catch (Exception e) {
+				throw new RecordNotFoundException("Record not found for Category Id : " + categoryId);
+			}
+		}
+		if (kpiTypes.isEmpty()) {
+			throw new RecordNotFoundException("Records not found for Category Ids [] : " + kpiCategoryId);
 		}
 		return KPICategoryConverter.convertToResponse(kpiTypes);
 	}

@@ -1,0 +1,105 @@
+<div *ngIf="userDetailForm !== undefined" class="container" style="height: 83vh">
+  <div class="edit m-t-5">
+    <div class="card" style="background: #f7f7f7bd">
+      <div class="card-title text-center m-t-5">
+        <h3>Profile Settings</h3>
+      </div>
+      <div class="card-body">
+        <form [formGroup]='userDetailForm' (ngSubmit)="onEditProfileSave()">
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="edit-label required">First Name</label>
+              <div class="form-group">
+                <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50"
+                  (change)="onInputChange('firstName')">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched">
+                  <span *ngIf="userDetailForm.get('firstName').errors?.required" class="error-text">First name is
+                    required</span>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="edit-label required">Last Name</label>
+              <div class="form-group">
+                <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50"
+                  (change)="onInputChange('lastName')">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched">
+                  <span *ngIf="userDetailForm.get('lastName').errors?.required" class="error-text">Last name is
+                    required</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="edit-label required">Email</label>
+              <div class="form-group">
+                <input type="email" class="form-control edit-input" formControlName="email" maxlength="100">
+                <span class="help-block"
+                  *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
+                  <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
+                    Email is required</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
+                    Invalid email</span>
+                  <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
+                    Email already exists</span>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="edit-label">Phone</label>
+              <div class="form-group">
+                <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20"
+                  (change)="onInputChange('phone')">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <label class="edit-label">Address</label>
+              <div class="form-group">
+                <input type="text" class="form-control edit-input" formControlName="address" maxlength="200"
+                  (change)="onInputChange('address')">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="edit-label">Country</label>
+              <div class="form-group">
+                <select name="" id="" class="form-control edit-input" style="height: 40px;"
+                  (change)="onCountryChange($event.target.value)">
+                  <option class="edit-input" selected value="">Select Country</option>
+                  <option *ngFor="let country of userDetailForm.get('countryList')['controls']"
+                    [selected]="(userDetailForm.controls.country.value !== null && country.value.countryId === userDetailForm.controls.country.value.countryId)"
+                    class="edit-input" [value]="country.value.countryId">
+                    {{country.value.countryName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="edit-label">Department</label>
+              <div class="form-group">
+                <select name="" id="" class="form-control edit-input" style="height: 40px;"
+                  (change)="onDepartmentChange($event.target.value)">
+                  <option class="edit-input" selected value="">Select Department</option>
+                  <option *ngFor="let department of userDetailForm.get('departmentList')['controls']"
+                    [selected]="(userDetailForm.controls.department.value !== null && department.value.departmentId === userDetailForm.controls.department.value.departmentId)"
+                    class="edit-input" [value]="department.value.departmentId">
+                    {{department.value.departmentName}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group m-t-30">
+            <button type="submit" [disabled]="!userDetailForm.valid"
+              class="btn btn-primary btn-lg float-right">Submit</button>
+            <button type="button" (click)="onCancel()" class="btn btn-danger btn-lg float-right m-r-5">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

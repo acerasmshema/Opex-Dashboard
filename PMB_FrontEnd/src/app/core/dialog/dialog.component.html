@@ -127,8 +127,8 @@
                             </div>
                             <div class="col-md-3">
                                 <button [disabled]="maintenanceDays.isRemarksError || maintenanceDays.isDateError"
-                                    pButton type="button" label="Add" (click)="add()" class="ui-button-primary"
-                                    style="background-color: #007ad9;height:30px;"></button>
+                                    pButton type="button" label="Add" (click)="onAddMaintenanceDays()"
+                                    class="ui-button-primary" style="background-color: #007ad9;height:30px;"></button>
                             </div>
                         </div>
                     </div>
@@ -158,19 +158,19 @@
         <p-panel header="List of Maintenance Days " [collapsed]="maintenanceDays.collapsed" [toggleable]="true"
             (onBeforeToggle)="maintenanceCollapse()">
             <div class="container">
-                <div class="row" style="height: 260px;width:700px; " class="list_maintenances_remarks">
+                <div class="row" style="height: 400px;width:700px; " class="list_maintenances_remarks">
                     <div class="col-md-12">
                         <p-table [columns]="maintenanceDays.maintanenceDaysColumn"
                             [value]="maintenanceDays.maintanenceDayModel" selectionMode="multiple" editMode="row"
-                            scrollHeight="150px" [rows]="5" [paginator]="true" 
+                            scrollHeight="150px" [rows]="5" [paginator]="true"
                             [(selection)]="maintenanceDays.selectedMaintenanceDay" dataKey="id"
                             [tableStyle]="{'table-layout':'auto'}">
                             <ng-template pTemplate="header" let-columns>
-                                <tr >
+                                <tr>
                                     <th style="width: 3em;">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
-                                    <th *ngFor="let col of columns" style="text-align: center, max-width: 1em;">
+                                    <th *ngFor="let col of columns" style="text-align: center">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 2em; text-align:center;">
@@ -187,12 +187,11 @@
                                     <td class=".ng-invalid.ng-dirty text-center" style="width: 90px;">
                                         {{rowData.maintainceDates}}
                                     </td>
-                                    <td>
+                                    <td style="width: 400px;">
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <textarea [rows]="2" [cols]="30" [(ngModel)]="rowData.remarks"
-                                                    style="width:100%; max-width:300px;" pInputTextarea
-                                                    autoResize="autoResize"></textarea>
+                                                <textarea [rows]="2" maxlength="500" [cols]="40" [(ngModel)]="rowData.remarks"
+                                                    style="width:100%; max-width:300px;" pInputTextarea></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData.remarks}}
@@ -240,5 +239,253 @@
     </p-dialog>
 </div>
 
+<div *ngIf="dialogName === 'addUser'">
+    <form [formGroup]='userDetailForm' (ngSubmit)="onCreateUser()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '800px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userDetailForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header">Add New User</span> </p-header>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="edit-label required">First Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50" (change)="onInputChange('firstName')">
+                        <span class="error-text"
+                            *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
+                            First name is required
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">Last Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50" (change)="onInputChange('lastName')">
+                        <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
+                            && userDetailForm.get('lastName').errors?.required">
+                            Last name is required
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Email</label>
+                    <div class="form-group">
+                        <input type="email" class="form-control edit-input" formControlName="email" maxlength="100">
+                        <span class="help-block"
+                            *ngIf="!userDetailForm.get('email').valid && userDetailForm.get('email').touched">
+                            <span *ngIf="userDetailForm.get('email').errors?.required" class="error-text">
+                                Email is required</span>
+                            <span *ngIf="userDetailForm.get('email').errors?.email" class="error-text">
+                                Invalid email</span>
+                            <span *ngIf="userDetailForm.get('email').errors?.emailExit" class="error-text">
+                                Email already exists</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label">Phone</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20" (change)="onInputChange('phone')">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="edit-label">Address</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="address" maxlength="200" (change)="onInputChange('address')">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label">Country</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onCountryChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Country</option>
+                            <option *ngFor="let country of userDetailForm.controls.countryList.controls"
+                                class="edit-input" [value]="country.value.countryId"> {{country.value.countryName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Username</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-input" formControlName="username" maxlength="50">
+                        <span class="help-block"
+                            *ngIf="!userDetailForm.get('username').valid && userDetailForm.get('username').touched">
+                            <span *ngIf="userDetailForm.get('username').errors?.required" class="error-text">
+                                Username is required</span>
+                            <span *ngIf="userDetailForm.get('username').errors?.usernameExit" class="error-text">
+                                Username already exists</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label">Department</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onDepartmentChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Department</option>
+                            <option *ngFor="let department of userDetailForm.controls.departmentList.controls"
+                                [value]="department.value.departmentId" class="edit-input">
+                                {{department.value.departmentName}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Password</label>
+                    <div class="form-group">
+                        <input type="password" class="form-control edit-input" formControlName="password"
+                            autocomplete="new-password" maxlength="50">
+                        <span *ngIf="!userDetailForm.get('password').valid && userDetailForm.get('password').touched">
+                            <span *ngIf="userDetailForm.get('password').errors.required" class="error-text">
+                                Password is required</span>
+                            <span *ngIf="userDetailForm.get('password').hasError('minlength')" class="error-text">
+                                Password should be atleast 8 characters</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">Confirm Password</label>
+                    <div class="form-group">
+                        <input type="password" class="form-control edit-input" formControlName="confirmPassword"
+                            maxlength="50">
+                        <span
+                            *ngIf="!userDetailForm.get('confirmPassword').valid && userDetailForm.get('confirmPassword').touched">
+                            <span *ngIf="userDetailForm.get('confirmPassword').errors.required" class="error-text">
+                                Confirm Password is required</span>
+                            <span *ngIf="userDetailForm.get('confirmPassword').errors.mustMatch" class="error-text">
+                                Passwords must match</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table table-bordered" style="background: #f1f1f1;">
+                    <div class="table-title text-center">
+                        <span class="required role-head">Assign User Role</span>
+                        <span
+                            *ngIf="userDetailForm.controls.millRoles.controls.length < userDetailForm.controls.totalMills.value"
+                            class="float-right m-r-5" (click)="onAddMillRole()">
+                            <div #addMillRole style="display:inline-block;position:relative">
+                                <em class="fa fa-user-plus fa-2x" pTooltip="Add Mill Role" [appendTo]="addMillRole"
+                                    tooltipPosition="left"></em>
+                            </div>
+                        </span>
+                    </div>
+                    <thead class="m-t-5">
+                        <tr>
+                            <th class="text-center" style="width: 43%;">Mill</th>
+                            <th class="text-center" style="width: 43%;">User Role</th>
+                            <th class="text-center" style="width: 14%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let millRole of userDetailForm.controls.millRoles.controls; let i=index">
+                            <td style="width: 43%;">
+                                <select [disabled]="millRole.value.selectedMill.disabled"
+                                    [class]="(millRole.value.millError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
+                                    (change)="onMillChange($event.target.value, millRole)">
+                                    <option class="edit-input" value="" disabled selected>Select Mill</option>
+                                    <option *ngFor="let mill of millRole.value.mills.controls" class="edit-input"
+                                        [value]="mill.value.millId">
+                                        {{mill.value.millName}}</option>
+                                </select>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '1')">Mill is
+                                    required</span>
+                                <span class="error-text" *ngIf="(millRole.value.millError.value === '2')">Mill is
+                                    already selected</span>
+                            </td>
+                            <td style="width: 43%;">
+                                <select [disabled]="millRole.value.selectedUserRole.disabled"
+                                    [class]="(millRole.value.roleError.value !== '') ? 'form-control edit-input invalid' : 'form-control edit-input'"
+                                    (change)="onUserRoleChange($event.target.value, millRole)">
+                                    <option class="edit-input" value="" disabled selected>Select User Role</option>
+                                    <option *ngFor="let userRole of millRole.value.userRoles.controls"
+                                        [value]="userRole.value.userRoleId" class="edit-input">
+                                        {{userRole.value.roleName}}
+                                    </option>
+                                </select>
+                                <span class="error-text" *ngIf="(millRole.value.roleError.value !== '')">User role is
+                                    required</span>
+                            </td>
+                            <td class="text-center">
+                                <a (click)='onDeleteMillRole(i)'>
+                                    <div #deleteMillRole style="display:inline-block;position:relative">
+                                        <i class="fa fa-trash" [style.color]="(i === 0) ? '#9c9999': 'red'"
+                                            pTooltip="Delete" tooltipPosition="left" [appendTo]="deleteMillRole"></i>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!userDetailForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onUserDetailCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'userRole'">
+    <form [formGroup]='userRoleForm' (ngSubmit)="onUserRoleSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="userRoleForm.controls.show.value" [blockScroll]="true" [draggable]="true" [maximizable]="true">
+            <p-header> <span class="dialog-header">{{userRoleForm.controls.operation.value}} User Role</span>
+            </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Role Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-role" formControlName="roleName">
+                        <span class="help-block"
+                            *ngIf="!userRoleForm.get('roleName').valid && userRoleForm.get('roleName').touched">
+                            <span *ngIf="userRoleForm.get('roleName').errors?.required" class="error-text">
+                                Role name is required</span>
+                            <span *ngIf="userRoleForm.get('roleName').errors?.userRoleExit" class="error-text">
+                                Role name already exists</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label">Description</label>
+                    <div class="form-group">
+                        <textarea type="text" class="form-control edit-role" rows="4"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="statusSwitch" formControlName="active">
+                        <label class="custom-control-label edit-label" for="statusSwitch">Active</label>
+                    </div>
+                    <span *ngIf="userRoleForm.controls.userExistError.value !== ''" class="error-text">
+                        {{userRoleForm.controls.userExistError.value}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!userRoleForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onUserRoleCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
 
 <p-toast [baseZIndex]="12000" [style]="{marginTop: '20px'}"></p-toast>

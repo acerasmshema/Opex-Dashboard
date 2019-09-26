@@ -18,8 +18,10 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.spinnerSubscription = this.statusService.spinnerSubject.
       subscribe((isSpin: boolean) => {
-        this.isSpin = isSpin;
-        this.statusService.isSpin = isSpin;
+        setTimeout(() => {
+          this.isSpin = isSpin;
+          this.statusService.isSpin = isSpin;
+        }, 1);
       });
   }
 

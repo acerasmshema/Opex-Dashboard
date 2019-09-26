@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { LocalStorageService } from '../../shared/service/localStorage/local-storage.service';
 import { StatusService } from '../../shared/service/status.service';
 import { Subscription } from 'rxjs';
 import { SidebarRequest } from './sidebar-request';
@@ -9,9 +8,11 @@ import { SearchKpiData } from '../../shared/models/search-kpi-data';
 import { SidebarService } from './sidebar-service';
 import { ConsumptionService } from '../../dashboard/consumption-dashboard/consumption.service';
 import { ConsumptionDetiail } from '../../dashboard/consumption-dashboard/consumption-detail';
-import { HeaderService } from '../header/header.service';
 import { BenchmarkService } from '../../benchmark/benchmark.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -30,54 +31,61 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     private consumptionService: ConsumptionService,
     private benchmarkService: BenchmarkService,
-    private localStorageService: LocalStorageService,
-    private headerService: HeaderService,
-    private statusService: StatusService) {
+    private commonService: CommonService,
+    private validationService: ValidationService,
+    private statusService: StatusService,
+    private messageService: MessageService) {
   }
 
   ngOnInit() {
     this.sidebarSubscription = this.statusService.sidebarSubject.
-      subscribe((sidebarRequestData: SidebarRequest) => {
-        if (sidebarRequestData.isShow) {
-          if (sidebarRequestData.type === "dashboard") {
-            this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
+      subscribe(
+        (sidebarRequestData: SidebarRequest) => {
+          if (sidebarRequestData.isShow) {
+            if (sidebarRequestData.type === "dashboard") {
+              this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
+              this.commonService.getAllBuType(this.sidebarForm);
 
-            let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
-            if (kpiTypes === undefined || kpiTypes === null)
-              this.getKpiDetails(sidebarRequestData.kpiCategoryId);
-            else
-              this.sidebarForm.kpiTypes = kpiTypes;
+              let kpiTypes = this.statusService.kpiCategoryMap.get(sidebarRequestData.kpiCategoryId);
+              if (kpiTypes === undefined || kpiTypes === null)
+                this.getKpiDetails(sidebarRequestData.kpiCategoryId);
+              else
+                this.sidebarForm.kpiTypes = kpiTypes;
 
-            const consumptionDetail = this.statusService.consumptionDetailMap.get(sidebarRequestData.kpiCategoryId);
-            if (consumptionDetail !== undefined && consumptionDetail.searchKpiData !== undefined) {
-              this.searchKpiData = consumptionDetail.searchKpiData;
+              const consumptionDetail = this.statusService.consumptionDetailMap.get(sidebarRequestData.kpiCategoryId);
+              if (consumptionDetail !== undefined && consumptionDetail.searchKpiData !== undefined) {
+                this.searchKpiData = consumptionDetail.searchKpiData;
+              }
+              else {
+                this.searchKpiData = new SearchKpiData();
+                this.searchKpiData.frequency = (this.statusService.common.selectedRole.roleName === "MillOps") ?
+                  this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
+                  this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+              }
             }
             else {
+              this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
+              this.sidebarService.getMills(this.sidebarForm);
+              this.commonService.getAllBuType(this.sidebarForm);
+              this.getBenchmarkKpiDetail();
               this.searchKpiData = new SearchKpiData();
-              this.searchKpiData.frequency = (this.localStorageService.fetchUserRole() == "Mills Operation") ?
-                this.sidebarForm.frequencies.find(frequency => frequency.name === 'Daily') :
-                this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+              this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
+
+              setTimeout(() => {
+                this.toggleCollapsed();
+              }, 20);
             }
+            this.sidebarForm.type = sidebarRequestData.type;
           }
-          else {
-            this.onGetAllMills();
-            this.onGetAllBuType();
-            this.getBenchmarkKpiDetail();
-            this.sidebarForm = this.sidebarService.getBenchmarkSidebarForm(sidebarRequestData);
-            this.searchKpiData = new SearchKpiData();
-            this.searchKpiData.frequency = this.sidebarForm.frequencies.find(frequency => frequency.name === 'Monthly');
 
-            setTimeout(() => {
-              this.toggleCollapsed();
-            }, 20);
-          }
-          this.sidebarForm.type = sidebarRequestData.type;
-        }
+          let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
+          this.statusService.sidebarSizeSubject.next(sidebarSize);
+          this.showSidebar = sidebarRequestData.isShow;
 
-        let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
-        this.statusService.sidebarSizeSubject.next(sidebarSize);
-        this.showSidebar = sidebarRequestData.isShow;
-      });
+          setTimeout(() => {
+            this.commonService.setDropDownFont();
+          }, 100);
+        });
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled())
@@ -92,7 +100,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarService.getKpiTypes(requestData)
       .subscribe((kpiTypes: any) => {
         this.sidebarForm.kpiTypes = kpiTypes;
-      });
+      },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   getKpiDetails(kpiCategoryId: any) {
@@ -103,7 +119,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((kpiTypes: any) => {
         this.statusService.kpiCategoryMap.set(kpiCategoryId, kpiTypes);
         this.sidebarForm.kpiTypes = kpiTypes;
-      });
+      },
+        (error: any) => {
+          this.statusService.spinnerSubject.next(false);
+          if (error.status == "0") {
+            alert(CommonMessage.ERROR.SERVER_ERROR)
+          } else {
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+          }
+        });
   }
 
   toggleCollapsed() {
@@ -146,7 +170,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       else {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
-  
+
         if (this.searchKpiData.kpiTypes === undefined || this.searchKpiData.kpiTypes.length === 0) {
           this.searchKpiData.kpiTypes = this.sidebarForm.kpiTypes;
         }
@@ -171,7 +195,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.millsErrorMessage = CommonMessage.ERROR.MILLS_SELECT;
         isError = true;
       }
-      if(!isError) {
+      if (!isError) {
         this.statusService.spinnerSubject.next(true);
         this.sidebarForm.dateError = false;
         this.sidebarForm.millsError = false;
@@ -187,45 +211,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  onGetAllBuType() {
-    if (this.statusService.common.buTypes.length === 0) {
-      this.headerService.getAllBuType().
-        subscribe((buTypes: any) => {
-          this.statusService.common.buTypes = buTypes;
-          this.sidebarForm.buisnessUnits = buTypes;
-        });
-    }
-  }
-
-  onGetAllMills() {
-    if (this.statusService.common.mills.length === 0) {
-      const requestData = {
-        countryIds: "1,2"
-      }
-      this.headerService.getAllMills(requestData).
-        subscribe((mills: any) => {
-          this.statusService.common.mills = mills;
-          this.sidebarForm.mills = mills;
-        });
-    }
-  }
-
   onMillValidation() {
-    let mills = this.searchKpiData.mills;
-    if (mills !== undefined) {
-      if (mills.length < 2 && !this.sidebarForm.millsError) {
-        this.sidebarForm.millsError = true;
-      } else {
-        this.sidebarForm.millsError = false;
-      }
-    }
+    this.validationService.millValidation(this.searchKpiData, this.sidebarForm);
   }
 
   onDateValidation() {
-    const datePicker: any = document.getElementById("daterangepicker_input");
-    if (datePicker !== null && datePicker.value !== "" && this.sidebarForm.dateError) {
-      this.sidebarForm.dateError = false;
-    }
+    this.validationService.sidebarDateValidation(this.sidebarForm);
   }
 
   ngOnDestroy() {

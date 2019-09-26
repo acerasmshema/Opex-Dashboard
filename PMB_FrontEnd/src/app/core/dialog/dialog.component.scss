@@ -1,13 +1,80 @@
 .save-button {
-    margin-left: 50px;
-    height: 30px;
-}
-
-.error-text {
-    font-weight: 500;
-    color: red;
+  margin-left: 50px;
+  height: 30px;
 }
 
 body .ui-table .ui-table-thead > tr > th {
-    max-width: 50px;
+  max-width: 50px;
+}
+
+.edit-label {
+  font-size: 9pt;
+  font-weight: 600;
+}
+
+.edit-input {
+  margin-top: -5px;
+  font-size: 10pt;
+  height: 30px;
+}
+
+.fa-edit {
+  font-size: 23px;
+  color: blue;
+}
+
+.fa-trash {
+  font-size: 23px;
+  color: red;
+}
+
+.ui-dropdown-label .ui-inputtext {
+  font-size: 10pt;
+}
+
+tbody {
+  display: block;
+  height: 100px;
+  overflow: auto;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.dialog-header {
+  font-size: 12pt;
+  padding-left: 41%;
+}
+
+.role-head {
+  font-size: 10pt;
+  font-weight: 500;
+}
+
+.error-text {
+  font-weight: 400;
+  color: red;
+  font-size: 9pt;
+}
+
+.invalid {
+  border: 1px solid red;
+}
+
+.edit-role {
+  font-size: 11pt;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  height: 13px;
+  width: 22px;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  opacity: 0.3;
 }
