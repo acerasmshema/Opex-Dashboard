@@ -9,7 +9,7 @@ export class ApiCallService {
   public callGetAPIwithOutData(url: string) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*'
       })
@@ -20,7 +20,7 @@ export class ApiCallService {
   public callGetAPIwithData(url: string, data: object) {
 
     const mergedHeaders = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
       'Accept': 'application/json',
       'Access-Control-Allow-Origin': '*',
       ...data
@@ -34,7 +34,7 @@ export class ApiCallService {
   public callPutAPIwithData(url: string, data: object) {
 
     const mergedHeaders = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
       'Accept': 'application/json',
       'Access-Control-Allow-Origin': '*'
     };
@@ -47,7 +47,7 @@ export class ApiCallService {
   public callAPIwithData(url: string, data: any) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*'
       })

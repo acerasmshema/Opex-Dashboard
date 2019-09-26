@@ -243,6 +243,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		logger.info("Inside service call to encrypt password for all users");
 		List<RgeUserEntity> users = rgeUserEntityRepository.findAll();
 		for (RgeUserEntity usr : users) {
+			
 			String passwordString = usr.getLoginId() + "_" + usr.getUserPassword();
 			String encodedSHAString = "";
 			try {
@@ -258,6 +259,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			} catch (Exception e) {
 				throw new RecordNotUpdatedException("Error while changing password for user Id : " + usr.getUserId());
 			}
+			
 		}
 	}
 }
