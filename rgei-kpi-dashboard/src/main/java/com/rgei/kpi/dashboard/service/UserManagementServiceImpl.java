@@ -42,7 +42,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Resource
 	ValidationService validationService;
-	
+
 	@Resource
 	CountryRepository countryRepository;
 
@@ -71,10 +71,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<UserRole> getUserRolesByStatus(Boolean activeRoles) {
 		logger.info("Inside service call to get roles by status : " + activeRoles);
-		
+
 		List<UserRoleEntity> entities = null;
 		if (Objects.nonNull(activeRoles) && activeRoles) {
-			entities = userRoleRepository.findAllByStatusAndAceAdminOrderByRoleNameAsc(activeRoles,Boolean.FALSE);
+			entities = userRoleRepository.findAllByStatusAndAceAdminOrderByRoleNameAsc(activeRoles, Boolean.FALSE);
 		} else {
 			entities = userRoleRepository.findAllByAceAdminOrderByRoleNameAsc(Boolean.FALSE);
 		}
@@ -100,7 +100,8 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public void updateUserRole(UserRole userRole) {
 		logger.info("Inside service call to update user role for request : " + userRole);
 		UserRoleEntity updateEntity = null;
-		Optional<UserRoleEntity> entity = Optional.ofNullable(userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId())));
+		Optional<UserRoleEntity> entity = Optional
+				.ofNullable(userRoleRepository.findByRoleId(Long.parseLong(userRole.getUserRoleId())));
 		if (entity.isPresent()) {
 			updateEntity = UserManagementUtility.updateFetchedUserRoleEntity(userRole, entity.get());
 		} else {
@@ -191,7 +192,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public void changePassword(ChangePasswordRequest changePasswordRequest) throws NoSuchAlgorithmException {
 		logger.info("Inside service call to change password");
-		String encodedSHAString = "";
 		RgeUserEntity rgeUserEntity = null;
 		try {
 			rgeUserEntity = rgeUserEntityRepository.findByUserId(Long.parseLong(changePasswordRequest.getUserId()));
@@ -199,19 +199,21 @@ public class UserManagementServiceImpl implements UserManagementService {
 			throw new RecordNotFoundException("No record found for user Id : " + changePasswordRequest.getUserId());
 		}
 		if (rgeUserEntity != null) {
-			Boolean isCurrentPasswordSame = validateCurrentPassword(changePasswordRequest, encodedSHAString, rgeUserEntity);
-			if(isCurrentPasswordSame) {
-			String newPassword = UserManagementUtility.encryptPassword(changePasswordRequest, rgeUserEntity);
-			rgeUserEntity.setUserPassword(newPassword);
-			rgeUserEntity.setUpdatedOn(new Date());
-			rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
-			try {
-				rgeUserEntityRepository.save(rgeUserEntity);
-			} catch (Exception e) {
-				throw new RecordNotUpdatedException("Error while changing password for user Id : " + changePasswordRequest.getUserId());
-			}
-			}else {
-				throw new RecordNotFoundException("Current password don't match for user id: " + changePasswordRequest.getUserId());
+			Boolean isCurrentPasswordSame = validateCurrentPassword(changePasswordRequest, rgeUserEntity);
+			if (isCurrentPasswordSame) {
+				String newPassword = UserManagementUtility.encryptPassword(changePasswordRequest, rgeUserEntity);
+				rgeUserEntity.setUserPassword(newPassword);
+				rgeUserEntity.setUpdatedOn(new Date());
+				rgeUserEntity.setUpdatedBy(rgeUserEntity.getLoginId());
+				try {
+					rgeUserEntityRepository.save(rgeUserEntity);
+				} catch (Exception e) {
+					throw new RecordNotUpdatedException(
+							"Error while changing password for user Id : " + changePasswordRequest.getUserId());
+				}
+			} else {
+				throw new RecordNotFoundException(
+						"Current password don't match for user id: " + changePasswordRequest.getUserId());
 			}
 		} else {
 			throw new RecordNotFoundException("No record found for user Id : " + changePasswordRequest.getUserId());
@@ -219,27 +221,29 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	}
 
-	private Boolean validateCurrentPassword(ChangePasswordRequest changePasswordRequest, String encodedSHAString,
-			RgeUserEntity rgeUserEntity) throws NoSuchAlgorithmException {
+	private Boolean validateCurrentPassword(ChangePasswordRequest changePasswordRequest, RgeUserEntity rgeUserEntity)
+			throws NoSuchAlgorithmException {
+		String newPassword = null;
 		Boolean isCurrentPasswordSame = false;
 		String decodedString = new String(Base64.getDecoder().decode(changePasswordRequest.getCurrentPassword()));
-		String passwordString = rgeUserEntity.getLoginId()+"_"+decodedString;
+		String passwordString = rgeUserEntity.getLoginId() + "_" + decodedString;
 		try {
-			encodedSHAString = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
+			newPassword = UserManagementUtility.toHexString(UserManagementUtility.getSHA(passwordString));
 		} catch (Exception e) {
 			throw new NoSuchAlgorithmException();
 		}
-		if(encodedSHAString.equals(rgeUserEntity.getUserPassword())){
-			isCurrentPasswordSame= true;
+		if (newPassword.equals(rgeUserEntity.getUserPassword())) {
+			isCurrentPasswordSame = true;
 		}
 		return isCurrentPasswordSame;
 	}
-	
+
 	@Override
 	public void encryptPasswordForAllUsers() throws NoSuchAlgorithmException {
 		logger.info("Inside service call to encrypt password for all users");
 		List<RgeUserEntity> users = rgeUserEntityRepository.findAll();
 		for (RgeUserEntity usr : users) {
+			
 			String passwordString = usr.getLoginId() + "_" + usr.getUserPassword();
 			String encodedSHAString = "";
 			try {
@@ -255,6 +259,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			} catch (Exception e) {
 				throw new RecordNotUpdatedException("Error while changing password for user Id : " + usr.getUserId());
 			}
+			
 		}
 	}
 }
