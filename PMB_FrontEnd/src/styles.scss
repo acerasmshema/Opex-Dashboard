@@ -1,38 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
-/* Application-wide Styles */
 html {
   height: 100%;
   width: 100%;
 }
-h1 {
-  color: #369;
-  font-size: 250%;
-}
-h2,
-h3 {
-  color: rgb(8, 8, 8);
-  font-weight: lighter;
-}
-body {
-  margin: 2em;
-  font-size: 12px;
-}
-body,
-input[text],
-button {
-  color: rgb(10, 10, 10);
-  font-size: 12px;
-  /* Full height */
-  height: 100%;
 
-  /* Center and scale the image nicely */
-  /*background-position: center;*/
-  background-repeat: no-repeat;
-  background-size: cover;
+h1, h2, h3, h4, h5, h6 {
+  color: black !important;
 }
-/* everywhere else */
+
 * {
-  font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+  font-family: Arial, sans-serif, Helvetica, Garamond;
   font-size: 12px;
 }
 
@@ -131,6 +107,10 @@ button {
   margin-top: 5px;
 }
 
+.m-t-10 {
+  margin-top: 10px;
+}
+
 .m-t-30 {
   margin-top: 30px;
 }
@@ -143,9 +123,15 @@ button {
   margin-bottom: 10px;
 }
 
+.gauge-center {
+  text-align: -webkit-center;
+  font-weight: 500;
+}
+
 .dashboard-container {
   height: 78.2vh;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .fa-commenting {
@@ -178,6 +164,10 @@ button {
   font-size: 5px;
 }
 
+.font-11 {
+  font-size: 11pt;
+}
+
 .font-20 {
   font-size: 20px;
 }
@@ -188,4 +178,12 @@ input.ng-invalid.ng-touched {
 
 .ui-tabview-panels {
   padding: 0 !important;
+}
+
+.card-color {
+  background: #f7f7f7bd !important;
+}
+
+body .ui-dialog .ui-dialog-content {
+  overflow-x: hidden;
 }

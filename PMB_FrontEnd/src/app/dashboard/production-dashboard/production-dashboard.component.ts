@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { ConsumptionTable } from '../consumption-dashboard/consumption-table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-production-dashboard',
@@ -42,10 +43,22 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   private annualChartRendered: boolean;
   private monthlyChartRendered: boolean;
   private productionChartRendered: boolean;
+  private productionYDaySubscription: Subscription;
+  private projectedTargetSubscription: Subscription;
+  private productionYTDSubscription: Subscription;
+  private stackBarChartSubscription: Subscription;
+  private stackAreaChartSubscription: Subscription;
+  private productionLinesYDaySubscription: Subscription;
+  private selProdLineSubscription: Subscription;
+  private allProdLineSubscription: Subscription;
+  private selProdLinesDateSubscription: Subscription;
+  private annotationDateSubscription: Subscription;
+  private dataForGridSubscription: Subscription;
 
   constructor(private statusService: StatusService,
     private productionService: ProductionService,
     private datePipe: DatePipe,
+    private commonService: CommonService,
     private messageService: MessageService) {
   }
 
@@ -57,15 +70,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (dashboardName === 'production') {
           this.searchData(false);
         }
-      },
-        (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
-        });
+      });
 
     this.projectTargetSubscription = this.statusService.projectTargetSubject.
       subscribe(() => {
@@ -115,7 +120,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.yesterdayProductionData = new ProductionLine();
     this.yesterdayProductionData.millName = this.statusService.common.selectedMill.millName;
     const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getProductionYDayData(data).
+    this.productionYDaySubscription = this.productionService.getProductionYDayData(data).
       subscribe((data: any) => {
         let valueArr = data['range'].split(',');
         let colorArr = data['colorRange'].split(',');
@@ -134,12 +139,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.yesterdayProductionData.show = true;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -151,7 +151,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       kpiId: '1',
       annualTargetRequired: '' + isAnnualTargetRequired
     };
-    this.productionService.getProjectedTarget(requestData).
+    this.projectedTargetSubscription = this.productionService.getProjectedTarget(requestData).
       subscribe((responseData: any) => {
         this.annualChart.targetDays = responseData['targetDays'];
         this.annualChart.targetValue = responseData['projectedTarget'].toLocaleString('en-us');
@@ -160,15 +160,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         if (isAnnualTargetRequired) {
           this.annualChart.annualTarget = responseData['annualTarget'].toLocaleString('en-us');
         }
-
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -183,19 +177,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.annualChart.annualData = [];
 
     const requestData = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
-    this.productionService.getProductionYTDTargetData(requestData).
-      subscribe((targetData: any) => {
-        this.annualChart.annualData = targetData;
-        this.annualChartRendered = true;
-        this.enableTabs();
-      },
+    this.productionYTDSubscription = this.productionService.getProductionYTDTargetData(requestData).
+      subscribe(
+        (targetData: any) => {
+          this.annualChart.annualData = targetData;
+          this.annualChartRendered = true;
+          this.enableTabs();
+        },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -213,29 +203,20 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     let frequency = this.productionEnquiryData.selectedValue['code'];
     let productionRequest = this.getProductionRequest(startDate, endDate, [], frequency);
 
-    this.productionService.getStackBarChartData(productionRequest).
+    this.stackBarChartSubscription = this.productionService.getStackBarChartData(productionRequest).
       subscribe((data: any) => {
         this.monthlyChart.stackBar = data;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
-    this.productionService.getStackAreaChartData(productionRequest).
-      subscribe((data: any) => {
-        this.monthlyChart.stackArea = data;
-      },
+    this.stackAreaChartSubscription = this.productionService.getStackAreaChartData(productionRequest).
+      subscribe(
+        (data: any) => {
+          this.monthlyChart.stackArea = data;
+        },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -263,7 +244,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       this.prodLines.push(prodLine);
     }
 
-    this.productionService.getAllproductionLinesYDayData(productionRequest).
+    this.productionLinesYDaySubscription = this.productionService.getAllproductionLinesYDayData(productionRequest).
       subscribe((data: any) => {
         if (data !== "e") {
           let gauges = data.dailyKpiPulp;
@@ -286,12 +267,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         }
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
 
     this.getAllProductionLinesDateRangeData(this.startDate, this.endDate);
@@ -303,9 +279,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       prodLine.productionLineData = [];
     });
 
-    this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
+    this.selProdLineSubscription = this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((processLines: any) => {
-        this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
+        this.allProdLineSubscription = this.productionService.getAllProductionLinesDateRangeDataTarget(productionRequest).
           subscribe((plTargetData: any) => {
             for (let index = 0; index < plTargetData.length; index++) {
               let prodLine = this.prodLines[index]
@@ -326,19 +302,14 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             });
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
   public getSelectedProductionLinesDateRangeData(startDate: string, endDate: string, processLines: any, frequency: any, isGridRequest: boolean) {
 
     let productionRequest = this.getProductionRequest(startDate, endDate, processLines, frequency);
-    this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
+    this.selProdLinesDateSubscription = this.productionService.getSelectedProductionLinesDateRangeData(productionRequest).
       subscribe((prodLineResponse: any) => {
         this.producionLineForm.processLines = this.statusService.common.processLines;
         this.prodLineChart = new ProductionLine();
@@ -365,7 +336,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.prodLineChart.colorScheme = { domain: domains };
 
         if (productionRequest.frequency === "0") {
-          this.productionService.getAnnotationDates(productionRequest).
+          this.annotationDateSubscription = this.productionService.getAnnotationDates(productionRequest).
             subscribe((annotationsData: any) => {
               this.annotationDates = annotationsData['annotationDates'];
               this.prodLineChart.productionLineData = prodLineResponse;
@@ -394,12 +365,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -553,7 +519,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
       millId: this.statusService.common.selectedMill.millId
     };
 
-    this.productionService.getDataForGrid(requestData).
+    this.dataForGridSubscription = this.productionService.getDataForGrid(requestData).
       subscribe((thresholdTarget: ConsumptionTable[]) => {
         thresholdTarget[0].series.forEach(processLine => {
           const target = processLine.target.split(',')[0].split(':')[1];
@@ -561,12 +527,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         });
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
 
   }
@@ -574,5 +535,28 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.updateChartSubscription.unsubscribe();
     this.projectTargetSubscription.unsubscribe();
+
+    if (this.productionYDaySubscription !== undefined)
+      this.productionYDaySubscription.unsubscribe();
+    if (this.projectedTargetSubscription !== undefined)
+      this.projectedTargetSubscription.unsubscribe();
+    if (this.productionYTDSubscription !== undefined)
+      this.productionYTDSubscription.unsubscribe();
+    if (this.stackBarChartSubscription !== undefined)
+      this.stackBarChartSubscription.unsubscribe();
+    if (this.stackAreaChartSubscription !== undefined)
+      this.stackAreaChartSubscription.unsubscribe();
+    if (this.productionLinesYDaySubscription !== undefined)
+      this.productionLinesYDaySubscription.unsubscribe();
+    if (this.selProdLineSubscription !== undefined)
+      this.selProdLineSubscription.unsubscribe();
+    if (this.allProdLineSubscription !== undefined)
+      this.allProdLineSubscription.unsubscribe();
+    if (this.selProdLinesDateSubscription !== undefined)
+      this.selProdLinesDateSubscription.unsubscribe();
+    if (this.annotationDateSubscription !== undefined)
+      this.annotationDateSubscription.unsubscribe();
+    if (this.dataForGridSubscription !== undefined)
+      this.dataForGridSubscription.unsubscribe();
   }
 }

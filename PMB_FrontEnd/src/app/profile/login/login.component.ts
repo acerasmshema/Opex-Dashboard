@@ -6,8 +6,9 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { LoginService } from './login.service';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { UserDetail } from 'src/app/setup/user-management/user-detail/user-detail.model';
 import { LocalStorageService } from 'src/app/shared/service/localStorage/local-storage.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,
     private statusService: StatusService,
     private messageService: MessageService,
+    private commonService: CommonService,
     private localStorageService: LocalStorageService,
     private loginService: LoginService) {
   }
@@ -57,12 +59,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl("home/dashboard");
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         }
       );
   }

@@ -1,0 +1,222 @@
+<div class="container-fluid" style="padding: 0">
+  <p-tabView>
+    <p-tabPanel header="Consumption Configuration" leftIcon="fa fa-sun-o" selected="true">
+      <ng-template pTemplate="consumption-configuration">
+        <div class="dashboard-container" style="height: 83.7vh;">
+          <div class="row card-color">
+            <div class="col-md-9">
+              <div class="form-inline pull-right p-t-5 m-b-5">
+                <label class="m-r-5">Campaign : </label>
+                <select class="form-control setup-select">
+                  <option disabled value="" selected>Select Campaign</option>
+                  <option selected value="">2019 Campaign (01/01/2019 - 31-12-2019) Pulp</option>
+                  <option selected value="">Summer (01/05-2019 - 01/08-2019) Pulp</option>
+                  <option selected value="">Winter (09/05-2019 - 01/01-2020) Pulp</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-inline p-t-5 m-b-5">
+                <label class="m-r-5">KPI Type : </label>
+                <select class="form-control setup-select col-9">
+                  <option disabled value="">Select KPI Type</option>
+                  <option selected value="">Steam</option>
+                  <option value="">Wood</option>
+                  <option value="">NaOh</option>
+                  <option value="">Water</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-10">
+            <div class="col-md-3" style="padding-left: 45px;">
+              <div class="card card-color">
+                <div class="card-body">
+                  <ul>
+                    <li>
+                      <h5 style="color: green">FL : Fiber Line</h5>
+                    </li>
+                    <li>
+                      <h5 style="color: red">PL : Process Line</h5>
+                    </li>
+                    <li>
+                      <h5 style="color: purple">PCD : Pin Chip Digester</h5>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card card-color">
+                <div class="card-body" style="padding-bottom: 5px;">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="card">
+                        <div class="card-title text-center m-t-5">
+                          <h3>Steam - LP <span style="color: red; font-size: 12pt;">(t/ADt)</span></h3>
+                        </div>
+                        <div class="card-body">
+                          <form>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL1 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="0">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL2 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="300">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL3 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="1100">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PCD : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="29">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD1 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="100">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD2 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="5000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD3 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="12000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD4 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="7700">
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card">
+                        <div class="card-title text-center m-t-5">
+                          <h3>Steam - MP <span style="color: red; font-size: 12pt;">(t/ADt)</span></h3>
+                        </div>
+                        <div class="card-body">
+                          <form>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL1 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="0">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL2 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="8000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>FL3 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="9000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PCD : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="290000000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD1 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="50000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD2 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="50000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD3 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="50000">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group form-inline">
+                                  <label>PD4 : </label>
+                                  <input type="number" class="form-control edit-input col-9" value="50000">
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m-t-10">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg float-right"
+                          (click)="onSubmit()">Submit</button>
+                        <button type="button" (click)="onCancel()"
+                          class="btn btn-danger btn-lg float-right m-r-5">Reset</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>

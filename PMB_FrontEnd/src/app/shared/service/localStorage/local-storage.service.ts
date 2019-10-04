@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Router } from '@angular/router';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { UserDetail } from 'src/app/setup/user-management/user-detail/user-detail.model';
 
 @Injectable()
 export class LocalStorageService {

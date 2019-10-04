@@ -24,7 +24,7 @@ import { CoreModule } from './core/core.module';
 import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
 import { StatusService } from './shared/service/status.service';
 import { PrimeNgModule } from './shared/primeng-modules';
-import { MessageService } from 'primeng/primeng';
+import { MessageService, ConfirmationService } from 'primeng/primeng';
 import { LocalStorageService } from './shared/service/localStorage/local-storage.service';
 import { ApiCallService } from './shared/service/api/api-call.service';
 import { ProductionService } from './dashboard/production-dashboard/production.service';
@@ -35,11 +35,11 @@ import { BenchmarkService } from './benchmark/benchmark.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { LoginComponent } from './profile/login/login.component';
 import { LoginService } from './profile/login/login.service';
-import { UserDetailService } from './user-management/user-detail/user-detail.service';
-import { UserRoleService } from './user-management/user-role/user-role.service';
 import { ValidationService } from './shared/service/validation/validation.service';
 import { CommonService } from './shared/service/common/common.service';
 import { TokenInterceptor } from './core/interceptor/token-interceptor';
+import { UserDetailService } from './setup/user-management/user-detail/user-detail.service';
+import { UserRoleService } from './setup/user-management/user-role/user-role.service';
 
 @NgModule({
   declarations: [
@@ -94,7 +94,8 @@ import { TokenInterceptor } from './core/interceptor/token-interceptor';
     StatusService,
     UserDetailService,
     UserRoleService,
-    ValidationService
+    ValidationService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent]
 })

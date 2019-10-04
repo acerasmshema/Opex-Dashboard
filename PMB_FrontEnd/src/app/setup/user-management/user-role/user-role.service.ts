@@ -30,7 +30,7 @@ export class UserRoleService {
                     this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
-                    console.log("error in user role");
+                    this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     this.statusService.spinnerSubject.next(false);
                 }
             );

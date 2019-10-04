@@ -13,46 +13,78 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item ">
-              <a routerLink='/home' class="nav-link" style="color:white;">
-                <em class="fa fa-home"></em><span class="header-size">
-                  {{ 'Home' | translate }}</span></a>
+              <a routerLink='/home' class="nav-link">
+                <em class="fa fa-home"></em>
+                <span class="header-size">{{ 'Home' | translate }}</span>
+              </a>
             </li>
             <li class="nav-item ">
-              <a routerLink='/benchmark' class="nav-link" style="color:white;"><em class="fa fa-dot-circle-o"></em><span
-                  class="header-size">
-                  {{ 'Benchmark' | translate }}</span></a>
+              <a routerLink='/benchmark' class="nav-link">
+                <em class="fa fa-dot-circle-o m-r-2"></em>
+                <span class="header-size">{{ 'Benchmark' | translate }}</span>
+              </a>
             </li>
             <li *ngIf="selectedMillName === 'Kerinci'" class="nav-item ">
-              <a class="nav-link" routerLink='/kappaAnalytics' style="color:white;"><em
-                  class="fa fa-snowflake-o "></em><span class="header-size">
-                  {{ 'Digester Kappa Analytics' | translate }}</span></a>
+              <a class="nav-link" routerLink='/kappaAnalytics'>
+                <em class="fa fa-snowflake-o m-r-2"></em>
+                <span class="header-size">{{ 'Digester Kappa Analytics' | translate }}</span>
+              </a>
             </li>
-            <li *ngIf="isShow" class="nav-item ">
-              <a class="nav-link" routerLink='/user' style="color:white;"><em class="fa fa-user-o"></em><span
-                  class="header-size">
-                  {{ 'User Management' | translate }}</span></a>
+            <li *ngIf="showTabs" class="nav-item dropdown">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle btn-drop-down" type="button" id="dropdownMenu1"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <em class="fa fa-gears"></em><span class="header-size">
+                    {{ 'Setup' | translate }}</span>
+                </button>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                  <li class="dropdown-item" *ngIf="showTabs">
+                    <a class="nav-link" routerLink='/setup/user'><em class="fa fa-user-o"></em><span
+                        class="sub-header-size">
+                        {{ 'User Management' | translate }}</span>
+                    </a>
+                  </li>
+                  <li class="dropdown-item" *ngIf="showTabs">
+                    <a class="nav-link" routerLink='/setup/campaign'><em class="fa fa-clock-o"></em><span
+                        class="sub-header-size">
+                        {{ 'Campaign Management' | translate }}</span>
+                    </a>
+                  </li>
+                  <li class="dropdown-submenu dropdown-item">
+                    <a class="nav-link"><em class="fa fa-gear"></em><span class="sub-header-size m-r-5">
+                        {{ 'Threshold Management' | translate }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="dropdown-item"><a class="sub-header-size"
+                          routerLink="/setup/threshold/production">Production</a></li>
+                      <li class="dropdown-item"><a class="sub-header-size"
+                          routerLink="/setup/threshold/consumption">Consumption</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
           <div class="pull-right">
             <ul class="nav pull-right">
               <li class="nav-item dropdown" id="select_mill">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                  style="color:white;font-size: 11pt;border: 1px solid white">{{ selectedMillName | translate }}</a>
+                <a class="nav-link dropdown-toggle font-11" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false" style="border: 1px solid white">{{ selectedMillName | translate }}</a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
                   <li *ngFor="let mill of mills">
-                    <a class="dropdown-item" style="font-size: 11pt;" (click)="onChangeMill(mill.millId)">
+                    <a class="dropdown-item font-11" (click)="onChangeMill(mill.millId)">
                       {{mill.millName}}</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
-                <a class=" nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                  style="color:white;font-size: 11pt;"><span><i class="fa fa-user"></i></span> {{ user }}
+                <a class=" nav-link dropdown-toggle font-11" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false"><span><i class="fa fa-user"></i></span> {{ user }}
                   <strong class="caret"></strong></a>
                 <ul class="dropdown-menu dropdown-menu-local" aria-labelledby="dropdown1">
-                  <li><a routerLink='/profile' class="dropdown-item" style="font-size: 11pt;color: white;">
+                  <li><a routerLink='/profile' class="dropdown-item font-11">
                       <span class="m-r-5"><i class="fa fa-gear"></i></span>{{ 'Settings' | translate }}
                     </a></li>
-                  <li (click)="logOut()"><a class="dropdown-item" style="font-size: 11pt;">
+                  <li (click)="logOut()"><a class="dropdown-item font-11">
                       <span class="m-r-5"><i class="fa fa-power-off"></i></span> {{ 'Logout' | translate }}</a></li>
                 </ul>
               </li>

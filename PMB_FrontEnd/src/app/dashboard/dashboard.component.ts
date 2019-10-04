@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
     }
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = showSideBar;
+    sidebarRequest.showSidebar = showSideBar;
     sidebarRequest.kpiCategoryId = "" + kpiCategoryId;
     sidebarRequest.type = "dashboard";
     this.statusService.sidebarSubject.next(sidebarRequest);
@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       subscribe((processLines: any) => {
         this.statusService.common.processLines = processLines;
         let sidebarRequest = new SidebarRequest();
-        sidebarRequest.isShow = false;
+        sidebarRequest.showSidebar = false;
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
