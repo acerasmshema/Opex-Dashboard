@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class BenchmarkingController {
 
 	@Resource
 	private BenchmarkingService benchmarkingService;
-
+	
 	@ApiOperation(value = "getBenchmarkingData", notes = "Get benchmarking data for selected filters", response = BenchmarkingReponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping(value = "/v1/benchmarking/get_selected_data")

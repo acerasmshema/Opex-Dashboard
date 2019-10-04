@@ -31,6 +31,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="user_role")
@@ -68,7 +70,7 @@ public class UserRoleEntity implements Serializable {
 	@Column(name="is_aceadmin")
 	private Boolean aceAdmin;
 	
-
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name="rge_user_role"

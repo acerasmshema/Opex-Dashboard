@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarModule } from 'ng-sidebar';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { GaugeChartModule } from 'angular-gauge-chart';
@@ -39,6 +39,7 @@ import { UserDetailService } from './user-management/user-detail/user-detail.ser
 import { UserRoleService } from './user-management/user-role/user-role.service';
 import { ValidationService } from './shared/service/validation/validation.service';
 import { CommonService } from './shared/service/common/common.service';
+import { TokenInterceptor } from './core/interceptor/token-interceptor';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,11 @@ import { CommonService } from './shared/service/common/common.service';
     }),
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
     CommonService,
     LoginService,
     DashboardService,
