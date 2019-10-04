@@ -3,6 +3,7 @@ import { UserRole } from './user-role.model';
 import { UserRoleService } from './user-role.service';
 import { StatusService } from 'src/app/shared/service/status.service';
 import { Subscription } from 'rxjs';
+import { MasterData } from 'src/app/shared/constant/MasterData';
 
 @Component({
   selector: 'app-user-role',
@@ -14,11 +15,7 @@ export class UserRoleComponent implements OnInit, OnDestroy {
   public userRoles: UserRole[] = [];
   roleSubscription: Subscription;
 
-  cols = [
-    { field: 'roleName', header: 'Role Name', width: "25%" },
-    { field: 'description', header: 'Description', width: "54%" },
-    { field: 'active', header: 'Active', width: "7%" },
-  ];
+  cols = MasterData.userRoleCols;
 
   constructor(private userRoleService: UserRoleService,
     private statusService: StatusService) { }

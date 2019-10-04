@@ -6,11 +6,12 @@ import { FormControl, Validators, FormBuilder, FormGroup, AbstractControl } from
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { UserRole } from 'src/app/user-management/user-role/user-role.model';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
-import { MillRole } from 'src/app/user-management/user-detail/mill-role.model';
 import { MessageService } from 'primeng/primeng';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { UserRole } from 'src/app/setup/user-management/user-role/user-role.model';
+import { UserDetail } from 'src/app/setup/user-management/user-detail/user-detail.model';
+import { MillRole } from 'src/app/setup/user-management/user-detail/mill-role.model';
+import { CampaignModel } from 'src/app/setup/campaign-management/campaign-model';
 
 @Injectable()
 export class DialogService {
@@ -87,8 +88,8 @@ export class DialogService {
         return userDetailForm;
     }
 
-    createUserRoleForm(userRole: UserRole) {
-        let userRoleForm = this.formBuilder.group({
+    createUserRoleForm(userRole: UserRole): FormGroup {
+        return this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(userRole.operation),
             userRoleId: new FormControl(userRole.userRoleId),
@@ -99,8 +100,22 @@ export class DialogService {
             userExistError: new FormControl(''),
             active: new FormControl(userRole.active),
         });
+    }
 
-        return userRoleForm;
+    createCampaignForm(campaign: CampaignModel): FormGroup {
+        return this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(campaign.operation),
+            millName: new FormControl(this.statusService.common.selectedMill.millName),
+            campaignId: new FormControl(campaign.campaignId),
+            createdBy: new FormControl(campaign.createdBy),
+            validateCampaignName: new FormControl(campaign.campaignName),
+            campaignName: new FormControl(campaign.campaignName),
+            startDate: new FormControl(campaign.startDate),
+            endDate: new FormControl(campaign.endDate),
+            buType: new FormControl(campaign.buType),
+            active: new FormControl(campaign.active),
+        });
     }
 
     addMillRole(userDetailForm: FormGroup) {
@@ -175,7 +190,7 @@ export class DialogService {
                     this.statusService.common.activeUserRoles = roleList;
                 },
                 (error: any) => {
-                    console.log("error in user role");
+                    this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                 }
             );
     }
@@ -216,7 +231,7 @@ export class DialogService {
                         this.statusService.spinnerSubject.next(false);
                     },
                     (error: any) => {
-                        console.log("Error");
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                         this.statusService.spinnerSubject.next(false);
                     }
                 );

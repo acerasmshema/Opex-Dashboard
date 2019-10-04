@@ -15,8 +15,8 @@ export class ProfileComponent implements OnInit {
     document.getElementById("select_mill").style.display = "block";
 
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = false;
-    sidebarRequest.type = "user-management";
+    sidebarRequest.showSidebar = false;
+    sidebarRequest.type = "profile";
     this.statusService.sidebarSubject.next(sidebarRequest);
   }
 

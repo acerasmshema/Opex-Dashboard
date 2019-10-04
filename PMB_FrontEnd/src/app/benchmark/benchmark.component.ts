@@ -25,7 +25,7 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
     document.getElementById("select_mill").style.display = "none";
 
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = true;
+    sidebarRequest.showSidebar = true;
     sidebarRequest.type = "benchmark";
     this.statusService.sidebarSubject.next(sidebarRequest);
 

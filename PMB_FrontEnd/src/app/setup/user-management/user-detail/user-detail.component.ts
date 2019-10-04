@@ -5,6 +5,9 @@ import { UserDetailService } from './user-detail.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
+import { MasterData } from 'src/app/shared/constant/MasterData';
+import { ConfirmationService } from 'primeng/primeng';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 
 @Component({
   selector: 'app-user-detail',
@@ -13,21 +16,14 @@ import { ValidationService } from 'src/app/shared/service/validation/validation.
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
 
-  cols = [
-    { field: 'username', header: 'Username' },
-    { field: 'firstName', header: 'First Name' },
-    { field: 'lastName', header: 'Last Name' },
-    { field: 'email', header: 'Email' },
-    { field: 'millRoleSortName', header: 'Role' },
-    { field: 'active', header: 'Active' }
-  ];
-
+  cols = MasterData.userDetailCols;
   users: UserDetail[] = [];
   userDetailForm: FormGroup;
   userSubscription: Subscription;
 
   constructor(private userDetailService: UserDetailService,
     private validationService: ValidationService,
+    private confirmationService: ConfirmationService,
     private statusService: StatusService) { }
 
   ngOnInit() {
@@ -129,9 +125,17 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     if (this.statusService.common.userDetail.userId !== userInfo.userId) {
       this.userDetailForm.controls.active.setValue((status !== "false") ? true : false);
     }
-    else if (status === "false" && !confirm("Are you sure you want to inactivate yourself?")) {
-      let selectStatusElement: any = document.getElementById('statusSelect');
-      selectStatusElement.value = "true";
+    else if (status === 'false') {
+      this.confirmationService.confirm({
+        message: CommonMessage.MESSAGE.INACTIVE_USER,
+        accept: () => {
+          this.userDetailForm.controls.active.setValue((status !== "false") ? true : false);
+        },
+        reject: () => {
+          let selectStatusElement: any = document.getElementById('statusSelect');
+          selectStatusElement.value = "true";
+        }
+      });
     }
     else {
       this.userDetailForm.controls.active.setValue((status !== "false") ? true : false);

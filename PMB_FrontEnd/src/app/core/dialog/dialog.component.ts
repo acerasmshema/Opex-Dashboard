@@ -11,8 +11,9 @@ import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
-import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
-import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
+import { FormGroup } from '@angular/forms';
+import { UserRoleService } from 'src/app/setup/user-management/user-role/user-role.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-dialog',
@@ -32,6 +33,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   public maintenanceDays: MaintenanceDays;
   public userDetailForm: FormGroup;
   public userRoleForm: FormGroup;
+  public campaignForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -46,6 +48,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private productionService: ProductionService,
     private userRoleService: UserRoleService,
+    private commonService: CommonService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -85,15 +88,15 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.userRoleForm.reset();
           this.userRoleForm = this.dialogService.createUserRoleForm(data.userRole);
         }
+        else if (dialogName === 'campaign') {
+          if (this.campaignForm !== undefined)
+            this.campaignForm.reset();
+          this.campaignForm = this.dialogService.createCampaignForm(data.campaign);
+        }
         this.dialogName = dialogName;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -255,12 +258,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.maintenanceDays.maintanenceDayModel = response;
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         }
       );
   }
@@ -282,12 +280,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.statusService.projectTargetSubject.next();
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -473,6 +466,10 @@ export class DialogComponent implements OnInit, OnDestroy {
   onInputChange(value: any) {
     let formControl: any = this.userDetailForm.get(value);
     this.validationService.trimValue(formControl);
+  }
+
+  onConfigCancel() {
+    this.campaignForm.controls.show.setValue(false);
   }
 
   ngOnDestroy() {

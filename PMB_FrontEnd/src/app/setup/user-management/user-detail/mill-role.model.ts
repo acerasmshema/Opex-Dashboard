@@ -1,5 +1,5 @@
-import { MillDetail } from '../../shared/models/mill-detail.model';
-import { UserRole } from 'src/app/user-management/user-role/user-role.model';
+import { MillDetail } from 'src/app/shared/models/mill-detail.model';
+import { UserRole } from '../user-role/user-role.model';
 
 export class MillRole {
     millRoleId: string;

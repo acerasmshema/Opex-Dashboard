@@ -5,8 +5,10 @@ import { API_URL } from '../../constant/API_URLs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
-import { Department } from 'src/app/user-management/user-detail/department.model';
+import { Department } from 'src/app/setup/user-management/user-detail/department.model';
 import { Observable } from 'rxjs';
+import { CommonMessage } from '../../constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
 
 @Injectable()
 export class CommonService {
@@ -18,6 +20,7 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
+        private messageService: MessageService,
         private statusService: StatusService) { }
 
     public getAllMills(): Observable<any> {
@@ -41,7 +44,7 @@ export class CommonService {
                         }
                     },
                     (error: any) => {
-                        console.log("Error in Buisness unit")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     });
         }
         else if (sidebarForm !== null) {
@@ -64,7 +67,7 @@ export class CommonService {
                         this.statusService.common.countryList = countries;
                     },
                     (error: any) => {
-                        console.log("Error handling")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     }
                 );
         }
@@ -93,7 +96,7 @@ export class CommonService {
                         this.statusService.common.departmentList = departments;
                     },
                     (error: any) => {
-                        console.log("Error handling")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     }
                 );
         }
@@ -132,6 +135,15 @@ export class CommonService {
                 const element = elements[index];
                 element.style.fontSize = "12px";
             }
+        }
+    }
+
+    handleError(error: any) {
+        this.statusService.spinnerSubject.next(false);
+        if (error.status == "0") {
+          alert(CommonMessage.ERROR.SERVER_ERROR)
+        } else {
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
         }
     }
 }
