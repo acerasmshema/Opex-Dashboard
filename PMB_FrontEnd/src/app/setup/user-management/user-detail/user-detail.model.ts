@@ -20,4 +20,5 @@ export class UserDetail {
     role: string;
     showDialog: boolean;
     millRoleSortName: string;
+    token: string;
 }

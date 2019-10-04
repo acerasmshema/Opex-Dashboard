@@ -58,7 +58,13 @@ public class UserConverter {
 			rgeUserResponse.setLoginId(rgeUserEntity.getLoginId());
 			rgeUserResponse.setUserName(rgeUserEntity.getFirstName() + " " +rgeUserEntity.getLastName());
 			if(!rgeUserEntity.getUserRoles().isEmpty()) {
-				rgeUserResponse.setUserRole(rgeUserEntity.getUserRoles().get(0).getRoleName());
+				List<String> roles = new ArrayList<>();
+				for(UserRoleMillEntity rolesList: rgeUserEntity.getUserRoleMills()) {
+					if(Boolean.TRUE.equals(rolesList.getStatus())) {
+						roles.add(rolesList.getRole().getRoleName());	
+					}
+				rgeUserResponse.setUserRole(roles);
+				}
 			}
 		}else {
 			throw new RecordNotFoundException("User not found");
