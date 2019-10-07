@@ -1,8 +1,10 @@
 package com.rgei.kpi.dashboard.security;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -10,6 +12,7 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,7 +27,7 @@ public class JwtTokenUtil implements Serializable {
 
 	@Value("${jwt.secret}")
 	private String secret;
-
+	
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
@@ -42,15 +45,6 @@ public class JwtTokenUtil implements Serializable {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
 	
-	public Boolean extendTokenExpiration(String token) {
-		Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody()
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(jwtTokenValidity)));
-		String tkn  = Jwts.builder().setClaims(getAllClaimsFromToken(token)).signWith(SignatureAlgorithm.HS512, secret).compact();
-		return true;
-	}
-
-
 	private Boolean isTokenExpired(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
@@ -70,5 +64,12 @@ public class JwtTokenUtil implements Serializable {
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	}
+
+	public void setExposedHeaders() {
+		CorsConfiguration cors = new CorsConfiguration();
+		List<String> exposedHeaders = new ArrayList<>();
+		exposedHeaders.add("token");
+		cors.setExposedHeaders(exposedHeaders);		
 	}
 }

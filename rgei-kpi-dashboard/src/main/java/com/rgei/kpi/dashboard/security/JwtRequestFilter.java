@@ -62,6 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		}
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			jwtTokenUtil.setExposedHeaders();
 			UserDetails userDetails = this.rgeUserService.loadUserByUsername(username);
 			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
 				long issuedTime = jwtTokenUtil.getAllClaimsFromToken(jwtToken).getIssuedAt().getTime();
@@ -71,7 +72,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				if (expire > loadFac) {
 					jwtToken = jwtTokenUtil.generateToken(userDetails);
 					response.addHeader("token", jwtToken);
-					
 				}
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
