@@ -120,11 +120,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         this.annotationDialog.annotationsLines = annotationsLines;
       },
         (error: any) => {
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -180,12 +176,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           }
         },
           (error: any) => {
-            this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
@@ -238,11 +229,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         },
           (error: any) => {
             this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
@@ -314,12 +301,7 @@ export class DialogComponent implements OnInit, OnDestroy {
             }
           },
           (error: any) => {
-            this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
@@ -344,12 +326,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
     },
       (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if (error.status == "0") {
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-        } else {
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
+        this.commonService.handleError(error);
       });
 
   }

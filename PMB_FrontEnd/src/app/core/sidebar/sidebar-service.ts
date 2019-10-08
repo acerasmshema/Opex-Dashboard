@@ -68,12 +68,7 @@ export class SidebarService {
                         this.statusService.common.mills = mills;
                     },
                     (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                        }
+                        this.commonService.handleError(error);
                     });
         }
         else {

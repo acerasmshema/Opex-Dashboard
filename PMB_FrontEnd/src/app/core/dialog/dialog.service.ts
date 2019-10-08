@@ -161,10 +161,7 @@ export class DialogService {
                         userDetailForm.controls.totalMills.setValue(mills.length);
                     },
                     (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        }
+                        this.commonService.handleError(error);
                     });
         }
         else {

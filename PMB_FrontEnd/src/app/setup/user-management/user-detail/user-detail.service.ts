@@ -130,9 +130,7 @@ export class UserDetailService {
                         this.setMills(userDetailForm);
                     },
                     (error: any) => {
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        }
+                        this.commonService.handleError(error);
                     });
         }
         else {

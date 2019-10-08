@@ -53,12 +53,13 @@ export class HeaderComponent implements OnInit {
     this.loginService.logOut(requestData).
       subscribe(
         (response: any) => {
-          this.localStorageService.removeUserDetail();
+          
         },
         (error: any) => {
           this.commonService.handleError(error);
         });
 
+    this.localStorageService.removeUserDetail();
     this.commonService.clearStatus();
     this.router.navigateByUrl('login');
   }

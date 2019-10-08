@@ -10,12 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CoreModule } from 'src/app/core/core.module';
 import { GaugeChartModule } from 'angular-gauge-chart';
+import { AnnualConfigurationComponent } from './production-configuration/annual-configuration/annual-configuration.component';
 
 @NgModule({
   declarations: [ProductionConfigurationComponent,
     ConsumptionConfigurationComponent,
     ProductionTargetComponent,
-    ProcessLineTargetComponent],
+    ProcessLineTargetComponent,
+    AnnualConfigurationComponent],
   imports: [
     CommonModule,
     CoreModule,

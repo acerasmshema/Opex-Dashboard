@@ -4,10 +4,13 @@ import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { LocalStorageService } from 'src/app/shared/service/localStorage/local-storage.service';
 import { Router } from '@angular/router';
+import { StatusService } from 'src/app/shared/service/status.service';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-    constructor(private localStorageService: LocalStorageService, private router: Router) { }
+    constructor(private localStorageService: LocalStorageService,
+        private statusService: StatusService,
+        private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let user = this.localStorageService.fetchUserDetail();
@@ -23,12 +26,23 @@ export class TokenInterceptor implements HttpInterceptor {
             .do(
                 (event: any) => {
                     if (event instanceof HttpResponse) {
-                        console.log(event.headers);
+                        const authorizationToken = event.headers.get("Authorization");
+                        if (authorizationToken !== undefined && authorizationToken !== null) {
+                            let userDetail = this.statusService.common.userDetail;
+                            if (userDetail !== undefined && userDetail !== null) {
+                                userDetail.token = authorizationToken;
+                                this.localStorageService.storeUserDetails(userDetail);
+                            }
+                        }
                     }
                 },
                 (err: any) => {
                     if (err instanceof HttpErrorResponse) {
-                        this.router.navigateByUrl('login');
+                        if (err.status === 0 || err.status === 401) {
+                            alert("Session Timeout")
+                            this.localStorageService.removeUserDetail();
+                            this.router.navigateByUrl('login');
+                        }
                     }
                 });
     }

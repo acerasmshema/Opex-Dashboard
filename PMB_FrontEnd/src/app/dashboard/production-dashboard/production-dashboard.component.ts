@@ -13,7 +13,6 @@ import { StatusService } from '../../shared/service/status.service';
 import * as $ from "jquery";
 import { Subscription } from 'rxjs';
 import { ConsumptionTable } from '../consumption-dashboard/consumption-table';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 
@@ -293,12 +292,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             this.enableTabs();
           },
             (error: any) => {
-              this.statusService.spinnerSubject.next(false);
-              if (error.status == "0") {
-                alert(CommonMessage.ERROR.SERVER_ERROR)
-              } else {
-                this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-              }
+              this.commonService.handleError(error);
             });
       },
         (error: any) => {
@@ -345,14 +339,10 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
             },
               (error: any) => {
                 this.statusService.spinnerSubject.next(false);
-                if (error.status == "0") {
-                  alert(CommonMessage.ERROR.SERVER_ERROR)
-                } else {
-                  this.annotationDates = [];
-                  this.prodLineChart.productionLineData = prodLineResponse;
-                  this.productionChartRendered = true;
-                  this.enableTabs();
-                }
+                this.annotationDates = [];
+                this.prodLineChart.productionLineData = prodLineResponse;
+                this.productionChartRendered = true;
+                this.enableTabs();
               });
         } else {
           this.prodLineChart.productionLineData = prodLineResponse;

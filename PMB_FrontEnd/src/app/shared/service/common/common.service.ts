@@ -140,10 +140,7 @@ export class CommonService {
 
     handleError(error: any) {
         this.statusService.spinnerSubject.next(false);
-        if (error.status == "0") {
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-        } else {
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
+        if (error.status !== 0)  
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
         }
     }
-}
