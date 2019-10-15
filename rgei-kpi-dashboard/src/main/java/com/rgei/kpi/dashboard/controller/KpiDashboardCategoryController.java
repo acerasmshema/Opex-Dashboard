@@ -47,7 +47,7 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "Authorization")
 @RestController
 @RequestMapping("/restCall")
 public class KpiDashboardCategoryController {
