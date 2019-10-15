@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -23,17 +23,15 @@ public class KpiConfigurationEntity implements Serializable {
 	@Id
 	@Column(name = "kpi_configuration_id")
 	private Integer kpiConfigurationId;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="business_unit_type_id")
-	private BusinessUnitTypeEntity buType;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="mill_id")
-	private MillEntity millId;
+	@Column(name = "bu_type_id")
+	private Integer buTypeId;
+
+	@Column(name = "mill_id")
+	private Integer millId;
 
 	@Column(name = "kpi_id")
-	private KpiEntity kpiId;
+	private Integer kpiId;
 
 	@Column(name = "minimum")
 	private Integer minimum;
@@ -43,6 +41,15 @@ public class KpiConfigurationEntity implements Serializable {
 
 	@Column(name = "threshold")
 	private Integer threshold;
+
+	@Column(name = "start_date")
+	private Timestamp startDate;
+
+	@Column(name = "end_date")
+	private Timestamp endDate;
+
+	@Column(name = "is_default")
+	private Boolean isDefault;
 
 	private Boolean active;
 
@@ -57,11 +64,19 @@ public class KpiConfigurationEntity implements Serializable {
 
 	@Column(name = "updated_date")
 	private Timestamp updatedDate;
-	
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "bu_type_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
+	private BusinessUnitTypeEntity buType;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "mill_id", referencedColumnName = "mill_id", insertable = false, updatable = false)
+	private MillEntity mill;
+
 	@JsonIgnore
-	@OneToMany(mappedBy="kpiId")
+	@OneToMany(mappedBy = "kpiId")
 	private List<KpiEntity> kpi;
-	
+
 	public Integer getKpiConfigurationId() {
 		return kpiConfigurationId;
 	}
@@ -86,20 +101,36 @@ public class KpiConfigurationEntity implements Serializable {
 		this.buType = buType;
 	}
 
-	public MillEntity getMillId() {
+	public Integer getBuTypeId() {
+		return buTypeId;
+	}
+
+	public void setBuTypeId(Integer buTypeId) {
+		this.buTypeId = buTypeId;
+	}
+
+	public Integer getMillId() {
 		return millId;
 	}
 
-	public void setMillId(MillEntity millId) {
+	public void setMillId(Integer millId) {
 		this.millId = millId;
 	}
 
-	public KpiEntity getKpiId() {
+	public Integer getKpiId() {
 		return kpiId;
 	}
 
-	public void setKpiId(KpiEntity kpiId) {
+	public void setKpiId(Integer kpiId) {
 		this.kpiId = kpiId;
+	}
+
+	public MillEntity getMill() {
+		return mill;
+	}
+
+	public void setMill(MillEntity mill) {
+		this.mill = mill;
 	}
 
 	public Integer getMinimum() {
@@ -124,6 +155,22 @@ public class KpiConfigurationEntity implements Serializable {
 
 	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
+	}
+
+	public Timestamp getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Timestamp startDate) {
+		this.startDate = startDate;
+	}
+
+	public Timestamp getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Timestamp endDate) {
+		this.endDate = endDate;
 	}
 
 	public Boolean getActive() {
@@ -164,6 +211,14 @@ public class KpiConfigurationEntity implements Serializable {
 
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 
 }
