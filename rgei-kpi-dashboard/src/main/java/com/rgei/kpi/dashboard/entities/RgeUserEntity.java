@@ -33,6 +33,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "rge_user")
 public class RgeUserEntity implements Serializable {
@@ -109,6 +111,7 @@ public class RgeUserEntity implements Serializable {
     @JoinColumn(name = "country", referencedColumnName = "country_id",insertable=false, updatable=false)
 	private CountryEntity countryEntity;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "rgeUsers", fetch = FetchType.EAGER)
 	private List<UserRoleEntity> userRoles;
 

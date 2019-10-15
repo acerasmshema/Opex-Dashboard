@@ -38,6 +38,8 @@ public class User {
 
 	private Department department;
 	private String password = null;
+	
+	private String token;
 
 	public String getUserId() {
 		return userId;
@@ -165,6 +167,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

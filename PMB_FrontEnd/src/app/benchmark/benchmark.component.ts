@@ -5,8 +5,7 @@ import { ConsumptionModel } from '../shared/models/consumption-model';
 import { BenchmarkService } from './benchmark.service';
 import { SearchKpiData } from '../shared/models/search-kpi-data';
 import { Subscription } from 'rxjs';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { CommonService } from '../shared/service/common/common.service';
 
 @Component({
   selector: 'app-benchmark',
@@ -19,13 +18,13 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
 
   constructor(private statusService: StatusService,
     private becnhmarkService: BenchmarkService,
-    private messageService: MessageService) { }
+    private commonService: CommonService) { }
 
   ngOnInit() {
     document.getElementById("select_mill").style.display = "none";
 
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = true;
+    sidebarRequest.showSidebar = true;
     sidebarRequest.type = "benchmark";
     this.statusService.sidebarSubject.next(sidebarRequest);
 
@@ -37,13 +36,7 @@ export class BenchmarkComponent implements OnInit, OnDestroy {
           this.becnhmarkService.filterCharts(searchKpiData);
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          }
-          else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 

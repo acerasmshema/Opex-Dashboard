@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarSubscription = this.statusService.sidebarSubject.
       subscribe(
         (sidebarRequestData: SidebarRequest) => {
-          if (sidebarRequestData.isShow) {
+          if (sidebarRequestData.showSidebar) {
             if (sidebarRequestData.type === "dashboard") {
               this.sidebarForm = this.sidebarService.getDashboardSidebarForm(sidebarRequestData);
               this.commonService.getAllBuType(this.sidebarForm);
@@ -78,9 +78,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
             this.sidebarForm.type = sidebarRequestData.type;
           }
 
-          let sidebarSize = (sidebarRequestData.isShow) ? "collapse" : "hide"
+          let sidebarSize = (sidebarRequestData.showSidebar) ? "collapse" : "hide"
           this.statusService.sidebarSizeSubject.next(sidebarSize);
-          this.showSidebar = sidebarRequestData.isShow;
+          this.showSidebar = sidebarRequestData.showSidebar;
 
           setTimeout(() => {
             this.commonService.setDropDownFont();
@@ -102,12 +102,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.kpiTypes = kpiTypes;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+      
         });
   }
 
@@ -121,12 +116,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarForm.kpiTypes = kpiTypes;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 

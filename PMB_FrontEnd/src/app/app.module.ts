@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarModule } from 'ng-sidebar';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { GaugeChartModule } from 'angular-gauge-chart';
@@ -24,7 +24,7 @@ import { CoreModule } from './core/core.module';
 import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
 import { StatusService } from './shared/service/status.service';
 import { PrimeNgModule } from './shared/primeng-modules';
-import { MessageService } from 'primeng/primeng';
+import { MessageService, ConfirmationService } from 'primeng/primeng';
 import { LocalStorageService } from './shared/service/localStorage/local-storage.service';
 import { ApiCallService } from './shared/service/api/api-call.service';
 import { ProductionService } from './dashboard/production-dashboard/production.service';
@@ -35,10 +35,11 @@ import { BenchmarkService } from './benchmark/benchmark.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { LoginComponent } from './profile/login/login.component';
 import { LoginService } from './profile/login/login.service';
-import { UserDetailService } from './user-management/user-detail/user-detail.service';
-import { UserRoleService } from './user-management/user-role/user-role.service';
 import { ValidationService } from './shared/service/validation/validation.service';
 import { CommonService } from './shared/service/common/common.service';
+import { TokenInterceptor } from './core/interceptor/token-interceptor';
+import { UserDetailService } from './setup/user-management/user-detail/user-detail.service';
+import { UserRoleService } from './setup/user-management/user-role/user-role.service';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,11 @@ import { CommonService } from './shared/service/common/common.service';
     }),
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
     CommonService,
     LoginService,
     DashboardService,
@@ -88,7 +94,8 @@ import { CommonService } from './shared/service/common/common.service';
     StatusService,
     UserDetailService,
     UserRoleService,
-    ValidationService
+    ValidationService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent]
 })
