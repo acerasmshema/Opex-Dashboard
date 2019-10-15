@@ -24,8 +24,8 @@ public class ThresholdManagementUtility {
 			threshold.setBuType(fetchBuType(config.getBuType()));
 			threshold.setMinimum(Double.parseDouble(CommonFunction.getString(config.getMinimum())));
 			threshold.setMaximum(Double.parseDouble(CommonFunction.getString(config.getMaximum())));
-			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.EXTENDED_DATE_FORMAT));
-			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.EXTENDED_DATE_FORMAT));
+			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
+			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setActive(config.getActive());
 			threshold.setCreatedBy(CommonFunction.getString(config.getCreatedBy()));
 			threshold.setCreatedDate(CommonFunction.getString(config.getCreatedDate()));

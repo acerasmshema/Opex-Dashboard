@@ -51,7 +51,7 @@ public class ThresholdManagementController {
 	
 	@ApiOperation(value = "getProductionTargetsByMillId", notes = "Retrieve production target by Mill Id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
-	@GetMapping("/v1/production_targets")
+	@GetMapping("/v1/production_target")
 	public ResponseEntity<List<ProductionThreshold>> getProductionTargetsByMillId(@RequestHeader(value = "millId") String millId) {
 		logger.info("Get all users by mill Id : " + millId);
 		List<ProductionThreshold> responseList = thresholdManagementService.getProductionTargetsByMillId(CommonFunction.covertToInteger(millId));
