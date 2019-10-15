@@ -1,6 +1,6 @@
 label {
   font-size: 11pt;
-  font-weight: 500;
+  font-weight: 600;
   min-width: 9vh;
 }
 
@@ -17,4 +17,17 @@ label {
 option {
   font-size: 15px;
   border: 1px solid black;
+}
+
+th {
+  font-size: 11pt;
+}
+
+.td-role {
+  margin: 3px;
+  font-size: 11pt;
+}
+
+.font-17 {
+  font-size: 17px;
 }

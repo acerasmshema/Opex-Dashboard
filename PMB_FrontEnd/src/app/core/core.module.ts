@@ -9,6 +9,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { PrimeNgModule } from '../shared/primeng-modules';
 import { DialogComponent } from './dialog/dialog.component';
 import { TranslatePipe } from '../shared/pipes/translate.pipe';
+import { GaugeChartModule } from 'angular-gauge-chart';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TranslatePipe } from '../shared/pipes/translate.pipe';
     RouterModule,
     PrimeNgModule,
     ReactiveFormsModule,
+    GaugeChartModule
   ],
   exports: [
     LayoutComponent,

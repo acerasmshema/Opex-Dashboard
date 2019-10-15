@@ -10,12 +10,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "campaign",
-    pathMatch: 'full',
-  loadChildren: './campaign-management/campaign-management.module#CampaignManagementModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: "threshold",
     loadChildren: './threshold-management/threshold-management.module#ThresholdManagementModule',
     canActivate: [AuthGuard]

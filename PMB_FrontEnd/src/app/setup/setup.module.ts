@@ -5,7 +5,6 @@ import { SetupRoutingModule } from './setup-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
-import { GaugeChartModule } from 'angular-gauge-chart';
 
 @NgModule({
   declarations: [],
@@ -17,7 +16,6 @@ import { GaugeChartModule } from 'angular-gauge-chart';
     HttpClientModule,
     SetupRoutingModule,
     PrimeNgModule,
-    GaugeChartModule,
   ]
 })
 export class SetupModule { }
