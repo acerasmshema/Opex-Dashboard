@@ -65,11 +65,4 @@ public class JwtTokenUtil implements Serializable {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
-
-	public void setExposedHeaders() {
-		CorsConfiguration cors = new CorsConfiguration();
-		List<String> exposedHeaders = new ArrayList<>();
-		exposedHeaders.add("token");
-		cors.setExposedHeaders(exposedHeaders);		
-	}
 }
