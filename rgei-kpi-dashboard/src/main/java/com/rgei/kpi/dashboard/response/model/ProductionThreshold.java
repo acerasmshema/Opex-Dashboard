@@ -5,6 +5,7 @@ public class ProductionThreshold {
 	private String productionThresholdId;
 	private BuTypeResponse buType;
 	private Double threshold;
+	private Double minimum;
 	private Double maximum;
 	private String startDate;
 	private String endDate;
@@ -36,6 +37,14 @@ public class ProductionThreshold {
 
 	public void setThreshold(Double threshold) {
 		this.threshold = threshold;
+	}
+
+	public Double getMinimum() {
+		return minimum;
+	}
+
+	public void setMinimum(Double minimum) {
+		this.minimum = minimum;
 	}
 
 	public Double getMaximum() {
