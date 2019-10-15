@@ -1,0 +1,45 @@
+<div *ngIf="processLineThresholds.length  > 0">
+  <p-table #processLine [columns]="cols" [value]="processLineThresholds" [paginator]="true" [rows]="10"
+    dataKey="userRoleId" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="buType"
+    sortOrder="1">
+    <ng-template pTemplate="caption">
+      <div class="text-right">
+        <span class="m-l-5" (click)="onCreate()">
+          <em class="fa fa-plus fa-2x" pTooltip="Add Process Line Threshold" tooltipPosition="left"></em>
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th class="text-center" style="width: 4%;"></th>
+        <th class="text-center" *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn
+          pReorderableColumn [style.width]="col.width">
+          <p-sortIcon [field]="col.field" pTooltip="Sort" tooltipPosition="top"></p-sortIcon>
+          {{col.header}}
+        </th>
+        <th class="text-center" style="width: 10%">Action</th>
+      </tr>
+      <tr class="text-center">
+        <th style="width: 4%;"><i class="fa fa-search"></i></th>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field" class="ui-fluid">
+          <input *ngIf="col.showInputBox" pInputText type="text"
+            (input)="processLine.filter($event.target.value, col.field, col.filterMatchMode)"
+            [value]="processLine.filters[col.field]?.value">
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-ri="rowIndex" let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td class="td-role text-center">{{ri + 1}}</td>
+        <td *ngFor="let col of columns" class="text-center">
+          <div class="td-role">{{rowData[col.field]}}</div>
+        </td>
+        <td class="text-center">
+          <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.processLineThresholdId)"><i
+              class="fa fa-edit" pTooltip="Edit" tooltipPosition="top"></i></span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

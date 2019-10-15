@@ -1,0 +1,19 @@
+<div class="container-fluid" style="padding: 0">
+  <p-tabView>
+    <p-tabPanel header="Production Target" leftIcon="fa fa-th-large">
+      <ng-template pTemplate="app-production-target">
+        <app-production-target></app-production-target>
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel header="Process Line Target" leftIcon="fa fa-leaf">
+      <ng-template pTemplate="app-process-line-target">
+        <app-process-line-target></app-process-line-target>
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel header="Annual Configuration" leftIcon="fa fa-clock-o">
+        <ng-template pTemplate="app-annual-configuration">
+          <app-annual-configuration></app-annual-configuration>
+        </ng-template>
+      </p-tabPanel>
+  </p-tabView>
+</div>

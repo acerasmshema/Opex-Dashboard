@@ -3,8 +3,7 @@ import { ConsumptionService } from './consumption.service';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionTable } from './consumption-table';
 import { ConsumptionDetiail } from './consumption-detail';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { CommonService } from 'src/app/shared/service/common/common.service';
 
 @Component({
   selector: 'app-consumption-dashboard',
@@ -21,7 +20,7 @@ export class ConsumptionDashboardComponent implements OnInit {
  
   constructor(private consumptionService: ConsumptionService,
     private statusService: StatusService,
-    private messageService:MessageService) {
+    private commonService: CommonService) {
   }
 
   ngOnInit() {
@@ -52,12 +51,7 @@ export class ConsumptionDashboardComponent implements OnInit {
         this.header = this.consumptionService.getHeader("" + this.kpiCategoryId);
       },
       (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
+        this.commonService.handleError(error);
     });
   }
 

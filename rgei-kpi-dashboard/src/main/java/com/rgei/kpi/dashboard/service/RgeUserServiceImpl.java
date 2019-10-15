@@ -1,12 +1,17 @@
 package com.rgei.kpi.dashboard.service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
@@ -27,7 +32,7 @@ import com.rgei.kpi.dashboard.util.UserConverter;
 import com.rgei.kpi.dashboard.util.UserManagementUtility;
 
 @Service
-public class RgeUserServiceImpl implements RgeUserService {
+public class RgeUserServiceImpl implements RgeUserService  {
 
 	CentralizedLogger logger = RgeiLoggerFactory.getLogger(RgeUserServiceImpl.class);
 
@@ -137,6 +142,20 @@ public class RgeUserServiceImpl implements RgeUserService {
 			loginDetailEntityRepository.save(loginEntity);
 			logger.info("User logged out successfully.", rgeUserLogoutRequest.getUsername());
 		}
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		RgeUserResponse user = this.getUserByName(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User '" + username + "' not found.");
+		}
+		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+		for (String role : user.getUserRole()) {
+			SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+			grantedAuthorities.add(authority);
+		}
+		return new org.springframework.security.core.userdetails.User(user.getLoginId(), "", grantedAuthorities);
 	}
 
 }
