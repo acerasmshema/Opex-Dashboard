@@ -15,7 +15,7 @@ export class KappaNumberPredictionComponent implements OnInit {
     document.getElementById("select_mill").style.display = "none";
     
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = false;
+    sidebarRequest.showSidebar = false;
     this.statusService.sidebarSubject.next(sidebarRequest);
   }
 

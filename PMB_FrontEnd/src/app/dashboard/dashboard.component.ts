@@ -4,8 +4,7 @@ import { SidebarRequest } from '../core/sidebar/sidebar-request';
 import { DashboardService } from './dashboard.service';
 import { Subscription } from 'rxjs';
 import { ConsumptionService } from './consumption-dashboard/consumption.service';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { CommonService } from '../shared/service/common/common.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private statusService: StatusService,
     private consumptionService: ConsumptionService,
     private dashboardService: DashboardService,
-    private messageService:MessageService) {
+    private commonService: CommonService) {
 
     this.cacheMap = new Map<string, boolean>();
     this.cacheMap.set("1", true);
@@ -79,7 +78,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
     }
     let sidebarRequest = new SidebarRequest();
-    sidebarRequest.isShow = showSideBar;
+    sidebarRequest.showSidebar = showSideBar;
     sidebarRequest.kpiCategoryId = "" + kpiCategoryId;
     sidebarRequest.type = "dashboard";
     this.statusService.sidebarSubject.next(sidebarRequest);
@@ -102,7 +101,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       subscribe((processLines: any) => {
         this.statusService.common.processLines = processLines;
         let sidebarRequest = new SidebarRequest();
-        sidebarRequest.isShow = false;
+        sidebarRequest.showSidebar = false;
         this.statusService.sidebarSubject.next(sidebarRequest);
         this.processUnitLegends = processLines;
         this.showTabs = true;
@@ -122,12 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       },
       (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if(error.status=="0"){
-        alert(CommonMessage.ERROR.SERVER_ERROR)
-        }else{
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-      }
+        this.commonService.handleError(error);
     });
   }
 

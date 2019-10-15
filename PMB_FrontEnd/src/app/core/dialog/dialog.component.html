@@ -190,29 +190,15 @@
                                     <td style="width: 400px;">
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <textarea [rows]="2" maxlength="500" [cols]="40" [(ngModel)]="rowData.remarks"
-                                                    style="width:100%; max-width:300px;" pInputTextarea></textarea>
+                                                <textarea [rows]="2" maxlength="500" [cols]="40"
+                                                    [(ngModel)]="rowData.remarks" style="width:100%; max-width:300px;"
+                                                    pInputTextarea></textarea>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData.remarks}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
-                                    <!--
-                                         <span style="width:100px;"></span>
-                                         <td>
-                                        <p-cellEditor>
-                                            <ng-template pTemplate="input">
-                                            
-                                                <input type="text" [(ngModel)]="rowData.remarks" style="width: 100%;"
-                                                    class="ng-pristine ng-valid ng-star-inserted ng-touched">
-                                            </ng-template>
-                                            <ng-template pTemplate="output">
-                                                {{rowData.remarks}}
-                                            </ng-template>
-                                        </p-cellEditor>
-                                    </td>
-                                    -->
                                     <td style="text-align:center; width: 180px; ">
                                         <button *ngIf="!editing" pButton type="button" pInitEditableRow
                                             icon="fa fa-pencil-square-o" label="Edit" class="ui-button-info"
@@ -249,7 +235,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">First Name</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50" (change)="onInputChange('firstName')">
+                        <input type="text" class="form-control edit-input" formControlName="firstName" maxlength="50"
+                            (change)="onInputChange('firstName')">
                         <span class="error-text"
                             *ngIf="!userDetailForm.get('firstName').valid && userDetailForm.get('firstName').touched && userDetailForm.get('firstName').errors?.required">
                             First name is required
@@ -259,7 +246,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Last Name</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50" (change)="onInputChange('lastName')">
+                        <input type="text" class="form-control edit-input" formControlName="lastName" maxlength="50"
+                            (change)="onInputChange('lastName')">
                         <span class="error-text" *ngIf="!userDetailForm.get('lastName').valid && userDetailForm.get('lastName').touched 
                             && userDetailForm.get('lastName').errors?.required">
                             Last name is required
@@ -286,7 +274,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label">Phone</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20" (change)="onInputChange('phone')">
+                        <input type="text" class="form-control edit-input" formControlName="phone" maxlength="20"
+                            (change)="onInputChange('phone')">
                     </div>
                 </div>
             </div>
@@ -294,7 +283,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label">Address</label>
                     <div class="form-group">
-                        <input type="text" class="form-control edit-input" formControlName="address" maxlength="200" (change)="onInputChange('address')">
+                        <input type="text" class="form-control edit-input" formControlName="address" maxlength="200"
+                            (change)="onInputChange('address')">
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -482,6 +472,389 @@
                 <button type="submit" [disabled]="!userRoleForm.valid"
                     class="btn btn-primary btn-md float-right">Submit</button>
                 <button type="button" (click)="onUserRoleCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'campaign'">
+    <form [formGroup]='campaignForm' (ngSubmit)="onCampaignSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="campaignForm.controls.show.value" [blockScroll]="true" [draggable]="true" [maximizable]="true">
+            <p-header> <span class="dialog-header" style="padding-left: 30%;">{{campaignForm.controls.operation.value}}
+                    Campaign for {{campaignForm.controls.millName.value}}</span>
+            </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Campaign Name</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control edit-role" formControlName="campaignName">
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-5">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Business Unit</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;">
+                            <option class="edit-input" [selected]="campaignForm.controls.operation.value === 'Add'"
+                                value="">Select Business Unit</option>
+                            <option [selected]="campaignForm.controls.operation.value !== 'Add'" class="edit-input">Pulp
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">Date Range</label>
+                    <div class="form-group">
+                        <ejs-daterangepicker id='daterangepicker' class="form-control edit-input daterangepicker"
+                            placeholder="{{'  Date Range' | translate }}">
+                        </ejs-daterangepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-5">
+                <div class="col-sm-6">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="statusSwitch" formControlName="active">
+                        <label class="custom-control-label edit-label" for="statusSwitch">Active</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-r-30">
+                <div class="col-md-12">
+                    <div class="form-group pull-right">
+                        <button type="button" (click)="onCampaignCancel()"
+                            class="btn btn-danger btn-md m-r-5">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-md">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'processLineThreshold'">
+    <form [formGroup]='processLineThresholdForm' (ngSubmit)="onProcessLineThresholdSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="processLineThresholdForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header"
+                    style="padding-left: 31%;">{{processLineThresholdForm.controls.operation.value}} Process Line
+                    Threshold</span>
+            </p-header>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Business Type</label>
+                            <div class="form-group">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onBusinessTypeChange($event.target.value)">
+                                    <option class="edit-input" selected value="">Select Business Type</option>
+                                    <option class="edit-input">Kraft</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Process Line</label>
+                            <div class="form-group">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onProcessLineChange($event.target.value)">
+                                    <option class="edit-input" selected value="">Select Process Line</option>
+                                    <option class="edit-input"> FL1</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Threshold</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Maximum</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Start Date</label>
+                            <div class="form-group">
+                                <ejs-daterangepicker id='daterangepicker'
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    placeholder="{{'  Date Range' | translate }}">
+                                </ejs-daterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">End Date</label>
+                            <div class="form-group">
+                                <ejs-daterangepicker id='daterangepicker'
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    placeholder="{{'  Date Range' | translate }}">
+                                </ejs-daterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gauge-center m-t-10">
+                        <rg-gauge-chart [canvasWidth]="processLineThresholdForm.controls.canvasWidth.value"
+                            [needleValue]="processLineThresholdForm.controls.needleValue.value"
+                            [options]="processLineThresholdForm.controls.options.value"
+                            [bottomLabel]="processLineThresholdForm.controls.bottomLabel.value">
+                        </rg-gauge-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!processLineThresholdForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onProcessLineThresholdCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'productionThreshold'">
+    <form [formGroup]='productionThresholdForm' (ngSubmit)="onProductionThresholdSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="productionThresholdForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header"
+                    style="padding-left: 31%;">{{productionThresholdForm.controls.operation.value}} Production
+                    Threshold</span>
+            </p-header>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Business Type</label>
+                            <div class="form-group">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onBusinessTypeChange($event.target.value)">
+                                    <option class="edit-input" selected value="">Select Business Type</option>
+                                    <option class="edit-input">Kraft</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Threshold</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Maximum</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Start Date</label>
+                            <div class="form-group">
+                                <ejs-daterangepicker id='daterangepicker'
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    placeholder="{{'  Date Range' | translate }}">
+                                </ejs-daterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">End Date</label>
+                            <div class="form-group">
+                                <ejs-daterangepicker id='daterangepicker'
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    placeholder="{{'  Date Range' | translate }}">
+                                </ejs-daterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gauge-center m-t-10">
+                        <rg-gauge-chart [canvasWidth]="productionThresholdForm.controls.canvasWidth.value"
+                            [needleValue]="productionThresholdForm.controls.needleValue.value"
+                            [options]="productionThresholdForm.controls.options.value"
+                            [bottomLabel]="productionThresholdForm.controls.bottomLabel.value"></rg-gauge-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!productionThresholdForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onProductionThresholdCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'annualTarget'">
+    <form [formGroup]='annualTargetForm' (ngSubmit)="onAnnualTargetSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '400px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="annualTargetForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header"
+                    style="padding-left: 31%;">{{annualTargetForm.controls.operation.value}} Annual Target</span>
+            </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Business Type</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onBusinessTypeChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Business Type</option>
+                            <option class="edit-input">Kraft</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Year</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onYearChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Year</option>
+                            <option class="edit-input">2019</option>
+                            <option class="edit-input">2020</option>
+                            <option class="edit-input">2021</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Working Days</label>
+                    <div class="form-group">
+                        <input type="number" class="form-control edit-input" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Annual Target</label>
+                    <div class="form-group">
+                        <input type="number" class="form-control edit-input" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!annualTargetForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onAnnualTargetCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
+<div *ngIf="dialogName === 'consumptionThreshold'">
+    <form [formGroup]='consumptionThresholdForm' (ngSubmit)="onConsumptionThresholdSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="consumptionThresholdForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header"
+                    style="padding-left: 31%;">{{consumptionThresholdForm.controls.operation.value}} Consumption
+                    Threshold</span>
+            </p-header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="edit-label required">Business Type</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onBusinessTypeChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Business Type</option>
+                            <option class="edit-input">Kraft</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-10">
+                <div class="col-sm-6">
+                    <label class="edit-label required">KPI Category</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onBusinessTypeChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Category</option>
+                            <option class="edit-input">Chemical</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">KPI</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onconsumptionChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select KPI</option>
+                            <option class="edit-input">Steam</option>
+                            <option class="edit-input">Wood</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-10">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Process Line</label>
+                    <div class="form-group">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onconsumptionChange($event.target.value)">
+                            <option class="edit-input" selected value="">Select Process Line</option>
+                            <option class="edit-input"> FL1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">Threshold</label>
+                    <div class="form-group">
+                        <input type="number" class="form-control edit-input" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-10">
+                <div class="col-sm-6">
+                    <label class="edit-label required">Start Date</label>
+                    <div class="form-group">
+                        <ejs-daterangepicker id='daterangepicker' class="form-control edit-input daterangepicker"
+                            style="height: 32px;" placeholder="{{'  Date Range' | translate }}">
+                        </ejs-daterangepicker>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="edit-label required">End Date</label>
+                    <div class="form-group">
+                        <ejs-daterangepicker id='daterangepicker' class="form-control edit-input daterangepicker"
+                            style="height: 32px;" placeholder="{{'  Date Range' | translate }}">
+                        </ejs-daterangepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!consumptionThresholdForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onConsumptionThresholdCancel()"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>

@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
                 this.statusService.common.userDetail = user;
                 this.statusService.common.selectedMill = this.statusService.common.userDetail.millRoles[0].selectedMill;
             }
-            if (state.url === '/user' && !this.statusService.common.selectedRole) {
+            if (state.url.includes("/setup") && !this.statusService.common.selectedRole) {
                 if (!this.statusService.common.userDetail.millRoles[0].selectedUserRole.showUserManagement) {
                     this.router.navigateByUrl('/home');
                 }

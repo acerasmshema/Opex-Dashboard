@@ -41,4 +41,8 @@ export class CommonMessage {
         1011: 'User is inactive. Please contact administrator',
         1012: 'Users are associated with this role so cannot be deactivated. Users must be assigned a new role'
     }
+
+    static MESSAGE = {
+        INACTIVE_USER: 'Are you sure you want to inactivate yourself?',
+    }
 }
