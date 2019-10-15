@@ -32,6 +32,10 @@ export class DialogComponent implements OnInit, OnDestroy {
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
   public userDetailForm: FormGroup;
+  public processLineThresholdForm: FormGroup;
+  public productionThresholdForm: FormGroup;
+  public annualTargetForm: FormGroup;
+  public consumptionThresholdForm: FormGroup;
   public userRoleForm: FormGroup;
   public campaignForm: FormGroup;
   public dialogName: string;
@@ -92,6 +96,26 @@ export class DialogComponent implements OnInit, OnDestroy {
           if (this.campaignForm !== undefined)
             this.campaignForm.reset();
           this.campaignForm = this.dialogService.createCampaignForm(data.campaign);
+        }
+        else if (dialogName === 'processLineThreshold') {
+          if (this.processLineThresholdForm !== undefined)
+            this.processLineThresholdForm.reset();
+          this.processLineThresholdForm = this.dialogService.createProcessLineThresholdForm(data.processLineThreshold);
+        }
+        else if (dialogName === 'productionThreshold') {
+          if (this.productionThresholdForm !== undefined)
+            this.productionThresholdForm.reset();
+          this.productionThresholdForm = this.dialogService.createProductionThresholdForm(data.productionThreshold);
+        }
+        else if (dialogName === 'annualTarget') {
+          if (this.annualTargetForm !== undefined)
+            this.annualTargetForm.reset();
+          this.annualTargetForm = this.dialogService.createAnnualTargetForm(data.annualTarget);
+        }
+        else if (dialogName === 'consumptionThreshold') {
+          if (this.consumptionThresholdForm !== undefined)
+            this.consumptionThresholdForm.reset();
+          this.consumptionThresholdForm = this.dialogService.createConsumptionThresholdForm(data.consumptionThreshold);
         }
         this.dialogName = dialogName;
       },

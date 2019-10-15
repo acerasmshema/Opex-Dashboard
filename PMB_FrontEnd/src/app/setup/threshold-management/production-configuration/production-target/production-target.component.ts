@@ -1,35 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductionLine } from 'src/app/dashboard/production-dashboard/production-LINE';
+import { ProductionTargetService } from './production-target.service';
+import { ProductionThreshold } from './production-threshold';
+import { MasterData } from 'src/app/shared/constant/MasterData';
+import { StatusService } from 'src/app/shared/service/status.service';
 
 @Component({
   selector: 'app-production-target',
   templateUrl: './production-target.component.html',
-  styleUrls: ['./production-target.component.scss']
+  styleUrls: ['./production-target.component.scss'],
+  providers: [ProductionTargetService]
 })
 export class ProductionTargetComponent implements OnInit {
 
-  public canvasWidth = 220
-  public needleValue = 80
-  public bottomLabel = '7500'
-  public options = {
-      hasNeedle: true,
-      needleColor: 'black',
-      needleUpdateSpeed: 1000,
-      arcColors:  ["red", "yellow", "green"],      
-      arcDelimiters: [80, 90],
-      rangeLabel: ['0', '9000'],
-      needleStartValue: 50,
-  }
+  productionThresholds: ProductionThreshold[] = [];
+  cols = MasterData.productionThresholdCols;
 
-  constructor() { }
+  constructor(private productionTargetService: ProductionTargetService,
+    private statusService: StatusService) { }
 
   ngOnInit() {
-   
+    this.productionThresholds = this.productionTargetService.getProductionThresholds();
   }
 
-  onSubmit() {
-    this.options.rangeLabel[0] = '11';
-    this.options.rangeLabel[1] = '80';
+  onCreate() {
+    let productionThreshold = new ProductionThreshold();
+    productionThreshold.buType = '';
+    productionThreshold.threshold = null;
+    productionThreshold.maximum = null;
+    productionThreshold.startDate = ''
+    productionThreshold.endDate = '';
+    productionThreshold.createdBy = this.statusService.common.userDetail.username;
+    productionThreshold.updatedBy = this.statusService.common.userDetail.username;
+    productionThreshold.operation = "Add";
+
+    const data = {
+      dialogName: "productionThreshold",
+      productionThreshold: productionThreshold
+    }
+    this.statusService.dialogSubject.next(data);
+  }
+
+  onEdit(productionThresholdId: string) {
+    const productionThreshold = this.productionThresholds.find((productionThreshold) => productionThreshold.productionThresholdId === productionThresholdId)
+    productionThreshold.operation = "Edit";
+
+    const data = {
+      dialogName: "productionThreshold",
+      productionThreshold: productionThreshold
+    }
+    this.statusService.dialogSubject.next(data);
   }
 
 }

@@ -12,6 +12,10 @@ import { UserRole } from 'src/app/setup/user-management/user-role/user-role.mode
 import { UserDetail } from 'src/app/setup/user-management/user-detail/user-detail.model';
 import { MillRole } from 'src/app/setup/user-management/user-detail/mill-role.model';
 import { CampaignModel } from 'src/app/setup/campaign-management/campaign-model';
+import { ProcessLineThreshold } from 'src/app/setup/threshold-management/production-configuration/process-line-target/process-line-threshold';
+import { ProductionThreshold } from 'src/app/setup/threshold-management/production-configuration/production-target/production-threshold';
+import { ConsumptionThreshold } from 'src/app/setup/threshold-management/consumption-configuration/consumption-threshold';
+import { AnnualTarget } from 'src/app/setup/threshold-management/production-configuration/annual-configuration/annual-target';
 
 @Injectable()
 export class DialogService {
@@ -99,6 +103,88 @@ export class DialogService {
             description: new FormControl(userRole.description),
             userExistError: new FormControl(''),
             active: new FormControl(userRole.active),
+        });
+    }
+
+    createProcessLineThresholdForm(processLineThreshold: ProcessLineThreshold): FormGroup {
+        let options = {
+            hasNeedle: true,
+            needleColor: 'black',
+            needleUpdateSpeed: 1000,
+            arcColors:  ["red", "yellow", "green"],      
+            arcDelimiters: [80, 90],
+            rangeLabel: ['0', '9000'],
+            needleStartValue: 50,
+        };
+
+        return this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(processLineThreshold.operation),
+            buType: new FormControl(processLineThreshold.buType),
+            createdBy: new FormControl(processLineThreshold.createdBy),
+            processLine: new FormControl(processLineThreshold.processLine),
+            threshold: new FormControl(processLineThreshold.threshold),
+            maximum: new FormControl(processLineThreshold.maximum),
+            startDate: new FormControl(processLineThreshold.startDate),
+            endDate: new FormControl(processLineThreshold.endDate),
+            canvasWidth: new FormControl(220),
+            needleValue: new FormControl(80),
+            bottomLabel: new FormControl(7500),
+            options: new FormControl(options),
+        });
+    }
+
+    createProductionThresholdForm(productionThreshold: ProductionThreshold): FormGroup {
+        let options = {
+            hasNeedle: true,
+            needleColor: 'black',
+            needleUpdateSpeed: 1000,
+            arcColors:  ["red", "yellow", "green"],      
+            arcDelimiters: [80, 90],
+            rangeLabel: ['0', '9000'],
+            needleStartValue: 50,
+        }
+
+        return this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(productionThreshold.operation),
+            buType: new FormControl(productionThreshold.buType),
+            createdBy: new FormControl(productionThreshold.createdBy),
+            threshold: new FormControl(productionThreshold.threshold),
+            maximum: new FormControl(productionThreshold.maximum),
+            startDate: new FormControl(productionThreshold.startDate),
+            endDate: new FormControl(productionThreshold.endDate),
+            canvasWidth: new FormControl(220),
+            needleValue: new FormControl(80),
+            bottomLabel: new FormControl(7500),
+            options: new FormControl(options),
+        });
+    }
+
+    createAnnualTargetForm(annualTarget: AnnualTarget): FormGroup {
+        return this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(annualTarget.operation),
+            buType: new FormControl(annualTarget.buType),
+            createdBy: new FormControl(annualTarget.createdBy),
+            workingDays: new FormControl(annualTarget.workingDays),
+            year: new FormControl(annualTarget.year),
+            target: new FormControl(annualTarget.target),
+        });
+    }
+
+    createConsumptionThresholdForm(consumptionThreshold: ConsumptionThreshold): FormGroup {
+        return this.formBuilder.group({
+            show: new FormControl(true),
+            operation: new FormControl(consumptionThreshold.operation),
+            kpiCategory: new FormControl(consumptionThreshold.kpiCategory),
+            kpi: new FormControl(consumptionThreshold.kpi),
+            processLine: new FormControl(consumptionThreshold.processLine),
+            buType: new FormControl(consumptionThreshold.buType),
+            createdBy: new FormControl(consumptionThreshold.createdBy),
+            threshold: new FormControl(consumptionThreshold.threshold),
+            startDate: new FormControl(consumptionThreshold.startDate),
+            endDate: new FormControl(consumptionThreshold.endDate),
         });
     }
 
