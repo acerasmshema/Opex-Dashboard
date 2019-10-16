@@ -5,7 +5,7 @@ public class ProcessLineTargetThreshold {
 	private String processLineTargetThreshold;
 	private BuTypeResponse buType;
 	private MillDetail mill;
-	private ProcessLineResponse processLine;
+	private ProcessLine processLine;
 	private Double threshold;
 	private Double minimum;
 	private Double maximum;
@@ -33,11 +33,11 @@ public class ProcessLineTargetThreshold {
 		this.mill = mill;
 	}
 
-	public ProcessLineResponse getProcessLine() {
+	public ProcessLine getProcessLine() {
 		return processLine;
 	}
 
-	public void setProcessLine(ProcessLineResponse processLine) {
+	public void setProcessLine(ProcessLine processLine) {
 		this.processLine = processLine;
 	}
 

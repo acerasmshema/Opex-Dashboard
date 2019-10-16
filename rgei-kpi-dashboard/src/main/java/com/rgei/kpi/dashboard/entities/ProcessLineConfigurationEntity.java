@@ -24,7 +24,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	@Column(name = "process_line_configuration_id")
 	private Integer processLineConfigurationId;
 
-	@Column(name = "bu_type_id")
+	@Column(name = "bu_id")
 	private Integer buTypeId;
 
 	@Column(name = "mill_id")
@@ -37,13 +37,13 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	private Integer processLineId;
 
 	@Column(name = "minimum")
-	private Integer minimum;
+	private Double minimum;
 
 	@Column(name = "maximum")
-	private Integer maximum;
+	private Double maximum;
 
 	@Column(name = "threshold")
-	private Integer threshold;
+	private Double threshold;
 
 	@Column(name = "start_date")
 	private Timestamp startDate;
@@ -69,7 +69,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	private Timestamp updatedDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "bu_type_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
+	@JoinColumn(name = "bu_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
 	private BusinessUnitTypeEntity buType;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -77,7 +77,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	private MillEntity mill;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "processLineId", referencedColumnName = "processLineId", insertable = false, updatable = false)
+	@JoinColumn(name = "process_line_id", referencedColumnName = "process_line_id", insertable = false, updatable = false)
 	private ProcessLineEntity processLine;
 
 	@JsonIgnore
@@ -156,27 +156,27 @@ public class ProcessLineConfigurationEntity implements Serializable {
 		this.mill = mill;
 	}
 
-	public Integer getMinimum() {
+	public Double getMinimum() {
 		return minimum;
 	}
 
-	public void setMinimum(Integer minimum) {
+	public void setMinimum(Double minimum) {
 		this.minimum = minimum;
 	}
 
-	public Integer getMaximum() {
+	public Double getMaximum() {
 		return maximum;
 	}
 
-	public void setMaximum(Integer maximum) {
+	public void setMaximum(Double maximum) {
 		this.maximum = maximum;
 	}
 
-	public Integer getThreshold() {
+	public Double getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Integer threshold) {
+	public void setThreshold(Double threshold) {
 		this.threshold = threshold;
 	}
 
