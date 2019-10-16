@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.service.ThresholdManagementService;
@@ -55,6 +56,15 @@ public class ThresholdManagementController {
 	public ResponseEntity<List<ProductionThreshold>> getProductionTargetsByMillId(@RequestHeader(value = "millId") String millId) {
 		logger.info("Get all users by mill Id : " + millId);
 		List<ProductionThreshold> responseList = thresholdManagementService.getProductionTargetsByMillId(CommonFunction.covertToInteger(millId));
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "getProcessLineTargets", notes = "Retrieve process line target by Mill Id", response = User.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping("/v1/process_line_targets")
+	public ResponseEntity<List<ProcessLineTargetThreshold >> getProcessLineTargets(@RequestHeader(value = "millId") String millId,@RequestHeader(value = "buTypeId") String buTypeId,@RequestHeader(value = "kpiId") String kpiId) {
+		logger.info("Retrieve process line target by Mill Id : " + millId);
+		List<ProcessLineTargetThreshold > responseList = thresholdManagementService.getProcessLineTargets(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buTypeId),CommonFunction.covertToInteger(kpiId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 }
