@@ -1,14 +1,12 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -18,14 +16,13 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "kpi_configuration")
-public class KpiConfigurationEntity implements Serializable {
+@Table(name = "process_line_configuration")
+public class ProcessLineConfigurationEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "kpi_configuration_id")
-	private Integer kpiConfigurationId;
+	@Column(name = "process_line_configuration_id")
+	private Integer processLineConfigurationId;
 
 	@Column(name = "bu_type_id")
 	private Integer buTypeId;
@@ -35,6 +32,9 @@ public class KpiConfigurationEntity implements Serializable {
 
 	@Column(name = "kpi_id")
 	private Integer kpiId;
+	
+	@Column(name = "process_line_id")
+	private Integer processLineId;
 
 	@Column(name = "minimum")
 	private Double minimum;
@@ -46,10 +46,10 @@ public class KpiConfigurationEntity implements Serializable {
 	private Double threshold;
 
 	@Column(name = "start_date")
-	private Date startDate;
+	private Timestamp startDate;
 
 	@Column(name = "end_date")
-	private Date endDate;
+	private Timestamp endDate;
 
 	@Column(name = "is_default")
 	private Boolean isDefault;
@@ -60,13 +60,13 @@ public class KpiConfigurationEntity implements Serializable {
 	private String createdBy;
 
 	@Column(name = "created_date")
-	private Date createdDate;
+	private Timestamp createdDate;
 
 	@Column(name = "updated_by")
 	private String updatedBy;
 
 	@Column(name = "updated_date")
-	private Date updatedDate;
+	private Timestamp updatedDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bu_type_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
@@ -75,17 +75,37 @@ public class KpiConfigurationEntity implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "mill_id", referencedColumnName = "mill_id", insertable = false, updatable = false)
 	private MillEntity mill;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "process_line_id", referencedColumnName = "process_line_id", insertable = false, updatable = false)
+	private ProcessLineEntity processLine;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "kpiId")
 	private List<KpiEntity> kpi;
-
-	public Integer getKpiConfigurationId() {
-		return kpiConfigurationId;
+	
+	public Integer getProcessLineConfigurationId() {
+		return processLineConfigurationId;
 	}
 
-	public void setKpiConfigurationId(Integer kpiConfigurationId) {
-		this.kpiConfigurationId = kpiConfigurationId;
+	public void setProcessLineConfigurationId(Integer processLineConfigurationId) {
+		this.processLineConfigurationId = processLineConfigurationId;
+	}
+
+	public Integer getProcessLineId() {
+		return processLineId;
+	}
+
+	public void setProcessLineId(Integer processLineId) {
+		this.processLineId = processLineId;
+	}
+
+	public ProcessLineEntity getProcessLine() {
+		return processLine;
+	}
+
+	public void setProcessLine(ProcessLineEntity processLine) {
+		this.processLine = processLine;
 	}
 
 	public List<KpiEntity> getKpi() {
@@ -160,19 +180,19 @@ public class KpiConfigurationEntity implements Serializable {
 		this.threshold = threshold;
 	}
 
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 
@@ -192,11 +212,11 @@ public class KpiConfigurationEntity implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
 
@@ -208,11 +228,11 @@ public class KpiConfigurationEntity implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdatedDate() {
+	public Timestamp getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(Date updatedDate) {
+	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 

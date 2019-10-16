@@ -1,36 +1,44 @@
 package com.rgei.kpi.dashboard.response.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class ProcessLineTargetThreshold {
 
-public class ProductionThreshold {
-
-	private String productionThresholdId;
+	private String processLineTargetThreshold;
 	private BuTypeResponse buType;
-	private Integer kpiId;
-	private Integer millId;
+	private MillDetail mill;
+	private ProcessLine processLine;
 	private Double threshold;
 	private Double minimum;
 	private Double maximum;
 	private String startDate;
 	private String endDate;
-	private Boolean isDefault;
-	@JsonIgnore
 	private Boolean active;
-	@JsonIgnore
 	private String createdBy;
-	@JsonIgnore
 	private String createdDate;
-	@JsonIgnore
 	private String updatedBy;
-	@JsonIgnore
 	private String updatedDate;
 
-	public String getProductionThresholdId() {
-		return productionThresholdId;
+	public String getProcessLineTargetThreshold() {
+		return processLineTargetThreshold;
 	}
 
-	public void setProductionThresholdId(String productionThresholdId) {
-		this.productionThresholdId = productionThresholdId;
+	public void setProcessLineTargetThreshold(String processLineTargetThreshold) {
+		this.processLineTargetThreshold = processLineTargetThreshold;
+	}
+
+	public MillDetail getMill() {
+		return mill;
+	}
+
+	public void setMill(MillDetail mill) {
+		this.mill = mill;
+	}
+
+	public ProcessLine getProcessLine() {
+		return processLine;
+	}
+
+	public void setProcessLine(ProcessLine processLine) {
+		this.processLine = processLine;
 	}
 
 	public BuTypeResponse getBuType() {
@@ -81,14 +89,6 @@ public class ProductionThreshold {
 		this.endDate = endDate;
 	}
 
-	public Boolean getIsDefault() {
-		return isDefault;
-	}
-
-	public void setIsDefault(Boolean isDefault) {
-		this.isDefault = isDefault;
-	}
-
 	public Boolean getActive() {
 		return active;
 	}
@@ -127,22 +127,6 @@ public class ProductionThreshold {
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
-	}
-
-	public Integer getKpiId() {
-		return kpiId;
-	}
-
-	public void setKpiId(Integer kpiId) {
-		this.kpiId = kpiId;
-	}
-
-	public Integer getMillId() {
-		return millId;
-	}
-
-	public void setMillId(Integer millId) {
-		this.millId = millId;
 	}
 
 }

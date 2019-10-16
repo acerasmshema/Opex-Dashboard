@@ -18,9 +18,16 @@ package com.rgei.kpi.dashboard.util;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Objects;
 
+import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.CountryEntity;
+import com.rgei.kpi.dashboard.entities.MillEntity;
+import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
+import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
+import com.rgei.kpi.dashboard.response.model.MillDetail;
+import com.rgei.kpi.dashboard.response.model.ProcessLine;
 
 public class CommonFunction {
 	
@@ -29,7 +36,7 @@ public class CommonFunction {
 	}
 	
 	public static Integer covertToInteger(String integerValue) {
-		return Integer.parseInt(integerValue);
+		return (integerValue != null) ?Integer.parseInt(integerValue): null;
 	}
 	
 	public static Long covertToLong(String longValue) {
@@ -63,4 +70,41 @@ public class CommonFunction {
 		}
 		return countryResponse;
 		}
+	
+	public static BuTypeResponse convertBUEntityToResponse(BusinessUnitTypeEntity buType) {
+		BuTypeResponse buTypeResponse = null;
+		if(Objects.nonNull(buType)) {
+			buTypeResponse = new BuTypeResponse();
+			buTypeResponse.setBuTypeId(buType.getBusinessUnitTypeId());
+			buTypeResponse.setBuId(buType.getBusinessUnit().getBusinessUnitId());
+			buTypeResponse.setBuTypeName(buType.getBusinessUnitTypeName());
+			buTypeResponse.setBuTypeCode(buType.getBusinessUnitTypeCode());
+		}
+		return buTypeResponse;
+	}
+	
+	public static MillDetail convertMillEntityToResponse(MillEntity millEntity) {
+		MillDetail millDetail = null;
+		if(Objects.nonNull(millEntity)) {
+			millDetail = new MillDetail();
+			millDetail.setMillId(millEntity.getMillId().toString());
+			millDetail.setMillCode(millEntity.getMillCode());
+			millDetail.setMillName(millEntity.getMillName());
+			millDetail.setActive(millEntity.getActive());
+		}
+		return millDetail;
+	}
+	
+	public static ProcessLine convertProcessLineEntityToResponse(ProcessLineEntity processLineEntity) {
+		ProcessLine processLine = null;
+		if(Objects.nonNull(processLineEntity)) {
+			processLine = new ProcessLine();
+			processLine.setProcessLineId(processLineEntity.getProcessLineId());
+			processLine.setProcessLineCode(processLineEntity.getProcessLineCode());
+			processLine.setProcessLineName(processLineEntity.getProcessLineName());
+		}
+		return processLine;
+	}
+	
+	
 }
