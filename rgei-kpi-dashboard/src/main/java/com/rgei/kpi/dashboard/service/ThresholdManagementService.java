@@ -9,7 +9,8 @@ public interface ThresholdManagementService {
 
 	List<ProductionThreshold> getProductionTargetsByMillId(Integer millId);
 
-	List<ProcessLineTargetThreshold> getProcessLineTargets(Integer millId, Integer buTypeId,
-			Integer kpiId);
+	List<ProcessLineTargetThreshold> getProcessLineTargets(Integer millId, Integer buTypeId, Integer kpiId);
+
+	void createProductionTarget(ProductionThreshold productionTarget);
 
 }

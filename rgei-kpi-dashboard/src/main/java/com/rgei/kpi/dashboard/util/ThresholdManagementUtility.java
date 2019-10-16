@@ -1,6 +1,7 @@
 package com.rgei.kpi.dashboard.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ public class ThresholdManagementUtility {
 			threshold.setMaximum(Double.parseDouble(CommonFunction.getString(config.getMaximum())));
 			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
+			threshold.setIsDefault(config.getIsDefault());
 			threshold.setActive(config.getActive());
 			threshold.setCreatedBy(CommonFunction.getString(config.getCreatedBy()));
 			threshold.setCreatedDate(CommonFunction.getString(config.getCreatedDate()));
@@ -47,6 +49,28 @@ public class ThresholdManagementUtility {
 			buTypeResponse.setBuTypeCode(buType.getBusinessUnitTypeCode());
 		}
 		return buTypeResponse;
+	}
+
+	public static KpiConfigurationEntity createConfigurationEntity(ProductionThreshold productionTarget) {
+		KpiConfigurationEntity configEntity = new KpiConfigurationEntity();
+		if(Objects.nonNull(productionTarget)) {
+			configEntity.setThreshold(productionTarget.getThreshold());
+			configEntity.setMinimum(0.0);
+			configEntity.setMaximum(productionTarget.getMaximum());
+			configEntity.setThreshold(productionTarget.getThreshold());
+			configEntity.setBuTypeId(productionTarget.getBuType().getBuId());
+			configEntity.setKpiId(productionTarget.getKpiId());
+			configEntity.setMillId(productionTarget.getMillId());
+			configEntity.setStartDate(Utility.stringToDateConvertor(productionTarget.getStartDate(), DashboardConstant.FORMAT));
+			configEntity.setEndDate(Utility.stringToDateConvertor(productionTarget.getEndDate(), DashboardConstant.FORMAT));
+			configEntity.setIsDefault(Boolean.FALSE);
+			configEntity.setActive(Boolean.TRUE);
+			configEntity.setCreatedBy(productionTarget.getCreatedBy());
+			configEntity.setCreatedDate(new Date());
+			configEntity.setUpdatedBy(productionTarget.getUpdatedBy());
+			configEntity.setUpdatedDate(new Date());
+		}
+		return configEntity;
 	}
 
 }
