@@ -19,7 +19,8 @@ export class ProcessLineTargetComponent implements OnInit {
     private statusService: StatusService) { }
 
   ngOnInit() {
-    this.processLineThresholds = this.processLineTargetService.getProcessLineThresholds();
+    this.processLineThresholds = []
+    this.processLineTargetService.getProcessLineThresholds(this.processLineThresholds);
   }
 
   onCreate() {

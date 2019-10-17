@@ -14,6 +14,8 @@ import { ValidationService } from 'src/app/shared/service/validation/validation.
 import { FormGroup } from '@angular/forms';
 import { UserRoleService } from 'src/app/setup/user-management/user-role/user-role.service';
 import { CommonService } from 'src/app/shared/service/common/common.service';
+import { ProductionTargetService } from 'src/app/setup/threshold-management/production-configuration/production-target/production-target.service';
+import { ConsumptionConfigurationService } from 'src/app/setup/threshold-management/consumption-configuration/consumption-configuration.service';
 
 @Component({
   selector: 'app-dialog',
@@ -53,6 +55,8 @@ export class DialogComponent implements OnInit, OnDestroy {
     private productionService: ProductionService,
     private userRoleService: UserRoleService,
     private commonService: CommonService,
+    private productionTargetService: ProductionTargetService,
+    private consumptionConfigService: ConsumptionConfigurationService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -464,13 +468,61 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  onProductionThresholdSubmit() {
+    if (this.productionThresholdForm.invalid)
+      return;
+
+    if (this.productionThresholdForm.controls.operation.value === "Add") {
+      this.productionTargetService.addProductionTarget(this.productionThresholdForm);
+    } else {
+      this.productionTargetService.updateProductionTarget(this.productionThresholdForm);
+    }
+  }
+
   onInputChange(value: any) {
     let formControl: any = this.userDetailForm.get(value);
     this.validationService.trimValue(formControl);
   }
 
+  onKpiCategoryChange(value: string) {
+    this.dialogService.getKpiDetails(value, this.consumptionThresholdForm);
+  }
+
+  onKpiChange(value: string) {
+    this.dialogService.getKpiProcessLines(value, this.consumptionThresholdForm);
+  }
+
   onConfigCancel() {
     this.campaignForm.controls.show.setValue(false);
+  }
+
+  onThresholdChange(value, type: string) {
+    if (type === "production") {
+      this.dialogService.changeGaugeThreshold(value, this.productionThresholdForm);
+    }
+    else if (type === "processLine") {
+
+    }
+  }
+
+  onMaximumChange(value, type: string) {
+    if (type === "production") {
+      this.dialogService.changeGaugeMaximum(value, this.productionThresholdForm);
+    }
+    else if (type === "processLine") {
+
+    }
+  }
+
+  onBusinessTypeChange(value: string, type: string) {
+    if (type === "production") {
+      const buTypeList: any = this.productionThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.productionThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "processLine") {
+
+    }
   }
 
   ngOnDestroy() {

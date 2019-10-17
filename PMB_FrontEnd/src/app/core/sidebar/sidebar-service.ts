@@ -6,8 +6,6 @@ import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { StatusService } from '../../shared/service/status.service';
 import { CommonService } from 'src/app/shared/service/common/common.service';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/primeng';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 
 @Injectable()
@@ -16,7 +14,6 @@ export class SidebarService {
     kpiTypeUrl = API_URL.apiURLs.KPI_TYPE_URL;
 
     constructor(private apiCallService: ApiCallService,
-        private messageService: MessageService,
         private commonService: CommonService,
         private statusService: StatusService) { }
 

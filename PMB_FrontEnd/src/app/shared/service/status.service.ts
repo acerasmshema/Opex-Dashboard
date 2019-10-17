@@ -18,7 +18,8 @@ export class StatusService {
     public enableTabs: Subject<boolean> = new Subject<boolean>();
     public benchmarkSubject: Subject<SearchKpiData> = new Subject<SearchKpiData>();
     public refreshUserList: Subject<boolean> = new Subject<boolean>();
-
+    public refreshProductionTargetList: Subject<boolean> = new Subject<boolean>();
+    
     public kpiCategoryMap: Map<string, any> = new Map<string, any>();
     public consumptionDetailMap: Map<string, ConsumptionDetiail> = new Map<string, ConsumptionDetiail>();
     public benchmarkList: ConsumptionModel[] = [];

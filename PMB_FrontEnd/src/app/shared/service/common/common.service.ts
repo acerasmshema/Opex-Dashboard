@@ -9,6 +9,7 @@ import { Department } from 'src/app/setup/user-management/user-detail/department
 import { Observable } from 'rxjs';
 import { CommonMessage } from '../../constant/Common-Message';
 import { MessageService } from 'primeng/primeng';
+import { ConsumptionConfig } from 'src/app/setup/threshold-management/consumption-configuration/consumption-config.model';
 
 @Injectable()
 export class CommonService {
@@ -30,25 +31,48 @@ export class CommonService {
         return this.apiCallService.callGetAPIwithData(this.allMills, requestData);
     }
 
-    public getAllBuType(sidebarForm: SidebarForm) {
+    public getAllBuType(object: any) {
         if (this.statusService.common.buTypes.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allBuTypes)
                 .subscribe(
                     (buTypes: any) => {
                         this.statusService.common.buTypes = buTypes;
-                        if (sidebarForm !== null) {
-                            sidebarForm.buisnessUnits = buTypes;
+                        if (object instanceof SidebarForm) {
+                            object.buisnessUnits = buTypes;
                             setTimeout(() => {
                                 this.setDropDownFont();
                             }, 100);
+                        }
+                        else if (object instanceof ConsumptionConfig) {
+                            object.buTypes = buTypes;
+                        }
+                        else if (object instanceof FormGroup) {
+                            const buTypeList: any = object.controls.buTypeList;
+                            let buTypeControl = buTypeList.controls;
+                            buTypes.forEach(buType => {
+                                buTypeControl.push(new FormControl(buType));
+                            });
                         }
                     },
                     (error: any) => {
                         this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     });
         }
-        else if (sidebarForm !== null) {
-            sidebarForm.buisnessUnits = this.statusService.common.buTypes;
+        else if (object !== null) {
+            if (object instanceof SidebarForm) {
+                object.buisnessUnits = this.statusService.common.buTypes;
+            }
+            else if (object instanceof ConsumptionConfig) {
+                object.buTypes = this.statusService.common.buTypes;
+            }
+            else if (object instanceof FormGroup) {
+                const buTypeList: any = object.controls.buTypeList;
+                let buTypeControl = buTypeList.controls;
+                const buTypes = this.statusService.common.buTypes;
+                buTypes.forEach(buType => {
+                    buTypeControl.push(new FormControl(buType));
+                });
+            }
         }
     }
 
@@ -140,7 +164,7 @@ export class CommonService {
 
     handleError(error: any) {
         this.statusService.spinnerSubject.next(false);
-        if (error.status !== 0)  
+        if (error.status !== 0)
             this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
     }
+}
