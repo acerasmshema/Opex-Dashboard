@@ -27,7 +27,6 @@ import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
-import com.rgei.kpi.dashboard.response.model.MillRole;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 
 public class CommonFunction {

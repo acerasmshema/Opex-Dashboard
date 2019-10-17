@@ -1,7 +1,6 @@
 package com.rgei.kpi.dashboard.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Resource;
 
@@ -11,17 +10,14 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.RgeUserEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.repository.KpiConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
-import com.rgei.kpi.dashboard.repository.RgeUserEntityRepository;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
-import com.rgei.kpi.dashboard.response.model.User;
 import com.rgei.kpi.dashboard.util.ProcessLineConfigurationManagementUtility;
 import com.rgei.kpi.dashboard.util.ThresholdManagementUtility;
-import com.rgei.kpi.dashboard.util.UserManagementUtility;
 
 @Service
 public class ThresholdManagementServiceImpl implements ThresholdManagementService{
@@ -52,6 +48,28 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 			return ProcessLineConfigurationManagementUtility.convertToProcessLineThreshold(processLineConfigurationEntity);
 		}
 		throw new RecordNotFoundException("Data not available in database for Mill Id : " + millId);
+	}
+
+	@Override
+	public void updateProcessLineTarget(ProcessLineTargetThreshold targetThreshold) {
+		logger.info("Update process line target for MillId : ",  targetThreshold.getMillId());
+		ProcessLineConfigurationEntity processLineConfigEntity = null;
+		if(targetThreshold != null && targetThreshold.getBuType() != null && targetThreshold.getProcessLine() != null) {
+			ProcessLineConfigurationEntity entity = processLineConfigurationRepository.findAllByMillIdAndBuTypeIdAndKpiIdAndProcessLineId(targetThreshold.getMillId(), targetThreshold.getBuType().getBuTypeId(), targetThreshold.getKpiId(), targetThreshold.getProcessLine().getProcessLineId());
+			if(entity != null) {
+				processLineConfigEntity = ProcessLineConfigurationManagementUtility.getProcessLineConfigurationEntity(targetThreshold, entity);
+				
+				try {
+					processLineConfigurationRepository.save(processLineConfigEntity);
+				}catch(RuntimeException e) {
+					throw new RecordNotUpdatedException("Error while updating process line target configuration :" + processLineConfigEntity);
+				}
+			}else {
+				throw new RecordNotFoundException("Process line target not found against target id  :" + targetThreshold.getProcessLineTargetThresholdId());
+			}
+		}else {
+			throw new RecordNotFoundException("Process line target not found against target id  :" + targetThreshold.getProcessLineTargetThresholdId());
+		}
 	}
 
 }

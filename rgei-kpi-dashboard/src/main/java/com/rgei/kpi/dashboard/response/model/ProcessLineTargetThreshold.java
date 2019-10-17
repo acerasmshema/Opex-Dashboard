@@ -2,35 +2,45 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class ProcessLineTargetThreshold {
 
-	private String processLineTargetThreshold;
+	private String processLineTargetThresholdId;
 	private BuTypeResponse buType;
-	private MillDetail mill;
+	private Integer millId;
 	private ProcessLine processLine;
+	private Integer kpiId;
 	private Double threshold;
 	private Double minimum;
 	private Double maximum;
 	private String startDate;
 	private String endDate;
 	private Boolean active;
+	private Boolean isDefaultConfig;
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
 	private String updatedDate;
 
-	public String getProcessLineTargetThreshold() {
-		return processLineTargetThreshold;
+	public String getProcessLineTargetThresholdId() {
+		return processLineTargetThresholdId;
 	}
 
-	public void setProcessLineTargetThreshold(String processLineTargetThreshold) {
-		this.processLineTargetThreshold = processLineTargetThreshold;
+	public void setProcessLineTargetThresholdId(String processLineTargetThreshold) {
+		this.processLineTargetThresholdId = processLineTargetThreshold;
 	}
 
-	public MillDetail getMill() {
-		return mill;
+	public Integer getMillId() {
+		return millId;
 	}
 
-	public void setMill(MillDetail mill) {
-		this.mill = mill;
+	public void setMillId(Integer millId) {
+		this.millId = millId;
+	}
+
+	public Integer getKpiId() {
+		return kpiId;
+	}
+
+	public void setKpiId(Integer kpiId) {
+		this.kpiId = kpiId;
 	}
 
 	public ProcessLine getProcessLine() {
@@ -95,6 +105,14 @@ public class ProcessLineTargetThreshold {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	
+	public Boolean getIsDefaultConfig() {
+		return isDefaultConfig;
+	}
+
+	public void setIsDefaultConfig(Boolean isDefaultConfig) {
+		this.isDefaultConfig = isDefaultConfig;
 	}
 
 	public String getCreatedBy() {

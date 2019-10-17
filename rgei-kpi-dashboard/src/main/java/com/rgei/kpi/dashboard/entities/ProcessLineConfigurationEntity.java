@@ -24,7 +24,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	@Column(name = "process_line_configuration_id")
 	private Integer processLineConfigurationId;
 
-	@Column(name = "bu_id")
+	@Column(name = "bu_type_id")
 	private Integer buTypeId;
 
 	@Column(name = "mill_id")
