@@ -27,7 +27,6 @@ import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.CountryResponse;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
-import com.rgei.kpi.dashboard.response.model.MillRole;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
 
 public class CommonFunction {
@@ -37,7 +36,7 @@ public class CommonFunction {
 	}
 	
 	public static Integer covertToInteger(String integerValue) {
-		return Integer.parseInt(integerValue);
+		return (integerValue != null) ?Integer.parseInt(integerValue): null;
 	}
 	
 	public static Long covertToLong(String longValue) {
@@ -89,8 +88,8 @@ public class CommonFunction {
 		if(Objects.nonNull(millEntity)) {
 			millDetail = new MillDetail();
 			millDetail.setMillId(millEntity.getMillId().toString());
-			millDetail.setMillCode(millEntity.getMillCode().toString());
-			millDetail.setMillName(millEntity.getMillName().toString());
+			millDetail.setMillCode(millEntity.getMillCode());
+			millDetail.setMillName(millEntity.getMillName());
 			millDetail.setActive(millEntity.getActive());
 		}
 		return millDetail;

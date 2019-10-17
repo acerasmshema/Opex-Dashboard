@@ -3,6 +3,7 @@ package com.rgei.kpi.dashboard.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 
@@ -11,9 +12,9 @@ public class ProcessLineConfigurationManagementUtility {
 	}
 
 	public static List<ProcessLineTargetThreshold> convertToProcessLineThreshold(
-			List<ProcessLineConfigurationEntity> ProcessLineConfigurationEntityList) {
+			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList) {
 		List<ProcessLineTargetThreshold> response = new ArrayList<>();
-		for(ProcessLineConfigurationEntity config : ProcessLineConfigurationEntityList) {
+		for(ProcessLineConfigurationEntity config : processLineConfigurationEntityList) {
 			ProcessLineTargetThreshold threshold = new ProcessLineTargetThreshold();
 			threshold.setProcessLineTargetThreshold(config.getProcessLineConfigurationId().toString());
 			threshold.setBuType(CommonFunction.convertBUEntityToResponse(config.getBuType()));
@@ -22,8 +23,8 @@ public class ProcessLineConfigurationManagementUtility {
 			threshold.setThreshold(config.getThreshold());
 			threshold.setMinimum(config.getMinimum());
 			threshold.setMaximum(config.getMaximum());
-			threshold.setStartDate(config.getStartDate().toString());
-			threshold.setEndDate(config.getEndDate().toString());
+			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
+			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setActive(config.getActive());
 			threshold.setCreatedBy(config.getCreatedBy());
 			threshold.setCreatedDate(config.getCreatedDate().toString());

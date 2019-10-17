@@ -8,33 +8,30 @@
             <div class="col-md-3">
               <div class="form-inline">
                 <label class="m-r-5">Business Type</label>
-                <select class="form-control setup-select col-8">
+                <select class="form-control setup-select col-8" (change)="onBuTypeChange($event.target.value)">
                   <option disabled value="" selected>Select Business Type</option>
-                  <option selected value="">Pulp Kraft</option>
+                  <option *ngFor="let buType of consumptionConfig.buTypes" [value]="buType.buTypeId">
+                    {{buType.buTypeName}}</option>
                 </select>
               </div>
             </div>
             <div class="col-md-3" style="margin-right: -30px;">
               <div class="form-inline">
                 <label class="m-r-5">Kpi Category</label>
-                <select class="form-control setup-select col-8">
+                <select class="form-control setup-select col-8" (change)="onKpiCategoryChange($event.target.value)">
                   <option disabled value="" selected>Select Category</option>
-                  <option selected value="">Chemical</option>
-                  <option selected value="">Wood</option>
-                  <option selected value="">Utility</option>
+                  <option *ngFor="let kpiCategory of consumptionConfig.kpiCategories" [value]="kpiCategory.kpiCategoryId">
+                    {{kpiCategory.kpiCategoryName}}</option>
                 </select>
               </div>
             </div>
             <div class="col-md-3" style="margin-right: -30px;">
               <div class="form-inline">
                 <label>KPI</label>
-                <select class="form-control setup-select col-9">
-                  <option disabled value=""></option>
-                  <option selected value="">Select KPI</option>
-                  <option value="">Steam (AD/t)</option>
-                  <option value="">Wood (AD/t)</option>
-                  <option value="">NaOh (AD/t)</option>
-                  <option value="">Water (AD/t)</option>
+                <select class="form-control setup-select col-9" (change)="onKPIChange($event.target.value)">
+                  <option selected value="" disabled>Select KPI</option>
+                  <option *ngFor="let kpi of consumptionConfig.kpis" [value]="kpi.kpiId">{{kpi.kpiName}} ({{kpi.unit}})
+                  </option>
                 </select>
               </div>
             </div>
@@ -79,7 +76,9 @@
                 <tr [pSelectableRow]="rowData">
                   <td class="td-role text-center">{{ri + 1}}</td>
                   <td *ngFor="let col of columns" class="text-center">
-                    <div class="td-role">{{rowData[col.field]}}</div>
+                    <div *ngIf="col.field === 'processLine'" class="td-role">{{rowData[col.field].processLineCode}}
+                    </div>
+                    <div *ngIf="col.field !== 'processLine'" class="td-role">{{rowData[col.field]}}</div>
                   </td>
                   <td class="text-center">
                     <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.consumptionThresholdId)"><i

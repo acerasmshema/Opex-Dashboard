@@ -10,4 +10,6 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 
 	List<ProcessLineConfigurationEntity> findByMillIdAndBuTypeIdAndKpiId(Integer millId, Integer buTypeId, Integer kpiId);
 
+	List<ProcessLineConfigurationEntity> findByMillIdAndKpiId(Integer millId, Integer kpiId);
+
 }
