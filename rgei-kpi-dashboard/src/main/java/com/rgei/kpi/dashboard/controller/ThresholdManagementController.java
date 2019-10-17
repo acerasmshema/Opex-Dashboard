@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +71,7 @@ public class ThresholdManagementController {
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 	
+
 	@ApiOperation(value = "updateProcessLineTarget", notes = "Update process line target")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping("/v1/update_process_line_target")
@@ -78,4 +80,14 @@ public class ThresholdManagementController {
 		thresholdManagementService.updateProcessLineTarget(threshold);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@ApiOperation(value = "createProcessLineTargets", notes = "Create process line target by Mill Id", response = User.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PostMapping("/v1/create_process_line_targets")
+	public ResponseEntity<HttpStatus> createProcessLineTargets(@RequestBody ProcessLineTargetThreshold processLineTargetThreshold ) {
+		logger.info("Create process line target by Mill : " + processLineTargetThreshold.getMillId());
+		thresholdManagementService.createProcessLineTargets(processLineTargetThreshold);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
 }

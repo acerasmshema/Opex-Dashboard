@@ -35,14 +35,6 @@ public class ProcessLineTargetThreshold {
 		this.millId = millId;
 	}
 
-	public Integer getKpiId() {
-		return kpiId;
-	}
-
-	public void setKpiId(Integer kpiId) {
-		this.kpiId = kpiId;
-	}
-
 	public ProcessLine getProcessLine() {
 		return processLine;
 	}
@@ -145,6 +137,14 @@ public class ProcessLineTargetThreshold {
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public Integer getKpiId() {
+		return kpiId;
+	}
+
+	public void setKpiId(Integer kpiId) {
+		this.kpiId = kpiId;
 	}
 
 }
