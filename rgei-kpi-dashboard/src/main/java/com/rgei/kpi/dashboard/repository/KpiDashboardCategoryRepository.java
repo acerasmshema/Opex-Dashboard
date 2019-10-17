@@ -70,4 +70,30 @@ public interface KpiDashboardCategoryRepository extends JpaRepository<DailyKpiPu
 			+ "process_line_4 as PCD, process_line_5 as PD1, process_line_6 as PD2, process_line_7 as PD3,\r\n"
 			+ "process_line_8 as PD4 FROM daily_kpi_pulp dkp inner join kpi on kpi.kpi_id= dkp.kpi_id inner join kpi_type kt on kt.kpi_type_id=kpi.kpi_type_id WHERE dkp.kpi_category_id= :kpiCategoryId AND mill_id= :millId AND date(datetime)= :yesterdayDate   and kpi.active='true' order by kt.kpi_order asc", nativeQuery=true)
 	public List<Object[]> getYesterdayAllProcessLinesData(@Param("yesterdayDate")Date yesterdayDate,  @Param("kpiCategoryId")Integer kpiCategoryId, @Param("millId")Integer millId);
+
+
+  // Kimman: Special handling for wood comsumption yield
+  @Query(value = "SELECT process_line_1 as FL1, process_line_2 as FL2, process_line_3 as FL3, "
+      + "process_line_4 as PCD, process_line_5 as PD1, process_line_6 as PD2, process_line_7 as PD3, "
+      + "process_line_8 as PD4 FROM daily_kpi_pulp dkp " 
+      + "inner join kpi on kpi.kpi_id=dkp.kpi_id "
+      + "inner join kpi_type kt on kt.kpi_type_id=kpi.kpi_type_id "
+      + "WHERE dkp.kpi_category_id=:kpiCategoryId AND mill_id= :millId AND kpi.kpi_type_id != 13 "  // exclude yeild data
+      + "AND date(datetime)= :yesterdayDate  and kpi.active='true' order by kt.kpi_order asc", nativeQuery = true)
+  public List<Object[]> getYesterdayAllProcessLinesData2(
+      @Param("yesterdayDate") Date yesterdayDate, @Param("kpiCategoryId") Integer kpiCategoryId,
+      @Param("millId") Integer millId);
+
+  @Query(value = "SELECT AVG(process_line_1) as FL1, AVG(process_line_2) as FL2, "
+      + "AVG(process_line_3) as FL3, AVG(process_line_4) as PCD, AVG(process_line_5) as PD1, "
+      + "AVG(process_line_6) as PD2, AVG(process_line_7) as PD3, AVG(process_line_8) as PD4 "
+      + "FROM daily_kpi_pulp dkp inner join kpi on kpi.kpi_id= dkp.kpi_id "
+      + "inner join kpi_type kt on kt.kpi_type_id=kpi.kpi_type_id "
+      + "WHERE dkp.kpi_category_id=:kpiCategoryId AND mill_id=:millId "
+      + "AND date(dkp.datetime) between :startDate and :endDate " 
+      + "AND kpi.active='true' "
+      + "AND kpi.kpi_type_id = 13 GROUP BY dkp.kpi_id, kt.kpi_order "
+      + "order by kt.kpi_order asc", nativeQuery = true) // only include yield data
+  public List<Object[]> getAverageWoodConsumptionYieldProcessLinesData(@Param("startDate") Date startDate,
+      @Param("endDate") Date endDate, @Param("kpiCategoryId") Integer kpiCategoryId, @Param("millId") Integer millId);
 }
