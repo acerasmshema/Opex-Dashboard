@@ -328,6 +328,11 @@ public class KpiDashboardCategoryUtility {
 	public static Date getYesterdayDate() {
 		LocalDate yesterdayDate = LocalDate.now().minusDays(1);
 		return Date.valueOf(yesterdayDate.toString());
+  }
+  
+	public static Date getPrev7DaysDate() {
+		LocalDate date = LocalDate.now().minusDays(7);
+		return Date.valueOf(date.toString());
 	}
 
 	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, ProcessLine kpiProcessLine,

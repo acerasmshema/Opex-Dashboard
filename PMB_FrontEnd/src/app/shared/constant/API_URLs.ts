@@ -26,6 +26,7 @@ export class API_URL {
         KPI_TYPE_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/get_kpi_type',
         CONSUMPTION_API_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/selected_kpi_process_lines',
         CONSUMPTION_GRID_API_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data',
+        CONSUMPTION_GRID_API_URL_2: API_URL.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data_2',
 
         CONSUMPTION_API_GRID_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/selected_kpi_grid_data',
         SAVE_ANNOTATION_URL: API_URL.BASE_API_URL_v1 + '/kpi_annotation/save_annotation',

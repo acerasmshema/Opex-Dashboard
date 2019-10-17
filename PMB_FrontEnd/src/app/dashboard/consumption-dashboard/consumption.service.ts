@@ -15,6 +15,7 @@ export class ConsumptionService {
 
   consumptionKpiUrl = API_URL.apiURLs.CONSUMPTION_API_URL;
   consumptionGridKpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
+  consumptionGridKpiUrl2 = API_URL.apiURLs.CONSUMPTION_GRID_API_URL_2;
 
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
@@ -125,7 +126,7 @@ export class ConsumptionService {
   }
 
   public getDataForGrid(data: object) {
-    return this.apiCallService.callGetAPIwithData(this.consumptionGridKpiUrl, data);
+    return this.apiCallService.callGetAPIwithData(this.consumptionGridKpiUrl2, data);
   }
 
   public getKpiGridData(kpiId: number, kpiName: string, kpiCategoryId: string) {
