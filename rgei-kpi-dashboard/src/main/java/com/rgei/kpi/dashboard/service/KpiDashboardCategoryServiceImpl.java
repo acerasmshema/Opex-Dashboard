@@ -212,7 +212,63 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 			KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiType, responseEntity);
 		}
 		return resultList;
-	}
+  }
+  
+  
+  // Kimman: for special wood comsuption yield average 7 days handling
+  @Override
+  public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory2(Integer kpiCategoryId, Integer millId) {
+    logger.info("Getting custom yesterday values for kpi category against id", kpiCategoryId);
+    List<KpiCategoryResponse> resultList = new ArrayList<>();
+    List<KpiType> kpiType = null;
+    Optional<List<KpiTypeEntity>> kpiTypeEntity = Optional
+        .ofNullable(kpiCategoryRepository.findByKpiCategoryId(kpiCategoryId));
+    if (kpiTypeEntity.isPresent()) {
+      kpiType = KpiDashboardCategoryUtility.convertToKpiTypeDTO(kpiTypeEntity.get(), millId);
+    } else {
+      throw new RecordNotFoundException("Record not found for Kpi Category Id : " + kpiCategoryId);
+    }
+    List<Object[]> responseEntity = kpiCategoryDashboardRepository
+        .getYesterdayAllProcessLinesData2(KpiDashboardCategoryUtility.getYesterdayDate(), kpiCategoryId, millId);
+
+    List<Object[]> responseEntity2 = new ArrayList<>();
+
+    // kimman: only handle if category is wood comsuption
+    if (kpiCategoryId == 4) {
+      responseEntity2 = kpiCategoryDashboardRepository.getAverageWoodConsumptionYieldProcessLinesData(
+          KpiDashboardCategoryUtility.getPrev7DaysDate(), KpiDashboardCategoryUtility.getYesterdayDate(), 4, millId);
+    }
+
+    if (DashboardConstant.KRC.equals(millId.toString())) {
+      // Kimman: Due to STUPID and inflexiblity of the system design
+      //         JUST SOME HARDCODED handling, to support wood comsuption requirement
+      //         TO BE RESTRUCTURED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
+      kpiTypeForComsumption.add(kpiType.get(0));
+      KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption, responseEntity);
+
+      List<KpiType> kpiTypeForComsumption2 = new ArrayList<KpiType>();
+      kpiTypeForComsumption2.add(kpiType.get(1));
+      kpiTypeForComsumption2.add(kpiType.get(2));
+      kpiTypeForComsumption2.add(kpiType.get(3));
+      KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption2, responseEntity2);
+
+    } else if (DashboardConstant.RZ.equals(millId.toString())) {
+      // Kimman: Due to STUPID and inflexiblity of the system design
+      //         JUST SOME HARDCODED handling, to support wood comsuption requirement
+      //         TO BE RESTRUCTURED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
+      kpiTypeForComsumption.add(kpiType.get(0));
+      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption, responseEntity);
+
+      List<KpiType> kpiTypeForComsumption2 = new ArrayList<KpiType>();
+      kpiTypeForComsumption2.add(kpiType.get(1));
+      kpiTypeForComsumption2.add(kpiType.get(2));
+      kpiTypeForComsumption2.add(kpiType.get(3));
+      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption2, responseEntity2);
+    }
+    return resultList;
+  }
 
 	private void getYearlyFrequencyGridResponse(KpiDashboardCategoryRequest kpiDashboardCategoryRequest,
 			List<List<Map<String, Object>>> responseData, List<String> finalKpiProcessLines) {

@@ -88,5 +88,18 @@ public class KpiDashboardCategoryController {
 		List<KpiCategoryResponse> response = kpiDashboardCategoryService.getYesterdayValuesForKpiCategory(kpiCategoryId,
 				millId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+  
+  // Kimman: for special wood comsumption yield average 7 days handling
+  @ApiOperation(value = "getYesterdayValuesForKpiCategory2", notes = "Retrieve yesterday avg values for kpi category against the request/filters")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping(value = "/v1/kpi_category/yesterday_all_process_lines_data_2")
+	public ResponseEntity<List<KpiCategoryResponse>> getYesterdayValuesForKpiCategory2(
+			@RequestHeader(value = "kpiCategoryId") Integer kpiCategoryId,
+			@RequestHeader(value = "millId") Integer millId) {
+		logger.info("Inside KPIDashboardCategoryController to fetch yesterday values for kpi category", kpiCategoryId);
+		List<KpiCategoryResponse> response = kpiDashboardCategoryService.getYesterdayValuesForKpiCategory2(kpiCategoryId,
+				millId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
