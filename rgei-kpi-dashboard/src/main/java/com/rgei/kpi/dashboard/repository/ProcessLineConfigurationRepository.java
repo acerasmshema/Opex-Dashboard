@@ -20,5 +20,10 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 	ProcessLineConfigurationEntity getAllBetweenDates(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("buId") Integer buId,@Param("kpiId") Integer kpiId,
 			@Param("processLineId") Integer processLineId);
 
+
 	ProcessLineConfigurationEntity findAllByMillIdAndBuTypeIdAndKpiIdAndProcessLineId(Integer millId, Integer buTypeId, Integer kpiId, Integer processLineId);
+
+	List<ProcessLineConfigurationEntity> findByMillIdAndKpiId(Integer millId, Integer kpiId);
+
+
 }

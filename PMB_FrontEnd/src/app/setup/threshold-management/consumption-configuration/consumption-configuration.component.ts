@@ -4,20 +4,26 @@ import { StatusService } from 'src/app/shared/service/status.service';
 import { ConsumptionConfigurationService } from './consumption-configuration.service';
 import { ConsumptionThreshold } from './consumption-threshold';
 import { MasterData } from 'src/app/shared/constant/MasterData';
+import { ConsumptionConfig } from './consumption-config.model';
 
 @Component({
   selector: 'app-consumption-configuration',
   templateUrl: './consumption-configuration.component.html',
-  styleUrls: ['./consumption-configuration.component.scss'],
-  providers: [ConsumptionConfigurationService]
+  styleUrls: ['./consumption-configuration.component.scss']
 })
 export class ConsumptionConfigurationComponent implements OnInit {
 
   consumptionThresholds: ConsumptionThreshold[] = [];
   cols = MasterData.consumptionThresholdCols;
+  consumptionConfig: ConsumptionConfig;
+  selectedBuTypeId: string;
+  selectedKPIId: string;
+  selectedKPICategory: string;
 
   constructor(private statusService: StatusService,
-    private consumptionConfigService: ConsumptionConfigurationService) { }
+    private consumptionConfigService: ConsumptionConfigurationService) {
+    this.consumptionConfig = new ConsumptionConfig();
+  }
 
   ngOnInit() {
     document.getElementById("select_mill").style.display = "block";
@@ -27,7 +33,12 @@ export class ConsumptionConfigurationComponent implements OnInit {
     sidebarRequest.type = "profile";
     this.statusService.sidebarSubject.next(sidebarRequest);
 
-    this.consumptionThresholds = this.consumptionConfigService.getConsumptionThresholds();
+    this.consumptionConfigService.getConsumptionConfig(this.consumptionConfig);
+  }
+
+  onSearch() {
+    this.consumptionThresholds = [];
+    this.consumptionConfigService.getConsumptionThresholds(this.consumptionThresholds, this.selectedBuTypeId, this.selectedKPIId);
   }
 
   onCreate() {
@@ -50,8 +61,10 @@ export class ConsumptionConfigurationComponent implements OnInit {
 
   onEdit(consumptionThresholdId: string) {
     const consumptionThreshold = this.consumptionThresholds.find((consumptionThreshold) => consumptionThreshold.consumptionThresholdId === consumptionThresholdId)
+    consumptionThreshold.kpiCategory = this.selectedKPICategory;
+    consumptionThreshold.kpi = this.consumptionConfig.kpis.find((kpi) => kpi.kpiId === +this.selectedKPIId);
     consumptionThreshold.operation = "Edit";
-
+    
     const data = {
       dialogName: "consumptionThreshold",
       consumptionThreshold: consumptionThreshold
@@ -59,5 +72,16 @@ export class ConsumptionConfigurationComponent implements OnInit {
     this.statusService.dialogSubject.next(data);
   }
 
+  onKpiCategoryChange(value: string) {    
+    this.selectedKPICategory = this.consumptionConfig.kpiCategories.find((kpiCategory) => kpiCategory.kpiCategoryId === +value)
+    this.consumptionConfigService.getKpiDetails(value, this.consumptionConfig);
+  }
 
+  onBuTypeChange(buTypeId: string) {
+    this.selectedBuTypeId = buTypeId;
+  }
+
+  onKPIChange(kpiId: string) {
+    this.selectedKPIId = kpiId;
+  }
 }

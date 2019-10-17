@@ -59,5 +59,11 @@ export class API_URL {
         VALIDATE_USERNAME: API_URL.BASE_API_URL_v1 + '/validate_user_name',
         VALIDATE_USERROLE: API_URL.BASE_API_URL_v1 + '/validate_role',
     }
-    
+
+    static threshold_api_URLs = {
+        PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/production_target',
+        UPDATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/update_production_target',
+        CREATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/create_production_target',
+        PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/process_line_targets',
+    }
 }

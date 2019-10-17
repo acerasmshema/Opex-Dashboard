@@ -4,11 +4,14 @@ public class ProductionThreshold {
 
 	private String productionThresholdId;
 	private BuTypeResponse buType;
+	private Integer kpiId;
+	private Integer millId;
 	private Double threshold;
 	private Double minimum;
 	private Double maximum;
 	private String startDate;
 	private String endDate;
+	private Boolean isDefault;
 	private Boolean active;
 	private String createdBy;
 	private String createdDate;
@@ -71,6 +74,14 @@ public class ProductionThreshold {
 		this.endDate = endDate;
 	}
 
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
 	public Boolean getActive() {
 		return active;
 	}
@@ -109,6 +120,22 @@ public class ProductionThreshold {
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public Integer getKpiId() {
+		return kpiId;
+	}
+
+	public void setKpiId(Integer kpiId) {
+		this.kpiId = kpiId;
+	}
+
+	public Integer getMillId() {
+		return millId;
+	}
+
+	public void setMillId(Integer millId) {
+		this.millId = millId;
 	}
 
 }

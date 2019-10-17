@@ -11,6 +11,12 @@ public interface ThresholdManagementService {
 
 	List<ProcessLineTargetThreshold> getProcessLineTargets(Integer millId, Integer buTypeId, Integer kpiId);
 
+
+	void createProductionTarget(ProductionThreshold productionTarget);
+
+	void updateProductionTarget(ProductionThreshold productionTarget);
+
+
 	void updateProcessLineTarget(ProcessLineTargetThreshold targetThreshold);
 
 	void createProcessLineTargets(ProcessLineTargetThreshold processLineTargetThreshold);

@@ -40,6 +40,8 @@ import { CommonService } from './shared/service/common/common.service';
 import { TokenInterceptor } from './core/interceptor/token-interceptor';
 import { UserDetailService } from './setup/user-management/user-detail/user-detail.service';
 import { UserRoleService } from './setup/user-management/user-role/user-role.service';
+import { ProductionTargetService } from './setup/threshold-management/production-configuration/production-target/production-target.service';
+import { ConsumptionConfigurationService } from './setup/threshold-management/consumption-configuration/consumption-configuration.service';
 
 @NgModule({
   declarations: [
@@ -96,6 +98,8 @@ import { UserRoleService } from './setup/user-management/user-role/user-role.ser
     UserRoleService,
     ValidationService,
     ConfirmationService,
+    ProductionTargetService,
+    ConsumptionConfigurationService,
   ],
   bootstrap: [AppComponent]
 })
