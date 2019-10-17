@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 
@@ -25,6 +26,8 @@ public class ThresholdManagementUtility {
 			threshold.setBuType(fetchBuType(config.getBuType()));
 			threshold.setMinimum(Double.parseDouble(CommonFunction.getString(config.getMinimum())));
 			threshold.setMaximum(Double.parseDouble(CommonFunction.getString(config.getMaximum())));
+			threshold.setKpiId(config.getKpiId());
+			threshold.setMillId(config.getMillId());
 			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setIsDefault(config.getIsDefault());
@@ -54,7 +57,6 @@ public class ThresholdManagementUtility {
 	public static KpiConfigurationEntity createConfigurationEntity(ProductionThreshold productionTarget) {
 		KpiConfigurationEntity configEntity = new KpiConfigurationEntity();
 		if(Objects.nonNull(productionTarget)) {
-			configEntity.setThreshold(productionTarget.getThreshold());
 			configEntity.setMinimum(0.0);
 			configEntity.setMaximum(productionTarget.getMaximum());
 			configEntity.setThreshold(productionTarget.getThreshold());
@@ -73,4 +75,28 @@ public class ThresholdManagementUtility {
 		return configEntity;
 	}
 
+	public static KpiConfigurationEntity updateFetchedUserEntity(ProductionThreshold productionTarget,
+			KpiConfigurationEntity configEntity) {
+		Date date = new Date();
+		try {
+			configEntity.setThreshold(productionTarget.getThreshold());
+			configEntity.setMinimum(0.0);
+			configEntity.setMaximum(productionTarget.getMaximum());
+			configEntity.setThreshold(productionTarget.getThreshold());
+			configEntity.setBuTypeId(productionTarget.getBuType().getBuId());
+			configEntity.setKpiId(productionTarget.getKpiId());
+			configEntity.setMillId(productionTarget.getMillId());
+			configEntity.setStartDate(Utility.stringToDateConvertor(productionTarget.getStartDate(), DashboardConstant.FORMAT));
+			configEntity.setEndDate(Utility.stringToDateConvertor(productionTarget.getEndDate(), DashboardConstant.FORMAT));
+			configEntity.setIsDefault(Boolean.FALSE);
+			configEntity.setActive(Boolean.TRUE);
+			configEntity.setCreatedBy(productionTarget.getCreatedBy());
+			configEntity.setCreatedDate(date);
+			configEntity.setUpdatedBy(productionTarget.getUpdatedBy());
+			configEntity.setUpdatedDate(date);
+		} catch (Exception e) {
+			throw new RecordNotUpdatedException("Error while updating production target :" + productionTarget);
+		}
+		return configEntity;
+	}
 }

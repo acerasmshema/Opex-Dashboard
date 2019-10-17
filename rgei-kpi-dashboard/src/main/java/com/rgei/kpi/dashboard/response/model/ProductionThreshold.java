@@ -1,7 +1,5 @@
 package com.rgei.kpi.dashboard.response.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ProductionThreshold {
 
 	private String productionThresholdId;
@@ -14,15 +12,10 @@ public class ProductionThreshold {
 	private String startDate;
 	private String endDate;
 	private Boolean isDefault;
-	@JsonIgnore
 	private Boolean active;
-	@JsonIgnore
 	private String createdBy;
-	@JsonIgnore
 	private String createdDate;
-	@JsonIgnore
 	private String updatedBy;
-	@JsonIgnore
 	private String updatedDate;
 
 	public String getProductionThresholdId() {

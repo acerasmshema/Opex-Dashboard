@@ -16,6 +16,7 @@ import { ProcessLineThreshold } from 'src/app/setup/threshold-management/product
 import { ProductionThreshold } from 'src/app/setup/threshold-management/production-configuration/production-target/production-threshold';
 import { ConsumptionThreshold } from 'src/app/setup/threshold-management/consumption-configuration/consumption-threshold';
 import { AnnualTarget } from 'src/app/setup/threshold-management/production-configuration/annual-configuration/annual-target';
+import { ConsumptionTable } from 'src/app/dashboard/consumption-dashboard/consumption-table';
 
 @Injectable()
 export class DialogService {
@@ -23,6 +24,8 @@ export class DialogService {
     saveAnnotation = API_URL.apiURLs.SAVE_ANNOTATION_URL;
     findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
     userURL = API_URL.user_api_URLs.CREATE_USER;
+    allProcessLines = API_URL.apiURLs.ALL_PROCESS_LINES_URL;
+    kpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
 
     constructor(private apiCallService: ApiCallService,
         private commonService: CommonService,
@@ -111,18 +114,20 @@ export class DialogService {
             hasNeedle: true,
             needleColor: 'black',
             needleUpdateSpeed: 1000,
-            arcColors:  ["red", "yellow", "green"],      
+            arcColors: ["red", "yellow", "green"],
             arcDelimiters: [80, 90],
             rangeLabel: ['0', '9000'],
             needleStartValue: 50,
         };
 
-        return this.formBuilder.group({
+        let processLineThresholdForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(processLineThreshold.operation),
             buType: new FormControl(processLineThreshold.buType),
+            buTypeList: this.formBuilder.array([]),
             createdBy: new FormControl(processLineThreshold.createdBy),
             processLine: new FormControl(processLineThreshold.processLine),
+            processLineList: this.formBuilder.array([]),
             threshold: new FormControl(processLineThreshold.threshold),
             maximum: new FormControl(processLineThreshold.maximum),
             startDate: new FormControl(processLineThreshold.startDate),
@@ -132,6 +137,9 @@ export class DialogService {
             bottomLabel: new FormControl(7500),
             options: new FormControl(options),
         });
+        this.commonService.getAllBuType(processLineThresholdForm);
+        this.getProcessLines(processLineThresholdForm);
+        return processLineThresholdForm;
     }
 
     createProductionThresholdForm(productionThreshold: ProductionThreshold): FormGroup {
@@ -139,26 +147,33 @@ export class DialogService {
             hasNeedle: true,
             needleColor: 'black',
             needleUpdateSpeed: 1000,
-            arcColors:  ["red", "yellow", "green"],      
+            arcColors: ["red", "yellow", "green"],
             arcDelimiters: [80, 90],
-            rangeLabel: ['0', '9000'],
+            rangeLabel: ['0', productionThreshold.maximum + ''],
             needleStartValue: 50,
         }
 
-        return this.formBuilder.group({
+        let productionThresholdForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(productionThreshold.operation),
+            productionThresholdId: new FormControl(productionThreshold.productionThresholdId),
             buType: new FormControl(productionThreshold.buType),
+            buTypeList: this.formBuilder.array([]),
             createdBy: new FormControl(productionThreshold.createdBy),
             threshold: new FormControl(productionThreshold.threshold),
             maximum: new FormControl(productionThreshold.maximum),
             startDate: new FormControl(productionThreshold.startDate),
             endDate: new FormControl(productionThreshold.endDate),
+            millId: new FormControl(productionThreshold.millId),
+            kpiId: new FormControl(productionThreshold.kpiId),
             canvasWidth: new FormControl(220),
             needleValue: new FormControl(80),
-            bottomLabel: new FormControl(7500),
+            bottomLabel: new FormControl(productionThreshold.threshold),
             options: new FormControl(options),
         });
+        this.commonService.getAllBuType(productionThresholdForm);
+
+        return productionThresholdForm;
     }
 
     createAnnualTargetForm(annualTarget: AnnualTarget): FormGroup {
@@ -174,18 +189,30 @@ export class DialogService {
     }
 
     createConsumptionThresholdForm(consumptionThreshold: ConsumptionThreshold): FormGroup {
-        return this.formBuilder.group({
+        let consumptionThresholdForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(consumptionThreshold.operation),
             kpiCategory: new FormControl(consumptionThreshold.kpiCategory),
             kpi: new FormControl(consumptionThreshold.kpi),
             processLine: new FormControl(consumptionThreshold.processLine),
             buType: new FormControl(consumptionThreshold.buType),
+            processLineList: this.formBuilder.array([]),
+            kpiCategoryList: this.formBuilder.array([]),
+            buTypeList: this.formBuilder.array([]),
+            kpiList: this.formBuilder.array([]),
             createdBy: new FormControl(consumptionThreshold.createdBy),
             threshold: new FormControl(consumptionThreshold.threshold),
             startDate: new FormControl(consumptionThreshold.startDate),
             endDate: new FormControl(consumptionThreshold.endDate),
         });
+
+        this.commonService.getAllBuType(consumptionThresholdForm);
+        this.getKpiCategoryList(consumptionThresholdForm);
+        if (consumptionThreshold.kpiCategory !== undefined) {
+            this.getKpiDetails(consumptionThreshold.kpiCategory.kpiCategoryId, consumptionThresholdForm, consumptionThreshold.kpi.kpiId);
+        }
+
+        return consumptionThresholdForm;
     }
 
     createCampaignForm(campaign: CampaignModel): FormGroup {
@@ -322,4 +349,75 @@ export class DialogService {
         }
     }
 
+    getProcessLines(form: FormGroup) {
+        const requestData = {
+            millId: this.statusService.common.selectedMill.millId
+        }
+        this.apiCallService.callGetAPIwithData(this.allProcessLines, requestData).
+            subscribe(
+                (processLines: any) => {
+                    const processLineList: any = form.controls.processLineList;
+                    let processLineControl = processLineList.controls;
+                    processLines.forEach(processLine => {
+                        processLineControl.push(new FormControl(processLine));
+                    });
+                },
+                (error: any) => {
+                    this.commonService.handleError(error);
+                }
+            );
+    }
+
+    getKpiCategoryList(form: FormGroup) {
+        const kpiCategoryList: any = form.controls.kpiCategoryList;
+        let kpiCategoryControl = kpiCategoryList.controls;
+        kpiCategoryControl.push(new FormControl({ kpiCategoryId: 2, kpiCategoryName: "Chemical" }));
+        kpiCategoryControl.push(new FormControl({ kpiCategoryId: 3, kpiCategoryName: "Utility" }));
+        kpiCategoryControl.push(new FormControl({ kpiCategoryId: 4, kpiCategoryName: "Wood" }));
+    }
+
+    getKpiDetails(kpiCategoryId: string, consumptionThresholdForm: FormGroup, kpiId?: string) {
+        const requestData = {
+            kpiCategoryId: "" + kpiCategoryId,
+            millId: this.statusService.common.selectedMill.millId
+        };
+        this.apiCallService.callGetAPIwithData(this.kpiUrl, requestData).
+            subscribe(
+                (consumptionsTable: ConsumptionTable[]) => {
+                    const kpiList: any = consumptionThresholdForm.controls.kpiList;
+                    let kpiListControl = kpiList.controls;
+                    consumptionsTable.forEach(table => {
+                        kpiListControl.push(new FormControl(table));
+                    });
+                    if (kpiId !== undefined)
+                        this.getKpiProcessLines(kpiId, consumptionThresholdForm);
+                },
+                (error: any) => {
+                    this.commonService.handleError(error);
+                }
+            );
+    }
+
+    getKpiProcessLines(kpiId: string, form: FormGroup) {
+        const kpiList: any = form.controls.kpiList;
+        const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +kpiId).value;
+        const processLineList: any = form.controls.processLineList;
+        let processLineControl = processLineList.controls;
+
+        kpi.series.forEach(processLine =>
+            processLineControl.push(new FormControl(processLine))
+        )
+    }
+
+    changeGaugeThreshold(thresholdValue: string, form: FormGroup) {
+        form.controls.bottomLabel.setValue(thresholdValue);
+        let maximum = +form.controls.options.value.rangeLabel[1];
+        let thresholdPercentage = (+thresholdValue * 100) / maximum;
+        form.controls.needleValue.setValue(thresholdPercentage);
+        form.controls.options.value.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
+    }
+
+    changeGaugeMaximum(value: string, form: FormGroup) {
+        form.controls.options.value.rangeLabel = ['0', value];
+    }
 }
