@@ -19,8 +19,7 @@ export class ConsumptionService {
 
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
-    private datePipe: DatePipe,
-    private messageService: MessageService) { }
+    private datePipe: DatePipe) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');

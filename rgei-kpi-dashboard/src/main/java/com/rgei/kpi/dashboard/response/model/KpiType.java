@@ -30,7 +30,7 @@ public class KpiType {
 	private String kpiName;
 	private String updatedBy;
 	private Timestamp updatedDate;
-	private List<String> processLines;
+	private List<ProcessLine> processLines;
 	private Map<String,String> target;
 	private Kpi kpi;
 	
@@ -82,10 +82,10 @@ public class KpiType {
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	public List<String> getProcessLines() {
+	public List<ProcessLine> getProcessLines() {
 		return processLines;
 	}
-	public void setProcessLines(List<String> processLines) {
+	public void setProcessLines(List<ProcessLine> processLines) {
 		this.processLines = processLines;
 	}
 	public Map<String, String> getTarget() {

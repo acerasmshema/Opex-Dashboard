@@ -36,8 +36,8 @@ export class MasterData {
   static processLineTargetCols = [
     { field: 'buType', header: 'Business Type', showInputBox: true },
     { field: 'processLine', header: 'Process Line', showInputBox: true },
-    { field: 'threshold', header: 'Threshold', showInputBox: false },
-    { field: 'maximum', header: 'Maximum', showInputBox: false },
+    { field: 'threshold', header: 'Threshold', showInputBox: true },
+    { field: 'maximum', header: 'Maximum', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
     { field: 'endDate', header: 'End Date', showInputBox: true }
   ];

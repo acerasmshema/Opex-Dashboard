@@ -47,6 +47,7 @@ public class StatusCodes {
 	public static final String RECORD_NOT_UPDATED = "1013";
 	public static final String RECORD_NOT_CREATED = "1014";
 	public static final String RECORD_NOT_DELETED = "1015";
+	public static final String DATE_RANGE_ALREADY_EXIST = "1016";
 	
 
 }

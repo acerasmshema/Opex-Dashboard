@@ -1,12 +1,14 @@
 package com.rgei.kpi.dashboard.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -21,6 +23,7 @@ public class KpiConfigurationEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "kpi_configuration_id")
 	private Integer kpiConfigurationId;
 
@@ -34,19 +37,19 @@ public class KpiConfigurationEntity implements Serializable {
 	private Integer kpiId;
 
 	@Column(name = "minimum")
-	private Integer minimum;
+	private Double minimum;
 
 	@Column(name = "maximum")
-	private Integer maximum;
+	private Double maximum;
 
 	@Column(name = "threshold")
-	private Integer threshold;
+	private Double threshold;
 
 	@Column(name = "start_date")
-	private Timestamp startDate;
+	private Date startDate;
 
 	@Column(name = "end_date")
-	private Timestamp endDate;
+	private Date endDate;
 
 	@Column(name = "is_default")
 	private Boolean isDefault;
@@ -57,13 +60,13 @@ public class KpiConfigurationEntity implements Serializable {
 	private String createdBy;
 
 	@Column(name = "created_date")
-	private Timestamp createdDate;
+	private Date createdDate;
 
 	@Column(name = "updated_by")
 	private String updatedBy;
 
 	@Column(name = "updated_date")
-	private Timestamp updatedDate;
+	private Date updatedDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bu_type_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
@@ -133,43 +136,43 @@ public class KpiConfigurationEntity implements Serializable {
 		this.mill = mill;
 	}
 
-	public Integer getMinimum() {
+	public Double getMinimum() {
 		return minimum;
 	}
 
-	public void setMinimum(Integer minimum) {
+	public void setMinimum(Double minimum) {
 		this.minimum = minimum;
 	}
 
-	public Integer getMaximum() {
+	public Double getMaximum() {
 		return maximum;
 	}
 
-	public void setMaximum(Integer maximum) {
+	public void setMaximum(Double maximum) {
 		this.maximum = maximum;
 	}
 
-	public Integer getThreshold() {
+	public Double getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Integer threshold) {
+	public void setThreshold(Double threshold) {
 		this.threshold = threshold;
 	}
 
-	public Timestamp getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Timestamp startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Timestamp getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Timestamp endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
@@ -189,11 +192,11 @@ public class KpiConfigurationEntity implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Timestamp getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Timestamp createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
@@ -205,11 +208,11 @@ public class KpiConfigurationEntity implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
-	public Timestamp getUpdatedDate() {
+	public Date getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(Timestamp updatedDate) {
+	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 

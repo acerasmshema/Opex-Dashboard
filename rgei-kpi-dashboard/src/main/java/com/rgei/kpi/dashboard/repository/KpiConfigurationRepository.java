@@ -10,4 +10,6 @@ public interface KpiConfigurationRepository extends JpaRepository<KpiConfigurati
 
 	List<KpiConfigurationEntity> findByMillId(Integer millId);
 
+	KpiConfigurationEntity findByKpiConfigurationId(int parseInt);
+
 }
