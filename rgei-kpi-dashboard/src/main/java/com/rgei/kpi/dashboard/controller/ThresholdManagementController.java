@@ -24,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,5 +68,14 @@ public class ThresholdManagementController {
 		logger.info("Retrieve process line target by Mill Id : " + millId);
 		List<ProcessLineTargetThreshold > responseList = thresholdManagementService.getProcessLineTargets(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buTypeId),CommonFunction.covertToInteger(kpiId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "updateProcessLineTarget", notes = "Update process line target")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PutMapping("/v1/update_process_line_target")
+	public ResponseEntity<HttpStatus> updateProcessLineTarget(@RequestBody ProcessLineTargetThreshold threshold) {
+		logger.info("Updating process line target", threshold);
+		thresholdManagementService.updateProcessLineTarget(threshold);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
