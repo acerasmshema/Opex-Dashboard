@@ -61,16 +61,34 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	public void createProductionTarget(ProductionThreshold productionTarget) {
 
 		logger.info("Inside service call to create production target for request : " + productionTarget);
-		// validationService.validateUserName(user.getUsername());
-		// validationService.validateEmail(user.getEmail());
 		try {
 			KpiConfigurationEntity configEntity = ThresholdManagementUtility
 					.createConfigurationEntity(productionTarget);
 			kpiConfigurationRepository.save(configEntity);
-
+			//ThresholdManagementUtility.validateDateRange(productionTarget);
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating production target  :" + productionTarget);
 		}
+	}
+
+	@Override
+	public void updateProductionTarget(ProductionThreshold productionTarget) {
+
+		logger.info("Inside service call to update production target for request : " + productionTarget);
+		try {
+			if (productionTarget != null) {
+				KpiConfigurationEntity kpiConfigurationEntity = kpiConfigurationRepository.findByKpiConfigurationId(Integer.parseInt(productionTarget.getProductionThresholdId()));
+				if (kpiConfigurationEntity != null) {
+					KpiConfigurationEntity updatedThreshold = ThresholdManagementUtility.updateFetchedUserEntity(productionTarget, kpiConfigurationEntity);
+					kpiConfigurationRepository.save(updatedThreshold);
+				} else {
+					throw new RecordNotFoundException("User not found against configuration id  :" + productionTarget.getProductionThresholdId());
+				}
+			}
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while updating production target  :" + productionTarget);
+		}
+			
 	}
 
 }
