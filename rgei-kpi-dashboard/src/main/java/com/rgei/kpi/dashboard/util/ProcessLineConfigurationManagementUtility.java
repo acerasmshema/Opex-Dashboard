@@ -2,6 +2,7 @@ package com.rgei.kpi.dashboard.util;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
@@ -43,39 +44,36 @@ public class ProcessLineConfigurationManagementUtility {
 	
 	public static ProcessLineConfigurationEntity convertToProcessLineEntity(
 			ProcessLineTargetThreshold processLineTargetThreshold) {
-		ProcessLineConfigurationEntity ProcessLineConfigurationEntity = new ProcessLineConfigurationEntity();
+		ProcessLineConfigurationEntity processLineConfigurationEntity = new ProcessLineConfigurationEntity();
 		if(processLineTargetThreshold!=null) {
-			ProcessLineConfigurationEntity.setMillId(processLineTargetThreshold.getMillId());
-			ProcessLineConfigurationEntity.setBuTypeId(processLineTargetThreshold.getBuType().getBuTypeId());
-			ProcessLineConfigurationEntity.setKpiId(processLineTargetThreshold.getKpiId());
-			ProcessLineConfigurationEntity.setProcessLineId(processLineTargetThreshold.getProcessLine().getProcessLineId());
-			ProcessLineConfigurationEntity.setMaximum(processLineTargetThreshold.getMaximum());
-			ProcessLineConfigurationEntity.setMinimum(processLineTargetThreshold.getMinimum());
-			ProcessLineConfigurationEntity.setThreshold(processLineTargetThreshold.getThreshold());
-			ProcessLineConfigurationEntity.setStartDate( Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT));
-			ProcessLineConfigurationEntity.setEndDate( Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT));
-			ProcessLineConfigurationEntity.setActive(processLineTargetThreshold.getActive());
-			ProcessLineConfigurationEntity.setCreatedBy(processLineTargetThreshold.getCreatedBy());
-			ProcessLineConfigurationEntity.setCreatedDate( Utility.stringToDateConvertor(processLineTargetThreshold.getCreatedDate(), DashboardConstant.FORMAT));
-			ProcessLineConfigurationEntity.setUpdatedBy(processLineTargetThreshold.getUpdatedBy());
-			ProcessLineConfigurationEntity.setUpdatedDate( Utility.stringToDateConvertor(processLineTargetThreshold.getUpdatedDate(), DashboardConstant.FORMAT));
-			ProcessLineConfigurationEntity.setIsDefault(Boolean.FALSE);
-			
+			processLineConfigurationEntity.setMillId(processLineTargetThreshold.getMillId());
+			processLineConfigurationEntity.setBuTypeId(processLineTargetThreshold.getBuType().getBuTypeId());
+			processLineConfigurationEntity.setKpiId(processLineTargetThreshold.getKpiId());
+			processLineConfigurationEntity.setProcessLineId(processLineTargetThreshold.getProcessLine().getProcessLineId());
+			processLineConfigurationEntity.setMaximum(processLineTargetThreshold.getMaximum());
+			processLineConfigurationEntity.setMinimum(processLineTargetThreshold.getMinimum());
+			processLineConfigurationEntity.setThreshold(processLineTargetThreshold.getThreshold());
+			processLineConfigurationEntity.setStartDate(Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT));
+			processLineConfigurationEntity.setEndDate(Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT));
+			processLineConfigurationEntity.setCreatedBy(processLineTargetThreshold.getCreatedBy());
+			processLineConfigurationEntity.setCreatedDate(new Date());
+			processLineConfigurationEntity.setUpdatedBy(processLineTargetThreshold.getUpdatedBy());
+			processLineConfigurationEntity.setUpdatedDate(new Date());
+			processLineConfigurationEntity.setIsDefault(Boolean.FALSE);
+			processLineConfigurationEntity.setActive(Boolean.TRUE);
 			}
-		return ProcessLineConfigurationEntity;
+		return processLineConfigurationEntity;
 	}
 
 	public static ProcessLineConfigurationEntity getProcessLineConfigurationEntity(ProcessLineTargetThreshold threshold, ProcessLineConfigurationEntity entity) {
 		entity.setProcessLineConfigurationId(CommonFunction.covertToInteger(threshold.getProcessLineTargetThresholdId()));
 		entity.setMinimum(threshold.getMinimum());
 		entity.setMaximum(threshold.getMaximum());
-		entity.setCreatedBy(threshold.getCreatedBy());
 		entity.setUpdatedBy(threshold.getUpdatedBy());
 		entity.setStartDate(Timestamp.valueOf(threshold.getStartDate()));
 		entity.setEndDate(Timestamp.valueOf(threshold.getEndDate()));
-		entity.setCreatedDate(Timestamp.valueOf(threshold.getCreatedDate()));
-		entity.setUpdatedDate(Timestamp.valueOf(threshold.getUpdatedDate()));
-		entity.setActive(threshold.getActive());
+		entity.setUpdatedDate(new Date());
+		entity.setActive(Boolean.TRUE);
 		entity.setIsDefault(threshold.getIsDefaultConfig());
 		entity.setMillId(threshold.getMillId());
 		entity.setBuTypeId(threshold.getBuType().getBuTypeId());
