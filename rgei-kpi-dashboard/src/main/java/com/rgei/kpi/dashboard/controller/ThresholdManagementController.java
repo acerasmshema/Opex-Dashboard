@@ -24,13 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 import com.rgei.kpi.dashboard.response.model.User;
@@ -116,4 +112,21 @@ public class ThresholdManagementController {
 	}
 
 
+	@ApiOperation(value = "getAnnualConfiguration", notes = "Retrieve annual configuration by Mill Id", response = MillBuKpiCategoryResponse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping("/v1/get_annual_configuration")
+	public ResponseEntity<List<MillBuKpiCategoryResponse>> getAnnualConfiguration(@RequestHeader(value = "millId") String millId,@RequestHeader(value = "buId") String buId) {
+		logger.info("Retrieve process line target by Mill Id : " + millId);
+		List<MillBuKpiCategoryResponse > responseList = thresholdManagementService.getAnnualConfiguration(CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(buId));
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "createAnnualConfiguration", notes = "Create production target")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
+	@PostMapping("/v1/create_annual_configuration")
+	public ResponseEntity<HttpStatus> createAnnualConfiguration(@RequestBody MillBuKpiCategoryResponse response) {
+		logger.info("Creating annual configuration", response);
+		thresholdManagementService.createAnnualConfiguration(response);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 }
