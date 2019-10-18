@@ -24,7 +24,7 @@ public class ThresholdManagementUtility {
 			threshold.setProductionThresholdId(CommonFunction.getString(config.getKpiConfigurationId()));
 			threshold.setThreshold(Double.parseDouble(CommonFunction.getString(config.getThreshold())));
 			threshold.setBuType(fetchBuType(config.getBuType()));
-			threshold.setMinimum(Double.parseDouble(CommonFunction.getString(config.getMinimum())));
+			threshold.setMinimum(0.0);
 			threshold.setMaximum(Double.parseDouble(CommonFunction.getString(config.getMaximum())));
 			threshold.setKpiId(config.getKpiId());
 			threshold.setMillId(config.getMillId());
@@ -88,10 +88,8 @@ public class ThresholdManagementUtility {
 			configEntity.setMillId(productionTarget.getMillId());
 			configEntity.setStartDate(Utility.stringToDateConvertor(productionTarget.getStartDate(), DashboardConstant.FORMAT));
 			configEntity.setEndDate(Utility.stringToDateConvertor(productionTarget.getEndDate(), DashboardConstant.FORMAT));
-			configEntity.setIsDefault(Boolean.FALSE);
+			configEntity.setIsDefault(productionTarget.getIsDefault());
 			configEntity.setActive(Boolean.TRUE);
-			configEntity.setCreatedBy(productionTarget.getCreatedBy());
-			configEntity.setCreatedDate(date);
 			configEntity.setUpdatedBy(productionTarget.getUpdatedBy());
 			configEntity.setUpdatedDate(date);
 		} catch (Exception e) {

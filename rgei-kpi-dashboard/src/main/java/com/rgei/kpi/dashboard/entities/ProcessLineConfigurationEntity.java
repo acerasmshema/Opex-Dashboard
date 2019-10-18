@@ -28,7 +28,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	@Column(name = "process_line_configuration_id")
 	private Integer processLineConfigurationId;
 
-	@Column(name = "bu_id")
+	@Column(name = "bu_type_id")
 	private Integer buTypeId;
 
 	@Column(name = "mill_id")
@@ -73,7 +73,7 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	private Date updatedDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "bu_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
+	@JoinColumn(name = "bu_type_id", referencedColumnName = "business_unit_type_id", insertable = false, updatable = false)
 	private BusinessUnitTypeEntity buType;
 
 	@OneToOne(cascade = CascadeType.ALL)
