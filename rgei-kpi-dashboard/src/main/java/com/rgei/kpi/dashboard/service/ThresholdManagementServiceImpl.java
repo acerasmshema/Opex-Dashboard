@@ -1,7 +1,5 @@
 package com.rgei.kpi.dashboard.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,11 +11,7 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
-
-import com.rgei.kpi.dashboard.entities.RgeUserEntity;
-import com.rgei.kpi.dashboard.entities.UserRoleEntity;
 import com.rgei.kpi.dashboard.exception.DateRangeAlreadyExistException;
-
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
@@ -27,8 +21,6 @@ import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 import com.rgei.kpi.dashboard.util.ProcessLineConfigurationManagementUtility;
 import com.rgei.kpi.dashboard.util.ThresholdManagementUtility;
-
-import com.rgei.kpi.dashboard.util.UserManagementUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
 
@@ -81,7 +73,6 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 			ProcessLineConfigurationEntity entity = processLineConfigurationRepository.findAllByMillIdAndBuTypeIdAndKpiIdAndProcessLineId(targetThreshold.getMillId(), targetThreshold.getBuType().getBuTypeId(), targetThreshold.getKpiId(), targetThreshold.getProcessLine().getProcessLineId());
 			if(entity != null) {
 				processLineConfigEntity = ProcessLineConfigurationManagementUtility.getProcessLineConfigurationEntity(targetThreshold, entity);
-				
 				try {
 					processLineConfigurationRepository.save(processLineConfigEntity);
 				}catch(RuntimeException e) {
