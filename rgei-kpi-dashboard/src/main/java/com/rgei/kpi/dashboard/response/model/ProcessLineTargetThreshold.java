@@ -13,7 +13,7 @@ public class ProcessLineTargetThreshold {
 	private String startDate;
 	private String endDate;
 	private Boolean active;
-	private Boolean isDefaultConfig;
+	private Boolean isDefault;
 	private String createdBy;
 	private String createdDate;
 	private String updatedBy;
@@ -99,12 +99,12 @@ public class ProcessLineTargetThreshold {
 		this.active = active;
 	}
 	
-	public Boolean getIsDefaultConfig() {
-		return isDefaultConfig;
+	public Boolean getIsDefault() {
+		return isDefault;
 	}
 
-	public void setIsDefaultConfig(Boolean isDefaultConfig) {
-		this.isDefaultConfig = isDefaultConfig;
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 
 	public String getCreatedBy() {

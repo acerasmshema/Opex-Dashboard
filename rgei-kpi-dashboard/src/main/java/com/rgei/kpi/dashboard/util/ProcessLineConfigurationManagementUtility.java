@@ -1,6 +1,5 @@
 package com.rgei.kpi.dashboard.util;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ProcessLineConfigurationManagementUtility {
 			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setActive(config.getActive());
-			threshold.setIsDefaultConfig(config.getIsDefault());
+			threshold.setIsDefault(config.getIsDefault());
 			threshold.setCreatedBy(config.getCreatedBy());
 			threshold.setCreatedDate(config.getCreatedDate().toString());
 			threshold.setUpdatedBy(config.getUpdatedBy());
@@ -67,14 +66,15 @@ public class ProcessLineConfigurationManagementUtility {
 
 	public static ProcessLineConfigurationEntity getProcessLineConfigurationEntity(ProcessLineTargetThreshold threshold, ProcessLineConfigurationEntity entity) {
 		entity.setProcessLineConfigurationId(CommonFunction.covertToInteger(threshold.getProcessLineTargetThresholdId()));
-		entity.setMinimum(threshold.getMinimum());
+		entity.setMinimum(0.0);
 		entity.setMaximum(threshold.getMaximum());
+		entity.setThreshold(threshold.getThreshold());
 		entity.setUpdatedBy(threshold.getUpdatedBy());
-		entity.setStartDate(Timestamp.valueOf(threshold.getStartDate()));
-		entity.setEndDate(Timestamp.valueOf(threshold.getEndDate()));
+		entity.setStartDate(Utility.stringToDateConvertor(threshold.getStartDate(), DashboardConstant.FORMAT));
+		entity.setEndDate(Utility.stringToDateConvertor(threshold.getEndDate(), DashboardConstant.FORMAT));
 		entity.setUpdatedDate(new Date());
 		entity.setActive(Boolean.TRUE);
-		entity.setIsDefault(threshold.getIsDefaultConfig());
+		entity.setIsDefault(threshold.getIsDefault());
 		entity.setMillId(threshold.getMillId());
 		entity.setBuTypeId(threshold.getBuType().getBuTypeId());
 		entity.setProcessLineId(threshold.getProcessLine().getProcessLineId());
