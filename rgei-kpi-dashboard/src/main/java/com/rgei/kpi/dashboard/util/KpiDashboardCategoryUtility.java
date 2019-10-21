@@ -338,7 +338,7 @@ public class KpiDashboardCategoryUtility {
 	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, ProcessLine kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
 		String value = null;
-		val.setProcessLineId(kpiProcessLine.getProcessLineId().toString());
+		val.setProcessLineId(kpiProcessLine.getProcessLineId());
 		val.setName(kpiProcessLine.getProcessLineCode());
 		val.setTarget(type.getTarget().get(kpiProcessLine.getProcessLineCode()));
 		switch (kpiProcessLine.getProcessLineCode()) {
@@ -411,7 +411,7 @@ public class KpiDashboardCategoryUtility {
 
 	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(ProcessLine kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
-		val.setProcessLineId(kpiProcessLine.getProcessLineId().toString());
+		val.setProcessLineId(kpiProcessLine.getProcessLineId());
 		val.setName(kpiProcessLine.getProcessLineCode());
 		val.setValue(DashboardConstant.NA);
 		val.setTarget(type.getTarget().get(kpiProcessLine.getProcessLineCode()));
