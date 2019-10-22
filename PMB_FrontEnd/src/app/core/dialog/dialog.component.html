@@ -552,7 +552,7 @@
                             <label class="edit-label required">Business Type</label>
                             <div class="form-group">
                                 <select class="form-control edit-input" style="height: 34px;"
-                                    (change)="onBusinessTypeChange($event.target.value)">
+                                    (change)="onBusinessTypeChange($event.target.value, 'processLine')">
                                     <option class="edit-input" selected value="">Select Business Type</option>
                                     <option *ngFor="let buType of processLineThresholdForm.controls.buTypeList.controls"
                                         [selected]="(processLineThresholdForm.controls.buType.value !== null && buType.value.buTypeId === processLineThresholdForm.controls.buType.value.buTypeId)"
@@ -568,7 +568,7 @@
                             <label class="edit-label required">Process Line</label>
                             <div class="form-group">
                                 <select class="form-control edit-input" style="height: 34px;"
-                                    (change)="onProcessLineChange($event.target.value)">
+                                    (change)="onProcessLineChange($event.target.value, 'processLine')">
                                     <option class="edit-input" selected value="">Select Process Line</option>
                                     <option
                                         *ngFor="let processLine of processLineThresholdForm.controls.processLineList.controls"
@@ -602,9 +602,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Start Date</label>
                             <div class="form-group">
-                                <ejs-datepicker id='daterangepicker' formControlName="startDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    placeholder="{{'  Date Range' | translate }}">
+                                <ejs-datepicker formControlName="startDate"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;">
                                 </ejs-datepicker>
                             </div>
                         </div>
@@ -613,9 +612,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">End Date</label>
                             <div class="form-group">
-                                <ejs-datepicker id='daterangepicker' formControlName="endDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    placeholder="{{'  Date Range' | translate }}">
+                                <ejs-datepicker formControlName="endDate"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;">
                                 </ejs-datepicker>
                             </div>
                         </div>
@@ -672,7 +670,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Threshold</label>
                             <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50" (change)="onThresholdChange($event.target.value, 'production')"
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    (change)="onThresholdChange($event.target.value, 'production')"
                                     formControlName="threshold">
                             </div>
                         </div>
@@ -681,7 +680,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Maximum</label>
                             <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50" (change)="onMaximumChange($event.target.value, 'production')"
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    (change)="onMaximumChange($event.target.value, 'production')"
                                     formControlName="maximum">
                             </div>
                         </div>
@@ -739,9 +739,13 @@
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onBusinessTypeChange($event.target.value)">
+                            (change)="onBusinessTypeChange($event.target.value, 'annual')">
                             <option class="edit-input" selected value="">Select Business Type</option>
-                            <option class="edit-input">Kraft</option>
+                            <option *ngFor="let buType of annualTargetForm.controls.buTypeList.controls"
+                                [selected]="(annualTargetForm.controls.buType.value !== null && buType.value.buTypeId === annualTargetForm.controls.buType.value.buTypeId)"
+                                class="edit-input" [value]="buType.value.buTypeId">
+                                {{buType.value.buTypeName}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -764,7 +768,7 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Working Days</label>
                     <div class="form-group">
-                        <input type="number" class="form-control edit-input" maxlength="50">
+                        <input type="number" class="form-control edit-input" maxlength="50" formControlName="workingDays">
                     </div>
                 </div>
             </div>
@@ -772,7 +776,7 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Annual Target</label>
                     <div class="form-group">
-                        <input type="number" class="form-control edit-input" maxlength="50">
+                        <input type="number" class="form-control edit-input" maxlength="50" formControlName="annualTarget">
                     </div>
                 </div>
             </div>
@@ -800,7 +804,7 @@
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onBusinessTypeChange($event.target.value)">
+                            (change)="onBusinessTypeChange($event.target.value, 'consumption')">
                             <option class="edit-input" selected value="">Select Business Type</option>
                             <option *ngFor="let buType of consumptionThresholdForm.controls.buTypeList.controls"
                                 [selected]="(consumptionThresholdForm.controls.buType.value !== null && buType.value.buTypeId === consumptionThresholdForm.controls.buType.value.buTypeId)"
@@ -834,7 +838,7 @@
                             (change)="onKpiChange($event.target.value)">
                             <option class="edit-input" selected value="">Select KPI</option>
                             <option *ngFor="let kpi of consumptionThresholdForm.controls.kpiList.controls"
-                                [selected]="(consumptionThresholdForm.controls.kpi.value !== null && kpi.value.kpiId === consumptionThresholdForm.controls.kpi.value.kpiId)"
+                                [selected]="(consumptionThresholdForm.controls.kpiId.value !== null && kpi.value.kpiId === consumptionThresholdForm.controls.kpiId.value)"
                                 class="edit-input" [value]="kpi.value.kpiId">
                                 {{kpi.value.kpiName}}
                             </option>
@@ -847,7 +851,7 @@
                     <label class="edit-label required">Process Line</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onconsumptionChange($event.target.value)">
+                            (change)="onProcessLineChange($event.target.value,'consumption')">
                             <option class="edit-input" selected value="">Select Process Line</option>
                             <option
                                 *ngFor="let processLine of consumptionThresholdForm.controls.processLineList.controls"

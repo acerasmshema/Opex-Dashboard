@@ -1,10 +1,13 @@
 export class AnnualTarget {
-    annualTargetId: string;
+    millBuKpiCategoryId: string;
     operation: string;
     buType: any;
     year: number;
     workingDays: number;
-    target: string;
+    annualTarget: string;
     createdBy: string;
     updatedBy: string;
+    isDefault: boolean;
+    millId: string;
+    kpiCategoryId: number;
 }

@@ -1,6 +1,6 @@
 <div *ngIf="annualTargets.length  > 0">
     <p-table #annual [columns]="cols" [value]="annualTargets" [paginator]="true" [rows]="10"
-      dataKey="annualTargetId" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="buType"
+      dataKey="millBuKpiCategoryId" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="false" sortField="buType"
       sortOrder="1">
       <ng-template pTemplate="caption">
         <div class="text-right">
@@ -36,7 +36,7 @@
             <div class="td-role">{{rowData[col.field]}}</div>
           </td>
           <td class="text-center">
-            <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.annualTargetId)"><i
+            <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.millBuKpiCategoryId)"><i
                 class="fa fa-edit" pTooltip="Edit" tooltipPosition="top"></i></span>
           </td>
         </tr>
