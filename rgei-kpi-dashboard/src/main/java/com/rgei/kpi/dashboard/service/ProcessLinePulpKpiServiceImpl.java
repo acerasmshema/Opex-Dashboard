@@ -16,7 +16,6 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,12 +34,10 @@ import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
-import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
-import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineFrequencyRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.DailyKpiPulp;
@@ -92,9 +89,6 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	@Resource
 	ProcessLineFrequencyRepository processLineFrequencyRepository;
 	
-	@Resource
-	ProcessLineConfigurationRepository processLineConfigurationRepository; 
-	
 	
 
 	@Override
@@ -108,11 +102,8 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		MillEntity mill = new MillEntity();
 		mill.setMillId(productionRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
-		
 		if (processLineEntity.isPresent()) {
-			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(productionRequest.getMillId(), yesterdayDate);
-			Map<Integer, List<BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
-			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get(),processLineConfigurationMap);
+			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}else {
 			throw new RecordNotFoundException("Record not found of process line for mill Id : "+productionRequest.getMillId());
 		}
@@ -219,15 +210,12 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<DateRangeResponse> getDailyTargetLineData(ProcessLineRequest processLineRequest) {
 		logger.info("Getting daily target line data", processLineRequest);
 		List<DateRangeResponse> dateRangeResponse = null;
-		Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
 		List<ProcessLine> processLine = null;
 		MillEntity mill = new MillEntity();
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
-			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(processLineRequest.getMillId(), yesterdayDate);
-			Map<Integer, List<BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
-			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get(), processLineConfigurationMap);
+			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
 		List<DailyKpiPulpEntity> dailyKpiPulpEntities;
 		try {
@@ -331,15 +319,12 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		logger.info("Getting process line data for specific frequencies", processLineRequest);
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<ProcessLine> processLines = null;
-		Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
 		MillEntity mill = new MillEntity();
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional
 				.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
-			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(processLineRequest.getMillId(), yesterdayDate);
-			Map<Integer, List<BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
-			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get(), processLineConfigurationMap);
+			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
 		List<String> lineList = null;
 		List<String> processLinesList = Arrays.asList(processLineRequest.getProcessLines());
@@ -373,15 +358,12 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public List<List<Map<String, Object>>> getDataGridProcessLinesForFrequecy(ProcessLineRequest processLineRequest) {
 		logger.info("Getting process line grid data for specific frequencies", processLineRequest);
 		List<ProcessLine> processLines = null;
-		Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
 		MillEntity mill = new MillEntity();
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional
 				.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
-			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(processLineRequest.getMillId(), yesterdayDate);
-			Map<Integer, List<BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
-			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get(), processLineConfigurationMap);
+			processLines = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get());
 		}
 		List<String> lineList = null;
 		List<String> processLinesList = Arrays.asList(processLineRequest.getProcessLines());

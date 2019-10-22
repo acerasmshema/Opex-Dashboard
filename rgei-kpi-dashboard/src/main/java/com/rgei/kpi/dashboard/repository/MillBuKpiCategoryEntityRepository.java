@@ -16,8 +16,6 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +30,4 @@ public interface MillBuKpiCategoryEntityRepository extends JpaRepository<MillBuK
 	@Query("Select e from MillBuKpiCategoryEntity e where e.mill.millId = :millId and e.kpiCategory.kpiCategoryId = :kpiCategoryId and e.businessUnit.businessUnitId = :buId")
 	public MillBuKpiCategoryEntity find(@Param("millId")Integer millId,
 			@Param("kpiCategoryId")Integer kpiCategoryId, @Param("buId")Integer buId);
-	
-	@Query("Select e from MillBuKpiCategoryEntity e where e.mill.millId = :millId and e.businessUnit.businessUnitId = :buId")
-	public List<MillBuKpiCategoryEntity> findAll(@Param("millId")Integer millId, @Param("buId")Integer buId);
 }

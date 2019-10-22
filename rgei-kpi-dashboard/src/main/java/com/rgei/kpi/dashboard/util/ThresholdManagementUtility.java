@@ -1,6 +1,5 @@
 package com.rgei.kpi.dashboard.util;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,10 +8,8 @@ import java.util.Objects;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
-import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 
 public class ThresholdManagementUtility {
@@ -99,57 +96,5 @@ public class ThresholdManagementUtility {
 			throw new RecordNotUpdatedException("Error while updating production target :" + productionTarget);
 		}
 		return configEntity;
-	}
-	
-	public static List<MillBuKpiCategoryResponse> getMillBuResponseList(List<MillBuKpiCategoryEntity> entities) {
-		List<MillBuKpiCategoryResponse> responseList = new ArrayList<MillBuKpiCategoryResponse>();
-		MillBuKpiCategoryResponse resp = null;
-		for(MillBuKpiCategoryEntity entity : entities) {
-			resp = new MillBuKpiCategoryResponse();
-			resp.setMillBuKpiCategoryId(entity.getMillBuKpiCategoryId());
-			resp.setYear(entity.getYear());
-			resp.setWorkingDays(entity.getWorkingDays());
-			resp.setTargetDays(entity.getTargetDays());
-			resp.setRangeValue(entity.getRangeValue());
-			resp.setMinTarget(entity.getMinTarget());
-			resp.setMillId(entity.getMillId());
-			resp.setMaxTarget(entity.getMaxTarget());
-			resp.setKpiCategoryId(entity.getKpiCategoryId());
-			resp.setDailyTarget(entity.getDailyTarget());
-			resp.setColorRange(entity.getColorRange());
-			resp.setBusinessUnitId(entity.getBusinessUnitId());
-			resp.setAnnualTarget(entity.getAnnualTarget());
-			resp.setActive(entity.getActive());
-			resp.setCreatedBy(entity.getCreatedBy());
-			resp.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
-			resp.setUpdatedBy(entity.getUpdatedBy());
-			resp.setUpdatedDate(CommonFunction.getString(entity.getUpdatedDate()));				
-			responseList.add(resp);
-		}
-		return responseList;
-	}
-	
-	public static MillBuKpiCategoryEntity createMillBuKpiEntity(MillBuKpiCategoryResponse response) {
-		MillBuKpiCategoryEntity entity = new MillBuKpiCategoryEntity();
-		if(Objects.nonNull(response)) {
-			entity.setYear(response.getYear());
-			entity.setWorkingDays(response.getWorkingDays());
-			entity.setTargetDays(response.getTargetDays());
-			entity.setRangeValue(response.getRangeValue());
-			entity.setMinTarget(response.getMinTarget());
-			entity.setMaxTarget(response.getMaxTarget());
-			entity.setMillId(response.getMillId());
-			entity.setKpiCategoryId(response.getKpiCategoryId());
-			entity.setBusinessUnitId(response.getBusinessUnitId());
-			entity.setDailyTarget(response.getDailyTarget());
-			entity.setAnnualTarget(response.getAnnualTarget());
-			entity.setColorRange(response.getColorRange());
-			entity.setActive(response.getActive());
-			entity.setCreatedBy(response.getCreatedBy());
-			entity.setCreatedDate(Timestamp.valueOf(response.getCreatedDate()));
-			entity.setUpdatedBy(response.getUpdatedBy());
-			entity.setUpdatedDate(Timestamp.valueOf(response.getUpdatedDate()));
-		}
-		return entity;
 	}
 }

@@ -16,7 +16,6 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.util;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,18 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
-import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
-import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MillDetail;
@@ -47,7 +42,7 @@ import com.rgei.kpi.dashboard.response.model.ProcessLineDetailsResponse;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 public class ProcessLineUtility {
-	
+
 	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(ProcessLineUtility.class);
 
 	private ProcessLineUtility() {
@@ -88,9 +83,8 @@ public class ProcessLineUtility {
 		return new Date(yestDate.getTime());
 	}
 
-	public static List<ProcessLine> convertToProcessLineDTO(List<ProcessLineEntity> entities, Map<Integer, List<BigDecimal>> processLineConfigurationMap) {
+	public static List<ProcessLine> convertToProcessLineDTO(List<ProcessLineEntity> entities) {
 		List<ProcessLine> processLine = new ArrayList<>();
-		Date date=new Date();
 		sortProcessLines(entities);
 		for (ProcessLineEntity entity : entities) {
 			ProcessLine processLineObject = new ProcessLine();
@@ -98,11 +92,11 @@ public class ProcessLineUtility {
 			processLineObject.setProcessLineCode(entity.getProcessLineCode());
 			processLineObject.setProcessLineName(entity.getProcessLineName());
 			processLineObject.setMillId(entity.getMill().getMillId());
-			processLineObject.setMinTarget(processLineConfigurationMap.get(entity.getProcessLineId()).get(0));
-			processLineObject.setMaxTarget(processLineConfigurationMap.get(entity.getProcessLineId()).get(1));
+			processLineObject.setMinTarget(entity.getMinTarget());
+			processLineObject.setMaxTarget(entity.getMaxTarget());
 			processLineObject.setRangeValue(entity.getRangeValue());
 			processLineObject.setColorRange(entity.getColorRange());
-			processLineObject.setDailyLineTarget(processLineConfigurationMap.get(entity.getProcessLineId()).get(2));
+			processLineObject.setDailyLineTarget(entity.getDailyLineTarget());
 			processLine.add(processLineObject);
 		}
 		return processLine;
@@ -346,29 +340,5 @@ public class ProcessLineUtility {
 			}
 			return value1;
 		});
-	}
-
-	public static Map<Integer,List<BigDecimal>> convertToApplicableConfguration(
-			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList) {
-		List<Integer> ProcessLineList=new ArrayList<Integer>();
-		Map<Integer,List<BigDecimal>> processLineConfigurationMap=new HashMap<Integer,List<BigDecimal>>();
-		processLineConfigurationEntityList.forEach(item->ProcessLineList.add(item.getProcessLineId()));
-		for(ProcessLineConfigurationEntity processLineConfigurationEntity:processLineConfigurationEntityList) {
-			if(!processLineConfigurationEntity.getIsDefault() ) {
-				List<BigDecimal> configurationValueList= new ArrayList<BigDecimal>();
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getMinimum()));
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getMaximum()));
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getThreshold()));
-				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLineId(), configurationValueList);
-			}else if(processLineConfigurationEntity.getIsDefault() && !processLineConfigurationMap.containsKey(processLineConfigurationEntity.getProcessLineId())) {
-				List<BigDecimal> configurationValueList= new ArrayList<BigDecimal>();
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getMinimum()));
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getMaximum()));
-				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getThreshold()));
-				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLineId(), configurationValueList);
-			}
-			
-		}
-		return processLineConfigurationMap;
 	}
 }
