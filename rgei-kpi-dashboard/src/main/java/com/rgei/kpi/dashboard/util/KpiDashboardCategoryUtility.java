@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
@@ -25,6 +24,7 @@ import com.rgei.kpi.dashboard.response.model.Kpi;
 import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.KpiCategorySeriesResponse;
 import com.rgei.kpi.dashboard.response.model.KpiType;
+import com.rgei.kpi.dashboard.response.model.ProcessLine;
 import com.rgei.kpi.dashboard.response.model.SeriesObject;
 
 /**
@@ -94,7 +94,7 @@ public class KpiDashboardCategoryUtility {
 				val.setKpiId(kpiType.get(i).getKpi().getKpiId());
 				val.setKpiName(kpiType.get(i).getKpi().getKpiName());
 				val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
-				for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
+				for (ProcessLine kpiProcessLine : kpiType.get(i).getProcessLines()) {
 					KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
 					val.setSeries(KpiDashboardCategoryUtility.getSeriesObject(obj, kpiProcessLine, value, series,
 							kpiType.get(i)));
@@ -111,7 +111,7 @@ public class KpiDashboardCategoryUtility {
 		val.setKpiId(kpiType.get(i).getKpi().getKpiId());
 		val.setKpiName(kpiType.get(i).getKpi().getKpiName());
 		val.setUnit(kpiType.get(i).getKpi().getKpiUnit());
-		for (String kpiProcessLine : kpiType.get(i).getProcessLines()) {
+		for (ProcessLine kpiProcessLine : kpiType.get(i).getProcessLines()) {
 			KpiCategorySeriesResponse value = new KpiCategorySeriesResponse();
 			val.setSeries(
 					KpiDashboardCategoryUtility.getDefaultSeriesObject(kpiProcessLine, value, series, kpiType.get(i)));
@@ -282,9 +282,9 @@ public class KpiDashboardCategoryUtility {
 		KpiType kpiTypeObject;
 		if (Boolean.TRUE.equals(kpi.getActive())) {
 			kpiTypeObject = new KpiType();
-			List<String> processLines = new LinkedList<String>();
+			List<ProcessLine> processLines = new LinkedList<>();
 			Map<String, String> target = new HashMap<>();
-			Map<Integer, String> prcoessLineMap = new TreeMap<>();
+			Map<Integer, ProcessLine> prcoessLineMap = new TreeMap<>();
 			if (Boolean.TRUE.equals(value.getActive())) {
 				kpiTypeObject.setKpiTypeId(value.getKpiTypeId());
 				kpiTypeObject.setKpiTypeCode(value.getKpiTypeCode());
@@ -296,8 +296,11 @@ public class KpiDashboardCategoryUtility {
 				for (KpiProcessLineEntity line : kpi.getKpiProcessLines()) {
 					if (millId.equals(line.getMill().getMillId())) {
 						target.put(line.getProcessLine().getProcessLineCode(), line.getTarget());
+						ProcessLine processLine = new ProcessLine();
+						processLine.setProcessLineId(line.getProcessLine().getProcessLineId());
+						processLine.setProcessLineCode(line.getProcessLine().getProcessLineCode());
 						prcoessLineMap.put(line.getProcessLine().getProcessLineOrder(),
-								line.getProcessLine().getProcessLineCode());
+								processLine);
 					}
 				}
 			}
@@ -325,53 +328,59 @@ public class KpiDashboardCategoryUtility {
 	public static Date getYesterdayDate() {
 		LocalDate yesterdayDate = LocalDate.now().minusDays(1);
 		return Date.valueOf(yesterdayDate.toString());
+  }
+  
+	public static Date getPrev7DaysDate() {
+		LocalDate date = LocalDate.now().minusDays(7);
+		return Date.valueOf(date.toString());
 	}
 
-	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, String kpiProcessLine,
+	public static List<KpiCategorySeriesResponse> getSeriesObject(Object[] obj, ProcessLine kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
 		String value = null;
-		val.setName(kpiProcessLine);
-		val.setTarget(type.getTarget().get(kpiProcessLine));
-		switch (kpiProcessLine) {
+		val.setProcessLineId(kpiProcessLine.getProcessLineId());
+		val.setName(kpiProcessLine.getProcessLineCode());
+		val.setTarget(type.getTarget().get(kpiProcessLine.getProcessLineCode()));
+		switch (kpiProcessLine.getProcessLineCode()) {
 		case DashboardConstant.PROCESS_LINE_FL1:
 			value = parseProcessLineValue(Double.valueOf(obj[0].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL2:
 			value = parseProcessLineValue(Double.valueOf(obj[1].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_FL3:
 			value = parseProcessLineValue(Double.valueOf(obj[2].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_PCD:
 			value = parseProcessLineValue(Double.valueOf(obj[3].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD1:
 			value = parseProcessLineValue(Double.valueOf(obj[4].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD2:
 			value = parseProcessLineValue(Double.valueOf(obj[5].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD3:
 			value = parseProcessLineValue(Double.valueOf(obj[6].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		case DashboardConstant.PROCESS_LINE_PD4:
 			value = parseProcessLineValue(Double.valueOf(obj[7].toString()));
 			val.setValue(value);
-			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine)));
+			val.setColor(fetchColor(value, type.getTarget().get(kpiProcessLine.getProcessLineCode())));
 			break;
 		default:
 		}
@@ -400,11 +409,12 @@ public class KpiDashboardCategoryUtility {
 		return color;
 	}
 
-	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(String kpiProcessLine,
+	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(ProcessLine kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
-		val.setName(kpiProcessLine);
+		val.setProcessLineId(kpiProcessLine.getProcessLineId());
+		val.setName(kpiProcessLine.getProcessLineCode());
 		val.setValue(DashboardConstant.NA);
-		val.setTarget(type.getTarget().get(kpiProcessLine));
+		val.setTarget(type.getTarget().get(kpiProcessLine.getProcessLineCode()));
 		val.setColor("black");
 		series.add(val);
 		return series;

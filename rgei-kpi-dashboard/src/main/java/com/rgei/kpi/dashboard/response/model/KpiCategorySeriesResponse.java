@@ -42,6 +42,8 @@ package com.rgei.kpi.dashboard.response.model;
 
 public class KpiCategorySeriesResponse {
 
+	private Integer processLineId;
+	
 	private String name;
 	
 	private String value;
@@ -54,11 +56,12 @@ public class KpiCategorySeriesResponse {
 		super();
 	}
 
-	public KpiCategorySeriesResponse(String name, String value, String color) {
+	public KpiCategorySeriesResponse(String name, String value, String color, Integer processLineId) {
 		super();
 		this.name = name;
 		this.value = value;
 		this.color = color;
+		this.processLineId = processLineId;
 	}
 
 	public String getName() {
@@ -91,6 +94,14 @@ public class KpiCategorySeriesResponse {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public Integer getProcessLineId() {
+		return processLineId;
+	}
+
+	public void setProcessLineId(Integer processLineId) {
+		this.processLineId = processLineId;
 	}
 	
 }

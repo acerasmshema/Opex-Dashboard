@@ -2,6 +2,7 @@ package com.rgei.kpi.dashboard.service;
 
 import java.util.List;
 
+import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 
@@ -11,6 +12,17 @@ public interface ThresholdManagementService {
 
 	List<ProcessLineTargetThreshold> getProcessLineTargets(Integer millId, Integer buTypeId, Integer kpiId);
 
+
 	void createProductionTarget(ProductionThreshold productionTarget);
 
+	void updateProductionTarget(ProductionThreshold productionTarget);
+
+
+	void updateProcessLineTarget(ProcessLineTargetThreshold targetThreshold);
+
+	void createProcessLineTargets(ProcessLineTargetThreshold processLineTargetThreshold);
+	
+	List<MillBuKpiCategoryResponse> getAnnualConfiguration(Integer millId, Integer buId);
+	
+	void createAnnualConfiguration(MillBuKpiCategoryResponse millBuKpiCategoryResponse);
 }

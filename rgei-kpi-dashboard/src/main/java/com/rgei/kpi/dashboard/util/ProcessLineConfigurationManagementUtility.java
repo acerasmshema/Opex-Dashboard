@@ -1,6 +1,7 @@
 package com.rgei.kpi.dashboard.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
@@ -16,9 +17,10 @@ public class ProcessLineConfigurationManagementUtility {
 		List<ProcessLineTargetThreshold> response = new ArrayList<>();
 		for(ProcessLineConfigurationEntity config : processLineConfigurationEntityList) {
 			ProcessLineTargetThreshold threshold = new ProcessLineTargetThreshold();
-			threshold.setProcessLineTargetThreshold(config.getProcessLineConfigurationId().toString());
+			threshold.setProcessLineTargetThresholdId(config.getProcessLineConfigurationId().toString());
 			threshold.setBuType(CommonFunction.convertBUEntityToResponse(config.getBuType()));
-			threshold.setMill(CommonFunction.convertMillEntityToResponse(config.getMill()));
+			threshold.setMillId(config.getMillId());
+			threshold.setKpiId(config.getKpiId());
 			threshold.setProcessLine(CommonFunction.convertProcessLineEntityToResponse(config.getProcessLine()));
 			threshold.setThreshold(config.getThreshold());
 			threshold.setMinimum(config.getMinimum());
@@ -26,6 +28,7 @@ public class ProcessLineConfigurationManagementUtility {
 			threshold.setStartDate(Utility.dateToStringConvertor(config.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setEndDate(Utility.dateToStringConvertor(config.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
 			threshold.setActive(config.getActive());
+			threshold.setIsDefault(config.getIsDefault());
 			threshold.setCreatedBy(config.getCreatedBy());
 			threshold.setCreatedDate(config.getCreatedDate().toString());
 			threshold.setUpdatedBy(config.getUpdatedBy());
@@ -35,7 +38,47 @@ public class ProcessLineConfigurationManagementUtility {
 		
 		return response;
 	}
-
 	
+	
+	
+	public static ProcessLineConfigurationEntity convertToProcessLineEntity(
+			ProcessLineTargetThreshold processLineTargetThreshold) {
+		ProcessLineConfigurationEntity processLineConfigurationEntity = new ProcessLineConfigurationEntity();
+		if(processLineTargetThreshold!=null) {
+			processLineConfigurationEntity.setMillId(processLineTargetThreshold.getMillId());
+			processLineConfigurationEntity.setBuTypeId(processLineTargetThreshold.getBuType().getBuTypeId());
+			processLineConfigurationEntity.setKpiId(processLineTargetThreshold.getKpiId());
+			processLineConfigurationEntity.setProcessLineId(processLineTargetThreshold.getProcessLine().getProcessLineId());
+			processLineConfigurationEntity.setMaximum(processLineTargetThreshold.getMaximum());
+			processLineConfigurationEntity.setMinimum(processLineTargetThreshold.getMinimum());
+			processLineConfigurationEntity.setThreshold(processLineTargetThreshold.getThreshold());
+			processLineConfigurationEntity.setStartDate(Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT));
+			processLineConfigurationEntity.setEndDate(Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT));
+			processLineConfigurationEntity.setCreatedBy(processLineTargetThreshold.getCreatedBy());
+			processLineConfigurationEntity.setCreatedDate(new Date());
+			processLineConfigurationEntity.setUpdatedBy(processLineTargetThreshold.getUpdatedBy());
+			processLineConfigurationEntity.setUpdatedDate(new Date());
+			processLineConfigurationEntity.setIsDefault(Boolean.FALSE);
+			processLineConfigurationEntity.setActive(Boolean.TRUE);
+			}
+		return processLineConfigurationEntity;
+	}
 
+	public static ProcessLineConfigurationEntity getProcessLineConfigurationEntity(ProcessLineTargetThreshold threshold, ProcessLineConfigurationEntity entity) {
+		entity.setProcessLineConfigurationId(CommonFunction.covertToInteger(threshold.getProcessLineTargetThresholdId()));
+		entity.setMinimum(0.0);
+		entity.setMaximum(threshold.getMaximum());
+		entity.setThreshold(threshold.getThreshold());
+		entity.setUpdatedBy(threshold.getUpdatedBy());
+		entity.setStartDate(Utility.stringToDateConvertor(threshold.getStartDate(), DashboardConstant.FORMAT));
+		entity.setEndDate(Utility.stringToDateConvertor(threshold.getEndDate(), DashboardConstant.FORMAT));
+		entity.setUpdatedDate(new Date());
+		entity.setActive(Boolean.TRUE);
+		entity.setIsDefault(threshold.getIsDefault());
+		entity.setMillId(threshold.getMillId());
+		entity.setBuTypeId(threshold.getBuType().getBuTypeId());
+		entity.setProcessLineId(threshold.getProcessLine().getProcessLineId());
+		entity.setKpiId(threshold.getKpiId());
+		return entity;
+	}
 }

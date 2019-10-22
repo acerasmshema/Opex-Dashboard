@@ -38,5 +38,8 @@ public interface KpiDashboardCategoryService {
 		
 	public List<List<Map<String,Object>>> getKpiCategoryDownloadGridData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest);
 	
-	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId);
+  public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory(Integer kpiCategoryId, Integer millId);
+  
+  // Kimman: for special wood comsuption yield average 7 days handling
+	public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory2(Integer kpiCategoryId, Integer millId);
 }
