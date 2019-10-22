@@ -35,9 +35,9 @@ export class AnnualConfigurationComponent implements OnInit, OnDestroy {
     annualTarget.year = null;
     annualTarget.buType = "";
     annualTarget.workingDays = null;
-    annualTarget.annualTarget = '';
+    annualTarget.threshold = '';
     annualTarget.millId = this.statusService.common.selectedMill.millId;
-    annualTarget.kpiCategoryId = 1;
+    annualTarget.kpiId = 1;
     annualTarget.createdBy = this.statusService.common.userDetail.username;
     annualTarget.updatedBy = this.statusService.common.userDetail.username;
     annualTarget.operation = "Add";
@@ -49,8 +49,8 @@ export class AnnualConfigurationComponent implements OnInit, OnDestroy {
     this.statusService.dialogSubject.next(data);
   }
 
-  onEdit(millBuKpiCategoryId: string) {
-    const annualTarget = this.annualTargets.find((annualTarget) => annualTarget.millBuKpiCategoryId === millBuKpiCategoryId)
+  onEdit(annualConfigurationId: string) {
+    const annualTarget = this.annualTargets.find((annualTarget) => annualTarget.annualConfigurationId === annualConfigurationId)
     annualTarget.operation = "Edit";
 
     const data = {

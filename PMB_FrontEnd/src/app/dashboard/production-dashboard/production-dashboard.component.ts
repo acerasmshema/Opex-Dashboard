@@ -256,11 +256,8 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
           prodLine.options.rangeLabel.push("" + gauge.max);
           prodLine.options.needleColor = '#292823';
 
-          let value = gauge.range.split(',');
-          let color = gauge.colorRange.split(',');
-          value.filter(item => prodLine.options.arcDelimiters.push(+item));
-          prodLine.options.arcColors.splice(0, prodLine.options.arcColors.length);
-          color.filter(item => prodLine.options.arcColors.push((item)));
+          let thresholdPercentage = (+gauge.threshold * 100) / +gauge.max;
+          prodLine.options.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
         }
       },
         (error: any) => {

@@ -54,7 +54,7 @@ export class MasterData {
     { field: 'buType', header: 'Business Type', showInputBox: true },
     { field: 'year', header: 'Year', showInputBox: true },
     { field: 'workingDays', header: 'Working Days', showInputBox: true },
-    { field: 'target', header: 'Annual Target', showInputBox: true }
+    { field: 'annualTarget', header: 'Annual Target', showInputBox: true }
   ];
 
   static consumptionThresholdCols = [

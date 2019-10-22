@@ -1,5 +1,5 @@
 export class AnnualTarget {
-    millBuKpiCategoryId: string;
+    annualConfigurationId: string;
     operation: string;
     buType: any;
     year: number;
@@ -9,5 +9,5 @@ export class AnnualTarget {
     updatedBy: string;
     isDefault: boolean;
     millId: string;
-    kpiCategoryId: number;
+    kpiId: number;
 }

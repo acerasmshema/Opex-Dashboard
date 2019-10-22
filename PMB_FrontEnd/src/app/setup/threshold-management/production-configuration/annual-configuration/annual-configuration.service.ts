@@ -47,7 +47,7 @@ export class AnnualConfigService {
         annualTarget.isDefault = annualTargetForm.controls.isDefault.value;
         annualTarget.updatedBy = this.statusService.common.userDetail.username;
         annualTarget.millId = annualTargetForm.controls.millId.value;
-        annualTarget.kpiCategoryId = annualTargetForm.controls.kpiCategoryId.value;
+        annualTarget.kpiId = annualTargetForm.controls.kpiId.value;
       
         this.apiCallService.callAPIwithData(this.addAnnualConfigUrl, annualTarget).
             subscribe(
@@ -67,7 +67,7 @@ export class AnnualConfigService {
         this.statusService.spinnerSubject.next(true);
 
         let annualTarget = new AnnualTarget();
-        annualTarget.millBuKpiCategoryId = annualTargetForm.controls.millBuKpiCategoryId.value;
+        annualTarget.annualConfigurationId = annualTargetForm.controls.annualConfigurationId.value;
         annualTarget.buType = annualTargetForm.controls.buType.value;
         annualTarget.year = annualTargetForm.controls.year.value;
         annualTarget.workingDays = annualTargetForm.controls.workingDays.value;
@@ -76,7 +76,7 @@ export class AnnualConfigService {
         annualTarget.isDefault = annualTargetForm.controls.isDefault.value;
         annualTarget.updatedBy = this.statusService.common.userDetail.username;
         annualTarget.millId = annualTargetForm.controls.millId.value;
-        annualTarget.kpiCategoryId = annualTargetForm.controls.kpiCategoryId.value;
+        annualTarget.kpiId = annualTargetForm.controls.kpiId.value;
       
         this.apiCallService.callPutAPIwithData(this.updateAnnualConfigUrl, annualTarget).
             subscribe(
