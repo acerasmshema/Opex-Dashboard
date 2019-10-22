@@ -18,14 +18,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "process_line_configuration")
-public class ProcessLineConfigurationEntity implements Serializable {
+@Table(name = "annual_configuration")
+public class AnnualConfigurationEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "process_line_configuration_id")
-	private Integer processLineConfigurationId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "annual_configuration_id")
+	private Integer annualConfigurationId;
 
 	@Column(name = "bu_type_id")
 	private Integer buTypeId;
@@ -35,24 +35,18 @@ public class ProcessLineConfigurationEntity implements Serializable {
 
 	@Column(name = "kpi_id")
 	private Integer kpiId;
-	
-	@Column(name = "process_line_id")
-	private Integer processLineId;
-
-	@Column(name = "minimum")
-	private Double minimum;
-
-	@Column(name = "maximum")
-	private Double maximum;
 
 	@Column(name = "threshold")
 	private Double threshold;
 
-	@Column(name = "start_date")
-	private Date startDate;
+	@Column(name = "year")
+	private Integer year;
 
-	@Column(name = "end_date")
-	private Date endDate;
+	@Column(name = "working_days")
+	private Integer workingDays;
+
+	@Column(name = "annual_target")
+	private String annualTarget;
 
 	@Column(name = "is_default")
 	private Boolean isDefault;
@@ -78,53 +72,17 @@ public class ProcessLineConfigurationEntity implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "mill_id", referencedColumnName = "mill_id", insertable = false, updatable = false)
 	private MillEntity mill;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "process_line_id", referencedColumnName = "process_line_id", insertable = false, updatable = false)
-	private ProcessLineEntity processLine;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "kpiId")
 	private List<KpiEntity> kpi;
-	
-	public Integer getProcessLineConfigurationId() {
-		return processLineConfigurationId;
+
+	public Integer getAnnualConfigurationId() {
+		return annualConfigurationId;
 	}
 
-	public void setProcessLineConfigurationId(Integer processLineConfigurationId) {
-		this.processLineConfigurationId = processLineConfigurationId;
-	}
-
-	public Integer getProcessLineId() {
-		return processLineId;
-	}
-
-	public void setProcessLineId(Integer processLineId) {
-		this.processLineId = processLineId;
-	}
-
-	public ProcessLineEntity getProcessLine() {
-		return processLine;
-	}
-
-	public void setProcessLine(ProcessLineEntity processLine) {
-		this.processLine = processLine;
-	}
-
-	public List<KpiEntity> getKpi() {
-		return kpi;
-	}
-
-	public void setKpi(List<KpiEntity> kpi) {
-		this.kpi = kpi;
-	}
-
-	public BusinessUnitTypeEntity getBuType() {
-		return buType;
-	}
-
-	public void setBuType(BusinessUnitTypeEntity buType) {
-		this.buType = buType;
+	public void setAnnualConfigurationId(Integer annualConfigurationId) {
+		this.annualConfigurationId = annualConfigurationId;
 	}
 
 	public Integer getBuTypeId() {
@@ -151,30 +109,6 @@ public class ProcessLineConfigurationEntity implements Serializable {
 		this.kpiId = kpiId;
 	}
 
-	public MillEntity getMill() {
-		return mill;
-	}
-
-	public void setMill(MillEntity mill) {
-		this.mill = mill;
-	}
-
-	public Double getMinimum() {
-		return minimum;
-	}
-
-	public void setMinimum(Double minimum) {
-		this.minimum = minimum;
-	}
-
-	public Double getMaximum() {
-		return maximum;
-	}
-
-	public void setMaximum(Double maximum) {
-		this.maximum = maximum;
-	}
-
 	public Double getThreshold() {
 		return threshold;
 	}
@@ -183,20 +117,36 @@ public class ProcessLineConfigurationEntity implements Serializable {
 		this.threshold = threshold;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Integer getYear() {
+		return year;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setYear(Integer year) {
+		this.year = year;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Integer getWorkingDays() {
+		return workingDays;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setWorkingDays(Integer workingDays) {
+		this.workingDays = workingDays;
+	}
+
+	public String getAnnualTarget() {
+		return annualTarget;
+	}
+
+	public void setAnnualTarget(String annualTarget) {
+		this.annualTarget = annualTarget;
+	}
+
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 
 	public Boolean getActive() {
@@ -239,12 +189,28 @@ public class ProcessLineConfigurationEntity implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public Boolean getIsDefault() {
-		return isDefault;
+	public BusinessUnitTypeEntity getBuType() {
+		return buType;
 	}
 
-	public void setIsDefault(Boolean isDefault) {
-		this.isDefault = isDefault;
+	public void setBuType(BusinessUnitTypeEntity buType) {
+		this.buType = buType;
+	}
+
+	public MillEntity getMill() {
+		return mill;
+	}
+
+	public void setMill(MillEntity mill) {
+		this.mill = mill;
+	}
+
+	public List<KpiEntity> getKpi() {
+		return kpi;
+	}
+
+	public void setKpi(List<KpiEntity> kpi) {
+		this.kpi = kpi;
 	}
 
 }

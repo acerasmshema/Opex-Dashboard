@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
+import com.rgei.kpi.dashboard.response.model.AnnualConfiguration;
+import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 import com.rgei.kpi.dashboard.response.model.User;
@@ -112,6 +114,33 @@ public class ThresholdManagementController {
 	public ResponseEntity<HttpStatus> updateProductionTarget(@RequestBody ProductionThreshold productionTarget) {
 		logger.info("Updating user", productionTarget);
 		thresholdManagementService.updateProductionTarget(productionTarget);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "getAnnualConfiguration", notes = "Retrieve annual configuration by Mill Id", response = MillBuKpiCategoryResponse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@GetMapping("/v1/annual_configuration")
+	public ResponseEntity<List<AnnualConfiguration>> getAnnualConfiguration(@RequestHeader(value = "millId") String millId) {
+		logger.info("Retrieve process line target by Mill Id : " + millId);
+		List<AnnualConfiguration > responseList = thresholdManagementService.getAnnualConfiguration(CommonFunction.covertToInteger(millId));
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "createAnnualConfiguration", notes = "Create production target")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
+	@PostMapping("/v1/create_annual_configuration")
+	public ResponseEntity<HttpStatus> createAnnualConfiguration(@RequestBody AnnualConfiguration response) {
+		logger.info("Creating annual configuration", response);
+		thresholdManagementService.createAnnualConfiguration(response);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@ApiOperation(value = "updateAnnualConfiguration", notes = "Update Annual Configuration")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
+	@PutMapping("/v1/update_annual_configuration")
+	public ResponseEntity<HttpStatus> updateAnnualConfiguration(@RequestBody AnnualConfiguration annualConfiguration) {
+		logger.info("Updating annual configuration", annualConfiguration);
+		thresholdManagementService.updateAnnualConfiguration(annualConfiguration);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
