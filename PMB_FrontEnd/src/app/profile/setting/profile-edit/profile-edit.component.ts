@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ProfileEditService } from './profile-edit.service';
 import { StatusService } from 'src/app/shared/service/status.service';
-import { UserDetail } from 'src/app/user-management/user-detail/user-detail.model';
+import { UserDetail } from 'src/app/setup/user-management/user-detail/user-detail.model';
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
-import { ApiCallService } from 'src/app/shared/service/api/api-call.service';
+import { CommonMessage } from 'src/app/shared/constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
 
 @Component({
   selector: 'app-profile-edit',
@@ -22,7 +23,7 @@ export class ProfileEditComponent implements OnInit {
     private commonService: CommonService,
     private formBuilder: FormBuilder,
     private validationService: ValidationService,
-    private apiCallService: ApiCallService,
+    private messageService: MessageService,
     private statusService: StatusService) { }
 
   ngOnInit() {
@@ -89,7 +90,7 @@ export class ProfileEditComponent implements OnInit {
           this.createUserDetailForm();
         },
         (error: any) => {
-          console.log("Error")
+          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
         }
       );
   }

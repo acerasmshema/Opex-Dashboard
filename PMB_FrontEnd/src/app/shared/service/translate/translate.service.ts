@@ -18,7 +18,6 @@ export class TranslateService {
         },
         error => {
           this.data = {};
-          console.log(123);
           resolve(this.data);
         }
       );

@@ -175,6 +175,49 @@ export class ValidationService {
         }
     }
 
+    workingDaysValidation(workingDays: string) {
+        return (formGroup: FormGroup) => {
+            const workingDaysControl = formGroup.controls[workingDays];
+
+            if (workingDaysControl.value !== null && workingDaysControl.value > 365) {
+                workingDaysControl.setErrors({ notMatch: true });
+            } else {
+                workingDaysControl.setErrors(null);
+            }
+        }
+    }
+
+
+    maximumValidation(threshold: string, maximum: string) {
+        return (formGroup: FormGroup) => {
+            const thresholdControl = formGroup.controls[threshold];
+            const maximumControl = formGroup.controls[maximum];
+
+            if (thresholdControl.value !== null && maximumControl.value !== null) {
+                if (thresholdControl.value > maximumControl.value) {
+                    maximumControl.setErrors({ notMatch: true });
+                } else {
+                    maximumControl.setErrors(null);
+                }
+            }
+        }
+    }
+
+    thresholdValidation(threshold: string, maximum: string) {
+        return (formGroup: FormGroup) => {
+            const thresholdControl = formGroup.controls[threshold];
+            const maximumControl = formGroup.controls[maximum];
+
+            if (thresholdControl.value !== null && maximumControl.value !== null) {
+                if (thresholdControl.value > maximumControl.value) {
+                    thresholdControl.setErrors({ notMatch: true });
+                } else {
+                    thresholdControl.setErrors(null);
+                }
+            }
+        }
+    }
+
     valdiateUserMillRole(userDetailForm: FormGroup): boolean {
         let inValid = false;
 

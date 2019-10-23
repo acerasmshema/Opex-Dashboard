@@ -26,6 +26,7 @@ export class API_URL {
         KPI_TYPE_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/get_kpi_type',
         CONSUMPTION_API_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/selected_kpi_process_lines',
         CONSUMPTION_GRID_API_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data',
+        CONSUMPTION_GRID_API_URL_2: API_URL.BASE_API_URL_v1 + '/kpi_category/yesterday_all_process_lines_data_2',
 
         CONSUMPTION_API_GRID_URL: API_URL.BASE_API_URL_v1 + '/kpi_category/selected_kpi_grid_data',
         SAVE_ANNOTATION_URL: API_URL.BASE_API_URL_v1 + '/kpi_annotation/save_annotation',
@@ -58,5 +59,16 @@ export class API_URL {
         VALIDATE_USERNAME: API_URL.BASE_API_URL_v1 + '/validate_user_name',
         VALIDATE_USERROLE: API_URL.BASE_API_URL_v1 + '/validate_role',
     }
-    
+
+    static threshold_api_URLs = {
+        PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/production_target',
+        UPDATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/update_production_target',
+        CREATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/create_production_target',
+        PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/process_line_targets',
+        UPDATE_PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/update_process_line_target',
+        CREATE_PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/create_process_line_targets',
+        ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/annual_configuration',
+        UPDATE_ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/update_process_line_target',
+        CREATE_ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/create_annual_configuration',
+    }
 }

@@ -6,8 +6,6 @@ import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { ApiCallService } from '../../shared/service/api/api-call.service';
 import { StatusService } from '../../shared/service/status.service';
 import { CommonService } from 'src/app/shared/service/common/common.service';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/primeng';
 import { MillDetail } from 'src/app/shared/models/mill-detail.model';
 
 @Injectable()
@@ -16,7 +14,6 @@ export class SidebarService {
     kpiTypeUrl = API_URL.apiURLs.KPI_TYPE_URL;
 
     constructor(private apiCallService: ApiCallService,
-        private messageService: MessageService,
         private commonService: CommonService,
         private statusService: StatusService) { }
 
@@ -68,12 +65,7 @@ export class SidebarService {
                         this.statusService.common.mills = mills;
                     },
                     (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                        }
+                        this.commonService.handleError(error);
                     });
         }
         else {

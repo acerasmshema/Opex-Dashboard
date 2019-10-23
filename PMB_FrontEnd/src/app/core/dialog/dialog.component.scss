@@ -78,3 +78,19 @@ tbody tr {
 .btn-primary:disabled {
   opacity: 0.3;
 }
+
+.daterangepicker {
+  border-radius: 3px;
+  background-color: white;
+  padding: 0px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.btn-config {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
