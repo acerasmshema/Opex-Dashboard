@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit {
     this.loginService.logOut(requestData).
       subscribe(
         (response: any) => {
-          
+
         },
         (error: any) => {
           this.commonService.handleError(error);
@@ -81,8 +81,17 @@ export class HeaderComponent implements OnInit {
       if (this.showTabs && window.location.pathname === '/user') {
         this.statusService.refreshUserList.next(true);
       }
-      else if (window.location.pathname === '/user') {
-        this.router.navigateByUrl('/home');
+      else if (window.location.pathname === '/setup/threshold/production') {
+        if (this.statusService.selectedProductionTab === "PRODUCTION")
+          this.statusService.refreshProductionTargetList.next(true);
+        else if (this.statusService.selectedProductionTab === "PROCESSLINE")
+          this.statusService.refreshProcessLineTargetList.next(true);
+        else if (this.statusService.selectedProductionTab === "ANNUAL")
+          this.statusService.refreshAnnualTargetList.next(true);
+      }
+
+      else if (window.location.pathname === '/setup/threshold/consumption') {
+        this.statusService.refreshConsumtionTargetList.next(true);
       }
       else {
         this.statusService.changeMill.next();

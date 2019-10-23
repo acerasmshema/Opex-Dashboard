@@ -130,7 +130,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
         this.yesterdayProductionData.options.needleColor = '#292823';
         this.yesterdayProductionData.options.rangeLabel.push(data['minValue'].toString());
         this.yesterdayProductionData.options.rangeLabel.push(data['maxValue'].toString());
-       
+
         let thresholdPercentage = (+threshold * 100) / maxValue;
         this.yesterdayProductionData.productionYDayNeedleValue = (+totalAverageValue * 100) / maxValue;;
         this.yesterdayProductionData.options.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
@@ -505,16 +505,15 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     };
 
     this.dataForGridSubscription = this.productionService.getDataForGrid(requestData).
-      subscribe((thresholdTarget: ConsumptionTable[]) => {
-        thresholdTarget[0].series.forEach(processLine => {
-          const target = processLine.target.split(',')[0].split(':')[1];
-          this.thresholdTargetMap[processLine.name] = target;
-        });
-      },
+      subscribe(
+        (thresholdTarget: ConsumptionTable[]) => {
+          thresholdTarget[0].series.forEach(processLine => {
+            this.thresholdTargetMap[processLine.name] = processLine.target;
+          });
+        },
         (error: any) => {
           this.commonService.handleError(error);
         });
-
   }
 
   ngOnDestroy() {

@@ -19,6 +19,7 @@ export class StatusService {
     public benchmarkSubject: Subject<SearchKpiData> = new Subject<SearchKpiData>();
     public refreshUserList: Subject<boolean> = new Subject<boolean>();
     public refreshProductionTargetList: Subject<boolean> = new Subject<boolean>();
+    public refreshAnnualTargetList: Subject<boolean> = new Subject<boolean>();
     public refreshProcessLineTargetList: Subject<boolean> = new Subject<boolean>();
     public refreshConsumtionTargetList: Subject<boolean> = new Subject<boolean>();
     
@@ -27,4 +28,5 @@ export class StatusService {
     public benchmarkList: ConsumptionModel[] = [];
     public common: CommonModel = new CommonModel();
     public isSpin: boolean = false;
+    public selectedProductionTab = "PRODUCTION";
 }
