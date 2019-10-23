@@ -20,5 +20,21 @@ export class ProductionConfigurationComponent implements OnInit {
     this.statusService.sidebarSubject.next(sidebarRequest);
   }
 
+  openTab(event: any) {
+    const index = event.index;
+    switch (index) {
+      case 0:
+        this.statusService.selectedProductionTab = 'PRODUCTION';
+        break;
+      case 1:
+        this.statusService.selectedProductionTab = 'PROCESSLINE';
+        break;
+      case 2:
+        this.statusService.selectedProductionTab = 'ANNUAL';
+        break;
 
+      default:
+        break;
+    }
+  }
 }

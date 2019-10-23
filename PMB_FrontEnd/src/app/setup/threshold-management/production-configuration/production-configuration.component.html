@@ -1,5 +1,5 @@
 <div class="container-fluid" style="padding: 0">
-  <p-tabView>
+  <p-tabView [activeIndex]="index" (onChange)="openTab($event)">
     <p-tabPanel header="Production Target" leftIcon="fa fa-th-large">
       <ng-template pTemplate="app-production-target">
         <app-production-target></app-production-target>

@@ -13,6 +13,7 @@ export class AnnualConfigService {
 
     annualCongigUrl = API_URL.threshold_api_URLs.ANNUAL_CONFIG;
     updateAnnualConfigUrl = API_URL.threshold_api_URLs.UPDATE_ANNUAL_CONFIG;
+    anualConfigUrl = API_URL.threshold_api_URLs.UPDATE_ANNUAL_CONFIG;
     addAnnualConfigUrl = API_URL.threshold_api_URLs.CREATE_ANNUAL_CONFIG;
 
     constructor(private statusService: StatusService,
@@ -55,7 +56,7 @@ export class AnnualConfigService {
                     annualTargetForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Annual Target " + CommonMessage.SUCCESS.ADD_SUCCESS });
-                    this.statusService.refreshProductionTargetList.next(true);
+                    this.statusService.refreshAnnualTargetList.next(true);
                 },
                 error => {
                     this.commonService.handleError(error);
@@ -84,7 +85,7 @@ export class AnnualConfigService {
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Annual Target " + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     annualTargetForm.controls.show.setValue(false);
-                    this.statusService.refreshProductionTargetList.next(true);
+                    this.statusService.refreshAnnualTargetList.next(true);
                 },
                 error => {
                     this.commonService.handleError(error);

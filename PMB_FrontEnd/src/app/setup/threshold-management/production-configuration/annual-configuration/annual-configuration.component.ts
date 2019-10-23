@@ -23,7 +23,7 @@ export class AnnualConfigurationComponent implements OnInit, OnDestroy {
     this.annualTargets = [];
     this.annualConfigService.getAnnualTargets(this.annualTargets);
 
-    this.annualTargetSubscription = this.statusService.refreshProductionTargetList.
+    this.annualTargetSubscription = this.statusService.refreshAnnualTargetList.
       subscribe((isRefresh: boolean) => {
         this.annualTargets = [];
         this.annualConfigService.getAnnualTargets(this.annualTargets);
