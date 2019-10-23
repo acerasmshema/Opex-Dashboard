@@ -536,111 +536,6 @@
     </form>
 </div>
 
-<div *ngIf="dialogName === 'processLineThreshold'">
-    <form [formGroup]='processLineThresholdForm' (ngSubmit)="onProcessLineThresholdSubmit()">
-        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
-            [(visible)]="processLineThresholdForm.controls.show.value" [blockScroll]="true" [draggable]="true"
-            [maximizable]="true">
-            <p-header> <span class="dialog-header"
-                    style="padding-left: 31%;">{{processLineThresholdForm.controls.operation.value}} Process Line
-                    Threshold</span>
-            </p-header>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">Business Type</label>
-                            <div class="form-group">
-                                <select class="form-control edit-input" style="height: 34px;"
-                                    (change)="onBusinessTypeChange($event.target.value)">
-                                    <option class="edit-input" selected value="">Select Business Type</option>
-                                    <option *ngFor="let buType of processLineThresholdForm.controls.buTypeList.controls"
-                                        [selected]="(processLineThresholdForm.controls.buType.value !== null && buType.value.buTypeId === processLineThresholdForm.controls.buType.value.buTypeId)"
-                                        class="edit-input" [value]="buType.value.buTypeId">
-                                        {{buType.value.buTypeName}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">Process Line</label>
-                            <div class="form-group">
-                                <select class="form-control edit-input" style="height: 34px;"
-                                    (change)="onProcessLineChange($event.target.value)">
-                                    <option class="edit-input" selected value="">Select Process Line</option>
-                                    <option
-                                        *ngFor="let processLine of processLineThresholdForm.controls.processLineList.controls"
-                                        [selected]="(processLineThresholdForm.controls.processLine.value !== null && processLine.value.processLineId === processLineThresholdForm.controls.processLine.value.processLineId)"
-                                        class="edit-input" [value]="processLine.value.processLineId">
-                                        {{processLine.value.processLineCode}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">Threshold</label>
-                            <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50"
-                                    formControlName="threshold">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">Maximum</label>
-                            <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50"
-                                    formControlName="maximum">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">Start Date</label>
-                            <div class="form-group">
-                                <ejs-datepicker id='daterangepicker' formControlName="startDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    placeholder="{{'  Date Range' | translate }}">
-                                </ejs-datepicker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="edit-label required">End Date</label>
-                            <div class="form-group">
-                                <ejs-datepicker id='daterangepicker' formControlName="endDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    placeholder="{{'  Date Range' | translate }}">
-                                </ejs-datepicker>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="gauge-center m-t-10">
-                        <rg-gauge-chart [canvasWidth]="processLineThresholdForm.controls.canvasWidth.value"
-                            [needleValue]="processLineThresholdForm.controls.needleValue.value"
-                            [options]="processLineThresholdForm.controls.options.value"
-                            [bottomLabel]="processLineThresholdForm.controls.bottomLabel.value">
-                        </rg-gauge-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group m-t-30">
-                <button type="submit" [disabled]="!processLineThresholdForm.valid"
-                    class="btn btn-primary btn-md float-right">Submit</button>
-                <button type="button" (click)="onProcessLineThresholdCancel()"
-                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
-            </div>
-        </p-dialog>
-    </form>
-</div>
-
 <div *ngIf="dialogName === 'productionThreshold'">
     <form [formGroup]='productionThresholdForm' (ngSubmit)="onProductionThresholdSubmit()">
         <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
@@ -672,8 +567,18 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Threshold</label>
                             <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50" (change)="onThresholdChange($event.target.value, 'production')"
-                                    formControlName="threshold">
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    (change)="onThresholdChange($event.target.value, 'production')"
+                                    formControlName="threshold" min="1">
+                                <span
+                                    *ngIf="!productionThresholdForm.get('threshold').valid && productionThresholdForm.get('threshold').touched">
+                                    <span *ngIf="productionThresholdForm.get('threshold').errors?.required"
+                                        class="error-text">
+                                        Threshold is required</span>
+                                    <span *ngIf="productionThresholdForm.get('threshold').errors?.notMatch"
+                                        class="error-text">
+                                        Threshold is not greater than maximum</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -681,8 +586,18 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Maximum</label>
                             <div class="form-group">
-                                <input type="number" class="form-control edit-input" maxlength="50" (change)="onMaximumChange($event.target.value, 'production')"
-                                    formControlName="maximum">
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    (change)="onMaximumChange($event.target.value, 'production')"
+                                    formControlName="maximum" min="1">
+                                <span
+                                    *ngIf="!productionThresholdForm.get('maximum').valid && productionThresholdForm.get('maximum').touched">
+                                    <span *ngIf="productionThresholdForm.get('maximum').errors?.required"
+                                        class="error-text">
+                                        Maximum is required</span>
+                                    <span *ngIf="productionThresholdForm.get('maximum').errors?.notMatch"
+                                        class="error-text">
+                                        Maximum is not lesser than threshold</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -693,6 +608,10 @@
                                 <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
                                     formControlName="startDate">
                                 </ejs-datepicker>
+                                <span class="error-text"
+                                    *ngIf="!productionThresholdForm.get('startDate').valid && productionThresholdForm.get('startDate').touched && productionThresholdForm.get('startDate').errors?.required">
+                                    Start date is required
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -703,6 +622,10 @@
                                 <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
                                     formControlName="endDate">
                                 </ejs-datepicker>
+                                <span class="error-text"
+                                    *ngIf="!productionThresholdForm.get('endDate').valid && productionThresholdForm.get('endDate').touched && productionThresholdForm.get('endDate').errors?.required">
+                                    End date is required
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -726,6 +649,125 @@
     </form>
 </div>
 
+<div *ngIf="dialogName === 'processLineThreshold'">
+    <form [formGroup]='processLineThresholdForm' (ngSubmit)="onProcessLineThresholdSubmit()">
+        <p-dialog modal="true" [responsive]="true" [style]="{width: '600px', minWidth: '200px'}" [baseZIndex]="10000"
+            [(visible)]="processLineThresholdForm.controls.show.value" [blockScroll]="true" [draggable]="true"
+            [maximizable]="true">
+            <p-header> <span class="dialog-header"
+                    style="padding-left: 31%;">{{processLineThresholdForm.controls.operation.value}} Process Line
+                    Threshold</span>
+            </p-header>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Business Type</label>
+                            <div class="form-group">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onBusinessTypeChange($event.target.value, 'processLine')">
+                                    <option class="edit-input" selected value="">Select Business Type</option>
+                                    <option *ngFor="let buType of processLineThresholdForm.controls.buTypeList.controls"
+                                        [selected]="(processLineThresholdForm.controls.buType.value !== null && buType.value.buTypeId === processLineThresholdForm.controls.buType.value.buTypeId)"
+                                        class="edit-input" [value]="buType.value.buTypeId">
+                                        {{buType.value.buTypeName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Process Line</label>
+                            <div class="form-group">
+                                <select class="form-control edit-input" style="height: 34px;"
+                                    (change)="onProcessLineChange($event.target.value, 'processLine')">
+                                    <option class="edit-input" selected value="">Select Process Line</option>
+                                    <option
+                                        *ngFor="let processLine of processLineThresholdForm.controls.processLineList.controls"
+                                        [selected]="(processLineThresholdForm.controls.processLine.value !== null && processLine.value.processLineId === processLineThresholdForm.controls.processLine.value.processLineId)"
+                                        class="edit-input" [value]="processLine.value.processLineId">
+                                        {{processLine.value.processLineCode}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Threshold</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    formControlName="threshold">
+                                <span class="error-text"
+                                    *ngIf="!processLineThresholdForm.get('threshold').valid && processLineThresholdForm.get('threshold').touched && processLineThresholdForm.get('threshold').errors?.required">
+                                    Threshold is required
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Maximum</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control edit-input" maxlength="50"
+                                    formControlName="maximum">
+                                <span class="error-text"
+                                    *ngIf="!processLineThresholdForm.get('maximum').valid && processLineThresholdForm.get('maximum').touched && processLineThresholdForm.get('maximum').errors?.required">
+                                    Maximum is required
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">Start Date</label>
+                            <div class="form-group">
+                                <ejs-datepicker formControlName="startDate"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;">
+                                </ejs-datepicker>
+                                <span class="error-text"
+                                    *ngIf="!processLineThresholdForm.get('startDate').valid && processLineThresholdForm.get('startDate').touched && processLineThresholdForm.get('startDate').errors?.required">
+                                    Start date is required
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="edit-label required">End Date</label>
+                            <div class="form-group">
+                                <ejs-datepicker formControlName="endDate"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;">
+                                </ejs-datepicker>
+                                <span class="error-text"
+                                    *ngIf="!processLineThresholdForm.get('endDate').valid && processLineThresholdForm.get('endDate').touched && processLineThresholdForm.get('endDate').errors?.required">
+                                    End date is required
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gauge-center m-t-10">
+                        <rg-gauge-chart [canvasWidth]="processLineThresholdForm.controls.canvasWidth.value"
+                            [needleValue]="processLineThresholdForm.controls.needleValue.value"
+                            [options]="processLineThresholdForm.controls.options.value"
+                            [bottomLabel]="processLineThresholdForm.controls.bottomLabel.value">
+                        </rg-gauge-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-t-30">
+                <button type="submit" [disabled]="!processLineThresholdForm.valid"
+                    class="btn btn-primary btn-md float-right">Submit</button>
+                <button type="button" (click)="onProcessLineThresholdCancel()"
+                    class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
+            </div>
+        </p-dialog>
+    </form>
+</div>
+
 <div *ngIf="dialogName === 'annualTarget'">
     <form [formGroup]='annualTargetForm' (ngSubmit)="onAnnualTargetSubmit()">
         <p-dialog modal="true" [responsive]="true" [style]="{width: '400px', minWidth: '200px'}" [baseZIndex]="10000"
@@ -739,9 +781,13 @@
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onBusinessTypeChange($event.target.value)">
+                            (change)="onBusinessTypeChange($event.target.value, 'annual')">
                             <option class="edit-input" selected value="">Select Business Type</option>
-                            <option class="edit-input">Kraft</option>
+                            <option *ngFor="let buType of annualTargetForm.controls.buTypeList.controls"
+                                [selected]="(annualTargetForm.controls.buType.value !== null && buType.value.buTypeId === annualTargetForm.controls.buType.value.buTypeId)"
+                                class="edit-input" [value]="buType.value.buTypeId">
+                                {{buType.value.buTypeName}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -764,7 +810,12 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Working Days</label>
                     <div class="form-group">
-                        <input type="number" class="form-control edit-input" maxlength="50">
+                        <input type="number" class="form-control edit-input" maxlength="50"
+                            formControlName="workingDays">
+                        <span class="error-text"
+                            *ngIf="!annualTargetForm.get('workingDays').valid && annualTargetForm.get('workingDays').touched && annualTargetForm.get('workingDays').errors?.required">
+                            Working days is required
+                        </span>
                     </div>
                 </div>
             </div>
@@ -772,7 +823,12 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Annual Target</label>
                     <div class="form-group">
-                        <input type="number" class="form-control edit-input" maxlength="50">
+                        <input type="number" class="form-control edit-input" maxlength="50"
+                            formControlName="annualTarget">
+                        <span class="error-text"
+                            *ngIf="!annualTargetForm.get('annualTarget').valid && annualTargetForm.get('annualTarget').touched && annualTargetForm.get('annualTarget').errors?.required">
+                            Annual target is required
+                        </span>
                     </div>
                 </div>
             </div>
@@ -800,7 +856,7 @@
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onBusinessTypeChange($event.target.value)">
+                            (change)="onBusinessTypeChange($event.target.value, 'consumption')">
                             <option class="edit-input" selected value="">Select Business Type</option>
                             <option *ngFor="let buType of consumptionThresholdForm.controls.buTypeList.controls"
                                 [selected]="(consumptionThresholdForm.controls.buType.value !== null && buType.value.buTypeId === consumptionThresholdForm.controls.buType.value.buTypeId)"
@@ -834,7 +890,7 @@
                             (change)="onKpiChange($event.target.value)">
                             <option class="edit-input" selected value="">Select KPI</option>
                             <option *ngFor="let kpi of consumptionThresholdForm.controls.kpiList.controls"
-                                [selected]="(consumptionThresholdForm.controls.kpi.value !== null && kpi.value.kpiId === consumptionThresholdForm.controls.kpi.value.kpiId)"
+                                [selected]="(consumptionThresholdForm.controls.kpiId.value !== null && kpi.value.kpiId === consumptionThresholdForm.controls.kpiId.value)"
                                 class="edit-input" [value]="kpi.value.kpiId">
                                 {{kpi.value.kpiName}}
                             </option>
@@ -847,7 +903,7 @@
                     <label class="edit-label required">Process Line</label>
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onconsumptionChange($event.target.value)">
+                            (change)="onProcessLineChange($event.target.value,'consumption')">
                             <option class="edit-input" selected value="">Select Process Line</option>
                             <option
                                 *ngFor="let processLine of consumptionThresholdForm.controls.processLineList.controls"
@@ -862,6 +918,10 @@
                     <label class="edit-label required">Threshold</label>
                     <div class="form-group">
                         <input type="number" class="form-control edit-input" maxlength="50" formControlName="threshold">
+                        <span class="error-text"
+                            *ngIf="!consumptionThresholdForm.get('threshold').valid && consumptionThresholdForm.get('threshold').touched && consumptionThresholdForm.get('threshold').errors?.required">
+                            Threshold is required
+                        </span>
                     </div>
                 </div>
             </div>
@@ -872,6 +932,10 @@
                         <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="startDate">
                         </ejs-datepicker>
+                        <span class="error-text"
+                            *ngIf="!consumptionThresholdForm.get('startDate').valid && consumptionThresholdForm.get('startDate').touched && consumptionThresholdForm.get('startDate').errors?.required">
+                            Start date is required
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -880,6 +944,10 @@
                         <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="endDate">
                         </ejs-datepicker>
+                        <span class="error-text"
+                            *ngIf="!consumptionThresholdForm.get('endDate').valid && consumptionThresholdForm.get('endDate').touched && consumptionThresholdForm.get('endDate').errors?.required">
+                            End date is required
+                        </span>
                     </div>
                 </div>
             </div>

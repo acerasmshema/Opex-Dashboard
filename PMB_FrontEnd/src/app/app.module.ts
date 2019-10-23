@@ -42,6 +42,8 @@ import { UserDetailService } from './setup/user-management/user-detail/user-deta
 import { UserRoleService } from './setup/user-management/user-role/user-role.service';
 import { ProductionTargetService } from './setup/threshold-management/production-configuration/production-target/production-target.service';
 import { ConsumptionConfigurationService } from './setup/threshold-management/consumption-configuration/consumption-configuration.service';
+import { ProcessLineTargetService } from './setup/threshold-management/production-configuration/process-line-target/process-line-target.service';
+import { AnnualConfigService } from './setup/threshold-management/production-configuration/annual-configuration/annual-configuration.service';
 
 @NgModule({
   declarations: [
@@ -100,6 +102,8 @@ import { ConsumptionConfigurationService } from './setup/threshold-management/co
     ConfirmationService,
     ProductionTargetService,
     ConsumptionConfigurationService,
+    ProcessLineTargetService,
+    AnnualConfigService,
   ],
   bootstrap: [AppComponent]
 })

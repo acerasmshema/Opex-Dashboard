@@ -123,15 +123,19 @@ export class DialogService {
         let processLineThresholdForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(processLineThreshold.operation),
+            processLineTargetThresholdId: new FormControl(processLineThreshold.processLineTargetThresholdId),
             buType: new FormControl(processLineThreshold.buType),
             buTypeList: this.formBuilder.array([]),
             createdBy: new FormControl(processLineThreshold.createdBy),
             processLine: new FormControl(processLineThreshold.processLine),
             processLineList: this.formBuilder.array([]),
-            threshold: new FormControl(processLineThreshold.threshold),
-            maximum: new FormControl(processLineThreshold.maximum),
-            startDate: new FormControl(processLineThreshold.startDate),
-            endDate: new FormControl(processLineThreshold.endDate),
+            threshold: new FormControl(processLineThreshold.threshold, Validators.required),
+            isDefault: new FormControl(processLineThreshold.isDefault),
+            maximum: new FormControl(processLineThreshold.maximum, Validators.required),
+            startDate: new FormControl(processLineThreshold.startDate, Validators.required),
+            endDate: new FormControl(processLineThreshold.endDate, Validators.required),
+            millId: new FormControl(processLineThreshold.millId),
+            kpiId: new FormControl(processLineThreshold.kpiId),
             canvasWidth: new FormControl(220),
             needleValue: new FormControl(80),
             bottomLabel: new FormControl(7500),
@@ -143,13 +147,14 @@ export class DialogService {
     }
 
     createProductionThresholdForm(productionThreshold: ProductionThreshold): FormGroup {
+        let maximum = (productionThreshold.maximum !== null) ? productionThreshold.maximum : '';
         let options = {
             hasNeedle: true,
             needleColor: 'black',
             needleUpdateSpeed: 1000,
             arcColors: ["red", "yellow", "green"],
-            arcDelimiters: [80, 90],
-            rangeLabel: ['0', productionThreshold.maximum + ''],
+            arcDelimiters: [],
+            rangeLabel: ['0', maximum + ''],
             needleStartValue: 50,
         }
 
@@ -159,57 +164,79 @@ export class DialogService {
             productionThresholdId: new FormControl(productionThreshold.productionThresholdId),
             buType: new FormControl(productionThreshold.buType),
             buTypeList: this.formBuilder.array([]),
-            createdBy: new FormControl(productionThreshold.createdBy),
-            threshold: new FormControl(productionThreshold.threshold),
-            maximum: new FormControl(productionThreshold.maximum),
-            startDate: new FormControl(productionThreshold.startDate),
-            endDate: new FormControl(productionThreshold.endDate),
+            isDefault: new FormControl(productionThreshold.isDefault),
             millId: new FormControl(productionThreshold.millId),
             kpiId: new FormControl(productionThreshold.kpiId),
+            createdBy: new FormControl(productionThreshold.createdBy),
+            updatedBy: new FormControl(productionThreshold.updatedBy),
+            threshold: new FormControl(productionThreshold.threshold, Validators.required),
+            maximum: new FormControl(productionThreshold.maximum, Validators.required),
+            startDate: new FormControl(productionThreshold.startDate, Validators.required),
+            endDate: new FormControl(productionThreshold.endDate, Validators.required),
             canvasWidth: new FormControl(220),
-            needleValue: new FormControl(80),
+            needleValue: new FormControl(0),
             bottomLabel: new FormControl(productionThreshold.threshold),
             options: new FormControl(options),
-        });
+        },
+            {
+                validator: [this.validationService.maximumValidation('threshold', 'maximum'), this.validationService.thresholdValidation('threshold', 'maximum')]
+            });
+
         this.commonService.getAllBuType(productionThresholdForm);
+
+        if (productionThreshold.operation === "Edit")
+            this.changeGaugeThreshold(productionThreshold.threshold, productionThresholdForm);
 
         return productionThresholdForm;
     }
 
     createAnnualTargetForm(annualTarget: AnnualTarget): FormGroup {
-        return this.formBuilder.group({
+        let annualTargetForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(annualTarget.operation),
             buType: new FormControl(annualTarget.buType),
-            createdBy: new FormControl(annualTarget.createdBy),
-            workingDays: new FormControl(annualTarget.workingDays),
+            workingDays: new FormControl(annualTarget.workingDays, Validators.required),
             year: new FormControl(annualTarget.year),
-            target: new FormControl(annualTarget.target),
+            annualTarget: new FormControl(annualTarget.annualTarget, Validators.required),
+            annualConfigurationId: new FormControl(annualTarget.annualConfigurationId),
+            buTypeList: this.formBuilder.array([]),
+            isDefault: new FormControl(annualTarget.isDefault),
+            millId: new FormControl(annualTarget.millId),
+            kpiId: new FormControl(annualTarget.kpiId),
+            createdBy: new FormControl(annualTarget.createdBy),
+            updatedBy: new FormControl(annualTarget.updatedBy),
         });
+
+        this.commonService.getAllBuType(annualTargetForm);
+
+        return annualTargetForm;
     }
 
     createConsumptionThresholdForm(consumptionThreshold: ConsumptionThreshold): FormGroup {
         let consumptionThresholdForm = this.formBuilder.group({
             show: new FormControl(true),
             operation: new FormControl(consumptionThreshold.operation),
+            processLineTargetThresholdId: new FormControl(consumptionThreshold.processLineTargetThresholdId),
             kpiCategory: new FormControl(consumptionThreshold.kpiCategory),
-            kpi: new FormControl(consumptionThreshold.kpi),
             processLine: new FormControl(consumptionThreshold.processLine),
             buType: new FormControl(consumptionThreshold.buType),
             processLineList: this.formBuilder.array([]),
             kpiCategoryList: this.formBuilder.array([]),
             buTypeList: this.formBuilder.array([]),
             kpiList: this.formBuilder.array([]),
+            isDefault: new FormControl(consumptionThreshold.isDefault),
+            millId: new FormControl(consumptionThreshold.millId),
+            kpiId: new FormControl(consumptionThreshold.kpiId),
             createdBy: new FormControl(consumptionThreshold.createdBy),
-            threshold: new FormControl(consumptionThreshold.threshold),
-            startDate: new FormControl(consumptionThreshold.startDate),
-            endDate: new FormControl(consumptionThreshold.endDate),
+            threshold: new FormControl(consumptionThreshold.threshold, Validators.required),
+            startDate: new FormControl(consumptionThreshold.startDate, Validators.required),
+            endDate: new FormControl(consumptionThreshold.endDate, Validators.required),
         });
 
         this.commonService.getAllBuType(consumptionThresholdForm);
         this.getKpiCategoryList(consumptionThresholdForm);
         if (consumptionThreshold.kpiCategory !== undefined) {
-            this.getKpiDetails(consumptionThreshold.kpiCategory.kpiCategoryId, consumptionThresholdForm, consumptionThreshold.kpi.kpiId);
+            this.getKpiDetails(consumptionThreshold.kpiCategory.kpiCategoryId, consumptionThresholdForm, "" + consumptionThreshold.kpiId);
         }
 
         return consumptionThresholdForm;
@@ -407,17 +434,25 @@ export class DialogService {
         kpi.series.forEach(processLine =>
             processLineControl.push(new FormControl(processLine))
         )
+        console.log(processLineControl)
     }
 
-    changeGaugeThreshold(thresholdValue: string, form: FormGroup) {
-        form.controls.bottomLabel.setValue(thresholdValue);
-        let maximum = +form.controls.options.value.rangeLabel[1];
-        let thresholdPercentage = (+thresholdValue * 100) / maximum;
-        form.controls.needleValue.setValue(thresholdPercentage);
-        form.controls.options.value.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
+    changeGaugeThreshold(thresholdValue: number, form: FormGroup) {
+        let maximum = +form.controls.maximum.value;
+        if (maximum > 0 && +thresholdValue > 0 && thresholdValue < maximum) {
+            form.controls.bottomLabel.setValue(thresholdValue);
+            let thresholdPercentage = (+thresholdValue * 100) / maximum;
+            form.controls.needleValue.setValue(thresholdPercentage);
+            form.controls.options.value.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
+        }
     }
 
-    changeGaugeMaximum(value: string, form: FormGroup) {
-        form.controls.options.value.rangeLabel = ['0', value];
+    changeGaugeMaximum(maximumValue: string, form: FormGroup) {
+        let thresholdValue = form.controls.threshold.value;
+        form.controls.options.value.rangeLabel = ['0', maximumValue];
+
+        if (+maximumValue > 0 && thresholdValue > 0 && thresholdValue < +maximumValue) {
+            this.changeGaugeThreshold(thresholdValue, form);
+        }
     }
 }

@@ -1,18 +1,20 @@
 package com.rgei.kpi.dashboard.util;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.BusinessUnitTypeEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
+import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
+import com.rgei.kpi.dashboard.response.model.AnnualConfiguration;
 import com.rgei.kpi.dashboard.response.model.BuTypeResponse;
-import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 
 public class ThresholdManagementUtility {
@@ -101,24 +103,20 @@ public class ThresholdManagementUtility {
 		return configEntity;
 	}
 	
-	public static List<MillBuKpiCategoryResponse> getMillBuResponseList(List<MillBuKpiCategoryEntity> entities) {
-		List<MillBuKpiCategoryResponse> responseList = new ArrayList<MillBuKpiCategoryResponse>();
-		MillBuKpiCategoryResponse resp = null;
-		for(MillBuKpiCategoryEntity entity : entities) {
-			resp = new MillBuKpiCategoryResponse();
-			resp.setMillBuKpiCategoryId(entity.getMillBuKpiCategoryId());
+	public static List<AnnualConfiguration> fetchAnnualConfigurations(List<AnnualConfigurationEntity> entities) {
+		List<AnnualConfiguration> responseList = new ArrayList<>();
+		AnnualConfiguration resp = null;
+		for(AnnualConfigurationEntity entity : entities) {
+			resp = new AnnualConfiguration();
+			resp.setAnnualConfigurationId(entity.getAnnualConfigurationId());
 			resp.setYear(entity.getYear());
 			resp.setWorkingDays(entity.getWorkingDays());
-			resp.setTargetDays(entity.getTargetDays());
-			resp.setRangeValue(entity.getRangeValue());
-			resp.setMinTarget(entity.getMinTarget());
-			resp.setMillId(entity.getMillId());
-			resp.setMaxTarget(entity.getMaxTarget());
-			resp.setKpiCategoryId(entity.getKpiCategoryId());
-			resp.setDailyTarget(entity.getDailyTarget());
-			resp.setColorRange(entity.getColorRange());
-			resp.setBusinessUnitId(entity.getBusinessUnitId());
+			resp.setBuType(fetchBuType(entity.getBuType()));
 			resp.setAnnualTarget(entity.getAnnualTarget());
+			resp.setThreshold(entity.getThreshold());
+			resp.setMillId(entity.getMillId());
+			resp.setKpiId(entity.getKpiId());
+			resp.setIsDefault(entity.getIsDefault());
 			resp.setActive(entity.getActive());
 			resp.setCreatedBy(entity.getCreatedBy());
 			resp.setCreatedDate(CommonFunction.getString(entity.getCreatedDate()));
@@ -129,26 +127,50 @@ public class ThresholdManagementUtility {
 		return responseList;
 	}
 	
-	public static MillBuKpiCategoryEntity createMillBuKpiEntity(MillBuKpiCategoryResponse response) {
-		MillBuKpiCategoryEntity entity = new MillBuKpiCategoryEntity();
-		if(Objects.nonNull(response)) {
-			entity.setYear(response.getYear());
-			entity.setWorkingDays(response.getWorkingDays());
-			entity.setTargetDays(response.getTargetDays());
-			entity.setRangeValue(response.getRangeValue());
-			entity.setMinTarget(response.getMinTarget());
-			entity.setMaxTarget(response.getMaxTarget());
-			entity.setMillId(response.getMillId());
-			entity.setKpiCategoryId(response.getKpiCategoryId());
-			entity.setBusinessUnitId(response.getBusinessUnitId());
-			entity.setDailyTarget(response.getDailyTarget());
-			entity.setAnnualTarget(response.getAnnualTarget());
-			entity.setColorRange(response.getColorRange());
-			entity.setActive(response.getActive());
-			entity.setCreatedBy(response.getCreatedBy());
-			entity.setCreatedDate(Timestamp.valueOf(response.getCreatedDate()));
-			entity.setUpdatedBy(response.getUpdatedBy());
-			entity.setUpdatedDate(Timestamp.valueOf(response.getUpdatedDate()));
+	public static AnnualConfigurationEntity createAnnualConfigurationEntity(AnnualConfiguration config) {
+		AnnualConfigurationEntity entity = new AnnualConfigurationEntity();
+		if(Objects.nonNull(config)) {
+			entity.setYear(config.getYear());
+			entity.setWorkingDays(config.getWorkingDays());
+			entity.setBuTypeId(config.getBuType().getBuTypeId());
+			entity.setAnnualTarget(config.getAnnualTarget());
+			entity.setThreshold(calculateThreshold(config));
+			entity.setMillId(config.getMillId());
+			entity.setKpiId(config.getKpiId());
+			entity.setIsDefault(Boolean.FALSE);			
+			entity.setActive(Boolean.TRUE);
+			entity.setCreatedBy(config.getCreatedBy());
+			entity.setCreatedDate(new Date());
+			entity.setUpdatedBy(config.getUpdatedBy());
+			entity.setUpdatedDate(new Date());
+		}
+		return entity;
+	}
+
+	private static Double calculateThreshold(AnnualConfiguration config) {
+		Double threshold = null;
+		if(null != config.getAnnualTarget() && null != config.getWorkingDays()) {
+			threshold = BigDecimal.valueOf(Double.valueOf(config.getAnnualTarget())/config.getWorkingDays()).setScale(0, RoundingMode.CEILING).doubleValue();
+		}else {
+			throw new RecordNotFoundException("Annual target or working days missing in request"+ config);
+		}
+		return threshold;
+	}
+
+	public static AnnualConfigurationEntity updateFetchedAnnualConfigEntity(AnnualConfiguration annualConfiguration,
+			AnnualConfigurationEntity entity) {
+		if(Objects.nonNull(annualConfiguration)) {
+			entity.setYear(annualConfiguration.getYear());
+			entity.setWorkingDays(annualConfiguration.getWorkingDays());
+			entity.setBuTypeId(annualConfiguration.getBuType().getBuTypeId());
+			entity.setAnnualTarget(annualConfiguration.getAnnualTarget());
+			entity.setThreshold(calculateThreshold(annualConfiguration));
+			entity.setMillId(annualConfiguration.getMillId());
+			entity.setKpiId(annualConfiguration.getKpiId());
+			entity.setIsDefault(annualConfiguration.getIsDefault());			
+			entity.setActive(Boolean.TRUE);
+			entity.setUpdatedBy(annualConfiguration.getUpdatedBy());
+			entity.setUpdatedDate(new Date());
 		}
 		return entity;
 	}

@@ -49,6 +49,7 @@ export class ProductionTargetService {
         productionThreshold.millId = productionThresholdForm.controls.millId.value;
         productionThreshold.kpiId = productionThresholdForm.controls.kpiId.value;
         productionThreshold.createdBy = productionThresholdForm.controls.createdBy.value;
+        productionThreshold.isDefault = productionThresholdForm.controls.isDefault.value;
         productionThreshold.updatedBy = this.statusService.common.userDetail.username;
 
         this.apiCallService.callAPIwithData(this.addProductionTargetUrl, productionThreshold).
@@ -77,6 +78,8 @@ export class ProductionTargetService {
         productionThreshold.kpiId = productionThresholdForm.controls.kpiId.value;
         productionThreshold.createdBy = productionThresholdForm.controls.createdBy.value;
         productionThreshold.updatedBy = this.statusService.common.userDetail.username;
+        productionThreshold.isDefault = productionThresholdForm.controls.isDefault.value;
+        
         try {
             productionThreshold.startDate = this.datePipe.transform(productionThresholdForm.controls.startDate.value, 'yyyy-MM-dd');
         } catch (error) {

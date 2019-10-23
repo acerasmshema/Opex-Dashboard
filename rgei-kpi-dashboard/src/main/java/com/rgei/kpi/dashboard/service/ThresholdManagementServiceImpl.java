@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.exception.DateRangeAlreadyExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
+import com.rgei.kpi.dashboard.repository.AnnualConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.KpiConfigurationRepository;
-import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
-import com.rgei.kpi.dashboard.response.model.MillBuKpiCategoryResponse;
+import com.rgei.kpi.dashboard.response.model.AnnualConfiguration;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
 import com.rgei.kpi.dashboard.util.ProcessLineConfigurationManagementUtility;
@@ -41,7 +41,7 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	ProcessLineConfigurationRepository processLineConfigurationRepository;
 	
 	@Resource
-	MillBuKpiCategoryEntityRepository millBuKpiCategoryRepository;
+	AnnualConfigurationRepository annualConfigurationRepository;
 	
 	@Override
 	public List<ProductionThreshold> getProductionTargetsByMillId(Integer millId) {
@@ -151,25 +151,63 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	}
 
 	@Override
-	public List<MillBuKpiCategoryResponse> getAnnualConfiguration(Integer millId, Integer buId) {
+	public List<AnnualConfiguration> getAnnualConfiguration(Integer millId) {
 		logger.info("Get annual configuration for MillId : ",  millId);
-		List<MillBuKpiCategoryEntity> entities = millBuKpiCategoryRepository.findAll(millId, buId);
+		List<AnnualConfigurationEntity> entities = annualConfigurationRepository.findByMillId(millId);
 		if(Objects.nonNull(entities) && !entities.isEmpty()) {
-			return ThresholdManagementUtility.getMillBuResponseList(entities);
+			return ThresholdManagementUtility.fetchAnnualConfigurations(entities);
 		}else {
 			throw new RecordNotFoundException("Annual configuration not found for mill Id :" + millId);
 		}
 	}
 
 	@Override
-	public void createAnnualConfiguration(MillBuKpiCategoryResponse millBuKpiCategoryResponse) {
-		logger.info("Create annual configuration for MillId : ",  millBuKpiCategoryResponse.getMillId());
+	public void createAnnualConfiguration(AnnualConfiguration annualConfiguration) {
+		logger.info("Create annual configuration for MillId : ",  annualConfiguration.getMillId());
+		validateAnnualConfigurationYear(annualConfiguration);
 		try {
-			MillBuKpiCategoryEntity entity = ThresholdManagementUtility
-					.createMillBuKpiEntity(millBuKpiCategoryResponse);
-			millBuKpiCategoryRepository.save(entity);
+			AnnualConfigurationEntity entity = ThresholdManagementUtility
+					.createAnnualConfigurationEntity(annualConfiguration);
+			annualConfigurationRepository.save(entity);
 		} catch (RuntimeException e) {
-			throw new RecordNotCreatedException("Error while creating annual configuration  :" + millBuKpiCategoryResponse);
+			throw new RecordNotCreatedException("Error while creating annual configuration  :" + annualConfiguration);
 		}
+	}
+
+	@Override
+	public void updateAnnualConfiguration(AnnualConfiguration annualConfiguration) {
+
+
+		logger.info("Inside service call to update annual configuration for request : " + annualConfiguration);
+		validateAnnualConfigurationYear(annualConfiguration);
+		try {
+			if (annualConfiguration != null) {
+				AnnualConfigurationEntity annualConfigurationEntity = annualConfigurationRepository.findByAnnualConfigurationId(annualConfiguration.getAnnualConfigurationId());
+				if (annualConfigurationEntity != null) {
+					AnnualConfigurationEntity updatedConfig = ThresholdManagementUtility.updateFetchedAnnualConfigEntity(annualConfiguration, annualConfigurationEntity);
+					annualConfigurationRepository.save(updatedConfig);
+				} else {
+					throw new RecordNotFoundException("User not found against configuration id  :" + annualConfiguration.getAnnualConfigurationId());
+				}
+			}
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while updating annual configuration  :" + annualConfiguration);
+		}
+			
+			
+	}
+
+	private void validateAnnualConfigurationYear(AnnualConfiguration annualConfiguration) {
+
+		AnnualConfigurationEntity annualConfigurationEntity = null;
+		if (annualConfiguration != null) {
+			annualConfigurationEntity = annualConfigurationRepository
+					.findByYearAndIsDefault(annualConfiguration.getYear(), Boolean.FALSE);
+			if (annualConfigurationEntity != null && null == annualConfiguration.getAnnualConfigurationId()
+					&& !annualConfigurationEntity.getAnnualConfigurationId()
+							.equals(annualConfiguration.getAnnualConfigurationId()))
+				throw new DateRangeAlreadyExistException("Record Already exist for same year");
+		}
+
 	}
 }
