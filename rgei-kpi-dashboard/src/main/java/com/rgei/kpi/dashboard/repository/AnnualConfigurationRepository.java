@@ -13,5 +13,5 @@ public interface AnnualConfigurationRepository extends JpaRepository<AnnualConfi
 	
 	AnnualConfigurationEntity findByAnnualConfigurationId(Integer annualConfigurationId);
 	
-	AnnualConfigurationEntity findByYearAndIsDefault(Integer year, Boolean isDefault);
+	AnnualConfigurationEntity findByYear(Integer year);
 }

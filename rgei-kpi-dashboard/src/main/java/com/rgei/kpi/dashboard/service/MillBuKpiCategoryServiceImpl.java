@@ -29,7 +29,6 @@ import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
-import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
