@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 
 public interface AnnualConfigurationRepository extends JpaRepository<AnnualConfigurationEntity, Integer> {
 
@@ -14,4 +13,6 @@ public interface AnnualConfigurationRepository extends JpaRepository<AnnualConfi
 	AnnualConfigurationEntity findByAnnualConfigurationId(Integer annualConfigurationId);
 	
 	AnnualConfigurationEntity findByYearAndIsDefault(Integer year, Boolean isDefault);
+
+	AnnualConfigurationEntity findByYear(Integer year);
 }

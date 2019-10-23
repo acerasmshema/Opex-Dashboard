@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.response.model.ProcessLineAnnualResponse;
@@ -106,6 +107,10 @@ public class ProcessLineExtendedUtil {
 		return Double.valueOf(millBuKpiCategoryEntity.getDailyTarget() * calculateNoOfDays());
 	}
 	
+	private static Double calculatedDailyTarget(AnnualConfigurationEntity annualConfigEntity) {
+		return Double.valueOf(annualConfigEntity.getThreshold() * calculateNoOfDays());
+	}
+	
 	private static ProcessLineSeries setCalculatedTarget(MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
 		ProcessLineSeries series = new ProcessLineSeries();
 		series.setName(setYesterday());
@@ -159,6 +164,25 @@ public class ProcessLineExtendedUtil {
 		
 	}
 	
+	public static TargetProceessLine generateTargetResponseV2(AnnualConfigurationEntity annualConfigEntity, List<DailyKpiPulpEntity> dailyKpiEntities) {
+		TargetProceessLine target = null;
+		if(annualConfigEntity != null) {
+			target = new TargetProceessLine();
+			List<ProcessLineSeries>  series = new LinkedList<>();
+			target.setName("Target");
+			int index = 1;
+			for(DailyKpiPulpEntity item : dailyKpiEntities) {
+				series.add(new ProcessLineSeries(
+							getFormattedLocalDate(item.getDatetime().toLocalDateTime().toLocalDate()), 
+							annualConfigEntity.getThreshold().longValue() * index++
+						));
+			}
+			target.setSeries(series);
+		}
+		return target;
+		
+	}
+	
 	public static Long calculateTargetValue(MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
 		Long target = null;
 		if(millBuKpiCategoryEntity != null) {
@@ -168,6 +192,13 @@ public class ProcessLineExtendedUtil {
 		
 	}
 	
-
+	public static Long calculateTargetValue(AnnualConfigurationEntity annualConfigEntity) {
+		Long target = null;
+		if(annualConfigEntity != null) {
+			target = calculatedDailyTarget(annualConfigEntity).longValue();
+		}
+		return target;
+		
+	}
 
 }
