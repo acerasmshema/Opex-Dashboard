@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 import com.rgei.kpi.dashboard.response.model.User;
+import com.rgei.kpi.dashboard.security.JwtTokenUtil;
 import com.rgei.kpi.dashboard.service.RgeUserService;
 import com.rgei.kpi.dashboard.util.CommonFunction;
 
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "Authorization")
 @RestController
 @RequestMapping("/restCall")
 public class RgeUserController {
@@ -37,6 +39,9 @@ public class RgeUserController {
 
 	@Resource
 	RgeUserService rgeUserService;
+	
+	@Resource
+	private JwtTokenUtil jwtTokenUtil;
 
 	@ApiOperation(value = "getUserById", notes = "Retrieve user by id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
@@ -70,8 +75,11 @@ public class RgeUserController {
 	@PostMapping(value = "/v1/user_info/login")
 	public ResponseEntity<User> getUserByName(@RequestBody RgeUserLoginRequest rgeUserLoginRequest) throws NoSuchAlgorithmException {
 		logger.info("Entering into the login process by the requsted id", rgeUserLoginRequest.getUsername());
-		User response = rgeUserService.loginProcess(rgeUserLoginRequest);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		User user = rgeUserService.loginProcess(rgeUserLoginRequest);
+		UserDetails userDetails = rgeUserService.loadUserByUsername(rgeUserLoginRequest.getUsername());
+		final String token = jwtTokenUtil.generateToken(userDetails);
+		user.setToken(token);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "logout", notes = "Logout user", response = RgeUserResponse.class)

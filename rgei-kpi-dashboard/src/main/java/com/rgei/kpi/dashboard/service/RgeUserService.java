@@ -18,12 +18,14 @@ package com.rgei.kpi.dashboard.service;
 
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.rgei.kpi.dashboard.response.model.RgeUserLoginRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserLogoutRequest;
 import com.rgei.kpi.dashboard.response.model.RgeUserResponse;
 import com.rgei.kpi.dashboard.response.model.User;
 
-public interface RgeUserService {
+public interface RgeUserService extends UserDetailsService{
 	
 	public User getUserById(Long userId);
 	

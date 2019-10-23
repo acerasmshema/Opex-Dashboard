@@ -48,6 +48,15 @@ public class MillBuKpiCategoryEntity implements Serializable {
 	@Column(name="daily_target")
 	private Integer dailyTarget;
 	
+	@Column(name = "business_unit_id")
+	private Integer businessUnitId;
+
+	@Column(name = "mill_id")
+	private Integer millId;
+
+	@Column(name = "kpi_category_id")
+	private Integer kpiCategoryId;
+	
 	@Column(name="target_days")
 	private Integer targetDays;
 
@@ -68,20 +77,26 @@ public class MillBuKpiCategoryEntity implements Serializable {
 	
 	@Column(name="color_range")
 	private String colorRange;
+	
+	@Column(name="year")
+	private Integer year;
+	
+	@Column(name="working_days")
+	private Integer workingDays;
 
 	//bi-directional many-to-one association to BusinessUnit
-	@ManyToOne
-	@JoinColumn(name="business_unit_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="business_unit_id", referencedColumnName = "business_unit_id", insertable = false, updatable = false)
 	private BusinessUnitEntity businessUnit;
 
 	//bi-directional many-to-one association to KpiCategory
-	@ManyToOne
-	@JoinColumn(name="kpi_category_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="kpi_category_id", referencedColumnName = "kpi_category_id", insertable = false, updatable = false)
 	private KpiCategoryEntity kpiCategory;
 
 	//bi-directional many-to-one association to Mill
-	@ManyToOne
-	@JoinColumn(name="mill_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="mill_id", referencedColumnName = "mill_id", insertable = false, updatable = false)
 	private MillEntity mill;
 
 	public Integer getMillBuKpiCategoryId() {
@@ -211,4 +226,45 @@ public class MillBuKpiCategoryEntity implements Serializable {
 	public void setColorRange(String colorRange) {
 		this.colorRange = colorRange;
 	}
+
+	public Integer getBusinessUnitId() {
+		return businessUnitId;
+	}
+
+	public void setBusinessUnitId(Integer businessUnitId) {
+		this.businessUnitId = businessUnitId;
+	}
+
+	public Integer getMillId() {
+		return millId;
+	}
+
+	public void setMillId(Integer millId) {
+		this.millId = millId;
+	}
+
+	public Integer getKpiCategoryId() {
+		return kpiCategoryId;
+	}
+
+	public void setKpiCategoryId(Integer kpiCategoryId) {
+		this.kpiCategoryId = kpiCategoryId;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getWorkingDays() {
+		return workingDays;
+	}
+
+	public void setWorkingDays(Integer workingDays) {
+		this.workingDays = workingDays;
+	}
+	
 }

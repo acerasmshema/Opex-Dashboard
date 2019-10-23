@@ -16,11 +16,13 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.response.model;
 
+import java.util.List;
+
 public class RgeUserResponse {
 	
 	private String loginId;
 	private String userName;
-	private String userRole;
+	private List<String> userRole;
 	
 	public String getLoginId() {
 		return loginId;
@@ -34,10 +36,10 @@ public class RgeUserResponse {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserRole() {
+	public List<String> getUserRole() {
 		return userRole;
 	}
-	public void setUserRole(String userRole) {
+	public void setUserRole(List<String> userRole) {
 		this.userRole = userRole;
 	}
 	
