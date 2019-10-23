@@ -147,13 +147,14 @@ export class DialogService {
     }
 
     createProductionThresholdForm(productionThreshold: ProductionThreshold): FormGroup {
+        let maximum = (productionThreshold.maximum !== null) ? productionThreshold.maximum : '';
         let options = {
             hasNeedle: true,
             needleColor: 'black',
             needleUpdateSpeed: 1000,
             arcColors: ["red", "yellow", "green"],
-            arcDelimiters: [80, 90],
-            rangeLabel: ['0', productionThreshold.maximum + ''],
+            arcDelimiters: [],
+            rangeLabel: ['0', maximum + ''],
             needleStartValue: 50,
         }
 
@@ -176,12 +177,15 @@ export class DialogService {
             needleValue: new FormControl(0),
             bottomLabel: new FormControl(productionThreshold.threshold),
             options: new FormControl(options),
-        });
+        },
+            {
+                validator: [this.validationService.maximumValidation('threshold', 'maximum'), this.validationService.thresholdValidation('threshold', 'maximum')]
+            });
 
         this.commonService.getAllBuType(productionThresholdForm);
 
         if (productionThreshold.operation === "Edit")
-            this.changeGaugeThreshold("" + productionThreshold.threshold, productionThresholdForm);
+            this.changeGaugeThreshold(productionThreshold.threshold, productionThresholdForm);
 
         return productionThresholdForm;
     }
@@ -433,15 +437,22 @@ export class DialogService {
         console.log(processLineControl)
     }
 
-    changeGaugeThreshold(thresholdValue: string, form: FormGroup) {
-        form.controls.bottomLabel.setValue(thresholdValue);
-        let maximum = +form.controls.options.value.rangeLabel[1];
-        let thresholdPercentage = (+thresholdValue * 100) / maximum;
-        form.controls.needleValue.setValue(thresholdPercentage);
-        form.controls.options.value.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
+    changeGaugeThreshold(thresholdValue: number, form: FormGroup) {
+        let maximum = +form.controls.maximum.value;
+        if (maximum > 0 && +thresholdValue > 0 && thresholdValue < maximum) {
+            form.controls.bottomLabel.setValue(thresholdValue);
+            let thresholdPercentage = (+thresholdValue * 100) / maximum;
+            form.controls.needleValue.setValue(thresholdPercentage);
+            form.controls.options.value.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
+        }
     }
 
-    changeGaugeMaximum(value: string, form: FormGroup) {
-        form.controls.options.value.rangeLabel = ['0', value];
+    changeGaugeMaximum(maximumValue: string, form: FormGroup) {
+        let thresholdValue = form.controls.threshold.value;
+        form.controls.options.value.rangeLabel = ['0', maximumValue];
+
+        if (+maximumValue > 0 && thresholdValue > 0 && thresholdValue < +maximumValue) {
+            this.changeGaugeThreshold(thresholdValue, form);
+        }
     }
 }

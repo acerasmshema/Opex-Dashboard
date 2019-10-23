@@ -35,7 +35,7 @@ export class AnnualConfigurationComponent implements OnInit, OnDestroy {
     annualTarget.year = null;
     annualTarget.buType = "";
     annualTarget.workingDays = null;
-    annualTarget.threshold = '';
+    annualTarget.annualTarget = '';
     annualTarget.millId = this.statusService.common.selectedMill.millId;
     annualTarget.kpiId = 1;
     annualTarget.createdBy = this.statusService.common.userDetail.username;
