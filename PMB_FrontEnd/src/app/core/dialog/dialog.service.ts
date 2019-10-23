@@ -218,7 +218,7 @@ export class DialogService {
             });
 
         this.commonService.getAllBuType(annualTargetForm);
-
+        
         return annualTargetForm;
     }
 

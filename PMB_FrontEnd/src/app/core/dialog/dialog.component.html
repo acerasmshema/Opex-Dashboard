@@ -553,7 +553,9 @@
                             <div class="form-group">
                                 <select class="form-control edit-input" style="height: 34px;"
                                     (change)="onBusinessTypeChange($event.target.value, 'production')">
-                                    <option class="edit-input" selected value="" disabled>Select Business Type</option>
+                                    <option class="edit-input"
+                                        [selected]="productionThresholdForm.controls.buType.value === ''" value=""
+                                        disabled>Select Business Type</option>
                                     <option *ngFor="let buType of productionThresholdForm.controls.buTypeList.controls"
                                         [selected]="(productionThresholdForm.controls.buType.value !== null && buType.value.buTypeId === productionThresholdForm.controls.buType.value.buTypeId)"
                                         class="edit-input" [value]="buType.value.buTypeId">
@@ -666,7 +668,9 @@
                             <div class="form-group">
                                 <select class="form-control edit-input" style="height: 34px;"
                                     (change)="onBusinessTypeChange($event.target.value, 'processLine')">
-                                    <option class="edit-input" selected value="" disabled>Select Business Type</option>
+                                    <option class="edit-input"
+                                        [selected]="processLineThresholdForm.controls.buType.value === ''" value=""
+                                        disabled>Select Business Type</option>
                                     <option *ngFor="let buType of processLineThresholdForm.controls.buTypeList.controls"
                                         [selected]="(processLineThresholdForm.controls.buType.value !== null && buType.value.buTypeId === processLineThresholdForm.controls.buType.value.buTypeId)"
                                         class="edit-input" [value]="buType.value.buTypeId">
@@ -682,7 +686,9 @@
                             <div class="form-group">
                                 <select class="form-control edit-input" style="height: 34px;"
                                     (change)="onProcessLineChange($event.target.value, 'processLine')">
-                                    <option class="edit-input" selected value="">Select Process Line</option>
+                                    <option class="edit-input"
+                                        [selected]="processLineThresholdForm.controls.processLine.value === ''"
+                                        value="">Select Process Line</option>
                                     <option
                                         *ngFor="let processLine of processLineThresholdForm.controls.processLineList.controls"
                                         [selected]="(processLineThresholdForm.controls.processLine.value !== null && processLine.value.processLineId === processLineThresholdForm.controls.processLine.value.processLineId)"
@@ -794,7 +800,8 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onBusinessTypeChange($event.target.value, 'annual')">
-                            <option class="edit-input" selected value="" disabled>Select Business Type</option>
+                            <option class="edit-input" [selected]="annualTargetForm.controls.buType.value === ''"
+                                value="" disabled>Select Business Type</option>
                             <option *ngFor="let buType of annualTargetForm.controls.buTypeList.controls"
                                 [selected]="(annualTargetForm.controls.buType.value !== null && buType.value.buTypeId === annualTargetForm.controls.buType.value.buTypeId)"
                                 class="edit-input" [value]="buType.value.buTypeId">
@@ -810,13 +817,13 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onYearChange($event.target.value)">
-                            <option class="edit-input" selected value="" disabled>Select Year</option>
-                            <option *ngFor="let year of annualTargetForm.controls.years.value"
+                            <option class="edit-input" [selected]="annualTargetForm.controls.year.value === null" value=""
+                                disabled>Select Year</option>
+                            <option *ngFor="let year of annualTargetForm.controls.years.value"  
                                 [selected]="(annualTargetForm.controls.year.value !== null && year === annualTargetForm.controls.year.value)"
                                 class="edit-input" [value]="year">
                                 {{year}}
                             </option>
-
                         </select>
                     </div>
                 </div>
@@ -879,7 +886,9 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onBusinessTypeChange($event.target.value, 'consumption')">
-                            <option class="edit-input" selected value="" disabled>Select Business Type</option>
+                            <option class="edit-input"
+                                [selected]="consumptionThresholdForm.controls.buType.value === ''" value="" disabled>
+                                Select Business Type</option>
                             <option *ngFor="let buType of consumptionThresholdForm.controls.buTypeList.controls"
                                 [selected]="(consumptionThresholdForm.controls.buType.value !== null && buType.value.buTypeId === consumptionThresholdForm.controls.buType.value.buTypeId)"
                                 class="edit-input" [value]="buType.value.buTypeId">
@@ -926,7 +935,9 @@
                     <div class="form-group">
                         <select class="form-control edit-input" style="height: 34px;"
                             (change)="onProcessLineChange($event.target.value,'consumption')">
-                            <option class="edit-input" selected value="">Select Process Line</option>
+                            <option class="edit-input"
+                                [selected]="consumptionThresholdForm.controls.processLine.value === ''" value="">Select
+                                Process Line</option>
                             <option
                                 *ngFor="let processLine of consumptionThresholdForm.controls.processLineList.controls"
                                 [selected]="(consumptionThresholdForm.controls.processLine.value !== null && processLine.value.processLineId === consumptionThresholdForm.controls.processLine.value.processLineId)"

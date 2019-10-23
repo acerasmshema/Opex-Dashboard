@@ -34,8 +34,8 @@ export class MasterData {
   ];
 
   static processLineTargetCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: true },
-    { field: 'processLine', header: 'Process Line', showInputBox: true },
+    { field: 'buType', header: 'Business Type', showInputBox: false },
+    { field: 'processLine', header: 'Process Line', showInputBox: false },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'maximum', header: 'Maximum', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
@@ -43,7 +43,7 @@ export class MasterData {
   ];
 
   static productionThresholdCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: true },
+    { field: 'buType', header: 'Business Type', showInputBox: false },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'maximum', header: 'Maximum', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
@@ -51,14 +51,14 @@ export class MasterData {
   ];
 
   static annualConfigCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: true },
+    { field: 'buType', header: 'Business Type', showInputBox: false },
     { field: 'year', header: 'Year', showInputBox: true },
     { field: 'workingDays', header: 'Working Days', showInputBox: true },
     { field: 'annualTarget', header: 'Annual Target', showInputBox: true }
   ];
 
   static consumptionThresholdCols = [
-    { field: 'processLine', header: 'Process Line', showInputBox: true },
+    { field: 'processLine', header: 'Process Line', showInputBox: false },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
     { field: 'endDate', header: 'End Date', showInputBox: true }
@@ -81,5 +81,5 @@ export class MasterData {
     { field: 'active', header: 'Active', width: "7%" },
   ];
 
-  static years = [2019, 2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040];
+  static years = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040];
 }
