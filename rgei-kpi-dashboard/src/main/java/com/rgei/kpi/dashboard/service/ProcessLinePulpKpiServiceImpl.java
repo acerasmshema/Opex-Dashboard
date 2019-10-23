@@ -19,6 +19,7 @@ package com.rgei.kpi.dashboard.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +33,14 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.MillEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
+import com.rgei.kpi.dashboard.repository.AnnualConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
@@ -95,7 +98,8 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	@Resource
 	ProcessLineConfigurationRepository processLineConfigurationRepository; 
 	
-	
+	@Resource
+	AnnualConfigurationRepository annualConfigurationRepository;
 
 	@Override
 	public ResponseObject allProcessLines(ProcessLineRequest productionRequest) {
@@ -272,31 +276,31 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public TargetProceessLine getAnnualTargetProcessLineV2(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Getting annual target for process lines");
-		MillBuKpiCategoryEntity millBuKpiCategoryEntity;
+//		MillBuKpiCategoryEntity millBuKpiCategoryEntity;
+		AnnualConfigurationEntity annualConfigEntity;
 		List<DailyKpiPulpEntity> dailyKpiEntities;
 		try {
-			millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
-					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-			
+//			millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
+//					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
+			annualConfigEntity = annualConfigurationRepository.findByYear(Calendar.getInstance().get(Calendar.YEAR));
 			dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
 					DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
 					DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
 		} catch (Exception e) {
 			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
 		}
-		if(millBuKpiCategoryEntity == null) {
+		if(annualConfigEntity == null) {
 			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
 		}
-		return ProcessLineExtendedUtil.generateTargetResponseV2(millBuKpiCategoryEntity, dailyKpiEntities);
+		return ProcessLineExtendedUtil.generateTargetResponseV2(annualConfigEntity, dailyKpiEntities);
 	}
 	
 	@Override
 	public Long getAnnualTargetValue(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Getting annual target value for process lines");
-		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
-				CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-		return ProcessLineExtendedUtil.calculateTargetValue(millBuKpiCategoryEntity);
+		AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYear(Calendar.getInstance().get(Calendar.YEAR));
+		return ProcessLineExtendedUtil.calculateTargetValue(annualConfigEntity);
 	}
 	
 	
