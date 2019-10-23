@@ -569,10 +569,15 @@
                             <div class="form-group">
                                 <input type="number" class="form-control edit-input" maxlength="50"
                                     (change)="onThresholdChange($event.target.value, 'production')"
-                                    formControlName="threshold">
-                                <span class="error-text"
-                                    *ngIf="!productionThresholdForm.get('threshold').valid && productionThresholdForm.get('threshold').touched && productionThresholdForm.get('threshold').errors?.required">
-                                    Threshold is required
+                                    formControlName="threshold" min="1">
+                                <span
+                                    *ngIf="!productionThresholdForm.get('threshold').valid && productionThresholdForm.get('threshold').touched">
+                                    <span *ngIf="productionThresholdForm.get('threshold').errors?.required"
+                                        class="error-text">
+                                        Threshold is required</span>
+                                    <span *ngIf="productionThresholdForm.get('threshold').errors?.notMatch"
+                                        class="error-text">
+                                        Threshold is not greater than maximum</span>
                                 </span>
                             </div>
                         </div>
@@ -583,10 +588,15 @@
                             <div class="form-group">
                                 <input type="number" class="form-control edit-input" maxlength="50"
                                     (change)="onMaximumChange($event.target.value, 'production')"
-                                    formControlName="maximum">
-                                <span class="error-text"
-                                    *ngIf="!productionThresholdForm.get('maximum').valid && productionThresholdForm.get('maximum').touched && productionThresholdForm.get('maximum').errors?.required">
-                                    Maximum is required
+                                    formControlName="maximum" min="1">
+                                <span
+                                    *ngIf="!productionThresholdForm.get('maximum').valid && productionThresholdForm.get('maximum').touched">
+                                    <span *ngIf="productionThresholdForm.get('maximum').errors?.required"
+                                        class="error-text">
+                                        Maximum is required</span>
+                                    <span *ngIf="productionThresholdForm.get('maximum').errors?.notMatch"
+                                        class="error-text">
+                                        Maximum is not lesser than threshold</span>
                                 </span>
                             </div>
                         </div>
