@@ -16,6 +16,8 @@ import { UserRoleService } from 'src/app/setup/user-management/user-role/user-ro
 import { CommonService } from 'src/app/shared/service/common/common.service';
 import { ProductionTargetService } from 'src/app/setup/threshold-management/production-configuration/production-target/production-target.service';
 import { ConsumptionConfigurationService } from 'src/app/setup/threshold-management/consumption-configuration/consumption-configuration.service';
+import { ProcessLineTargetService } from 'src/app/setup/threshold-management/production-configuration/process-line-target/process-line-target.service';
+import { AnnualConfigService } from 'src/app/setup/threshold-management/production-configuration/annual-configuration/annual-configuration.service';
 
 @Component({
   selector: 'app-dialog',
@@ -56,7 +58,9 @@ export class DialogComponent implements OnInit, OnDestroy {
     private userRoleService: UserRoleService,
     private commonService: CommonService,
     private productionTargetService: ProductionTargetService,
+    private annualConfigService: AnnualConfigService,
     private consumptionConfigService: ConsumptionConfigurationService,
+    private processLineThresholdService: ProcessLineTargetService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -479,6 +483,39 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  onAnnualTargetSubmit() {
+    if (this.annualTargetForm.invalid)
+      return;
+
+    if (this.annualTargetForm.controls.operation.value === "Add") {
+      this.annualConfigService.addAnnualTarget(this.annualTargetForm);
+    } else {
+      this.annualConfigService.updateAnnualTarget(this.annualTargetForm);
+    }
+  }
+
+  onProcessLineThresholdSubmit() {
+    if (this.processLineThresholdForm.invalid)
+      return;
+
+    if (this.processLineThresholdForm.controls.operation.value === "Add") {
+      this.processLineThresholdService.addProcessLineTarget(this.processLineThresholdForm);
+    } else {
+      this.processLineThresholdService.updateProcessLineTarget(this.processLineThresholdForm);
+    }
+  }
+
+  onConsumptionThresholdSubmit() {
+    if (this.consumptionThresholdForm.invalid)
+      return;
+
+    if (this.consumptionThresholdForm.controls.operation.value === "Add") {
+      this.consumptionConfigService.addConsumptionTarget(this.consumptionThresholdForm);
+    } else {
+      this.consumptionConfigService.updateConsumptionTarget(this.consumptionThresholdForm);
+    }
+  }
+
   onInputChange(value: any) {
     let formControl: any = this.userDetailForm.get(value);
     this.validationService.trimValue(formControl);
@@ -490,6 +527,9 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   onKpiChange(value: string) {
     this.dialogService.getKpiProcessLines(value, this.consumptionThresholdForm);
+    const kpiList: any = this.consumptionThresholdForm.controls.kpiList;
+    const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +value).value;
+    this.consumptionThresholdForm.controls.kpiId.setValue(kpi.kpiId);
   }
 
   onConfigCancel() {
@@ -499,9 +539,6 @@ export class DialogComponent implements OnInit, OnDestroy {
   onThresholdChange(value, type: string) {
     if (type === "production") {
       this.dialogService.changeGaugeThreshold(value, this.productionThresholdForm);
-    }
-    else if (type === "processLine") {
-
     }
   }
 
@@ -521,7 +558,36 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.productionThresholdForm.controls.buType.setValue(buType);
     }
     else if (type === "processLine") {
+      const buTypeList: any = this.processLineThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.processLineThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "consumption") {
+      const buTypeList: any = this.consumptionThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.consumptionThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "annual") {
+      const buTypeList: any = this.annualTargetForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.annualTargetForm.controls.buType.setValue(buType);
+    }
+  }
 
+  onYearChange(year: string) {
+    this.annualTargetForm.controls.year.setValue(year);
+  }
+
+  onProcessLineChange(value: string, type: string) {
+    if (type === "processLine") {
+      const processLineList: any = this.processLineThresholdForm.controls.processLineList;
+      const processLine = processLineList.controls.find((processLine) => processLine.value.processLineId === value).value;
+      this.processLineThresholdForm.controls.processLine.setValue(processLine);
+    }
+    else if (type === "consumption") {
+      const processLineList: any = this.consumptionThresholdForm.controls.processLineList;
+      const processLine = processLineList.controls.find((processLine) => processLine.value.processLineId === value).value;
+      this.consumptionThresholdForm.controls.processLine.setValue(processLine);
     }
   }
 

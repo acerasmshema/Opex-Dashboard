@@ -1,7 +1,6 @@
 export class ConsumptionThreshold {
-    consumptionThresholdId: string;
+    processLineTargetThresholdId: string;
     kpiCategory: any;
-    kpi: any;
     processLine: any;
     operation: string;
     buType: any;
@@ -10,4 +9,7 @@ export class ConsumptionThreshold {
     endDate: string;
     createdBy: string;
     updatedBy: string;
+    kpiId: number;
+    millId: string;
+    isDefault: boolean;
 }

@@ -57,8 +57,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
   constructor(private statusService: StatusService,
     private productionService: ProductionService,
     private datePipe: DatePipe,
-    private commonService: CommonService,
-    private messageService: MessageService) {
+    private commonService: CommonService) {
   }
 
   ngOnInit() {
@@ -121,20 +120,21 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     const data = { millId: this.statusService.common.selectedMill.millId, buId: '1', kpiCategoryId: '1', kpiId: '1' };
     this.productionYDaySubscription = this.productionService.getProductionYDayData(data).
       subscribe((data: any) => {
-        let valueArr = data['range'].split(',');
-        let colorArr = data['colorRange'].split(',');
-        const totalAverageValue = (data['totalAverageValue']);
 
-        this.yesterdayProductionData.productionYDayActualValue = parseFloat(totalAverageValue).toString();
-        this.yesterdayProductionData.productionYDayNeedleValue = (totalAverageValue * 100) / Number(data['maxValue']);
+        const totalAverageValue = data['totalAverageValue'];
+        const maxValue = +data['maxValue'];
+        const threshold = +data['threshold'];
+
+        this.yesterdayProductionData.productionYDayActualValue = totalAverageValue;
         this.yesterdayProductionData.canvasWidth = 275;
         this.yesterdayProductionData.options.needleColor = '#292823';
         this.yesterdayProductionData.options.rangeLabel.push(data['minValue'].toString());
         this.yesterdayProductionData.options.rangeLabel.push(data['maxValue'].toString());
-        valueArr.filter(item => this.yesterdayProductionData.options.arcDelimiters.push(Number(item)));
-        this.yesterdayProductionData.options.arcColors.splice(0, this.yesterdayProductionData.options.arcColors.length);
+       
+        let thresholdPercentage = (+threshold * 100) / maxValue;
+        this.yesterdayProductionData.productionYDayNeedleValue = (+totalAverageValue * 100) / maxValue;;
+        this.yesterdayProductionData.options.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
 
-        colorArr.filter(item => this.yesterdayProductionData.options.arcColors.push((item)));
         this.yesterdayProductionData.show = true;
       },
         (error: any) => {
@@ -245,24 +245,19 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
     this.productionLinesYDaySubscription = this.productionService.getAllproductionLinesYDayData(productionRequest).
       subscribe((data: any) => {
-        if (data !== "e") {
-          let gauges = data.dailyKpiPulp;
-          for (let index = 0; index < gauges.length; index++) {
-            const gauge = gauges[index];
-            let prodLine = this.prodLines[index]
-            let totalAverageValuePL1 = gauge.value;
-            prodLine.productionYDayActualValue = "" + totalAverageValuePL1;
-            prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +gauge.max;
-            prodLine.options.rangeLabel.push("" + gauge.min);
-            prodLine.options.rangeLabel.push("" + gauge.max);
-            prodLine.options.needleColor = '#292823';
+        let gauges = data.dailyKpiPulp;
+        for (let index = 0; index < gauges.length; index++) {
+          const gauge = gauges[index];
+          let prodLine = this.prodLines[index]
+          let totalAverageValuePL1 = gauge.value;
+          prodLine.productionYDayActualValue = "" + totalAverageValuePL1;
+          prodLine.productionYDayNeedleValue = (totalAverageValuePL1 * 100) / +gauge.max;
+          prodLine.options.rangeLabel.push("" + gauge.min);
+          prodLine.options.rangeLabel.push("" + gauge.max);
+          prodLine.options.needleColor = '#292823';
 
-            let value = gauge.range.split(',');
-            let color = gauge.colorRange.split(',');
-            value.filter(item => prodLine.options.arcDelimiters.push(+item));
-            prodLine.options.arcColors.splice(0, prodLine.options.arcColors.length);
-            color.filter(item => prodLine.options.arcColors.push((item)));
-          }
+          let thresholdPercentage = (+gauge.threshold * 100) / +gauge.max;
+          prodLine.options.arcDelimiters = [(thresholdPercentage * 0.95), thresholdPercentage];
         }
       },
         (error: any) => {

@@ -1,6 +1,7 @@
 package com.rgei.kpi.dashboard.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -9,17 +10,19 @@ import org.springframework.stereotype.Service;
 import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
+import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.exception.DateRangeAlreadyExistException;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.exception.RecordNotUpdatedException;
+import com.rgei.kpi.dashboard.repository.AnnualConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.KpiConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
+import com.rgei.kpi.dashboard.response.model.AnnualConfiguration;
 import com.rgei.kpi.dashboard.response.model.ProcessLineTargetThreshold;
 import com.rgei.kpi.dashboard.response.model.ProductionThreshold;
-import com.rgei.kpi.dashboard.util.CommonFunction;
 import com.rgei.kpi.dashboard.util.ProcessLineConfigurationManagementUtility;
 import com.rgei.kpi.dashboard.util.ThresholdManagementUtility;
 import com.rgei.kpi.dashboard.util.Utility;
@@ -36,7 +39,10 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 
 	@Resource
 	ProcessLineConfigurationRepository processLineConfigurationRepository;
-
+	
+	@Resource
+	AnnualConfigurationRepository annualConfigurationRepository;
+	
 	@Override
 	public List<ProductionThreshold> getProductionTargetsByMillId(Integer millId) {
 		logger.info("Get production threshold by mill id ", millId);
@@ -69,10 +75,9 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	@Override
 	public void updateProcessLineTarget(ProcessLineTargetThreshold targetThreshold) {
 		logger.info("Update process line target for MillId : ",  targetThreshold.getMillId());
-		validateDateRange(targetThreshold);
 		ProcessLineConfigurationEntity processLineConfigEntity = null;
 		if(targetThreshold != null && targetThreshold.getBuType() != null && targetThreshold.getProcessLine() != null) {
-			ProcessLineConfigurationEntity entity = processLineConfigurationRepository.findByProcessLineConfigurationId(CommonFunction.covertToInteger(targetThreshold.getProcessLineTargetThresholdId()));
+			ProcessLineConfigurationEntity entity = processLineConfigurationRepository.findAllByMillIdAndBuTypeIdAndKpiIdAndProcessLineId(targetThreshold.getMillId(), targetThreshold.getBuType().getBuTypeId(), targetThreshold.getKpiId(), targetThreshold.getProcessLine().getProcessLineId());
 			if(entity != null) {
 				processLineConfigEntity = ProcessLineConfigurationManagementUtility.getProcessLineConfigurationEntity(targetThreshold, entity);
 				try {
@@ -104,7 +109,7 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	private void validateDateRange(ProcessLineTargetThreshold processLineTargetThreshold)  {
 		ProcessLineConfigurationEntity processLineConfigurationEntity=null;
 		if(processLineTargetThreshold!=null) {
-			 processLineConfigurationEntity=processLineConfigurationRepository.getAllBetweenDates(Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT),Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT),processLineTargetThreshold.getMillId(),processLineTargetThreshold.getBuType().getBuTypeId(),processLineTargetThreshold.getKpiId(),processLineTargetThreshold.getProcessLine().getProcessLineId());
+			 processLineConfigurationEntity=processLineConfigurationRepository.getAllBetweenDates(Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT),Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT),processLineTargetThreshold.getMillId(),processLineTargetThreshold.getBuType().getBuId(),processLineTargetThreshold.getKpiId(),processLineTargetThreshold.getProcessLine().getProcessLineId());
 			 if(processLineConfigurationEntity!=null)
 				 throw new DateRangeAlreadyExistException("Record Already exist for same date range");
 		}
@@ -113,31 +118,22 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	
 
 	public void createProductionTarget(ProductionThreshold productionTarget) {
+
 		logger.info("Inside service call to create production target for request : " + productionTarget);
-		validateProductionDateRange(productionTarget);
 		try {
 			KpiConfigurationEntity configEntity = ThresholdManagementUtility
 					.createConfigurationEntity(productionTarget);
 			kpiConfigurationRepository.save(configEntity);
+			//ThresholdManagementUtility.validateDateRange(productionTarget);
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating production target  :" + productionTarget);
 		}
 	}
 
-	private void validateProductionDateRange(ProductionThreshold productionThreshold)  {
-		KpiConfigurationEntity kpiConfigurationEntity=null;
-		if(productionThreshold!=null) {
-			kpiConfigurationEntity=kpiConfigurationRepository.getAllBetweenDates(Utility.stringToDateConvertor(productionThreshold.getStartDate(), DashboardConstant.FORMAT),Utility.stringToDateConvertor(productionThreshold.getEndDate(), DashboardConstant.FORMAT),productionThreshold.getMillId(),productionThreshold.getBuType().getBuTypeId(),productionThreshold.getKpiId());
-			 if(kpiConfigurationEntity!=null)
-				 throw new DateRangeAlreadyExistException("Record Already exist for same date range");
-		}
-	}
-	
 	@Override
 	public void updateProductionTarget(ProductionThreshold productionTarget) {
 
 		logger.info("Inside service call to update production target for request : " + productionTarget);
-		validateProductionDateRange(productionTarget);
 		try {
 			if (productionTarget != null) {
 				KpiConfigurationEntity kpiConfigurationEntity = kpiConfigurationRepository.findByKpiConfigurationId(Integer.parseInt(productionTarget.getProductionThresholdId()));
@@ -154,5 +150,64 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 			
 	}
 
+	@Override
+	public List<AnnualConfiguration> getAnnualConfiguration(Integer millId) {
+		logger.info("Get annual configuration for MillId : ",  millId);
+		List<AnnualConfigurationEntity> entities = annualConfigurationRepository.findByMillId(millId);
+		if(Objects.nonNull(entities) && !entities.isEmpty()) {
+			return ThresholdManagementUtility.fetchAnnualConfigurations(entities);
+		}else {
+			throw new RecordNotFoundException("Annual configuration not found for mill Id :" + millId);
+		}
+	}
 
+	@Override
+	public void createAnnualConfiguration(AnnualConfiguration annualConfiguration) {
+		logger.info("Create annual configuration for MillId : ",  annualConfiguration.getMillId());
+		validateAnnualConfigurationYear(annualConfiguration);
+		try {
+			AnnualConfigurationEntity entity = ThresholdManagementUtility
+					.createAnnualConfigurationEntity(annualConfiguration);
+			annualConfigurationRepository.save(entity);
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while creating annual configuration  :" + annualConfiguration);
+		}
+	}
+
+	@Override
+	public void updateAnnualConfiguration(AnnualConfiguration annualConfiguration) {
+
+
+		logger.info("Inside service call to update annual configuration for request : " + annualConfiguration);
+		validateAnnualConfigurationYear(annualConfiguration);
+		try {
+			if (annualConfiguration != null) {
+				AnnualConfigurationEntity annualConfigurationEntity = annualConfigurationRepository.findByAnnualConfigurationId(annualConfiguration.getAnnualConfigurationId());
+				if (annualConfigurationEntity != null) {
+					AnnualConfigurationEntity updatedConfig = ThresholdManagementUtility.updateFetchedAnnualConfigEntity(annualConfiguration, annualConfigurationEntity);
+					annualConfigurationRepository.save(updatedConfig);
+				} else {
+					throw new RecordNotFoundException("User not found against configuration id  :" + annualConfiguration.getAnnualConfigurationId());
+				}
+			}
+		} catch (RuntimeException e) {
+			throw new RecordNotCreatedException("Error while updating annual configuration  :" + annualConfiguration);
+		}
+			
+			
+	}
+
+	private void validateAnnualConfigurationYear(AnnualConfiguration annualConfiguration) {
+
+		AnnualConfigurationEntity annualConfigurationEntity = null;
+		if (annualConfiguration != null) {
+			annualConfigurationEntity = annualConfigurationRepository
+					.findByYearAndIsDefault(annualConfiguration.getYear(), Boolean.FALSE);
+			if (annualConfigurationEntity != null && null == annualConfiguration.getAnnualConfigurationId()
+					&& !annualConfigurationEntity.getAnnualConfigurationId()
+							.equals(annualConfiguration.getAnnualConfigurationId()))
+				throw new DateRangeAlreadyExistException("Record Already exist for same year");
+		}
+
+	}
 }

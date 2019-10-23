@@ -27,7 +27,8 @@ export class ProductionLine {
         hasNeedle: true,
         needleColor: 'gray',
         needleUpdateSpeed: 1000,
-        arcColors: [], arcDelimiters: [],
+        arcColors: ["red", "yellow", "green"],
+        arcDelimiters: [],
         rangeLabel: [], needleStartValue: 0
     };
 }
