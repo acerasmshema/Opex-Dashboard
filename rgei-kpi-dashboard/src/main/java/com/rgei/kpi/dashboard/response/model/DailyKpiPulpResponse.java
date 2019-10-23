@@ -16,6 +16,8 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.response.model;
 
+import java.math.BigDecimal;
+
 //Shubham and Dixit code
 public class DailyKpiPulpResponse {
 	
@@ -25,6 +27,7 @@ public class DailyKpiPulpResponse {
 	private Double value;
 	private String range;
 	private String colorRange;
+	private BigDecimal threshold;
 	
 	public String getName() {
 		return name;
@@ -61,5 +64,11 @@ public class DailyKpiPulpResponse {
 	}
 	public void setColorRange(String colorRange) {
 		this.colorRange = colorRange;
+	}
+	public BigDecimal getThreshold() {
+		return threshold;
+	}
+	public void setThreshold(BigDecimal bigDecimal) {
+		this.threshold = bigDecimal;
 	} 
 }

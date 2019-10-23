@@ -273,4 +273,3 @@ public class RgeUserEntity implements Serializable {
 		this.countryEntity = countryEntity;
 	}
 }
-

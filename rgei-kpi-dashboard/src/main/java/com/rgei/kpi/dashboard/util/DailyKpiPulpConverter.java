@@ -31,6 +31,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
+import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.DailyKpiPulp;
@@ -45,14 +46,14 @@ import com.rgei.kpi.dashboard.response.model.SeriesObject;
 public class DailyKpiPulpConverter {
 
 	private static CentralizedLogger logger = RgeiLoggerFactory.getLogger(DailyKpiPulpConverter.class);
-	
-	//no-arg constructor
+
+	// no-arg constructor
 	private DailyKpiPulpConverter() {
-		
+
 	}
-	
+
 	public static Date getYesterdayDate() {
-		LocalDate yesterdayDate= LocalDate.now().minusDays(1);
+		LocalDate yesterdayDate = LocalDate.now().minusDays(1);
 		return Date.valueOf(yesterdayDate.toString());
 	}
 
@@ -69,111 +70,115 @@ public class DailyKpiPulpConverter {
 	}
 
 	public static ProcessLineResponse prePareResponse(List<ProcessLineEntity> processLineEntites,
-			List<DailyKpiPulpEntity> dailyKpiPulpEntities,MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
+			List<DailyKpiPulpEntity> dailyKpiPulpEntities, MillBuKpiCategoryEntity millBuKpiCategoryEntity,
+			KpiConfigurationEntity kpiConfigurationEntity) {
 		logger.info("Prepare process line response");
 		ProcessLineResponse response = new ProcessLineResponse();
-		Double allProcessSum =0.0D;
-		if(!dailyKpiPulpEntities.isEmpty()) {
-			for(DailyKpiPulpEntity entity:dailyKpiPulpEntities) {
-				if(Double.isNaN(entity.getProcessLine1()) && Double.isNaN(entity.getProcessLine2()) && Double.isNaN(entity.getProcessLine3())) {
+		Double allProcessSum = 0.0D;
+		if (!dailyKpiPulpEntities.isEmpty()) {
+			for (DailyKpiPulpEntity entity : dailyKpiPulpEntities) {
+				if (Double.isNaN(entity.getProcessLine1()) && Double.isNaN(entity.getProcessLine2())
+						&& Double.isNaN(entity.getProcessLine3())) {
 					response.setTotalAverageValue(Double.NaN);
-				}else {
+				} else {
 					handleNaNCondition(entity);
 					Double total = 0.0;
-					Double sumDouble = Double.sum(entity.getProcessLine1()+entity.getProcessLine2()+entity.getProcessLine3(),total);
+					Double sumDouble = Double
+							.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(), total);
 					allProcessSum += sumDouble;
-					response.setTotalAverageValue(BigDecimal.valueOf(allProcessSum).setScale(0, RoundingMode.CEILING).doubleValue());
+					response.setTotalAverageValue(
+							BigDecimal.valueOf(allProcessSum).setScale(0, RoundingMode.CEILING).doubleValue());
 				}
 			}
-		}else {
-			if(dailyKpiPulpEntities.isEmpty()) {
+		} else {
+			if (dailyKpiPulpEntities.isEmpty()) {
 				response.setTotalAverageValue(Double.NaN);
 			}
 		}
-		return populateTaget(processLineEntites,response,millBuKpiCategoryEntity);
+		return populateTaget(processLineEntites, response, millBuKpiCategoryEntity, kpiConfigurationEntity);
 	}
 
 	private static void handleNaNCondition(DailyKpiPulpEntity entity) {
-		if(Double.isNaN(entity.getProcessLine1())){
+		if (Double.isNaN(entity.getProcessLine1())) {
 			entity.setProcessLine1(0.00D);
-		}
-		else if(Double.isNaN(entity.getProcessLine2())) {
+		} else if (Double.isNaN(entity.getProcessLine2())) {
 			entity.setProcessLine2(0.00D);
-		}
-		else if(Double.isNaN(entity.getProcessLine3())) {
+		} else if (Double.isNaN(entity.getProcessLine3())) {
 			entity.setProcessLine3(0.00D);
 		}
 	}
 
-	private static ProcessLineResponse populateTaget(List<ProcessLineEntity> processLineEntites,ProcessLineResponse response,MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
-			response.setMinValue(BigDecimal.valueOf(millBuKpiCategoryEntity.getMinTarget()));
-			response.setMaxValue(BigDecimal.valueOf(millBuKpiCategoryEntity.getMaxTarget()));
-			
-			response.setRange(millBuKpiCategoryEntity.getRangeValue());
-			response.setColorRange(millBuKpiCategoryEntity.getColorRange());
+	private static ProcessLineResponse populateTaget(List<ProcessLineEntity> processLineEntites,
+			ProcessLineResponse response, MillBuKpiCategoryEntity millBuKpiCategoryEntity,
+			KpiConfigurationEntity kpiConfigurationEntity) {
+		response.setMinValue(BigDecimal.valueOf(kpiConfigurationEntity.getMinimum()));
+		response.setMaxValue(BigDecimal.valueOf(kpiConfigurationEntity.getMaximum()));
+		response.setThreshold(kpiConfigurationEntity.getThreshold());
+		response.setRange(millBuKpiCategoryEntity.getRangeValue());
+		response.setColorRange(millBuKpiCategoryEntity.getColorRange());
 		return response;
 	}
-	
+
 	@SuppressWarnings("static-access")
 	public static Date getCurrentYearDate() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(cal.YEAR, Calendar.getInstance().get(Calendar.YEAR));
 		cal.set(cal.MONTH, cal.JANUARY);
 		cal.set(cal.DATE, 1);
-		return new java.sql.Date( cal.getTime().getTime());
+		return new java.sql.Date(cal.getTime().getTime());
 	}
-	
 
-	
 	public static ProcessLineAnnualResponse prePareResponse(MillBuKpiCategoryEntity millBuKpiCategoryEntity,
 			List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		logger.info("Prepare process line annual response");
 		ProcessLineAnnualResponse response = new ProcessLineAnnualResponse();
-		Double allProcessSum =0.0D; 
-		if(!dailyKpiPulpEntities.isEmpty()) {
-			for(DailyKpiPulpEntity entity:dailyKpiPulpEntities) {
-				if(Double.isNaN(entity.getProcessLine1()) && Double.isNaN(entity.getProcessLine2()) && Double.isNaN(entity.getProcessLine3())) {
+		Double allProcessSum = 0.0D;
+		if (!dailyKpiPulpEntities.isEmpty()) {
+			for (DailyKpiPulpEntity entity : dailyKpiPulpEntities) {
+				if (Double.isNaN(entity.getProcessLine1()) && Double.isNaN(entity.getProcessLine2())
+						&& Double.isNaN(entity.getProcessLine3())) {
 					response.setTotalYTDProduction(Double.NaN);
-				}else {
+				} else {
 					handleNaNCondition(entity);
 					Double total = 0.0;
-					Double sumDouble = Double.sum(entity.getProcessLine1()+entity.getProcessLine2()+entity.getProcessLine3(),total);
+					Double sumDouble = Double
+							.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(), total);
 					allProcessSum += sumDouble;
 					response.setTotalYTDProduction(allProcessSum);
 				}
 			}
 		}
-		return populateAnnulTaget(millBuKpiCategoryEntity,response);
+		return populateAnnulTaget(millBuKpiCategoryEntity, response);
 	}
-	
 
-	
 	public static List<ProcessLineSeries> prePareDailyTargetResponse(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		logger.info("Prepare daily target response");
 		List<ProcessLineSeries> seriesList = new ArrayList<>();
 		ProcessLineSeries series = null;
 		Double processSum = 0.0D;
-		for(DailyKpiPulpEntity entity:dailyKpiPulpEntities) {
+		for (DailyKpiPulpEntity entity : dailyKpiPulpEntities) {
 			handleNaNCondition(entity);
 			series = new ProcessLineSeries();
 			Date value = new Date(entity.getDatetime().getTime());
 			series.setName(Utility.dateToStringConvertor(value, DashboardConstant.EXTENDED_DATE_FORMAT));
 			Double total = 0.0;
-			Double sumOfProcessLine = Double.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(),total);
-			processSum +=sumOfProcessLine;
+			Double sumOfProcessLine = Double
+					.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(), total);
+			processSum += sumOfProcessLine;
 			series.setValue(processSum.longValue());
 			seriesList.add(series);
 		}
 		return seriesList;
 	}
-	
+
 	public static Long calculateActualTarget(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		Double processSum = 0.0D;
-		for(DailyKpiPulpEntity entity:dailyKpiPulpEntities) {
+		for (DailyKpiPulpEntity entity : dailyKpiPulpEntities) {
 			handleNaNCondition(entity);
 			Double total = 0.0;
-			Double sumOfProcessLine = Double.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(),total);
-			processSum +=sumOfProcessLine;
+			Double sumOfProcessLine = Double
+					.sum(entity.getProcessLine1() + entity.getProcessLine2() + entity.getProcessLine3(), total);
+			processSum += sumOfProcessLine;
 		}
 		return processSum.longValue();
 	}
@@ -183,8 +188,8 @@ public class DailyKpiPulpConverter {
 		response.setAnnualTarget(millBuKpiCategoryEntity.getAnnualTarget());
 		return response;
 	}
-	
-	//Shubham and Dixit code
+
+	// Shubham and Dixit code
 	public static List<DailyKpiPulp> convertToDailyKpiPulpDTO(List<DailyKpiPulpEntity> entities) {
 		List<DailyKpiPulp> dailyKpiPulp = new ArrayList<>();
 		for (DailyKpiPulpEntity entity : entities) {
@@ -209,8 +214,8 @@ public class DailyKpiPulpConverter {
 		}
 		return dailyKpiPulp;
 	}
-	
-	//Shubham and Dixit code
+
+	// Shubham and Dixit code
 	public static List<DailyKpiPulpResponse> createResponseObject(List<ProcessLine> processLine,
 			List<DailyKpiPulp> dailyKpiPulp) {
 		List<DailyKpiPulpResponse> response = new ArrayList<>();
@@ -221,25 +226,35 @@ public class DailyKpiPulpConverter {
 			dailyKpiPulpResponse.setMax(processLineObj.getMaxTarget().longValue());
 			dailyKpiPulpResponse.setRange(processLineObj.getRangeValue());
 			dailyKpiPulpResponse.setColorRange(processLineObj.getColorRange());
+			dailyKpiPulpResponse.setThreshold(processLineObj.getDailyLineTarget());
 			response.add(dailyKpiPulpResponse);
 		}
 		populateProcessLinesValues(dailyKpiPulp, response);
 		return response;
 	}
-	
-	//Shubham and Dixit code
-	private static void populateProcessLinesValues(List<DailyKpiPulp> dailyKpiPulp, List<DailyKpiPulpResponse> response) {
+
+	// Shubham and Dixit code
+	private static void populateProcessLinesValues(List<DailyKpiPulp> dailyKpiPulp,
+			List<DailyKpiPulpResponse> response) {
 		if (dailyKpiPulp != null && !dailyKpiPulp.isEmpty()) {
-			
+
 			try {
-				response.get(0).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine1()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(1).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine2()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(2).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine3()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(3).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine4()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(4).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine5()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(5).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine6()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(6).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine7()).setScale(0, RoundingMode.CEILING).doubleValue());
-				response.get(7).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine8()).setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(0).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine1())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(1).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine2())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(2).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine3())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(3).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine4())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(4).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine5())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(5).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine6())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(6).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine7())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
+				response.get(7).setValue(BigDecimal.valueOf(dailyKpiPulp.get(0).getProcessLine8())
+						.setScale(0, RoundingMode.CEILING).doubleValue());
 			} catch (IndexOutOfBoundsException ex) {
 				logger.error("Index out of bound excep while populating process lines value", ex, response);
 			}
@@ -254,51 +269,63 @@ public class DailyKpiPulpConverter {
 			response.get(7).setValue(Double.valueOf(DashboardConstant.NAN));
 		}
 	}
-	
-	public static List<DateRangeResponse> createDailyKpiPulpResponseForBarChart(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+
+	public static List<DateRangeResponse> createDailyKpiPulpResponseForBarChart(
+			List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		logger.info("Create daily Kpi Pulp response for Bar Chart");
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<String> lineList = ProcessLineUtility.getRequestedProcessLines();
-		lineList.forEach(item -> 
-			resultList.add(new DateRangeResponse(item, new ArrayList<>())));
-		
-		
+		lineList.forEach(item -> resultList.add(new DateRangeResponse(item, new ArrayList<>())));
+
 		List<SeriesObject> seriesObjects = resultList.get(0).getSeries();
 		List<SeriesObject> seriesObjects2 = resultList.get(1).getSeries();
 		List<SeriesObject> seriesObjects3 = resultList.get(2).getSeries();
-		
+
 		dailyKpiPulpEntities.forEach(item -> {
 			Map<Object, Object> tmp = new HashMap<>();
-			tmp.put(DashboardConstant.NAME, Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT));
+			tmp.put(DashboardConstant.NAME,
+					Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT));
 			tmp.put(DashboardConstant.VALUE, Utility.parseProcessLineValue(item.getProcessLine1()));
-			
-			seriesObjects.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT), 
-					Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine1()).setScale(0, RoundingMode.CEILING).doubleValue())));
-			seriesObjects2.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT), 
-					Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine2()).setScale(0, RoundingMode.CEILING).doubleValue())));
-			seriesObjects3.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT), 
-					Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine3()).setScale(0, RoundingMode.CEILING).doubleValue())));
+
+			seriesObjects.add(
+					new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT),
+							Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine1())
+									.setScale(0, RoundingMode.CEILING).doubleValue())));
+			seriesObjects2.add(
+					new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT),
+							Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine2())
+									.setScale(0, RoundingMode.CEILING).doubleValue())));
+			seriesObjects3.add(
+					new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT),
+							Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine3())
+									.setScale(0, RoundingMode.CEILING).doubleValue())));
 		});
 		return resultList;
 	}
 
-	public static List<DateRangeResponse> createDailyKpiPulpResponseForAreaChart(List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
+	public static List<DateRangeResponse> createDailyKpiPulpResponseForAreaChart(
+			List<DailyKpiPulpEntity> dailyKpiPulpEntities) {
 		logger.info("Create daily Kpi Pulp response for Area Chart");
 		List<DateRangeResponse> resultList = new ArrayList<>();
 		List<String> lineList = ProcessLineUtility.getRequestedProcessLines();
-		
+
 		dailyKpiPulpEntities.forEach(item -> {
 			DateRangeResponse dateRangeResponse = new DateRangeResponse();
-			
+
 			ArrayList<SeriesObject> seriesList = new ArrayList<>();
 			Collections.addAll(seriesList,
-					new SeriesObject(lineList.get(0), Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine1()).setScale(0, RoundingMode.CEILING).doubleValue())),
-					new SeriesObject(lineList.get(1), Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine2()).setScale(0, RoundingMode.CEILING).doubleValue())),
-					new SeriesObject(lineList.get(2), Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine3()).setScale(0, RoundingMode.CEILING).doubleValue())));
+					new SeriesObject(lineList.get(0),
+							Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine1())
+									.setScale(0, RoundingMode.CEILING).doubleValue())),
+					new SeriesObject(lineList.get(1),
+							Utility.parseProcessLineValue(BigDecimal.valueOf(item.getProcessLine2())
+									.setScale(0, RoundingMode.CEILING).doubleValue())),
+					new SeriesObject(lineList.get(2), Utility.parseProcessLineValue(BigDecimal
+							.valueOf(item.getProcessLine3()).setScale(0, RoundingMode.CEILING).doubleValue())));
 
 			dateRangeResponse.setName(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.DATE_FORMAT));
 			dateRangeResponse.setSeries(seriesList);
-			
+
 			resultList.add(dateRangeResponse);
 		});
 		return resultList;

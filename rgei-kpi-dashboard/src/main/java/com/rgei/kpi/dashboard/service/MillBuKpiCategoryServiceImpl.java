@@ -16,6 +16,7 @@
  ******************************************************************************/
 package com.rgei.kpi.dashboard.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,11 +27,14 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
+import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
+import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotCreatedException;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
+import com.rgei.kpi.dashboard.repository.KpiConfigurationRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiCategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.ProcessLineRepository;
 import com.rgei.kpi.dashboard.response.model.KpiCategoryTargetDaysRequest;
@@ -54,12 +58,16 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService {
 
 	@Resource
 	ProcessLineRepository processLineRepository;
+	
+	@Resource
+	KpiConfigurationRepository kpiConfigurationRepository;
 
 	@Override
 	public ProcessLineResponse yesterdayAvgProductionLine(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Yesterday avg production line");
 		ProcessLineResponse processLineResponse = null;
+		Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
 		List<ProcessLineEntity> processLineEntites = processLineRepository
 				.findByProcessLineNameIn(ProcessLineUtility.getRequestedProcessLines());
 		MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(
@@ -69,17 +77,33 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService {
 				CommonFunction.getYesterdayDate(), CommonFunction.covertToInteger(millId),
 				CommonFunction.covertToInteger(buId), CommonFunction.covertToInteger(kpiCategoryId),
 				CommonFunction.covertToInteger(kpiId));
+		List<KpiConfigurationEntity> kpiConfigurationEntityList=kpiConfigurationRepository.findKpiConfigurationForCurrentDate(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buId),CommonFunction.covertToInteger(kpiId),yesterdayDate);
+		KpiConfigurationEntity kpiConfigurationEntity=findApplicableConfiguration(kpiConfigurationEntityList);
 		if (millBuKpiCategoryEntity == null) {
 			throw new RecordNotFoundException("No MillBuKpiCategory entity found for millId : " + millId);
 		}
 		if (millId.equals(DashboardConstant.KRC)) {
 			processLineResponse = DailyKpiPulpConverter.prePareResponse(processLineEntites, dailyKpiPulpEntities,
-					millBuKpiCategoryEntity);
+					millBuKpiCategoryEntity,kpiConfigurationEntity);
 		} else if (millId.equals(DashboardConstant.RZ)) {
 			processLineResponse = DailyKpiPulpConverterRZ.prePareResponse(processLineEntites, dailyKpiPulpEntities,
-					millBuKpiCategoryEntity);
+					millBuKpiCategoryEntity,kpiConfigurationEntity);
 		}
 		return processLineResponse;
+	}
+
+	private KpiConfigurationEntity findApplicableConfiguration(
+			List<KpiConfigurationEntity> kpiConfigurationEntityList) {
+		KpiConfigurationEntity kpiConfigurationApplicableEntity=null;
+		for(KpiConfigurationEntity kpiConfigurationEntity:kpiConfigurationEntityList ) {
+			
+			if(kpiConfigurationEntity.getIsDefault()) {
+				kpiConfigurationApplicableEntity= kpiConfigurationEntity;
+			}else 
+				kpiConfigurationApplicableEntity= kpiConfigurationEntity;
+			}
+		
+		return kpiConfigurationApplicableEntity;
 	}
 
 	@Override

@@ -192,7 +192,6 @@ export class ValidationService {
         return (formGroup: FormGroup) => {
             const thresholdControl = formGroup.controls[threshold];
             const maximumControl = formGroup.controls[maximum];
-
             if (thresholdControl.value !== null && maximumControl.value !== null) {
                 if (thresholdControl.value > maximumControl.value) {
                     maximumControl.setErrors({ notMatch: true });
@@ -207,7 +206,6 @@ export class ValidationService {
         return (formGroup: FormGroup) => {
             const thresholdControl = formGroup.controls[threshold];
             const maximumControl = formGroup.controls[maximum];
-
             if (thresholdControl.value !== null && maximumControl.value !== null) {
                 if (thresholdControl.value > maximumControl.value) {
                     thresholdControl.setErrors({ notMatch: true });

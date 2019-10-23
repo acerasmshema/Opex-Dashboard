@@ -1,5 +1,6 @@
 package com.rgei.kpi.dashboard.service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,12 +22,14 @@ import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
+import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.exception.RecordNotFoundException;
 import com.rgei.kpi.dashboard.repository.DailyKpiPulpEntityRepository;
 import com.rgei.kpi.dashboard.repository.KPICategoryEntityRepository;
 import com.rgei.kpi.dashboard.repository.KpiDashboardCategoryRepository;
 import com.rgei.kpi.dashboard.repository.KpiRepository;
 import com.rgei.kpi.dashboard.repository.MillBuKpiEntityRepository;
+import com.rgei.kpi.dashboard.repository.ProcessLineConfigurationRepository;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.Kpi;
 import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
@@ -38,6 +42,7 @@ import com.rgei.kpi.dashboard.util.KpiDashboardCategoryDataGridUtilityRZ;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtility;
 import com.rgei.kpi.dashboard.util.KpiDashboardCategoryUtilityRZ;
 import com.rgei.kpi.dashboard.util.MillBuKpiUtility;
+import com.rgei.kpi.dashboard.util.ProcessLineUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
 /**
@@ -64,6 +69,9 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 
 	@Resource
 	DailyKpiPulpEntityRepository dailyKpiPulpEntityRepository;
+	
+	@Resource
+	ProcessLineConfigurationRepository processLineConfigurationRepository; 
 
 	@Override
 	public List<DateRangeResponse> getKpiCategoryData(KpiDashboardCategoryRequest kpiDashboardCategoryRequest) {
@@ -197,10 +205,16 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		logger.info("Getting yesterday values for kpi category against id", kpiCategoryId);
 		List<KpiCategoryResponse> resultList = new ArrayList<>();
 		List<KpiType> kpiType = null;
+		Integer kpiId=1;
+		java.util.Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
 		Optional<List<KpiTypeEntity>> kpiTypeEntity = Optional
 				.ofNullable(kpiCategoryRepository.findByKpiCategoryId(kpiCategoryId));
 		if (kpiTypeEntity.isPresent()) {
 			kpiType = KpiDashboardCategoryUtility.convertToKpiTypeDTO(kpiTypeEntity.get(), millId);
+			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(millId,kpiId, yesterdayDate);
+			Map<String, BigDecimal> processLineConfigurationMap=KpiDashboardCategoryUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
+			KpiType kpi=applyCurrentthreshold(kpiType.get(0),processLineConfigurationMap);
+			kpiType.set(0, kpi);
 		} else {
 			throw new RecordNotFoundException("Record not found for Kpi Category Id : " + kpiCategoryId);
 		}
@@ -214,17 +228,34 @@ public class KpiDashboardCategoryServiceImpl implements KpiDashboardCategoryServ
 		return resultList;
   }
   
-  
-  // Kimman: for special wood comsuption yield average 7 days handling
+
+private KpiType applyCurrentthreshold(KpiType kpi, Map<String, BigDecimal> processLineConfigurationMap) {
+		Map<String,String> targetMap= kpi.getTarget();
+		for (Entry<String, BigDecimal> entry : processLineConfigurationMap.entrySet()) {
+			targetMap.put(entry.getKey(), entry.getValue().toString());
+		}
+		kpi.setTarget(targetMap);
+		
+		return kpi;
+	}
+
+// Kimman: for special wood comsuption yield average 7 days handling
+
   @Override
   public List<KpiCategoryResponse> getYesterdayValuesForKpiCategory2(Integer kpiCategoryId, Integer millId) {
     logger.info("Getting custom yesterday values for kpi category against id", kpiCategoryId);
     List<KpiCategoryResponse> resultList = new ArrayList<>();
     List<KpiType> kpiType = null;
+    java.util.Date yesterdayDate = ProcessLineUtility.getYesterdayDate();
     Optional<List<KpiTypeEntity>> kpiTypeEntity = Optional
         .ofNullable(kpiCategoryRepository.findByKpiCategoryId(kpiCategoryId));
     if (kpiTypeEntity.isPresent()) {
       kpiType = KpiDashboardCategoryUtility.convertToKpiTypeDTO(kpiTypeEntity.get(), millId);
+      for(KpiType kpi: kpiType ) {
+      List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(millId,kpi.getKpi().getKpiId(), yesterdayDate);
+		Map<String, BigDecimal> processLineConfigurationMap=KpiDashboardCategoryUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
+		kpi=applyCurrentthreshold(kpi,processLineConfigurationMap);
+      }
     } else {
       throw new RecordNotFoundException("Record not found for Kpi Category Id : " + kpiCategoryId);
     }

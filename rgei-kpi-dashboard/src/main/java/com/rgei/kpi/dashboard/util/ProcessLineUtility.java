@@ -364,7 +364,6 @@ public class ProcessLineUtility {
 				configurationValueList.add(new BigDecimal( processLineConfigurationEntity.getThreshold()));
 				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLineId(), configurationValueList);
 			}
-			
 		}
 		return processLineConfigurationMap;
 	}

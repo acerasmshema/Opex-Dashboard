@@ -19,6 +19,7 @@ import com.rgei.kpi.dashboard.constant.Quarter;
 import com.rgei.kpi.dashboard.entities.KpiEntity;
 import com.rgei.kpi.dashboard.entities.KpiProcessLineEntity;
 import com.rgei.kpi.dashboard.entities.KpiTypeEntity;
+import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.Kpi;
 import com.rgei.kpi.dashboard.response.model.KpiCategoryResponse;
@@ -394,10 +395,7 @@ public class KpiDashboardCategoryUtility {
 				|| Objects.isNull(threshold)) {
 			color = DashboardConstant.BLACK;
 		} else {
-			String[] target = threshold.split(",");
-			String[] targetColor = target[0].split(":");
-			String colorThreshold = targetColor[1];
-			Double colorValue = Double.parseDouble(colorThreshold);
+			Double colorValue = Double.parseDouble(threshold);
 			Double val = Double.parseDouble(value);
 			if (val > colorValue) {
 				color = DashboardConstant.RED;
@@ -447,6 +445,21 @@ public class KpiDashboardCategoryUtility {
 			}
 			return value1;
 		});
+	}
+	public static Map<String,BigDecimal> convertToApplicableConfguration(
+			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList) {
+		List<String> ProcessLineList=new ArrayList<String>();
+		Map<String,BigDecimal> processLineConfigurationMap=new HashMap<String,BigDecimal>();
+		processLineConfigurationEntityList.forEach(item->ProcessLineList.add(item.getProcessLine().getProcessLineCode()));
+		for(ProcessLineConfigurationEntity processLineConfigurationEntity:processLineConfigurationEntityList) {
+			if(!processLineConfigurationEntity.getIsDefault() ) {
+				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLine().getProcessLineCode(), new BigDecimal(processLineConfigurationEntity.getThreshold()));
+			}else if(processLineConfigurationEntity.getIsDefault() && !processLineConfigurationMap.containsKey(processLineConfigurationEntity.getProcessLine().getProcessLineCode())) {
+				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLine().getProcessLineCode(), new BigDecimal(processLineConfigurationEntity.getThreshold()));
+			}
+			
+		}
+		return processLineConfigurationMap;
 	}
 
 }

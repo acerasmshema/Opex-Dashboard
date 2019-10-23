@@ -31,6 +31,7 @@ import com.rgei.crosscutting.logger.RgeiLoggerFactory;
 import com.rgei.crosscutting.logger.service.CentralizedLogger;
 import com.rgei.kpi.dashboard.constant.DashboardConstant;
 import com.rgei.kpi.dashboard.entities.DailyKpiPulpEntity;
+import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.MillBuKpiCategoryEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineEntity;
 import com.rgei.kpi.dashboard.response.model.DailyKpiPulp;
@@ -68,7 +69,7 @@ public class DailyKpiPulpConverterRZ {
 	}
 
 	public static ProcessLineResponse prePareResponse(List<ProcessLineEntity> processLineEntites,
-			List<DailyKpiPulpEntity> dailyKpiPulpEntities, MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
+			List<DailyKpiPulpEntity> dailyKpiPulpEntities, MillBuKpiCategoryEntity millBuKpiCategoryEntity, KpiConfigurationEntity kpiConfigurationEntity) {
 		ProcessLineResponse response = new ProcessLineResponse();
 		Double allProcessSum = 0.0D;
 		if (!dailyKpiPulpEntities.isEmpty()) {
@@ -89,7 +90,7 @@ public class DailyKpiPulpConverterRZ {
 				response.setTotalAverageValue(Double.NaN);
 			}
 		}
-		return populateTarget(processLineEntites, response, millBuKpiCategoryEntity);
+		return populateTarget(processLineEntites, response, millBuKpiCategoryEntity,kpiConfigurationEntity);
 	}
 
 	private static void handleNaNCondition(DailyKpiPulpEntity entity) {
@@ -103,10 +104,10 @@ public class DailyKpiPulpConverterRZ {
 	}
 
 	private static ProcessLineResponse populateTarget(List<ProcessLineEntity> processLineEntites,
-			ProcessLineResponse response, MillBuKpiCategoryEntity millBuKpiCategoryEntity) {
-		response.setMinValue(BigDecimal.valueOf(millBuKpiCategoryEntity.getMinTarget()));
-		response.setMaxValue(BigDecimal.valueOf(millBuKpiCategoryEntity.getMaxTarget()));
-
+			ProcessLineResponse response, MillBuKpiCategoryEntity millBuKpiCategoryEntity, KpiConfigurationEntity kpiConfigurationEntity) {
+		response.setMinValue(BigDecimal.valueOf(kpiConfigurationEntity.getMinimum()));
+		response.setMaxValue(BigDecimal.valueOf(kpiConfigurationEntity.getMaximum()));
+		response.setThreshold(kpiConfigurationEntity.getThreshold());
 		response.setRange(millBuKpiCategoryEntity.getRangeValue());
 		response.setColorRange(millBuKpiCategoryEntity.getColorRange());
 		return response;
@@ -214,6 +215,7 @@ public class DailyKpiPulpConverterRZ {
 			dailyKpiPulpResponse.setMax(processLineObj.getMaxTarget().longValue());
 			dailyKpiPulpResponse.setRange(processLineObj.getRangeValue());
 			dailyKpiPulpResponse.setColorRange(processLineObj.getColorRange());
+			dailyKpiPulpResponse.setThreshold(processLineObj.getDailyLineTarget());
 			response.add(dailyKpiPulpResponse);
 		}
 		populateProcessLinesValues(dailyKpiPulp, response);

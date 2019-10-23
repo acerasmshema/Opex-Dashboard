@@ -25,6 +25,8 @@ public class ProcessLineResponse {
 	private String range;
 	private String colorRange;
 	private Double totalAverageValue;
+	private Double threshold;
+	
 	
 	public BigDecimal getMinValue() {
 		return minValue;
@@ -55,5 +57,12 @@ public class ProcessLineResponse {
 	}
 	public void setTotalAverageValue(Double totalAverageValue) {
 		this.totalAverageValue = totalAverageValue;
+	}
+	
+	public Double getThreshold() {
+		return threshold;
+	}
+	public void setThreshold(Double threshold) {
+		this.threshold = threshold;
 	}
 }
