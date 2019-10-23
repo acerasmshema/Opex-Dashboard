@@ -11,8 +11,13 @@ import { MasterData } from '../../shared/constant/MasterData';
 import { Table } from 'primeng/table';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';
 import { ValidationService } from 'src/app/shared/service/validation/validation.service';
-import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
-import { UserRoleService } from 'src/app/user-management/user-role/user-role.service';
+import { FormGroup } from '@angular/forms';
+import { UserRoleService } from 'src/app/setup/user-management/user-role/user-role.service';
+import { CommonService } from 'src/app/shared/service/common/common.service';
+import { ProductionTargetService } from 'src/app/setup/threshold-management/production-configuration/production-target/production-target.service';
+import { ConsumptionConfigurationService } from 'src/app/setup/threshold-management/consumption-configuration/consumption-configuration.service';
+import { ProcessLineTargetService } from 'src/app/setup/threshold-management/production-configuration/process-line-target/process-line-target.service';
+import { AnnualConfigService } from 'src/app/setup/threshold-management/production-configuration/annual-configuration/annual-configuration.service';
 
 @Component({
   selector: 'app-dialog',
@@ -31,7 +36,12 @@ export class DialogComponent implements OnInit, OnDestroy {
   public consumptionGridView: ConsumptionGridView;
   public maintenanceDays: MaintenanceDays;
   public userDetailForm: FormGroup;
+  public processLineThresholdForm: FormGroup;
+  public productionThresholdForm: FormGroup;
+  public annualTargetForm: FormGroup;
+  public consumptionThresholdForm: FormGroup;
   public userRoleForm: FormGroup;
+  public campaignForm: FormGroup;
   public dialogName: string;
 
   public annotationsCols = [
@@ -46,6 +56,11 @@ export class DialogComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private productionService: ProductionService,
     private userRoleService: UserRoleService,
+    private commonService: CommonService,
+    private productionTargetService: ProductionTargetService,
+    private annualConfigService: AnnualConfigService,
+    private consumptionConfigService: ConsumptionConfigurationService,
+    private processLineThresholdService: ProcessLineTargetService,
     private validationService: ValidationService) { }
 
   ngOnInit() {
@@ -85,15 +100,35 @@ export class DialogComponent implements OnInit, OnDestroy {
             this.userRoleForm.reset();
           this.userRoleForm = this.dialogService.createUserRoleForm(data.userRole);
         }
+        else if (dialogName === 'campaign') {
+          if (this.campaignForm !== undefined)
+            this.campaignForm.reset();
+          this.campaignForm = this.dialogService.createCampaignForm(data.campaign);
+        }
+        else if (dialogName === 'processLineThreshold') {
+          if (this.processLineThresholdForm !== undefined)
+            this.processLineThresholdForm.reset();
+          this.processLineThresholdForm = this.dialogService.createProcessLineThresholdForm(data.processLineThreshold);
+        }
+        else if (dialogName === 'productionThreshold') {
+          if (this.productionThresholdForm !== undefined)
+            this.productionThresholdForm.reset();
+          this.productionThresholdForm = this.dialogService.createProductionThresholdForm(data.productionThreshold);
+        }
+        else if (dialogName === 'annualTarget') {
+          if (this.annualTargetForm !== undefined)
+            this.annualTargetForm.reset();
+          this.annualTargetForm = this.dialogService.createAnnualTargetForm(data.annualTarget);
+        }
+        else if (dialogName === 'consumptionThreshold') {
+          if (this.consumptionThresholdForm !== undefined)
+            this.consumptionThresholdForm.reset();
+          this.consumptionThresholdForm = this.dialogService.createConsumptionThresholdForm(data.consumptionThreshold);
+        }
         this.dialogName = dialogName;
       },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -117,11 +152,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         this.annotationDialog.annotationsLines = annotationsLines;
       },
         (error: any) => {
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[1010] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -177,12 +208,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           }
         },
           (error: any) => {
-            this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
@@ -235,11 +261,7 @@ export class DialogComponent implements OnInit, OnDestroy {
         },
           (error: any) => {
             this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
@@ -255,12 +277,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.maintenanceDays.maintanenceDayModel = response;
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         }
       );
   }
@@ -282,12 +299,7 @@ export class DialogComponent implements OnInit, OnDestroy {
           this.statusService.projectTargetSubject.next();
         },
         (error: any) => {
-          this.statusService.spinnerSubject.next(false);
-          if (error.status == "0") {
-            alert(CommonMessage.ERROR.SERVER_ERROR)
-          } else {
-            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-          }
+          this.commonService.handleError(error);
         });
   }
 
@@ -321,16 +333,10 @@ export class DialogComponent implements OnInit, OnDestroy {
             }
           },
           (error: any) => {
-            this.statusService.spinnerSubject.next(false);
-            if (error.status == "0") {
-              alert(CommonMessage.ERROR.SERVER_ERROR)
-            } else {
-              this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-            }
+            this.commonService.handleError(error);
           });
     }
   }
-
 
   public onRowEditInit(rowData) {
     return rowData.remarks;
@@ -351,12 +357,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.messageService.add({ severity: "success", summary: '', detail: CommonMessage.SUCCESS.UPDATE_SUCCESS });
     },
       (error: any) => {
-        this.statusService.spinnerSubject.next(false);
-        if (error.status == "0") {
-          alert(CommonMessage.ERROR.SERVER_ERROR)
-        } else {
-          this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-        }
+        this.commonService.handleError(error);
       });
 
   }
@@ -470,9 +471,126 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  onProductionThresholdSubmit() {
+    if (this.productionThresholdForm.invalid)
+      return;
+
+    if (this.productionThresholdForm.controls.operation.value === "Add") {
+      this.productionTargetService.addProductionTarget(this.productionThresholdForm);
+    } else {
+      this.productionTargetService.updateProductionTarget(this.productionThresholdForm);
+    }
+  }
+
+  onAnnualTargetSubmit() {
+    if (this.annualTargetForm.invalid)
+      return;
+
+    if (this.annualTargetForm.controls.operation.value === "Add") {
+      this.annualConfigService.addAnnualTarget(this.annualTargetForm);
+    } else {
+      this.annualConfigService.updateAnnualTarget(this.annualTargetForm);
+    }
+  }
+
+  onProcessLineThresholdSubmit() {
+    if (this.processLineThresholdForm.invalid)
+      return;
+
+    if (this.processLineThresholdForm.controls.operation.value === "Add") {
+      this.processLineThresholdService.addProcessLineTarget(this.processLineThresholdForm);
+    } else {
+      this.processLineThresholdService.updateProcessLineTarget(this.processLineThresholdForm);
+    }
+  }
+
+  onConsumptionThresholdSubmit() {
+    if (this.consumptionThresholdForm.invalid)
+      return;
+
+    if (this.consumptionThresholdForm.controls.operation.value === "Add") {
+      this.consumptionConfigService.addConsumptionTarget(this.consumptionThresholdForm);
+    } else {
+      this.consumptionConfigService.updateConsumptionTarget(this.consumptionThresholdForm);
+    }
+  }
+
   onInputChange(value: any) {
     let formControl: any = this.userDetailForm.get(value);
     this.validationService.trimValue(formControl);
+  }
+
+  onKpiCategoryChange(value: string) {
+    this.dialogService.getKpiDetails(value, this.consumptionThresholdForm);
+  }
+
+  onKpiChange(value: string) {
+    this.dialogService.getKpiProcessLines(value, this.consumptionThresholdForm);
+    const kpiList: any = this.consumptionThresholdForm.controls.kpiList;
+    const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +value).value;
+    this.consumptionThresholdForm.controls.kpiId.setValue(kpi.kpiId);
+  }
+
+  onConfigCancel() {
+    this.campaignForm.controls.show.setValue(false);
+  }
+
+  onThresholdChange(value, type: string) {
+    if (type === "production") {
+      this.dialogService.changeGaugeThreshold(value, this.productionThresholdForm);
+    }
+    else if (type === "processLine") {
+      this.dialogService.changeGaugeThreshold(value, this.processLineThresholdForm);
+    }
+  }
+
+  onMaximumChange(value, type: string) {
+    if (type === "production") {
+      this.dialogService.changeGaugeMaximum(value, this.productionThresholdForm);
+    }
+    else if (type === "processLine") {
+      this.dialogService.changeGaugeMaximum(value, this.processLineThresholdForm);
+    }
+  }
+
+  onBusinessTypeChange(value: string, type: string) {
+    if (type === "production") {
+      const buTypeList: any = this.productionThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.productionThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "processLine") {
+      const buTypeList: any = this.processLineThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.processLineThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "consumption") {
+      const buTypeList: any = this.consumptionThresholdForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.consumptionThresholdForm.controls.buType.setValue(buType);
+    }
+    else if (type === "annual") {
+      const buTypeList: any = this.annualTargetForm.controls.buTypeList;
+      const buType = buTypeList.controls.find((buType) => buType.value.buTypeId === +value).value;
+      this.annualTargetForm.controls.buType.setValue(buType);
+    }
+  }
+
+  onYearChange(year: string) {
+    this.annualTargetForm.controls.year.setValue(year);
+  }
+
+  onProcessLineChange(value: string, type: string) {
+    if (type === "processLine") {
+      const processLineList: any = this.processLineThresholdForm.controls.processLineList;
+      const processLine = processLineList.controls.find((processLine) => processLine.value.processLineId === value).value;
+      this.processLineThresholdForm.controls.processLine.setValue(processLine);
+    }
+    else if (type === "consumption") {
+      const processLineList: any = this.consumptionThresholdForm.controls.processLineList;
+      const processLine = processLineList.controls.find((processLine) => processLine.value.processLineId === value).value;
+      this.consumptionThresholdForm.controls.processLine.setValue(processLine);
+    }
   }
 
   ngOnDestroy() {

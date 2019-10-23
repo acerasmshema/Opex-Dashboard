@@ -37,15 +37,14 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: "user",
-        pathMatch: 'full',
-        loadChildren: './user-management/user-management.module#UserManagementModule',
-        canActivate: [AuthGuard]
-      },
-      {
         path: "profile",
         pathMatch: 'full',
         loadChildren: './profile/profile.module#ProfileModule',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: "setup",
+        loadChildren: './setup/setup.module#SetupModule',
         canActivate: [AuthGuard]
       }
     ]

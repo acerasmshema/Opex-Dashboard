@@ -23,4 +23,63 @@ export class MasterData {
     { field: 'processLines', header: 'Process Line' },
     { field: 'description', header: 'Description' }
   ];
+
+  static userDetailCols = [
+    { field: 'username', header: 'Username' },
+    { field: 'firstName', header: 'First Name' },
+    { field: 'lastName', header: 'Last Name' },
+    { field: 'email', header: 'Email' },
+    { field: 'millRoleSortName', header: 'Role' },
+    { field: 'active', header: 'Active' }
+  ];
+
+  static processLineTargetCols = [
+    { field: 'buType', header: 'Business Type', showInputBox: true },
+    { field: 'processLine', header: 'Process Line', showInputBox: true },
+    { field: 'threshold', header: 'Threshold', showInputBox: true },
+    { field: 'maximum', header: 'Maximum', showInputBox: true },
+    { field: 'startDate', header: 'Start Date', showInputBox: true },
+    { field: 'endDate', header: 'End Date', showInputBox: true }
+  ];
+
+  static productionThresholdCols = [
+    { field: 'buType', header: 'Business Type', showInputBox: true },
+    { field: 'threshold', header: 'Threshold', showInputBox: true },
+    { field: 'maximum', header: 'Maximum', showInputBox: true },
+    { field: 'startDate', header: 'Start Date', showInputBox: true },
+    { field: 'endDate', header: 'End Date', showInputBox: true }
+  ];
+
+  static annualConfigCols = [
+    { field: 'buType', header: 'Business Type', showInputBox: true },
+    { field: 'year', header: 'Year', showInputBox: true },
+    { field: 'workingDays', header: 'Working Days', showInputBox: true },
+    { field: 'annualTarget', header: 'Annual Target', showInputBox: true }
+  ];
+
+  static consumptionThresholdCols = [
+    { field: 'processLine', header: 'Process Line', showInputBox: true },
+    { field: 'threshold', header: 'Threshold', showInputBox: true },
+    { field: 'startDate', header: 'Start Date', showInputBox: true },
+    { field: 'endDate', header: 'End Date', showInputBox: true }
+  ];
+
+  static campaignCols = [
+    { field: 'campaignName', header: 'Campaign Name', width: "20%", showEditButton: false },
+    { field: 'buType', header: 'Business Unit', width: "13%", showEditButton: false },
+    { field: 'date', header: 'Start Date - End Date', width: "18%", showEditButton: false },
+    { field: 'active', header: 'Active', width: "9%", showEditButton: false },
+    { field: 'productionConfig', header: 'Production Configuration', width: "16%", showEditButton: true },
+    { field: 'processLineConfig', header: 'Process Line Configuration', width: "16%", showEditButton: true },
+    { field: 'consumptionConfig', header: 'Consumption Configuration', width: "16%", showEditButton: true },
+    { field: 'action', header: 'Action', width: "8%", showEditButton: true },
+  ];
+
+  static userRoleCols = [
+    { field: 'roleName', header: 'Role Name', width: "25%" },
+    { field: 'description', header: 'Description', width: "54%" },
+    { field: 'active', header: 'Active', width: "7%" },
+  ];
+
+  static years = [2019, 2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040];
 }

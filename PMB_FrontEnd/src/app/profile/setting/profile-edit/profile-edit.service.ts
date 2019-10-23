@@ -9,8 +9,8 @@ import { MessageService } from 'primeng/primeng';
 @Injectable()
 export class ProfileEditService {
 
-    updateUserURL = API_URL.user_api_URLs.UPDATE_USER;
-    profileURL = API_URL.apiURLs.USER_PROFILE;
+    private updateUserURL = API_URL.user_api_URLs.UPDATE_USER;
+    private profileURL = API_URL.apiURLs.USER_PROFILE;
 
     constructor(private messageService: MessageService,
         private apiCallService: ApiCallService,
@@ -40,7 +40,7 @@ export class ProfileEditService {
                     this.messageService.add({ severity: "success", summary: '', detail: 'User details ' + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                 },
                 (error: any) => {
-                    console.log("Error")
+                    this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                 }
             );
     }

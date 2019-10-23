@@ -15,11 +15,11 @@ export class ConsumptionService {
 
   consumptionKpiUrl = API_URL.apiURLs.CONSUMPTION_API_URL;
   consumptionGridKpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
+  consumptionGridKpiUrl2 = API_URL.apiURLs.CONSUMPTION_GRID_API_URL_2;
 
   constructor(private apiCallService: ApiCallService,
     private statusService: StatusService,
-    private datePipe: DatePipe,
-    private messageService: MessageService) { }
+    private datePipe: DatePipe) { }
 
   public filterCharts(searchKpiData: SearchKpiData, kpiCategoryId: string) {
     searchKpiData.startDate = this.datePipe.transform(searchKpiData.date[0], 'yyyy-MM-dd');
@@ -126,7 +126,7 @@ export class ConsumptionService {
   }
 
   public getDataForGrid(data: object) {
-    return this.apiCallService.callGetAPIwithData(this.consumptionGridKpiUrl, data);
+    return this.apiCallService.callGetAPIwithData(this.consumptionGridKpiUrl2, data);
   }
 
   public getKpiGridData(kpiId: number, kpiName: string, kpiCategoryId: string) {

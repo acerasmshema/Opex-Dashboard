@@ -7,8 +7,7 @@ import { ApiCallService } from '../shared/service/api/api-call.service';
 import { ConsumptionRequest } from '../dashboard/consumption-dashboard/consumption-reqest';
 import { ConsumptionGridView } from '../dashboard/consumption-dashboard/consumption-grid-view';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { CommonService } from '../shared/service/common/common.service';
 
 @Injectable()
 export class BenchmarkService {
@@ -19,7 +18,7 @@ export class BenchmarkService {
     constructor(private apiCallService: ApiCallService,
         private statusService: StatusService,
         private datePipe: DatePipe,
-        private messageService: MessageService) { }
+        private commonService: CommonService) { }
 
 
     public filterCharts(searchKpiData: SearchKpiData) {
@@ -125,12 +124,7 @@ export class BenchmarkService {
                     this.statusService.spinnerSubject.next(false);
                 },
                     (error: any) => {
-                        this.statusService.spinnerSubject.next(false);
-                        if (error.status == "0") {
-                            alert(CommonMessage.ERROR.SERVER_ERROR)
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
-                        }
+                        this.commonService.handleError(error);
                     });
         }
     }

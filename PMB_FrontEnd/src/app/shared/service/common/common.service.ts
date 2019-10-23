@@ -5,8 +5,11 @@ import { API_URL } from '../../constant/API_URLs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SidebarForm } from 'src/app/core/sidebar/sidebar-form';
 import { Country } from '../../models/country.model';
-import { Department } from 'src/app/user-management/user-detail/department.model';
+import { Department } from 'src/app/setup/user-management/user-detail/department.model';
 import { Observable } from 'rxjs';
+import { CommonMessage } from '../../constant/Common-Message';
+import { MessageService } from 'primeng/primeng';
+import { ConsumptionConfig } from 'src/app/setup/threshold-management/consumption-configuration/consumption-config.model';
 
 @Injectable()
 export class CommonService {
@@ -18,6 +21,7 @@ export class CommonService {
     allUserRole = API_URL.user_api_URLs.ALL_USER_ROLE;
 
     constructor(private apiCallService: ApiCallService,
+        private messageService: MessageService,
         private statusService: StatusService) { }
 
     public getAllMills(): Observable<any> {
@@ -27,25 +31,48 @@ export class CommonService {
         return this.apiCallService.callGetAPIwithData(this.allMills, requestData);
     }
 
-    public getAllBuType(sidebarForm: SidebarForm) {
+    public getAllBuType(object: any) {
         if (this.statusService.common.buTypes.length === 0) {
             this.apiCallService.callGetAPIwithOutData(this.allBuTypes)
                 .subscribe(
                     (buTypes: any) => {
                         this.statusService.common.buTypes = buTypes;
-                        if (sidebarForm !== null) {
-                            sidebarForm.buisnessUnits = buTypes;
+                        if (object instanceof SidebarForm) {
+                            object.buisnessUnits = buTypes;
                             setTimeout(() => {
                                 this.setDropDownFont();
                             }, 100);
                         }
+                        else if (object instanceof ConsumptionConfig) {
+                            object.buTypes = buTypes;
+                        }
+                        else if (object instanceof FormGroup) {
+                            const buTypeList: any = object.controls.buTypeList;
+                            let buTypeControl = buTypeList.controls;
+                            buTypes.forEach(buType => {
+                                buTypeControl.push(new FormControl(buType));
+                            });
+                        }
                     },
                     (error: any) => {
-                        console.log("Error in Buisness unit")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     });
         }
-        else if (sidebarForm !== null) {
-            sidebarForm.buisnessUnits = this.statusService.common.buTypes;
+        else if (object !== null) {
+            if (object instanceof SidebarForm) {
+                object.buisnessUnits = this.statusService.common.buTypes;
+            }
+            else if (object instanceof ConsumptionConfig) {
+                object.buTypes = this.statusService.common.buTypes;
+            }
+            else if (object instanceof FormGroup) {
+                const buTypeList: any = object.controls.buTypeList;
+                let buTypeControl = buTypeList.controls;
+                const buTypes = this.statusService.common.buTypes;
+                buTypes.forEach(buType => {
+                    buTypeControl.push(new FormControl(buType));
+                });
+            }
         }
     }
 
@@ -64,7 +91,7 @@ export class CommonService {
                         this.statusService.common.countryList = countries;
                     },
                     (error: any) => {
-                        console.log("Error handling")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     }
                 );
         }
@@ -93,7 +120,7 @@ export class CommonService {
                         this.statusService.common.departmentList = departments;
                     },
                     (error: any) => {
-                        console.log("Error handling")
+                        this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
                     }
                 );
         }
@@ -133,5 +160,11 @@ export class CommonService {
                 element.style.fontSize = "12px";
             }
         }
+    }
+
+    handleError(error: any) {
+        this.statusService.spinnerSubject.next(false);
+        if (error.status !== 0)
+            this.messageService.add({ severity: 'error', summary: '', detail: CommonMessage.ERROR_CODES[error.error.status] });
     }
 }
