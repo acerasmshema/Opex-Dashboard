@@ -1,5 +1,5 @@
 export class ProcessLineThreshold {
-    processLineThresholdId: string;
+    processLineTargetThresholdId: string;
     operation: string;
     processLine: any;
     buType: any;
@@ -7,6 +7,9 @@ export class ProcessLineThreshold {
     maximum: number;
     startDate: string;
     endDate: string;
+    kpiId: number;
+    millId: string;
+    isDefault: boolean;
     createdBy: string;
     updatedBy: string;
 }

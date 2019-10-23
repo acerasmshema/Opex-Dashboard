@@ -43,7 +43,7 @@
           </div>
           <div *ngIf="consumptionThresholds.length  > 0" class="m-t-10">
             <p-table #consumption [columns]="cols" [value]="consumptionThresholds" [paginator]="true" [rows]="8"
-              dataKey="consumptionThresholdId" [resizableColumns]="true" [reorderableColumns]="true"
+              dataKey="processLineTargetThresholdId" [resizableColumns]="true" [reorderableColumns]="true"
               [scrollable]="false" sortField="buType" sortOrder="1">
               <ng-template pTemplate="caption">
                 <div class="text-right">
@@ -81,7 +81,7 @@
                     <div *ngIf="col.field !== 'processLine'" class="td-role">{{rowData[col.field]}}</div>
                   </td>
                   <td class="text-center">
-                    <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.consumptionThresholdId)"><i
+                    <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.processLineTargetThresholdId)"><i
                         class="fa fa-edit" pTooltip="Edit" tooltipPosition="top"></i></span>
                   </td>
                 </tr>

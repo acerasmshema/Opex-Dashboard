@@ -10,4 +10,5 @@ export class ProductionThreshold {
     endDate: string;
     createdBy: string;
     updatedBy: string;
+    isDefault: boolean;
 }

@@ -24,8 +24,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,31 +59,26 @@ public class ThresholdManagementController {
 
 	@Resource
 	ThresholdManagementService thresholdManagementService;
-
+	
 	@ApiOperation(value = "getProductionTargetsByMillId", notes = "Retrieve production target by Mill Id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/production_target")
-	public ResponseEntity<List<ProductionThreshold>> getProductionTargetsByMillId(
-			@RequestHeader(value = "millId") String millId) {
+	public ResponseEntity<List<ProductionThreshold>> getProductionTargetsByMillId(@RequestHeader(value = "millId") String millId) {
 		logger.info("Get all users by mill Id : " + millId);
-		List<ProductionThreshold> responseList = thresholdManagementService
-				.getProductionTargetsByMillId(CommonFunction.covertToInteger(millId));
+		List<ProductionThreshold> responseList = thresholdManagementService.getProductionTargetsByMillId(CommonFunction.covertToInteger(millId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
-
+	
 	@ApiOperation(value = "getProcessLineTargets", notes = "Retrieve process line target by Mill Id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/process_line_targets")
-	public ResponseEntity<List<ProcessLineTargetThreshold>> getProcessLineTargets(
-			@RequestHeader(value = "millId") String millId,
-			@RequestHeader(value = "buTypeId", required = false) String buTypeId,
-			@RequestHeader(value = "kpiId") String kpiId) {
+	public ResponseEntity<List<ProcessLineTargetThreshold >> getProcessLineTargets(@RequestHeader(value = "millId") String millId,@RequestHeader(value = "buTypeId", required = false) String buTypeId,@RequestHeader(value = "kpiId") String kpiId) {
 		logger.info("Retrieve process line target by Mill Id : " + millId);
-		List<ProcessLineTargetThreshold> responseList = thresholdManagementService.getProcessLineTargets(
-				CommonFunction.covertToInteger(millId), CommonFunction.covertToInteger(buTypeId),
-				CommonFunction.covertToInteger(kpiId));
+		List<ProcessLineTargetThreshold > responseList = thresholdManagementService.getProcessLineTargets(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buTypeId),CommonFunction.covertToInteger(kpiId));
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
+
+	
 
 	@ApiOperation(value = "updateProcessLineTarget", notes = "Update process line target")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
@@ -92,12 +92,12 @@ public class ThresholdManagementController {
 	@ApiOperation(value = "createProcessLineTargets", notes = "Create process line target by Mill Id", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PostMapping("/v1/create_process_line_targets")
-	public ResponseEntity<HttpStatus> createProcessLineTargets(
-			@RequestBody ProcessLineTargetThreshold processLineTargetThreshold) {
+	public ResponseEntity<HttpStatus> createProcessLineTargets(@RequestBody ProcessLineTargetThreshold processLineTargetThreshold ) {
 		logger.info("Create process line target by Mill : " + processLineTargetThreshold.getMillId());
 		thresholdManagementService.createProcessLineTargets(processLineTargetThreshold);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
 
 	@ApiOperation(value = "createProductionTarget", notes = "Create production target")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created") })
@@ -107,7 +107,7 @@ public class ThresholdManagementController {
 		thresholdManagementService.createProductionTarget(productionTarget);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-
+	
 	@ApiOperation(value = "updateProductionTarget", notes = "Update Production target")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@PutMapping("/v1/update_production_target")
@@ -117,7 +117,7 @@ public class ThresholdManagementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "getAnnualConfiguration", notes = "Retrieve annual configuration by Mill Id", response = MillBuKpiCategoryResponse.class)
+	@ApiOperation(value = "getAnnualConfiguration", notes = "Retrieve annual configuration by Mill Id", response = AnnualConfiguration.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK") })
 	@GetMapping("/v1/annual_configuration")
 	public ResponseEntity<List<AnnualConfiguration>> getAnnualConfiguration(@RequestHeader(value = "millId") String millId) {

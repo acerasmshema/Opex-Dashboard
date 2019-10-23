@@ -65,5 +65,10 @@ export class API_URL {
         UPDATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/update_production_target',
         CREATE_PRODUCTION_TARGET: API_URL.BASE_API_URL_v1 + '/create_production_target',
         PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/process_line_targets',
+        UPDATE_PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/update_process_line_target',
+        CREATE_PROCESS_LINE_TARGET: API_URL.BASE_API_URL_v1 + '/create_process_line_targets',
+        ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/annual_configuration',
+        UPDATE_ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/update_process_line_target',
+        CREATE_ANNUAL_CONFIG: API_URL.BASE_API_URL_v1 + '/create_annual_configuration',
     }
 }
