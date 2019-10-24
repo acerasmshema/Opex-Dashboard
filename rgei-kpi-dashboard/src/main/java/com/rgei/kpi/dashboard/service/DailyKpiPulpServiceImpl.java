@@ -49,7 +49,7 @@ public class DailyKpiPulpServiceImpl implements DailyKpiPulpService {
 
 	@Resource
 	MillBuKpiCategoryEntityRepository millBuKpiCategoryEntityRepository;
-
+	
 	@Override
 	public ProcessLineAnnualResponse getAnnualProcessLine(String millId, String buId, String kpiCategoryId,
 			String kpiId) {

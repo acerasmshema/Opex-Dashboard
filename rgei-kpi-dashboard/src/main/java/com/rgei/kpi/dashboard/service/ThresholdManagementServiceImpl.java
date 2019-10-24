@@ -27,8 +27,6 @@ import com.rgei.kpi.dashboard.util.ProcessLineConfigurationManagementUtility;
 import com.rgei.kpi.dashboard.util.ThresholdManagementUtility;
 import com.rgei.kpi.dashboard.util.Utility;
 
-
-
 @Service
 public class ThresholdManagementServiceImpl implements ThresholdManagementService {
 
@@ -39,10 +37,10 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 
 	@Resource
 	ProcessLineConfigurationRepository processLineConfigurationRepository;
-	
+
 	@Resource
 	AnnualConfigurationRepository annualConfigurationRepository;
-	
+
 	@Override
 	public List<ProductionThreshold> getProductionTargetsByMillId(Integer millId) {
 		logger.info("Get production threshold by mill id ", millId);
@@ -71,60 +69,84 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 		throw new RecordNotFoundException("Data not available in database for Mill Id : " + millId);
 	}
 
-
 	@Override
 	public void updateProcessLineTarget(ProcessLineTargetThreshold targetThreshold) {
-		logger.info("Update process line target for MillId : ",  targetThreshold.getMillId());
+		logger.info("Update process line target for MillId : ", targetThreshold.getMillId());
 		ProcessLineConfigurationEntity processLineConfigEntity = null;
-		if(targetThreshold != null && targetThreshold.getBuType() != null && targetThreshold.getProcessLine() != null) {
-			ProcessLineConfigurationEntity entity = processLineConfigurationRepository.findAllByMillIdAndBuTypeIdAndKpiIdAndProcessLineId(targetThreshold.getMillId(), targetThreshold.getBuType().getBuTypeId(), targetThreshold.getKpiId(), targetThreshold.getProcessLine().getProcessLineId());
-			if(entity != null) {
-				processLineConfigEntity = ProcessLineConfigurationManagementUtility.getProcessLineConfigurationEntity(targetThreshold, entity);
+		if (targetThreshold != null && targetThreshold.getBuType() != null
+				&& targetThreshold.getProcessLine() != null) {
+			validateExistingRecordForProcessLine(targetThreshold);
+			ProcessLineConfigurationEntity entity = processLineConfigurationRepository
+					.findByProcessLineConfigurationId(Integer.parseInt(targetThreshold.getProcessLineTargetThresholdId()));
+			if (entity != null) {
+				processLineConfigEntity = ProcessLineConfigurationManagementUtility
+						.getProcessLineConfigurationEntity(targetThreshold, entity);
 				try {
 					processLineConfigurationRepository.save(processLineConfigEntity);
-				}catch(RuntimeException e) {
-					throw new RecordNotUpdatedException("Error while updating process line target configuration :" + processLineConfigEntity);
+				} catch (RuntimeException e) {
+					throw new RecordNotUpdatedException(
+							"Error while updating process line target configuration :" + processLineConfigEntity);
 				}
-			}else {
-				throw new RecordNotFoundException("Process line target not found against target id  :" + targetThreshold.getProcessLineTargetThresholdId());
+			} else {
+				throw new RecordNotFoundException("Process line target not found against target id  :"
+						+ targetThreshold.getProcessLineTargetThresholdId());
 			}
-		}else {
-			throw new RecordNotFoundException("Process line target not found against target id  :" + targetThreshold.getProcessLineTargetThresholdId());
+		} else {
+			throw new RecordNotFoundException("Process line target not found against target id  :"
+					+ targetThreshold.getProcessLineTargetThresholdId());
 		}
 	}
 
 	public void createProcessLineTargets(ProcessLineTargetThreshold processLineTargetThreshold) {
 		logger.info("Inside service call to create new threshold data : " + processLineTargetThreshold);
-	
-		validateDateRange(processLineTargetThreshold);
-		ProcessLineConfigurationEntity processLineConfigurationEntity = ProcessLineConfigurationManagementUtility.convertToProcessLineEntity(processLineTargetThreshold);
+
+		validateExistingRecordForProcessLine(processLineTargetThreshold);
+		ProcessLineConfigurationEntity processLineConfigurationEntity = ProcessLineConfigurationManagementUtility
+				.convertToProcessLineEntity(processLineTargetThreshold);
 		try {
 			processLineConfigurationRepository.save(processLineConfigurationEntity);
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating:" + processLineConfigurationEntity);
 		}
-		
+
 	}
 
-	private void validateDateRange(ProcessLineTargetThreshold processLineTargetThreshold)  {
-		ProcessLineConfigurationEntity processLineConfigurationEntity=null;
-		if(processLineTargetThreshold!=null) {
-			 processLineConfigurationEntity=processLineConfigurationRepository.getAllBetweenDates(Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT),Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT),processLineTargetThreshold.getMillId(),processLineTargetThreshold.getBuType().getBuId(),processLineTargetThreshold.getKpiId(),processLineTargetThreshold.getProcessLine().getProcessLineId());
-			 if(processLineConfigurationEntity!=null)
-				 throw new DateRangeAlreadyExistException("Record Already exist for same date range");
+	private void validateExistingRecordForProcessLine(ProcessLineTargetThreshold processLineTargetThreshold) {
+		List<ProcessLineConfigurationEntity> processLineConfigurationEntity = null;
+		if (processLineTargetThreshold != null) {
+			processLineConfigurationEntity = processLineConfigurationRepository.getAllBetweenDates(
+					Utility.stringToDateConvertor(processLineTargetThreshold.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(processLineTargetThreshold.getEndDate(), DashboardConstant.FORMAT),
+					processLineTargetThreshold.getMillId(), processLineTargetThreshold.getKpiId(),
+					processLineTargetThreshold.getProcessLine().getProcessLineId());
+			if (processLineConfigurationEntity != null && processLineConfigurationEntity.size() > 0)
+				throw new DateRangeAlreadyExistException("Record Already exist for same date range");
 		}
-		
+
 	}
-	
+
+	private void validateExistingRecordForKpi(ProductionThreshold productionTarget) {
+		List<KpiConfigurationEntity> kpiConfigurationEntityList = null;
+		if (productionTarget != null) {
+			kpiConfigurationEntityList = processLineConfigurationRepository.fetchExistingRecordForKpi(
+					Utility.stringToDateConvertor(productionTarget.getStartDate(), DashboardConstant.FORMAT),
+					Utility.stringToDateConvertor(productionTarget.getEndDate(), DashboardConstant.FORMAT),
+					productionTarget.getMillId(), productionTarget.getKpiId());
+			if (kpiConfigurationEntityList != null && kpiConfigurationEntityList.size() > 0)
+				throw new DateRangeAlreadyExistException("Record Already exist for same date range");
+		}
+
+	}
 
 	public void createProductionTarget(ProductionThreshold productionTarget) {
 
 		logger.info("Inside service call to create production target for request : " + productionTarget);
 		try {
+			validateExistingRecordForKpi(productionTarget);
 			KpiConfigurationEntity configEntity = ThresholdManagementUtility
 					.createConfigurationEntity(productionTarget);
 			kpiConfigurationRepository.save(configEntity);
-			//ThresholdManagementUtility.validateDateRange(productionTarget);
+
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while creating production target  :" + productionTarget);
 		}
@@ -136,34 +158,38 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 		logger.info("Inside service call to update production target for request : " + productionTarget);
 		try {
 			if (productionTarget != null) {
-				KpiConfigurationEntity kpiConfigurationEntity = kpiConfigurationRepository.findByKpiConfigurationId(Integer.parseInt(productionTarget.getProductionThresholdId()));
+				validateExistingRecordForKpi(productionTarget);
+				KpiConfigurationEntity kpiConfigurationEntity = kpiConfigurationRepository
+						.findByKpiConfigurationId(Integer.parseInt(productionTarget.getProductionThresholdId()));
 				if (kpiConfigurationEntity != null) {
-					KpiConfigurationEntity updatedThreshold = ThresholdManagementUtility.updateFetchedUserEntity(productionTarget, kpiConfigurationEntity);
+					KpiConfigurationEntity updatedThreshold = ThresholdManagementUtility
+							.updateFetchedUserEntity(productionTarget, kpiConfigurationEntity);
 					kpiConfigurationRepository.save(updatedThreshold);
 				} else {
-					throw new RecordNotFoundException("User not found against configuration id  :" + productionTarget.getProductionThresholdId());
+					throw new RecordNotFoundException(
+							"User not found against configuration id  :" + productionTarget.getProductionThresholdId());
 				}
 			}
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while updating production target  :" + productionTarget);
 		}
-			
+
 	}
 
 	@Override
 	public List<AnnualConfiguration> getAnnualConfiguration(Integer millId) {
-		logger.info("Get annual configuration for MillId : ",  millId);
+		logger.info("Get annual configuration for MillId : ", millId);
 		List<AnnualConfigurationEntity> entities = annualConfigurationRepository.findByMillId(millId);
-		if(Objects.nonNull(entities) && !entities.isEmpty()) {
+		if (Objects.nonNull(entities) && !entities.isEmpty()) {
 			return ThresholdManagementUtility.fetchAnnualConfigurations(entities);
-		}else {
+		} else {
 			throw new RecordNotFoundException("Annual configuration not found for mill Id :" + millId);
 		}
 	}
 
 	@Override
 	public void createAnnualConfiguration(AnnualConfiguration annualConfiguration) {
-		logger.info("Create annual configuration for MillId : ",  annualConfiguration.getMillId());
+		logger.info("Create annual configuration for MillId : ", annualConfiguration.getMillId());
 		validateAnnualConfigurationYear(annualConfiguration);
 		try {
 			AnnualConfigurationEntity entity = ThresholdManagementUtility
@@ -177,32 +203,32 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	@Override
 	public void updateAnnualConfiguration(AnnualConfiguration annualConfiguration) {
 
-
 		logger.info("Inside service call to update annual configuration for request : " + annualConfiguration);
 		validateAnnualConfigurationYear(annualConfiguration);
 		try {
 			if (annualConfiguration != null) {
-				AnnualConfigurationEntity annualConfigurationEntity = annualConfigurationRepository.findByAnnualConfigurationId(annualConfiguration.getAnnualConfigurationId());
+				AnnualConfigurationEntity annualConfigurationEntity = annualConfigurationRepository
+						.findByAnnualConfigurationId(annualConfiguration.getAnnualConfigurationId());
 				if (annualConfigurationEntity != null) {
-					AnnualConfigurationEntity updatedConfig = ThresholdManagementUtility.updateFetchedAnnualConfigEntity(annualConfiguration, annualConfigurationEntity);
+					AnnualConfigurationEntity updatedConfig = ThresholdManagementUtility
+							.updateFetchedAnnualConfigEntity(annualConfiguration, annualConfigurationEntity);
 					annualConfigurationRepository.save(updatedConfig);
 				} else {
-					throw new RecordNotFoundException("User not found against configuration id  :" + annualConfiguration.getAnnualConfigurationId());
+					throw new RecordNotFoundException("User not found against configuration id  :"
+							+ annualConfiguration.getAnnualConfigurationId());
 				}
 			}
 		} catch (RuntimeException e) {
 			throw new RecordNotCreatedException("Error while updating annual configuration  :" + annualConfiguration);
 		}
-			
-			
+
 	}
 
 	private void validateAnnualConfigurationYear(AnnualConfiguration annualConfiguration) {
 
 		AnnualConfigurationEntity annualConfigurationEntity = null;
 		if (annualConfiguration != null) {
-			annualConfigurationEntity = annualConfigurationRepository
-					.findByYearAndIsDefault(annualConfiguration.getYear(), Boolean.FALSE);
+			annualConfigurationEntity = annualConfigurationRepository.findByYear(annualConfiguration.getYear());
 			if (annualConfigurationEntity != null && null == annualConfiguration.getAnnualConfigurationId()
 					&& !annualConfigurationEntity.getAnnualConfigurationId()
 							.equals(annualConfiguration.getAnnualConfigurationId()))
