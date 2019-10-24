@@ -30,7 +30,14 @@ export class ProductionTargetService {
         this.apiCallService.callGetAPIwithData(this.productionTargetUrl, requestData)
             .subscribe(
                 (productionThresholdList: ProductionThreshold[]) => {
-                    productionThresholds.push(...productionThresholdList);
+                    productionThresholdList.forEach(productionThreshold => {
+                        if (!productionThreshold.isDefault)
+                            productionThreshold.buTypeSortName = productionThreshold.buType.buTypeName;
+                        else
+                            productionThreshold.buTypeSortName = productionThreshold.buType.buTypeName + ' (default)';
+
+                        productionThresholds.push(productionThreshold);
+                    });
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -79,18 +86,23 @@ export class ProductionTargetService {
         productionThreshold.createdBy = productionThresholdForm.controls.createdBy.value;
         productionThreshold.updatedBy = this.statusService.common.userDetail.username;
         productionThreshold.isDefault = productionThresholdForm.controls.isDefault.value;
-        
-        try {
-            productionThreshold.startDate = this.datePipe.transform(productionThresholdForm.controls.startDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            productionThreshold.startDate = productionThresholdForm.controls.startDate.value;
-        }
-        try {
-            productionThreshold.endDate = this.datePipe.transform(productionThresholdForm.controls.endDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            productionThreshold.endDate = productionThresholdForm.controls.endDate.value;
-        }
+        let startDate = productionThresholdForm.controls.startDate.value.toString();
+        let endDate = productionThresholdForm.controls.endDate.value.toString();
 
+        if (startDate.length > 10) {
+            productionThreshold.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
+        }
+        else {
+            let tempStartDate = startDate.split("-");
+            productionThreshold.startDate = tempStartDate[2] + '-' + tempStartDate[1] + '-' + tempStartDate[0];
+        }
+        if (endDate.length > 10) {
+            productionThreshold.endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd');
+        }
+        else {
+            let tempEndDate = endDate.split("-");
+            productionThreshold.endDate = tempEndDate[2] + '-' + tempEndDate[1] + '-' + tempEndDate[0];
+        }
 
         this.apiCallService.callPutAPIwithData(this.updateProductionTargetUrl, productionThreshold).
             subscribe(

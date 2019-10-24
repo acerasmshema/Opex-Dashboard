@@ -39,7 +39,8 @@ export class CommonMessage {
         1009: 'Error during logout',
         1010: 'Record not found',
         1011: 'User is inactive. Please contact administrator',
-        1012: 'Users are associated with this role so cannot be deactivated. Users must be assigned a new role'
+        1012: 'Users are associated with this role so cannot be deactivated. Users must be assigned a new role',
+        1016: 'Date interval already exists',
     }
 
     static MESSAGE = {

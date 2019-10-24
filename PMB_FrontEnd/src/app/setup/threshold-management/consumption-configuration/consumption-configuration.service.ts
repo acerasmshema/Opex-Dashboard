@@ -34,7 +34,15 @@ export class ConsumptionConfigurationService {
         this.apiCallService.callGetAPIwithData(this.processLineTargetUrl, requestData)
             .subscribe(
                 (consumptionThresholdList: ConsumptionThreshold[]) => {
-                    consumptionThresholds.push(...consumptionThresholdList);
+                    consumptionThresholdList.forEach(consumptionThreshold => {
+                        if (!consumptionThreshold.isDefault)
+                            consumptionThreshold.processLineSortName = consumptionThreshold.processLine.processLineCode;
+                        else
+                            consumptionThreshold.processLineSortName = consumptionThreshold.processLine.processLineCode + ' (default)';
+
+                        consumptionThresholds.push(consumptionThreshold);
+                    });
+
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -112,17 +120,24 @@ export class ConsumptionConfigurationService {
         consumptionThreshold.createdBy = consumptionThresholdForm.controls.createdBy.value;
         consumptionThreshold.isDefault = consumptionThresholdForm.controls.isDefault.value;
         consumptionThreshold.updatedBy = this.statusService.common.userDetail.username;
-        try {
-            consumptionThreshold.startDate = this.datePipe.transform(consumptionThresholdForm.controls.startDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            consumptionThreshold.startDate = consumptionThresholdForm.controls.startDate.value;
-        }
-        try {
-            consumptionThreshold.endDate = this.datePipe.transform(consumptionThresholdForm.controls.endDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            consumptionThreshold.endDate = consumptionThresholdForm.controls.endDate.value;
-        }
+        
+        let startDate = consumptionThresholdForm.controls.startDate.value.toString();
+        let endDate = consumptionThresholdForm.controls.endDate.value.toString();
 
+        if (startDate.length > 10) {
+            consumptionThreshold.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
+        }
+        else {
+            let tempStartDate = startDate.split("-");
+            consumptionThreshold.startDate = tempStartDate[2] + '-' + tempStartDate[1] + '-' + tempStartDate[0];
+        }
+        if (endDate.length > 10) {
+            consumptionThreshold.endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd');
+        }
+        else {
+            let tempEndDate = endDate.split("-");
+            consumptionThreshold.endDate = tempEndDate[2] + '-' + tempEndDate[1] + '-' + tempEndDate[0];
+        }
 
         this.apiCallService.callPutAPIwithData(this.updateProcessLineTargetUrl, consumptionThreshold).
             subscribe(

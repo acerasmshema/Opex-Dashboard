@@ -34,8 +34,8 @@ export class MasterData {
   ];
 
   static processLineTargetCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: false },
-    { field: 'processLine', header: 'Process Line', showInputBox: false },
+    { field: 'buTypeSortName', header: 'Business Type', showInputBox: true },
+    { field: 'processLineSortName', header: 'Process Line', showInputBox: true },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'maximum', header: 'Maximum', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
@@ -43,7 +43,7 @@ export class MasterData {
   ];
 
   static productionThresholdCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: false },
+    { field: 'buTypeSortName', header: 'Business Type', showInputBox: true },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'maximum', header: 'Maximum', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
@@ -51,14 +51,14 @@ export class MasterData {
   ];
 
   static annualConfigCols = [
-    { field: 'buType', header: 'Business Type', showInputBox: false },
+    { field: 'buTypeSortName', header: 'Business Type', showInputBox: true },
     { field: 'year', header: 'Year', showInputBox: true },
     { field: 'workingDays', header: 'Working Days', showInputBox: true },
     { field: 'annualTarget', header: 'Annual Target', showInputBox: true }
   ];
 
   static consumptionThresholdCols = [
-    { field: 'processLine', header: 'Process Line', showInputBox: false },
+    { field: 'processLineSortName', header: 'Process Line', showInputBox: true },
     { field: 'threshold', header: 'Threshold', showInputBox: true },
     { field: 'startDate', header: 'Start Date', showInputBox: true },
     { field: 'endDate', header: 'End Date', showInputBox: true }

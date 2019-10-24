@@ -594,6 +594,21 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  onCancel(type: string) {
+    if (type === 'production') {
+      this.productionThresholdForm.controls.show.setValue(false);
+    }
+    else if (type === 'processLine') {
+      this.processLineThresholdForm.controls.show.setValue(false);
+    }
+    else if (type === 'annual') {
+      this.annualTargetForm.controls.show.setValue(false);
+    }
+    else if (type === 'consumption') {
+      this.consumptionThresholdForm.controls.show.setValue(false);
+    }
+  }
+
   ngOnDestroy() {
     this.dialogSubscription.unsubscribe();
     this.dialogName = null;

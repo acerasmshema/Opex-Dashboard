@@ -2,6 +2,7 @@ export class AnnualTarget {
     annualConfigurationId: string;
     operation: string;
     buType: any;
+    buTypeSortName: string;
     year: number;
     workingDays: number;
     annualTarget: string;

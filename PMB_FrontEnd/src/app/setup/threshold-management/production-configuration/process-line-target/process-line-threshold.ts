@@ -3,6 +3,8 @@ export class ProcessLineThreshold {
     operation: string;
     processLine: any;
     buType: any;
+    buTypeSortName: string;
+    processLineSortName: string;
     threshold: number;
     maximum: number;
     startDate: string;

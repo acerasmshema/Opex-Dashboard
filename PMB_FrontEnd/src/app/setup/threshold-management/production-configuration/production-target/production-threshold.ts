@@ -4,6 +4,7 @@ export class ProductionThreshold {
     millId: string;
     kpiId: number;
     buType: any;
+    buTypeSortName: string;
     threshold: number;
     maximum: number;
     startDate: string;

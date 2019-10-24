@@ -2,6 +2,7 @@ export class ConsumptionThreshold {
     processLineTargetThresholdId: string;
     kpiCategory: any;
     processLine: any;
+    processLineSortName: any;
     operation: string;
     buType: any;
     threshold: number;

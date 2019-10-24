@@ -6,8 +6,6 @@ import { DatePipe } from '@angular/common';
 import { ConsumptionRequest } from './consumption-reqest';
 import { StatusService } from '../../shared/service/status.service';
 import { ConsumptionGridView } from './consumption-grid-view';
-import { CommonMessage } from 'src/app/shared/constant/Common-Message';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })

@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit {
           this.showTabs = this.showTabs = this.statusService.common.selectedRole.showUserManagement;
         }
       });
-      if (this.showTabs && window.location.pathname === '/user') {
+      if (this.showTabs && window.location.pathname === '/setup/user') {
         this.statusService.refreshUserList.next(true);
       }
       else if (window.location.pathname === '/setup/threshold/production') {

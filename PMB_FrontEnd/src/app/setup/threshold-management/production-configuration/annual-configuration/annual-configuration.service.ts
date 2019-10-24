@@ -21,7 +21,7 @@ export class AnnualConfigService {
         private commonService: CommonService,
         private apiCallService: ApiCallService) { }
 
-    getAnnualTargets(annualTargets: AnnualTarget[]){
+    getAnnualTargets(annualTargets: AnnualTarget[]) {
         let requestData = {
             millId: this.statusService.common.selectedMill.millId
         };
@@ -29,7 +29,13 @@ export class AnnualConfigService {
         this.apiCallService.callGetAPIwithData(this.annualCongigUrl, requestData)
             .subscribe(
                 (annualConfigList: AnnualTarget[]) => {
-                    annualTargets.push(...annualConfigList);
+                    annualConfigList.forEach(annualConfig => {
+                        if (!annualConfig.isDefault)
+                            annualConfig.buTypeSortName = annualConfig.buType.buTypeName;
+                        else
+                            annualConfig.buTypeSortName = annualConfig.buType.buTypeName + ' (default)';
+                        annualTargets.push(annualConfig);
+                    });
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -49,7 +55,7 @@ export class AnnualConfigService {
         annualTarget.updatedBy = this.statusService.common.userDetail.username;
         annualTarget.millId = annualTargetForm.controls.millId.value;
         annualTarget.kpiId = annualTargetForm.controls.kpiId.value;
-      
+
         this.apiCallService.callAPIwithData(this.addAnnualConfigUrl, annualTarget).
             subscribe(
                 response => {
@@ -78,7 +84,7 @@ export class AnnualConfigService {
         annualTarget.updatedBy = this.statusService.common.userDetail.username;
         annualTarget.millId = annualTargetForm.controls.millId.value;
         annualTarget.kpiId = annualTargetForm.controls.kpiId.value;
-      
+
         this.apiCallService.callPutAPIwithData(this.updateAnnualConfigUrl, annualTarget).
             subscribe(
                 response => {

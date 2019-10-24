@@ -20,7 +20,8 @@
                 <label class="m-r-5">Kpi Category</label>
                 <select class="form-control setup-select col-8" (change)="onKpiCategoryChange($event.target.value)">
                   <option disabled value="" selected>Select Category</option>
-                  <option *ngFor="let kpiCategory of consumptionConfig.kpiCategories" [value]="kpiCategory.kpiCategoryId">
+                  <option *ngFor="let kpiCategory of consumptionConfig.kpiCategories"
+                    [value]="kpiCategory.kpiCategoryId">
                     {{kpiCategory.kpiCategoryName}}</option>
                 </select>
               </div>
@@ -76,13 +77,12 @@
                 <tr [pSelectableRow]="rowData">
                   <td class="td-role text-center">{{ri + 1}}</td>
                   <td *ngFor="let col of columns" class="text-center">
-                    <div *ngIf="col.field === 'processLine'" class="td-role">{{rowData[col.field].processLineCode}}
-                    </div>
-                    <div *ngIf="col.field !== 'processLine'" class="td-role">{{rowData[col.field]}}</div>
+                    <div class="td-role">{{rowData[col.field]}}</div>
                   </td>
                   <td class="text-center">
-                    <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.processLineTargetThresholdId)"><i
-                        class="fa fa-edit" pTooltip="Edit" tooltipPosition="top"></i></span>
+                    <span class="font-17" style="color: #3e3e3e;"
+                      (click)="onEdit(rowData.processLineTargetThresholdId)"><i class="fa fa-edit" pTooltip="Edit"
+                        tooltipPosition="top"></i></span>
                   </td>
                 </tr>
               </ng-template>

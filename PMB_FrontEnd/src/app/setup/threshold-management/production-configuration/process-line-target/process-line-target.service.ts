@@ -31,7 +31,15 @@ export class ProcessLineTargetService {
         this.apiCallService.callGetAPIwithData(this.processLineTargetUrl, requestData)
             .subscribe(
                 (processLineThresholdList: ProcessLineThreshold[]) => {
-                    processLineThresholds.push(...processLineThresholdList);
+                    processLineThresholdList.forEach(processLineThreshold => {
+                        if (!processLineThreshold.isDefault)
+                            processLineThreshold.buTypeSortName = processLineThreshold.buType.buTypeName;
+                        else
+                            processLineThreshold.buTypeSortName = processLineThreshold.buType.buTypeName + ' (default)';
+
+                        processLineThreshold.processLineSortName = processLineThreshold.processLine.processLineCode;
+                        processLineThresholds.push(processLineThreshold);
+                    });
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -82,16 +90,24 @@ export class ProcessLineTargetService {
         processLineThreshold.createdBy = processLineThresholdForm.controls.createdBy.value;
         processLineThreshold.isDefault = processLineThresholdForm.controls.isDefault.value;
         processLineThreshold.updatedBy = this.statusService.common.userDetail.username;
-        try {
-            processLineThreshold.startDate = this.datePipe.transform(processLineThresholdForm.controls.startDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            processLineThreshold.startDate = processLineThresholdForm.controls.startDate.value;
+        let startDate = processLineThresholdForm.controls.startDate.value.toString();
+        let endDate = processLineThresholdForm.controls.endDate.value.toString();
+
+        if (startDate.length > 10) {
+            processLineThreshold.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
         }
-        try {
-            processLineThreshold.endDate = this.datePipe.transform(processLineThresholdForm.controls.endDate.value, 'yyyy-MM-dd');
-        } catch (error) {
-            processLineThreshold.endDate = processLineThresholdForm.controls.endDate.value;
+        else {
+            let tempStartDate = startDate.split("-");
+            processLineThreshold.startDate = tempStartDate[2] + '-' + tempStartDate[1] + '-' + tempStartDate[0];
         }
+        if (endDate.length > 10) {
+            processLineThreshold.endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd');
+        }
+        else {
+            let tempEndDate = endDate.split("-");
+            processLineThreshold.endDate = tempEndDate[2] + '-' + tempEndDate[1] + '-' + tempEndDate[0];
+        }
+
 
 
         this.apiCallService.callPutAPIwithData(this.updateProcessLineTargetUrl, processLineThreshold).

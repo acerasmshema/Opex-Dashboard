@@ -551,7 +551,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Business Type</label>
                             <div class="form-group">
-                                <select class="form-control edit-input" style="height: 34px;"
+                                <select [disabled]="productionThresholdForm.controls.isDefault.value"
+                                    class="form-control edit-input" style="height: 34px;"
                                     (change)="onBusinessTypeChange($event.target.value, 'production')">
                                     <option class="edit-input"
                                         [selected]="productionThresholdForm.controls.buType.value === ''" value=""
@@ -579,7 +580,7 @@
                                         Threshold is required</span>
                                     <span *ngIf="productionThresholdForm.get('threshold').errors?.notMatch"
                                         class="error-text">
-                                        Threshold is not greater than maximum</span>
+                                        Threshold should be less then maximum target</span>
                                 </span>
                             </div>
                         </div>
@@ -598,7 +599,7 @@
                                         Maximum is required</span>
                                     <span *ngIf="productionThresholdForm.get('maximum').errors?.notMatch"
                                         class="error-text">
-                                        Maximum is not lesser than threshold</span>
+                                        Maximum target should be greater then threshold</span>
                                 </span>
                             </div>
                         </div>
@@ -607,8 +608,9 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Start Date</label>
                             <div class="form-group">
-                                <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    formControlName="startDate">
+                                <ejs-datepicker [enabled]="!productionThresholdForm.controls.isDefault.value"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    format='dd-MM-yyyy' formControlName="startDate">
                                 </ejs-datepicker>
                                 <span class="error-text"
                                     *ngIf="!productionThresholdForm.get('startDate').valid && productionThresholdForm.get('startDate').touched && productionThresholdForm.get('startDate').errors?.required">
@@ -621,8 +623,9 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">End Date</label>
                             <div class="form-group">
-                                <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
-                                    formControlName="endDate">
+                                <ejs-datepicker [enabled]="!productionThresholdForm.controls.isDefault.value"
+                                    class="form-control edit-input daterangepicker" style="height: 32px;"
+                                    format='dd-MM-yyyy' formControlName="endDate">
                                 </ejs-datepicker>
                                 <span class="error-text"
                                     *ngIf="!productionThresholdForm.get('endDate').valid && productionThresholdForm.get('endDate').touched && productionThresholdForm.get('endDate').errors?.required">
@@ -644,7 +647,7 @@
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!productionThresholdForm.valid"
                     class="btn btn-primary btn-md float-right">Submit</button>
-                <button type="button" (click)="onProductionThresholdCancel()"
+                <button type="button" (click)="onCancel('production')"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
@@ -666,7 +669,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Business Type</label>
                             <div class="form-group">
-                                <select class="form-control edit-input" style="height: 34px;"
+                                <select [disabled]="processLineThresholdForm.controls.isDefault.value"
+                                    class="form-control edit-input" style="height: 34px;"
                                     (change)="onBusinessTypeChange($event.target.value, 'processLine')">
                                     <option class="edit-input"
                                         [selected]="processLineThresholdForm.controls.buType.value === ''" value=""
@@ -684,7 +688,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Process Line</label>
                             <div class="form-group">
-                                <select class="form-control edit-input" style="height: 34px;"
+                                <select [disabled]="processLineThresholdForm.controls.isDefault.value"
+                                    class="form-control edit-input" style="height: 34px;"
                                     (change)="onProcessLineChange($event.target.value, 'processLine')">
                                     <option class="edit-input"
                                         [selected]="processLineThresholdForm.controls.processLine.value === ''"
@@ -713,7 +718,7 @@
                                         Threshold is required</span>
                                     <span *ngIf="processLineThresholdForm.get('threshold').errors?.notMatch"
                                         class="error-text">
-                                        Threshold is not greater than maximum</span>
+                                        Threshold should be less then maximum target</span>
                                 </span>
                             </div>
                         </div>
@@ -732,7 +737,7 @@
                                         Maximum is required</span>
                                     <span *ngIf="processLineThresholdForm.get('maximum').errors?.notMatch"
                                         class="error-text">
-                                        Maximum is not lesser than threshold</span>
+                                        Maximum target should be greater then threshold</span>
                                 </span>
                             </div>
                         </div>
@@ -741,7 +746,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">Start Date</label>
                             <div class="form-group">
-                                <ejs-datepicker formControlName="startDate"
+                                <ejs-datepicker [enabled]="!processLineThresholdForm.controls.isDefault.value"
+                                    format='dd-MM-yyyy' formControlName="startDate"
                                     class="form-control edit-input daterangepicker" style="height: 32px;">
                                 </ejs-datepicker>
                                 <span class="error-text"
@@ -755,7 +761,8 @@
                         <div class="col-sm-12">
                             <label class="edit-label required">End Date</label>
                             <div class="form-group">
-                                <ejs-datepicker formControlName="endDate"
+                                <ejs-datepicker [enabled]="!processLineThresholdForm.controls.isDefault.value"
+                                    format='dd-MM-yyyy' formControlName="endDate"
                                     class="form-control edit-input daterangepicker" style="height: 32px;">
                                 </ejs-datepicker>
                                 <span class="error-text"
@@ -779,7 +786,7 @@
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!processLineThresholdForm.valid"
                     class="btn btn-primary btn-md float-right">Submit</button>
-                <button type="button" (click)="onProcessLineThresholdCancel()"
+                <button type="button" (click)="onCancel('processLine')"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
@@ -798,8 +805,8 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onBusinessTypeChange($event.target.value, 'annual')">
+                        <select [disabled]="annualTargetForm.controls.isDefault.value" class="form-control edit-input"
+                            style="height: 34px;" (change)="onBusinessTypeChange($event.target.value, 'annual')">
                             <option class="edit-input" [selected]="annualTargetForm.controls.buType.value === ''"
                                 value="" disabled>Select Business Type</option>
                             <option *ngFor="let buType of annualTargetForm.controls.buTypeList.controls"
@@ -815,11 +822,11 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Year</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
-                            (change)="onYearChange($event.target.value)">
-                            <option class="edit-input" [selected]="annualTargetForm.controls.year.value === null" value=""
-                                disabled>Select Year</option>
-                            <option *ngFor="let year of annualTargetForm.controls.years.value"  
+                        <select [disabled]="annualTargetForm.controls.isDefault.value" class="form-control edit-input"
+                            style="height: 34px;" (change)="onYearChange($event.target.value)">
+                            <option class="edit-input" [selected]="annualTargetForm.controls.year.value === null"
+                                value="" disabled>Select Year</option>
+                            <option *ngFor="let year of annualTargetForm.controls.years.value"
                                 [selected]="(annualTargetForm.controls.year.value !== null && year === annualTargetForm.controls.year.value)"
                                 class="edit-input" [value]="year">
                                 {{year}}
@@ -834,16 +841,12 @@
                     <div class="form-group">
                         <input type="number" class="form-control edit-input" maxlength="50"
                             formControlName="workingDays">
-                        <span class="error-text"
-                            *ngIf="!annualTargetForm.get('workingDays').valid && annualTargetForm.get('workingDays').touched && annualTargetForm.get('workingDays').errors?.required">
-                            Working days is required
-                        </span>
                         <span
                             *ngIf="!annualTargetForm.get('workingDays').valid && annualTargetForm.get('workingDays').touched">
                             <span *ngIf="annualTargetForm.get('workingDays').errors?.required" class="error-text">
                                 Working days is required</span>
                             <span *ngIf="annualTargetForm.get('workingDays').errors?.notMatch" class="error-text">
-                                Working days is not greater 365</span>
+                                Working days should be less then 366</span>
                         </span>
                     </div>
                 </div>
@@ -864,7 +867,7 @@
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!annualTargetForm.valid"
                     class="btn btn-primary btn-md float-right">Submit</button>
-                <button type="button" (click)="onAnnualTargetCancel()"
+                <button type="button" (click)="onCancel('annual')"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>
@@ -884,7 +887,8 @@
                 <div class="col-sm-12">
                     <label class="edit-label required">Business Type</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
+                        <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
+                            class="form-control edit-input" style="height: 34px;"
                             (change)="onBusinessTypeChange($event.target.value, 'consumption')">
                             <option class="edit-input"
                                 [selected]="consumptionThresholdForm.controls.buType.value === ''" value="" disabled>
@@ -902,7 +906,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">KPI Category</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
+                        <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
+                            class="form-control edit-input" style="height: 34px;"
                             (change)="onKpiCategoryChange($event.target.value)">
                             <option class="edit-input" selected value="">Select KPI Category</option>
                             <option
@@ -917,7 +922,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">KPI</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
+                        <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
+                            class="form-control edit-input" style="height: 34px;"
                             (change)="onKpiChange($event.target.value)">
                             <option class="edit-input" selected value="">Select KPI</option>
                             <option *ngFor="let kpi of consumptionThresholdForm.controls.kpiList.controls"
@@ -933,7 +939,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Process Line</label>
                     <div class="form-group">
-                        <select class="form-control edit-input" style="height: 34px;"
+                        <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
+                            class="form-control edit-input" style="height: 34px;"
                             (change)="onProcessLineChange($event.target.value,'consumption')">
                             <option class="edit-input"
                                 [selected]="consumptionThresholdForm.controls.processLine.value === ''" value="">Select
@@ -962,7 +969,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Start Date</label>
                     <div class="form-group">
-                        <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
+                        <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
+                            format='dd-MM-yyyy' class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="startDate">
                         </ejs-datepicker>
                         <span class="error-text"
@@ -974,7 +982,8 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">End Date</label>
                     <div class="form-group">
-                        <ejs-datepicker class="form-control edit-input daterangepicker" style="height: 32px;"
+                        <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
+                            format='dd-MM-yyyy' class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="endDate">
                         </ejs-datepicker>
                         <span class="error-text"
@@ -987,7 +996,7 @@
             <div class="form-group m-t-30">
                 <button type="submit" [disabled]="!consumptionThresholdForm.valid"
                     class="btn btn-primary btn-md float-right">Submit</button>
-                <button type="button" (click)="onConsumptionThresholdCancel()"
+                <button type="button" (click)="onCancel('consumption')"
                     class="btn btn-danger btn-md float-right m-r-5">Cancel</button>
             </div>
         </p-dialog>

@@ -26,7 +26,7 @@ export class DialogService {
     findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
     userURL = API_URL.user_api_URLs.CREATE_USER;
     allProcessLines = API_URL.apiURLs.ALL_PROCESS_LINES_URL;
-    kpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL;
+    kpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL_2;
 
     constructor(private apiCallService: ApiCallService,
         private commonService: CommonService,
