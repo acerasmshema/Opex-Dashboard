@@ -310,7 +310,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		logger.info("Getting projected process line details");
 		Long tarDiff = calculateTargetDifference(millId, buId, kpiCategoryId, kpiId);
 		Integer targetDays = getTargetDays(millId, buId, kpiCategoryId);
-		Integer dailyTargetValue = getDailyTargetValues(millId, buId, kpiCategoryId);
+		Double dailyTargetValue = getDailyTargetValues(millId);
 		List<MaintenanceDaysResponse>  maintainanceDays = maintenanceDaysService.getMaintainanceDayDetails(millId, buId);
 		List<Date> dates = ProcessLineTargetUtil.processDateRange(targetDays);
 		Integer finalTargetDays = ProcessLineTargetUtil.processTargetDaysAsPerMaintainanceDays(dates, maintainanceDays, targetDays);
@@ -321,15 +321,12 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		String annualTarget = "";
 		//Fetch annualTarget value if annualTargetRequired is true
 		if(annualTargetRequired) {
-			/*
-			 * MillBuKpiCategoryEntity millBuKpiCategoryEntity =
-			 * millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId)
-			 * , CommonFunction.covertToInteger(kpiCategoryId),
-			 * CommonFunction.covertToInteger(buId));
-			 */
 			AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
 			if(annualConfigEntity != null) {
 				annualTarget = annualConfigEntity.getAnnualTarget();
+			}else {
+				AnnualConfigurationEntity annualDefaultConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.TRUE);
+				annualTarget = annualDefaultConfigEntity.getAnnualTarget();
 			}
 		}
 		
@@ -421,10 +418,17 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		return responseData;
 	}
 
-	private Integer getDailyTargetValues(String millId, String buId, String kpiCategoryId) {
+	private Double getDailyTargetValues(String millId) {
 		logger.info("Getting daily target data");
-		ProcessLineDailyTargetResponse  processLineDailyTargetResponse  = millBuKpiCategoryService.getProcessLineDailyTarget(millId, buId, kpiCategoryId);
-		return processLineDailyTargetResponse.getDailyTarget();
+		Double dailyTarget = null;
+		AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
+		if(annualConfigEntity != null) {
+			dailyTarget = annualConfigEntity.getThreshold();
+		}else {
+			AnnualConfigurationEntity annualDefaultConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.TRUE);
+			dailyTarget = annualDefaultConfigEntity.getThreshold();
+		}
+		return dailyTarget;
 	}
 
 	private Long calculateTargetDifference(String millId, String buId, String kpiCategoryId, String kpiId) {

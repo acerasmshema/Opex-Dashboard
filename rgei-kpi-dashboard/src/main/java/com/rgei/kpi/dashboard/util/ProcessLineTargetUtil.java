@@ -43,12 +43,12 @@ public class ProcessLineTargetUtil {
 		return null;
 	}
 
-	public static Long setProjectedTaeget(Long tarDiff, Integer targetDays, Integer dailyTargetValue) {
+	public static Long setProjectedTaeget(Long tarDiff, Integer targetDays, Double dailyTargetValue) {
 		Long newTarget = null;
 		if(tarDiff>0) {
 			Long val = targetDays.longValue();
 			newTarget = (tarDiff / val);
-			return (newTarget + dailyTargetValue);
+			return (newTarget + dailyTargetValue.longValue());
 		}
 		return newTarget;
 	}
