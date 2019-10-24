@@ -32,4 +32,5 @@ public class RgeiKpiDashboardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RgeiKpiDashboardApplication.class, args);
 	}
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 
 public interface ProcessLineConfigurationRepository extends JpaRepository<ProcessLineConfigurationEntity, Integer> {
@@ -18,8 +19,8 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 	ProcessLineConfigurationEntity findByProcessLineConfigurationId(Integer id);
 	
 	@Query(value = "from ProcessLineConfigurationEntity pl where (((pl.startDate <= :endDate) and (pl.endDate >= :startDate)) or ((pl.startDate <= :startDate) and (pl.endDate >= :startDate)))"
-			+ "and pl.millId=:millId and pl.buTypeId=:buId and pl.kpiId=:kpiId and pl.processLineId=:processLineId and pl.isDefault='false'")
-	ProcessLineConfigurationEntity getAllBetweenDates(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("buId") Integer buId,@Param("kpiId") Integer kpiId,
+			+ "and pl.millId=:millId and pl.kpiId=:kpiId and pl.processLineId=:processLineId and pl.isDefault='false'")
+	List<ProcessLineConfigurationEntity> getAllBetweenDates(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("kpiId") Integer kpiId,
 			@Param("processLineId") Integer processLineId);
 
 
@@ -31,6 +32,9 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 			+ " and pl.millId=:millId and pl.kpiId=:kpiId")
 	List<ProcessLineConfigurationEntity> fetchConfigurationDataForProcessLine(@Param("millId") Integer millId,@Param("kpiId") Integer kpiId,@Param("yDayDate") Date yDayDate);
 
+	@Query(value = "from KpiConfigurationEntity kc where (((kc.startDate <= :endDate) and (kc.endDate >= :startDate)) or ((kc.startDate <= :startDate) and (kc.endDate >= :startDate)))"
+			+ "and kc.millId=:millId and kc.kpiId=:kpiId and pl.isDefault='false'")
+	List<KpiConfigurationEntity> fetchExistingRecordForKpi(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("kpiId") Integer kpiId);
 
 	
 
