@@ -18,6 +18,4 @@ public interface AnnualConfigurationRepository extends JpaRepository<AnnualConfi
 
 	AnnualConfigurationEntity findByYear(Integer year);
 
-	public AnnualConfigurationEntity findByYearAndMillId(Integer year, Integer millId);
-
 }
