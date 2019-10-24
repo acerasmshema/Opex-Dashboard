@@ -266,23 +266,31 @@ private KpiType applyCurrentthreshold(KpiType kpi, Map<String, BigDecimal> proce
 
     // kimman: only handle if category is wood comsuption
     if (kpiCategoryId == 4) {
+    	List<Object[]> responseEntity1 = kpiCategoryDashboardRepository
+    	        .getYesterdayAllProcessLinesData2(KpiDashboardCategoryUtility.getYesterdayDate(), kpiCategoryId, millId);
       responseEntity2 = kpiCategoryDashboardRepository.getAverageWoodConsumptionYieldProcessLinesData(
           KpiDashboardCategoryUtility.getPrev7DaysDate(), KpiDashboardCategoryUtility.getYesterdayDate(), 4, millId);
+      responseEntity2.add(responseEntity1.get(0));
     }
 
     if (DashboardConstant.KRC.equals(millId.toString())) {
       // Kimman: Due to STUPID and inflexiblity of the system design
       //         JUST SOME HARDCODED handling, to support wood comsuption requirement
       //         TO BE RESTRUCTURED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    	if (kpiCategoryId != 4) {
       List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
-      kpiTypeForComsumption.add(kpiType.get(0));
+      for(KpiType kpi:kpiType) {
+      kpiTypeForComsumption.add(kpi);
+      }
       KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption, responseEntity);
-
+    	}
+      if (kpiCategoryId == 4) {
       List<KpiType> kpiTypeForComsumption2 = new ArrayList<KpiType>();
-      kpiTypeForComsumption2.add(kpiType.get(1));
-      kpiTypeForComsumption2.add(kpiType.get(2));
-      kpiTypeForComsumption2.add(kpiType.get(3));
+      for(KpiType kpi:kpiType) {
+          kpiTypeForComsumption2.add(kpi);
+          }
       KpiDashboardCategoryUtility.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption2, responseEntity2);
+      }
 
     } else if (DashboardConstant.RZ.equals(millId.toString())) {
       // Kimman: Due to STUPID and inflexiblity of the system design

@@ -83,6 +83,7 @@ public class KpiDashboardCategoryUtility {
 	public static void fetchConsumptionGridResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType,
 			List<Object[]> responseEntity) {
 		int i = 0;
+		try {
 		if (responseEntity.isEmpty()) {
 			for (; i < kpiType.size();) {
 				i = fetchDefaultTableResponse(resultList, kpiType, i);
@@ -104,7 +105,10 @@ public class KpiDashboardCategoryUtility {
 				resultList.add(val);
 			}
 		}
+	}catch(Exception e) {
+		e.printStackTrace();
 	}
+		}
 
 	private static int fetchDefaultTableResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType, int i) {
 		KpiCategoryResponse val = new KpiCategoryResponse();
