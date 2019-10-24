@@ -978,10 +978,10 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">Start Date</label>
                     <div class="form-group">
-                        <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
-                            [min]='consumptionThresholdForm.controls.endDate.value' format='dd-MM-yyyy'
-                            class="form-control edit-input daterangepicker" style="height: 32px;"
-                            formControlName="startDate">
+                        <ejs-datepicker formControlName="startDate"
+                            [enabled]="!consumptionThresholdForm.controls.isDefault.value"
+                            [max]='consumptionThresholdForm.controls.endDate.value' format='dd-MM-yyyy'
+                            class="form-control edit-input daterangepicker" style="height: 32px;">
                         </ejs-datepicker>
                         <span class="error-text"
                             *ngIf="!consumptionThresholdForm.get('startDate').valid && consumptionThresholdForm.get('startDate').touched && consumptionThresholdForm.get('startDate').errors?.required">
@@ -992,10 +992,10 @@
                 <div class="col-sm-6">
                     <label class="edit-label required">End Date</label>
                     <div class="form-group">
-                        <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
+                        <ejs-datepicker formControlName="endDate"
+                            [enabled]="!consumptionThresholdForm.controls.isDefault.value"
                             [min]='consumptionThresholdForm.controls.startDate.value' format='dd-MM-yyyy'
-                            class="form-control edit-input daterangepicker" style="height: 32px;"
-                            formControlName="endDate">
+                            class="form-control edit-input daterangepicker" style="height: 32px;">
                         </ejs-datepicker>
                         <span class="error-text"
                             *ngIf="!consumptionThresholdForm.get('endDate').valid && consumptionThresholdForm.get('endDate').touched && consumptionThresholdForm.get('endDate').errors?.required">

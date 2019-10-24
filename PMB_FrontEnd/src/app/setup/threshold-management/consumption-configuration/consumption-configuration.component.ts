@@ -45,7 +45,12 @@ export class ConsumptionConfigurationComponent implements OnInit, OnDestroy {
 
   onSearch() {
     this.consumptionThresholds = [];
-    this.consumptionConfigService.getConsumptionThresholds(this.consumptionThresholds, this.selectedBuTypeId, this.selectedKPIId);
+    this.consumptionConfig.buTypesError = (this.selectedBuTypeId !== undefined) ? false : true;
+    this.consumptionConfig.kpisError = (this.selectedKPIId !== undefined) ? false : true;
+    this.consumptionConfig.kpiCategoriesError = (this.selectedKPICategory !== undefined) ? false : true;
+    
+    if (!this.consumptionConfig.buTypesError && !this.consumptionConfig.kpisError && !this.consumptionConfig.kpiCategoriesError)
+      this.consumptionConfigService.getConsumptionThresholds(this.consumptionThresholds, this.selectedBuTypeId, this.selectedKPIId);
   }
 
   onCreate() {
@@ -54,6 +59,7 @@ export class ConsumptionConfigurationComponent implements OnInit, OnDestroy {
     consumptionThreshold.processLine = ''
     consumptionThreshold.threshold = null;
     consumptionThreshold.startDate = ''
+    consumptionThreshold.isDefault = false;
     consumptionThreshold.endDate = '';
     consumptionThreshold.millId = this.statusService.common.selectedMill.millId;
     consumptionThreshold.createdBy = this.statusService.common.userDetail.username;
@@ -83,14 +89,17 @@ export class ConsumptionConfigurationComponent implements OnInit, OnDestroy {
   onKpiCategoryChange(value: string) {
     this.selectedKPICategory = this.consumptionConfig.kpiCategories.find((kpiCategory) => kpiCategory.kpiCategoryId === +value)
     this.consumptionConfigService.getKpiDetails(value, this.consumptionConfig);
+    this.consumptionConfig.kpiCategoriesError = false;
   }
 
   onBuTypeChange(buTypeId: string) {
     this.selectedBuTypeId = buTypeId;
+    this.consumptionConfig.buTypesError = false;
   }
 
   onKPIChange(kpiId: string) {
     this.selectedKPIId = kpiId;
+    this.consumptionConfig.kpisError = false;
   }
 
   ngOnDestroy() {

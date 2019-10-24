@@ -21,7 +21,8 @@
                     <div *ngFor="let processLine of ct.series" [style.width.%]="100/ct.series.length"
                       class="chemicalcell text-center">
                       <h6> {{processLine.name}}</h6>
-                      <h6 [style.color]="processLine.color + '!important'">{{processLine.value}}</h6>
+                      <div [style.color]="(processLine.target > processLine.value) ? 'black' : 'red'">
+                        {{processLine.value}}</div>
                     </div>
                   </div>
                 </div>

@@ -8,7 +8,8 @@
             <div class="col-md-3">
               <div class="form-inline">
                 <label class="m-r-5">Business Type</label>
-                <select class="form-control setup-select col-8" (change)="onBuTypeChange($event.target.value)">
+                <select [style.border]="(consumptionConfig.buTypesError) ? '1px solid red' : ''"
+                  class="form-control setup-select col-8" (change)="onBuTypeChange($event.target.value)">
                   <option disabled value="" selected>Select Business Type</option>
                   <option *ngFor="let buType of consumptionConfig.buTypes" [value]="buType.buTypeId">
                     {{buType.buTypeName}}</option>
@@ -18,7 +19,8 @@
             <div class="col-md-3" style="margin-right: -30px;">
               <div class="form-inline">
                 <label class="m-r-5">Kpi Category</label>
-                <select class="form-control setup-select col-8" (change)="onKpiCategoryChange($event.target.value)">
+                <select [style.border]="(consumptionConfig.kpiCategoriesError) ? '1px solid red' : ''"
+                  class="form-control setup-select col-8" (change)="onKpiCategoryChange($event.target.value)">
                   <option disabled value="" selected>Select Category</option>
                   <option *ngFor="let kpiCategory of consumptionConfig.kpiCategories"
                     [value]="kpiCategory.kpiCategoryId">
@@ -29,7 +31,8 @@
             <div class="col-md-3" style="margin-right: -30px;">
               <div class="form-inline">
                 <label>KPI</label>
-                <select class="form-control setup-select col-9" (change)="onKPIChange($event.target.value)">
+                <select [style.border]="(consumptionConfig.kpisError) ? '1px solid red' : ''"
+                  class="form-control setup-select col-9" (change)="onKPIChange($event.target.value)">
                   <option selected value="" disabled>Select KPI</option>
                   <option *ngFor="let kpi of consumptionConfig.kpis" [value]="kpi.kpiId">{{kpi.kpiName}} ({{kpi.unit}})
                   </option>
