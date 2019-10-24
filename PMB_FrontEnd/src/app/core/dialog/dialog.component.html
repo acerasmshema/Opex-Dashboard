@@ -909,7 +909,9 @@
                         <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
                             class="form-control edit-input" style="height: 34px;"
                             (change)="onKpiCategoryChange($event.target.value)">
-                            <option class="edit-input" selected value="">Select KPI Category</option>
+                            <option class="edit-input"
+                                [selected]="consumptionThresholdForm.controls.kpiCategory.value === null" value=""
+                                disabled>Select KPI Category</option>
                             <option
                                 *ngFor="let kpiCategory of consumptionThresholdForm.controls.kpiCategoryList.controls"
                                 [selected]="(consumptionThresholdForm.controls.kpiCategory.value !== null && kpiCategory.value.kpiCategoryId === consumptionThresholdForm.controls.kpiCategory.value.kpiCategoryId)"
@@ -925,7 +927,9 @@
                         <select [disabled]="consumptionThresholdForm.controls.isDefault.value"
                             class="form-control edit-input" style="height: 34px;"
                             (change)="onKpiChange($event.target.value)">
-                            <option class="edit-input" selected value="">Select KPI</option>
+                            <option class="edit-input"
+                                [selected]="consumptionThresholdForm.controls.kpiId.value === null" disabled value="">
+                                Select KPI</option>
                             <option *ngFor="let kpi of consumptionThresholdForm.controls.kpiList.controls"
                                 [selected]="(consumptionThresholdForm.controls.kpiId.value !== null && kpi.value.kpiId === consumptionThresholdForm.controls.kpiId.value)"
                                 class="edit-input" [value]="kpi.value.kpiId">
@@ -943,11 +947,12 @@
                             class="form-control edit-input" style="height: 34px;"
                             (change)="onProcessLineChange($event.target.value,'consumption')">
                             <option class="edit-input"
-                                [selected]="consumptionThresholdForm.controls.processLine.value === ''" value="">Select
+                                [selected]="consumptionThresholdForm.controls.processLine.value === ''" disabled
+                                value="">Select
                                 Process Line</option>
                             <option
                                 *ngFor="let processLine of consumptionThresholdForm.controls.processLineList.controls"
-                                [selected]="(consumptionThresholdForm.controls.processLine.value !== null && processLine.value.processLineId === consumptionThresholdForm.controls.processLine.value.processLineId)"
+                                [selected]="(consumptionThresholdForm.controls.processLine.value !== null && +processLine.value.processLineId === consumptionThresholdForm.controls.processLine.value.processLineId)"
                                 class="edit-input" [value]="processLine.value.processLineId">
                                 {{processLine.value.name}}
                             </option>

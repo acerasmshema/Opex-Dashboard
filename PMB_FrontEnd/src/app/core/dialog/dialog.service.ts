@@ -227,7 +227,7 @@ export class DialogService {
             show: new FormControl(true),
             operation: new FormControl(consumptionThreshold.operation),
             processLineTargetThresholdId: new FormControl(consumptionThreshold.processLineTargetThresholdId),
-            kpiCategory: new FormControl(consumptionThreshold.kpiCategory, Validators.required),
+            kpiCategory: new FormControl(consumptionThreshold.kpiCategory),
             processLine: new FormControl(consumptionThreshold.processLine, Validators.required),
             buType: new FormControl(consumptionThreshold.buType, Validators.required),
             processLineList: this.formBuilder.array([]),
@@ -444,7 +444,6 @@ export class DialogService {
         kpi.series.forEach(processLine =>
             processLineControl.push(new FormControl(processLine))
         )
-        console.log(processLineControl)
     }
 
     changeGaugeThreshold(thresholdValue: number, form: FormGroup) {

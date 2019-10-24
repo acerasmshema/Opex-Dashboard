@@ -158,7 +158,7 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
 
         if (isAnnualTargetRequired) {
           let annualTarget = (+responseData['annualTarget'].toLocaleString('en-us') / 1000000);
-          this.annualChart.annualTarget = annualTarget.toFixed(1) + "M";
+          this.annualChart.annualTarget = annualTarget.toFixed(2) + "M";
         }
       },
         (error: any) => {
