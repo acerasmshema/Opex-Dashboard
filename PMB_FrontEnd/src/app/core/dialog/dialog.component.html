@@ -609,6 +609,7 @@
                             <label class="edit-label required">Start Date</label>
                             <div class="form-group">
                                 <ejs-datepicker [enabled]="!productionThresholdForm.controls.isDefault.value"
+                                    [max]='productionThresholdForm.controls.endDate.value'
                                     class="form-control edit-input daterangepicker" style="height: 32px;"
                                     format='dd-MM-yyyy' formControlName="startDate">
                                 </ejs-datepicker>
@@ -624,6 +625,7 @@
                             <label class="edit-label required">End Date</label>
                             <div class="form-group">
                                 <ejs-datepicker [enabled]="!productionThresholdForm.controls.isDefault.value"
+                                    [min]='productionThresholdForm.controls.startDate.value'
                                     class="form-control edit-input daterangepicker" style="height: 32px;"
                                     format='dd-MM-yyyy' formControlName="endDate">
                                 </ejs-datepicker>
@@ -747,8 +749,9 @@
                             <label class="edit-label required">Start Date</label>
                             <div class="form-group">
                                 <ejs-datepicker [enabled]="!processLineThresholdForm.controls.isDefault.value"
-                                    format='dd-MM-yyyy' formControlName="startDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;">
+                                    [max]='processLineThresholdForm.controls.endDate.value' format='dd-MM-yyyy'
+                                    formControlName="startDate" class="form-control edit-input daterangepicker"
+                                    style="height: 32px;">
                                 </ejs-datepicker>
                                 <span class="error-text"
                                     *ngIf="!processLineThresholdForm.get('startDate').valid && processLineThresholdForm.get('startDate').touched && processLineThresholdForm.get('startDate').errors?.required">
@@ -762,8 +765,9 @@
                             <label class="edit-label required">End Date</label>
                             <div class="form-group">
                                 <ejs-datepicker [enabled]="!processLineThresholdForm.controls.isDefault.value"
-                                    format='dd-MM-yyyy' formControlName="endDate"
-                                    class="form-control edit-input daterangepicker" style="height: 32px;">
+                                    [min]='processLineThresholdForm.controls.startDate.value' format='dd-MM-yyyy'
+                                    formControlName="endDate" class="form-control edit-input daterangepicker"
+                                    style="height: 32px;">
                                 </ejs-datepicker>
                                 <span class="error-text"
                                     *ngIf="!processLineThresholdForm.get('endDate').valid && processLineThresholdForm.get('endDate').touched && processLineThresholdForm.get('endDate').errors?.required">
@@ -975,7 +979,8 @@
                     <label class="edit-label required">Start Date</label>
                     <div class="form-group">
                         <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
-                            format='dd-MM-yyyy' class="form-control edit-input daterangepicker" style="height: 32px;"
+                            [min]='consumptionThresholdForm.controls.endDate.value' format='dd-MM-yyyy'
+                            class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="startDate">
                         </ejs-datepicker>
                         <span class="error-text"
@@ -988,7 +993,8 @@
                     <label class="edit-label required">End Date</label>
                     <div class="form-group">
                         <ejs-datepicker [enabled]="!consumptionThresholdForm.controls.isDefault.value"
-                            format='dd-MM-yyyy' class="form-control edit-input daterangepicker" style="height: 32px;"
+                            [min]='consumptionThresholdForm.controls.startDate.value' format='dd-MM-yyyy'
+                            class="form-control edit-input daterangepicker" style="height: 32px;"
                             formControlName="endDate">
                         </ejs-datepicker>
                         <span class="error-text"
