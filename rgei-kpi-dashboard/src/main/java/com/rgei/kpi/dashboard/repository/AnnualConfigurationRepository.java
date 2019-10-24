@@ -9,10 +9,15 @@ import com.rgei.kpi.dashboard.entities.AnnualConfigurationEntity;
 public interface AnnualConfigurationRepository extends JpaRepository<AnnualConfigurationEntity, Integer> {
 
 	public List<AnnualConfigurationEntity> findByMillId(Integer millId);
-	
+
 	AnnualConfigurationEntity findByAnnualConfigurationId(Integer annualConfigurationId);
 
 	AnnualConfigurationEntity findByYearAndIsDefault(Integer year, Boolean isDefault);
 
 	AnnualConfigurationEntity findByYearAndMillIdAndIsDefault(Integer year, Integer millId, Boolean val);
+
+	AnnualConfigurationEntity findByYear(Integer year);
+
+	public AnnualConfigurationEntity findByYearAndMillId(Integer year, Integer millId);
+
 }

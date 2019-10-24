@@ -239,7 +239,7 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 	public void updateAnnualConfiguration(AnnualConfiguration annualConfiguration) {
 
 		logger.info("Inside service call to update annual configuration for request : " + annualConfiguration);
-		//validateAnnualConfigurationYear(annualConfiguration);
+		validateAnnualConfigurationYearForUpdate(annualConfiguration);
 		try {
 			if (annualConfiguration != null) {
 				AnnualConfigurationEntity annualConfigurationEntity = annualConfigurationRepository
@@ -259,19 +259,30 @@ public class ThresholdManagementServiceImpl implements ThresholdManagementServic
 
 	}
 
-	/*
-	 * private void validateAnnualConfigurationYear(AnnualConfiguration
-	 * annualConfiguration) {
-	 * 
-	 * AnnualConfigurationEntity annualConfigurationEntity = null; if
-	 * (annualConfiguration != null) { annualConfigurationEntity =
-	 * annualConfigurationRepository.findByYear(annualConfiguration.getYear()); if
-	 * (annualConfigurationEntity != null && null ==
-	 * annualConfiguration.getAnnualConfigurationId() &&
-	 * !annualConfigurationEntity.getAnnualConfigurationId()
-	 * .equals(annualConfiguration.getAnnualConfigurationId())) throw new
-	 * DateRangeAlreadyExistException("Record Already exist for same year"); }
-	 * 
-	 * }
-	 */
+
+	private void validateAnnualConfigurationYear(AnnualConfiguration annualConfiguration) {
+
+		AnnualConfigurationEntity annualConfigurationEntity = null;
+		if (annualConfiguration != null) {
+			annualConfigurationEntity = annualConfigurationRepository.findByYearAndMillId(annualConfiguration.getYear(),
+					annualConfiguration.getMillId());
+			if (annualConfigurationEntity != null) {
+				throw new DateRangeAlreadyExistException("Record Already exist for same year");
+			}
+		}
+	}
+	
+	private void validateAnnualConfigurationYearForUpdate(AnnualConfiguration annualConfiguration) {
+
+		AnnualConfigurationEntity annualConfigurationEntity = null;
+		if (annualConfiguration != null) {
+			annualConfigurationEntity = annualConfigurationRepository.findByYearAndMillId(annualConfiguration.getYear(),
+					annualConfiguration.getMillId());
+			if (annualConfigurationEntity != null ) {
+				if (!annualConfiguration.getAnnualConfigurationId().equals(String.valueOf(annualConfigurationEntity.getAnnualConfigurationId()))) {
+					throw new DateRangeAlreadyExistException("Record Already exist for same date range");
+				}
+			}
+		}
+	}
 }
