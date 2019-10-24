@@ -68,9 +68,10 @@ public class ProcessLineConfigurationManagementUtility {
 		entity.setProcessLineConfigurationId(CommonFunction.covertToInteger(threshold.getProcessLineTargetThresholdId()));
 		entity.setMinimum(0.0);
 		entity.setMaximum(threshold.getMaximum());
+		entity.setThreshold(threshold.getThreshold());
 		entity.setUpdatedBy(threshold.getUpdatedBy());
-		entity.setStartDate(Utility.stringToDateConvertor(threshold.getStartDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
-		entity.setEndDate(Utility.stringToDateConvertor(threshold.getEndDate(), DashboardConstant.THRESHOLD_DATE_FORMAT));
+		entity.setStartDate(Utility.stringToDateConvertor(threshold.getStartDate(), DashboardConstant.FORMAT));
+		entity.setEndDate(Utility.stringToDateConvertor(threshold.getEndDate(), DashboardConstant.FORMAT));
 		entity.setUpdatedDate(new Date());
 		entity.setActive(Boolean.TRUE);
 		entity.setIsDefault(threshold.getIsDefault());

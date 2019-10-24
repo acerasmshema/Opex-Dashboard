@@ -282,7 +282,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		try {
 //			millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
 //					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-			annualConfigEntity = annualConfigurationRepository.findByYear(Calendar.getInstance().get(Calendar.YEAR));
+			annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
 			dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
 					DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
 					DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
@@ -299,7 +299,7 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public Long getAnnualTargetValue(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Getting annual target value for process lines");
-		AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYear(Calendar.getInstance().get(Calendar.YEAR));
+		AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
 		return ProcessLineExtendedUtil.calculateTargetValue(annualConfigEntity);
 	}
 	
@@ -321,10 +321,15 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		String annualTarget = "";
 		//Fetch annualTarget value if annualTargetRequired is true
 		if(annualTargetRequired) {
-			MillBuKpiCategoryEntity millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
-					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
-			if(millBuKpiCategoryEntity != null) {
-				annualTarget = millBuKpiCategoryEntity.getAnnualTarget();
+			/*
+			 * MillBuKpiCategoryEntity millBuKpiCategoryEntity =
+			 * millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId)
+			 * , CommonFunction.covertToInteger(kpiCategoryId),
+			 * CommonFunction.covertToInteger(buId));
+			 */
+			AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
+			if(annualConfigEntity != null) {
+				annualTarget = annualConfigEntity.getAnnualTarget();
 			}
 		}
 		

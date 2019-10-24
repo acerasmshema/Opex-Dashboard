@@ -190,7 +190,7 @@ public class GlobalExceptionHandler {
 	public HttpEntity<ApiErrorResponse> handleRecordExistException(DateRangeAlreadyExistException exception,
 			WebRequest request) {
 		ApiErrorResponse apiResponse = new ApiErrorResponse(StatusCodes.DATE_RANGE_ALREADY_EXIST, exception.getMessage(),
-				MessageConstant.RECORD_EXISTS, request.getDescription(false));
+				MessageConstant.DATE_RANGE_EXISTS, request.getDescription(false));
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
