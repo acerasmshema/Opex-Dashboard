@@ -33,7 +33,7 @@
                 <label>KPI</label>
                 <select [style.border]="(consumptionConfig.kpisError) ? '1px solid red' : ''"
                   class="form-control setup-select col-9" (change)="onKPIChange($event.target.value)">
-                  <option selected value="" disabled>Select KPI</option>
+                  <option [selected]="selectedKPIId === undefined" value="" disabled>Select KPI</option>
                   <option *ngFor="let kpi of consumptionConfig.kpis" [value]="kpi.kpiId">{{kpi.kpiName}} ({{kpi.unit}})
                   </option>
                 </select>

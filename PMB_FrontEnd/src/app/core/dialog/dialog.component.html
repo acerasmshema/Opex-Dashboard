@@ -822,12 +822,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div *ngIf="!annualTargetForm.controls.isDefault.value" class="row">
                 <div class="col-sm-12">
                     <label class="edit-label required">Year</label>
                     <div class="form-group">
-                        <select [disabled]="annualTargetForm.controls.isDefault.value" class="form-control edit-input"
-                            style="height: 34px;" (change)="onYearChange($event.target.value)">
+                        <select class="form-control edit-input" style="height: 34px;"
+                            (change)="onYearChange($event.target.value)">
                             <option class="edit-input" [selected]="annualTargetForm.controls.year.value === null"
                                 value="" disabled>Select Year</option>
                             <option *ngFor="let year of annualTargetForm.controls.years.value"

@@ -3,7 +3,7 @@ export class AnnualTarget {
     operation: string;
     buType: any;
     buTypeSortName: string;
-    year: number;
+    year: any;
     workingDays: number;
     annualTarget: string;
     createdBy: string;

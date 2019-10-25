@@ -48,7 +48,7 @@ export class ConsumptionConfigurationComponent implements OnInit, OnDestroy {
     this.consumptionConfig.buTypesError = (this.selectedBuTypeId !== undefined) ? false : true;
     this.consumptionConfig.kpisError = (this.selectedKPIId !== undefined) ? false : true;
     this.consumptionConfig.kpiCategoriesError = (this.selectedKPICategory !== undefined) ? false : true;
-    
+
     if (!this.consumptionConfig.buTypesError && !this.consumptionConfig.kpisError && !this.consumptionConfig.kpiCategoriesError)
       this.consumptionConfigService.getConsumptionThresholds(this.consumptionThresholds, this.selectedBuTypeId, this.selectedKPIId);
   }
@@ -90,6 +90,7 @@ export class ConsumptionConfigurationComponent implements OnInit, OnDestroy {
     this.selectedKPICategory = this.consumptionConfig.kpiCategories.find((kpiCategory) => kpiCategory.kpiCategoryId === +value)
     this.consumptionConfigService.getKpiDetails(value, this.consumptionConfig);
     this.consumptionConfig.kpiCategoriesError = false;
+    this.selectedKPIId = undefined;
   }
 
   onBuTypeChange(buTypeId: string) {

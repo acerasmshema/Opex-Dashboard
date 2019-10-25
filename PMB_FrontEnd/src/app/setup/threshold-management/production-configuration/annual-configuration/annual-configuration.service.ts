@@ -30,10 +30,14 @@ export class AnnualConfigService {
             .subscribe(
                 (annualConfigList: AnnualTarget[]) => {
                     annualConfigList.forEach(annualConfig => {
-                        if (!annualConfig.isDefault)
+                        if (!annualConfig.isDefault) {
                             annualConfig.buTypeSortName = annualConfig.buType.buTypeName;
-                        else
+                        }
+                        else {
                             annualConfig.buTypeSortName = annualConfig.buType.buTypeName + ' (default)';
+                            annualConfig.year = "Default";
+                        }
+                            
                         annualTargets.push(annualConfig);
                     });
                 },

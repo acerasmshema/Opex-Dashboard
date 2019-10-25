@@ -218,7 +218,7 @@ export class DialogService {
             });
 
         this.commonService.getAllBuType(annualTargetForm);
-        
+
         return annualTargetForm;
     }
 
@@ -423,6 +423,11 @@ export class DialogService {
                 (consumptionsTable: ConsumptionTable[]) => {
                     const kpiList: any = consumptionThresholdForm.controls.kpiList;
                     let kpiListControl = kpiList.controls;
+
+                    while (kpiListControl.length !== 0) {
+                        kpiList.removeAt(0)
+                    }
+
                     consumptionsTable.forEach(table => {
                         kpiListControl.push(new FormControl(table));
                     });
@@ -440,6 +445,10 @@ export class DialogService {
         const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +kpiId).value;
         const processLineList: any = form.controls.processLineList;
         let processLineControl = processLineList.controls;
+
+        while (processLineControl.length !== 0) {
+            processLineList.removeAt(0)
+        }
 
         kpi.series.forEach(processLine =>
             processLineControl.push(new FormControl(processLine))
