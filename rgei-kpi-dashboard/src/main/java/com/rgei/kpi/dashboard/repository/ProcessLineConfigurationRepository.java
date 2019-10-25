@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
 import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 
 public interface ProcessLineConfigurationRepository extends JpaRepository<ProcessLineConfigurationEntity, Integer> {
@@ -28,15 +27,8 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 
 	List<ProcessLineConfigurationEntity> findByMillIdAndKpiId(Integer millId, Integer kpiId);
 
-	@Query(value = "from ProcessLineConfigurationEntity pl where pl.startDate<:yDayDate and pl.endDate>:yDayDate"
+	@Query(value = "from ProcessLineConfigurationEntity pl where pl.startDate<=:yDayDate and pl.endDate>=:yDayDate"
 			+ " and pl.millId=:millId and pl.kpiId=:kpiId")
 	List<ProcessLineConfigurationEntity> fetchConfigurationDataForProcessLine(@Param("millId") Integer millId,@Param("kpiId") Integer kpiId,@Param("yDayDate") Date yDayDate);
-
-	@Query(value = "from KpiConfigurationEntity kc where (((kc.startDate <= :endDate) and (kc.endDate >= :startDate)) or ((kc.startDate <= :startDate) and (kc.endDate >= :startDate)))"
-			+ "and kc.millId=:millId and kc.kpiId=:kpiId and kc.isDefault='false'")
-	List<KpiConfigurationEntity> fetchExistingRecordForKpi(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("kpiId") Integer kpiId);
-
-	
-
 
 }

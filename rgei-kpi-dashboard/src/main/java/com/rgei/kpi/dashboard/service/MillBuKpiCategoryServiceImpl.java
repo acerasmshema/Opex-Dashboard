@@ -76,7 +76,7 @@ public class MillBuKpiCategoryServiceImpl implements MillBuKpiCategoryService {
 				CommonFunction.getYesterdayDate(), CommonFunction.covertToInteger(millId),
 				CommonFunction.covertToInteger(buId), CommonFunction.covertToInteger(kpiCategoryId),
 				CommonFunction.covertToInteger(kpiId));
-		List<KpiConfigurationEntity> kpiConfigurationEntityList=kpiConfigurationRepository.findKpiConfigurationForCurrentDate(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buId),CommonFunction.covertToInteger(kpiId),yesterdayDate);
+		List<KpiConfigurationEntity> kpiConfigurationEntityList=kpiConfigurationRepository.findKpiConfigurationForYesterdayDate(CommonFunction.covertToInteger(millId),CommonFunction.covertToInteger(buId),CommonFunction.covertToInteger(kpiId),yesterdayDate);
 		KpiConfigurationEntity kpiConfigurationEntity=findApplicableConfiguration(kpiConfigurationEntityList);
 		if (millBuKpiCategoryEntity == null) {
 			throw new RecordNotFoundException("No MillBuKpiCategory entity found for millId : " + millId);

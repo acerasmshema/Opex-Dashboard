@@ -12,5 +12,6 @@ public class MessageConstant {
 	public static final String INACTIVE_USER = "User is inactive";
 	public static final String RECORD_EXISTS = "Record already exists";
 	public static final String DATE_RANGE_EXISTS = "Date Range already exists";
+	public static final String YEAR_EXISTS = "Year already exists";
 	
 }

@@ -193,4 +193,12 @@ public class GlobalExceptionHandler {
 				MessageConstant.DATE_RANGE_EXISTS, request.getDescription(false));
 		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(YearAlreadyExistException.class)
+	public HttpEntity<ApiErrorResponse> handleRecordExistException(YearAlreadyExistException exception,
+			WebRequest request) {
+		ApiErrorResponse apiResponse = new ApiErrorResponse(StatusCodes.YEAR_ALREADY_EXIST, exception.getMessage(),
+				MessageConstant.YEAR_EXISTS, request.getDescription(false));
+		return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

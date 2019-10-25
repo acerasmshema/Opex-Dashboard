@@ -51,7 +51,6 @@ import com.rgei.kpi.dashboard.response.model.DailyKpiPulpResponse;
 import com.rgei.kpi.dashboard.response.model.DateRangeResponse;
 import com.rgei.kpi.dashboard.response.model.MaintenanceDaysResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLine;
-import com.rgei.kpi.dashboard.response.model.ProcessLineDailyTargetResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineProjectedResponse;
 import com.rgei.kpi.dashboard.response.model.ProcessLineRequest;
 import com.rgei.kpi.dashboard.response.model.ResponseObject;
@@ -283,13 +282,13 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 //			millBuKpiCategoryEntity = millBuKpiCategoryEntityRepository.find(CommonFunction.covertToInteger(millId),
 //					CommonFunction.covertToInteger(kpiCategoryId), CommonFunction.covertToInteger(buId));
 			annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
+			if(annualConfigEntity == null) {
+			annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.TRUE);
+			}
 			dailyKpiEntities = dailyKpiPulpEntityRepository.readForDateRange(DailyKpiPulpConverter.getCurrentYearDate(), DailyKpiPulpConverter.getYesterdayDate(),
 					DailyKpiPulpConverter.covertToInteger(millId), DailyKpiPulpConverter.covertToInteger(buId), 
 					DailyKpiPulpConverter.covertToInteger(kpiCategoryId), DailyKpiPulpConverter.covertToInteger(kpiId));
 		} catch (Exception e) {
-			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
-		}
-		if(annualConfigEntity == null) {
 			throw new RecordNotFoundException("Error while fetching records for annual target process line V2");
 		}
 		return ProcessLineExtendedUtil.generateTargetResponseV2(annualConfigEntity, dailyKpiEntities);
@@ -299,7 +298,12 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 	public Long getAnnualTargetValue(String millId, String buId, String kpiCategoryId,
 			String kpiId) {
 		logger.info("Getting annual target value for process lines");
-		AnnualConfigurationEntity annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
+		AnnualConfigurationEntity annualConfigEntity =null;
+		annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.FALSE);
+		if(annualConfigEntity == null) {
+		annualConfigEntity = annualConfigurationRepository.findByYearAndMillIdAndIsDefault(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(millId), Boolean.TRUE);
+		}
+		
 		return ProcessLineExtendedUtil.calculateTargetValue(annualConfigEntity);
 	}
 	

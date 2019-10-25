@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.rgei.kpi.dashboard.entities.KpiConfigurationEntity;
-import com.rgei.kpi.dashboard.entities.ProcessLineConfigurationEntity;
 
 public interface KpiConfigurationRepository extends JpaRepository<KpiConfigurationEntity, Integer> {
 
@@ -20,8 +19,12 @@ public interface KpiConfigurationRepository extends JpaRepository<KpiConfigurati
 			+ "and pl.millId=:millId and pl.buTypeId=:buTypeId and pl.kpiId=:kpiId and pl.isDefault='false'")
 	KpiConfigurationEntity getAllBetweenDates(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("buTypeId") Integer buTypeId,@Param("kpiId") Integer kpiId);
 
-	@Query(value = "from KpiConfigurationEntity kc where kc.startDate<:yDayDate and kc.endDate>:yDayDate"
+	@Query(value = "from KpiConfigurationEntity kc where kc.startDate<=:yDayDate and kc.endDate>=:yDayDate"
 			+ " and kc.millId=:millId and kc.kpiId=:kpiId and kc.buTypeId=:buTypeId")
-	List<KpiConfigurationEntity> findKpiConfigurationForCurrentDate(@Param("millId") Integer millId,@Param("buTypeId") Integer buTypeId,@Param("kpiId") Integer kpiId,@Param("yDayDate") Date yDayDate);
+	List<KpiConfigurationEntity> findKpiConfigurationForYesterdayDate(@Param("millId") Integer millId,@Param("buTypeId") Integer buTypeId,@Param("kpiId") Integer kpiId,@Param("yDayDate") Date yDayDate);
+	
+	@Query(value = "from KpiConfigurationEntity kc where (((kc.startDate <= :endDate) and (kc.endDate >= :startDate)) or ((kc.startDate <= :startDate) and (kc.endDate >= :startDate)))"
+			+ "and kc.millId=:millId and kc.kpiId=:kpiId and kc.isDefault='false'")
+	List<KpiConfigurationEntity> fetchExistingRecordForKpi(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("millId") Integer millId,@Param("kpiId") Integer kpiId);
 
 }
