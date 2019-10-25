@@ -35,7 +35,7 @@ export class ProcessLineTargetService {
                         if (!processLineThreshold.isDefault)
                             processLineThreshold.buTypeSortName = processLineThreshold.buType.buTypeName;
                         else
-                            processLineThreshold.buTypeSortName = processLineThreshold.buType.buTypeName + ' (default)';
+                            processLineThreshold.buTypeSortName = processLineThreshold.buType.buTypeName + ' (DEFAULT)';
 
                         processLineThreshold.processLineSortName = processLineThreshold.processLine.processLineCode;
                         processLineThresholds.push(processLineThreshold);
@@ -65,13 +65,20 @@ export class ProcessLineTargetService {
         this.apiCallService.callAPIwithData(this.addProcessLineTargetUrl, processLineThreshold).
             subscribe(
                 response => {
+                    processLineThresholdForm.controls.dateError.setValue('');
                     processLineThresholdForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Process Line Threshold " + CommonMessage.SUCCESS.ADD_SUCCESS });
                     this.statusService.refreshProcessLineTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        processLineThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }
@@ -108,18 +115,23 @@ export class ProcessLineTargetService {
             processLineThreshold.endDate = tempEndDate[2] + '-' + tempEndDate[1] + '-' + tempEndDate[0];
         }
 
-
-
         this.apiCallService.callPutAPIwithData(this.updateProcessLineTargetUrl, processLineThreshold).
             subscribe(
                 response => {
+                    processLineThresholdForm.controls.dateError.setValue('');
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Process Line Threshold " + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     processLineThresholdForm.controls.show.setValue(false);
                     this.statusService.refreshProcessLineTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        processLineThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }

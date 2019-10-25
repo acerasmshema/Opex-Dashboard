@@ -34,10 +34,9 @@ export class AnnualConfigService {
                             annualConfig.buTypeSortName = annualConfig.buType.buTypeName;
                         }
                         else {
-                            annualConfig.buTypeSortName = annualConfig.buType.buTypeName + ' (default)';
-                            annualConfig.year = "Default";
+                            annualConfig.buTypeSortName = annualConfig.buType.buTypeName + ' (DEFAULT)';
                         }
-                            
+
                         annualTargets.push(annualConfig);
                     });
                 },
@@ -63,13 +62,20 @@ export class AnnualConfigService {
         this.apiCallService.callAPIwithData(this.addAnnualConfigUrl, annualTarget).
             subscribe(
                 response => {
+                    annualTargetForm.controls.dateError.setValue('');
                     annualTargetForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Annual Target " + CommonMessage.SUCCESS.ADD_SUCCESS });
                     this.statusService.refreshAnnualTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        annualTargetForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }
@@ -98,7 +104,13 @@ export class AnnualConfigService {
                     this.statusService.refreshAnnualTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        annualTargetForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }

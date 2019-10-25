@@ -34,7 +34,7 @@ export class ProductionTargetService {
                         if (!productionThreshold.isDefault)
                             productionThreshold.buTypeSortName = productionThreshold.buType.buTypeName;
                         else
-                            productionThreshold.buTypeSortName = productionThreshold.buType.buTypeName + ' (default)';
+                            productionThreshold.buTypeSortName = productionThreshold.buType.buTypeName + ' (DEFAULT)';
 
                         productionThresholds.push(productionThreshold);
                     });
@@ -62,13 +62,20 @@ export class ProductionTargetService {
         this.apiCallService.callAPIwithData(this.addProductionTargetUrl, productionThreshold).
             subscribe(
                 response => {
+                    productionThresholdForm.controls.dateError.setValue('');
                     productionThresholdForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Production Threshold " + CommonMessage.SUCCESS.ADD_SUCCESS });
                     this.statusService.refreshProductionTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        productionThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }
@@ -107,13 +114,20 @@ export class ProductionTargetService {
         this.apiCallService.callPutAPIwithData(this.updateProductionTargetUrl, productionThreshold).
             subscribe(
                 response => {
+                    productionThresholdForm.controls.dateError.setValue('');
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Production Threshold " + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     productionThresholdForm.controls.show.setValue(false);
                     this.statusService.refreshProductionTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        productionThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }

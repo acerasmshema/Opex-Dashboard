@@ -14,6 +14,9 @@
                   <option *ngFor="let buType of consumptionConfig.buTypes" [value]="buType.buTypeId">
                     {{buType.buTypeName}}</option>
                 </select>
+                <span *ngIf="consumptionConfig.buTypesError" class="error-text" style="margin-left: 33%">
+                  Business type is required
+                </span>
               </div>
             </div>
             <div class="col-md-3" style="margin-right: -30px;">
@@ -26,6 +29,9 @@
                     [value]="kpiCategory.kpiCategoryId">
                     {{kpiCategory.kpiCategoryName}}</option>
                 </select>
+                <span *ngIf="consumptionConfig.kpiCategoriesError" class="error-text" style="margin-left: 30%">
+                  KPI category is required
+                </span>
               </div>
             </div>
             <div class="col-md-3" style="margin-right: -30px;">
@@ -37,6 +43,9 @@
                   <option *ngFor="let kpi of consumptionConfig.kpis" [value]="kpi.kpiId">{{kpi.kpiName}} ({{kpi.unit}})
                   </option>
                 </select>
+                <span *ngIf="consumptionConfig.kpisError" class="error-text" style="margin-left: 19%">
+                  KPI is required
+                </span>
               </div>
             </div>
             <div class="col-md-1">

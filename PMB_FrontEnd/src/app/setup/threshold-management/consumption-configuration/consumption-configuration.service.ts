@@ -38,11 +38,10 @@ export class ConsumptionConfigurationService {
                         if (!consumptionThreshold.isDefault)
                             consumptionThreshold.processLineSortName = consumptionThreshold.processLine.processLineCode;
                         else
-                            consumptionThreshold.processLineSortName = consumptionThreshold.processLine.processLineCode + ' (default)';
+                            consumptionThreshold.processLineSortName = consumptionThreshold.processLine.processLineCode + ' (DEFAULT)';
 
                         consumptionThresholds.push(consumptionThreshold);
                     });
-
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -96,13 +95,20 @@ export class ConsumptionConfigurationService {
         this.apiCallService.callAPIwithData(this.addProcessLineTargetUrl, consumptionThreshold).
             subscribe(
                 response => {
+                    consumptionThresholdForm.controls.dateError.setValue('');
                     consumptionThresholdForm.controls.show.setValue(false);
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Consumption Threshold " + CommonMessage.SUCCESS.ADD_SUCCESS });
                     this.statusService.refreshConsumtionTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        consumptionThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }
@@ -120,7 +126,7 @@ export class ConsumptionConfigurationService {
         consumptionThreshold.createdBy = consumptionThresholdForm.controls.createdBy.value;
         consumptionThreshold.isDefault = consumptionThresholdForm.controls.isDefault.value;
         consumptionThreshold.updatedBy = this.statusService.common.userDetail.username;
-        
+
         let startDate = consumptionThresholdForm.controls.startDate.value.toString();
         let endDate = consumptionThresholdForm.controls.endDate.value.toString();
 
@@ -142,13 +148,20 @@ export class ConsumptionConfigurationService {
         this.apiCallService.callPutAPIwithData(this.updateProcessLineTargetUrl, consumptionThreshold).
             subscribe(
                 response => {
+                    consumptionThresholdForm.controls.dateError.setValue('');
                     this.statusService.spinnerSubject.next(false);
                     this.messageService.add({ severity: "success", summary: '', detail: "Consumption Threshold " + CommonMessage.SUCCESS.UPDATE_SUCCESS });
                     consumptionThresholdForm.controls.show.setValue(false);
                     this.statusService.refreshConsumtionTargetList.next(true);
                 },
                 error => {
-                    this.commonService.handleError(error);
+                    if (error.error.status === "1016") {
+                        this.statusService.spinnerSubject.next(false);
+                        consumptionThresholdForm.controls.dateError.setValue(CommonMessage.ERROR_CODES[error.error.status]);
+                    }
+                    else {
+                        this.commonService.handleError(error);
+                    }
                 }
             );
     }

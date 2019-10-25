@@ -580,7 +580,7 @@
                                         Threshold is required</span>
                                     <span *ngIf="productionThresholdForm.get('threshold').errors?.notMatch"
                                         class="error-text">
-                                        Threshold should be less then maximum target</span>
+                                        Threshold should be less than maximum target</span>
                                 </span>
                             </div>
                         </div>
@@ -599,7 +599,7 @@
                                         Maximum is required</span>
                                     <span *ngIf="productionThresholdForm.get('maximum').errors?.notMatch"
                                         class="error-text">
-                                        Maximum target should be greater then threshold</span>
+                                        Maximum target should be greater than threshold</span>
                                 </span>
                             </div>
                         </div>
@@ -634,6 +634,11 @@
                                     End date is required
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                    <div *ngIf="productionThresholdForm.controls.dateError.value !== ''" class="row m-t-5">
+                        <div class="alert alert-danger m-l-20">
+                            <span>{{productionThresholdForm.controls.dateError.value}}</span>
                         </div>
                     </div>
                 </div>
@@ -720,7 +725,7 @@
                                         Threshold is required</span>
                                     <span *ngIf="processLineThresholdForm.get('threshold').errors?.notMatch"
                                         class="error-text">
-                                        Threshold should be less then maximum target</span>
+                                        Threshold should be less than maximum target</span>
                                 </span>
                             </div>
                         </div>
@@ -739,7 +744,7 @@
                                         Maximum is required</span>
                                     <span *ngIf="processLineThresholdForm.get('maximum').errors?.notMatch"
                                         class="error-text">
-                                        Maximum target should be greater then threshold</span>
+                                        Maximum target should be greater than threshold</span>
                                 </span>
                             </div>
                         </div>
@@ -773,6 +778,13 @@
                                     *ngIf="!processLineThresholdForm.get('endDate').valid && processLineThresholdForm.get('endDate').touched && processLineThresholdForm.get('endDate').errors?.required">
                                     End date is required
                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngIf="processLineThresholdForm.controls.dateError.value !== ''" class="row m-t-5">
+                            <div class="alert alert-danger m-l-20">
+                                <span>{{processLineThresholdForm.controls.dateError.value}}</span>
                             </div>
                         </div>
                     </div>
@@ -836,6 +848,9 @@
                                 {{year}}
                             </option>
                         </select>
+                        <span class="error-text" *ngIf="annualTargetForm.controls.dateError.value !== ''">
+                            {{annualTargetForm.controls.dateError.value}}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -850,7 +865,7 @@
                             <span *ngIf="annualTargetForm.get('workingDays').errors?.required" class="error-text">
                                 Working days is required</span>
                             <span *ngIf="annualTargetForm.get('workingDays').errors?.notMatch" class="error-text">
-                                Working days should be less then 366</span>
+                                Working days should be less than 366</span>
                         </span>
                     </div>
                 </div>
@@ -1001,6 +1016,13 @@
                             *ngIf="!consumptionThresholdForm.get('endDate').valid && consumptionThresholdForm.get('endDate').touched && consumptionThresholdForm.get('endDate').errors?.required">
                             End date is required
                         </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-10">
+                <div *ngIf="consumptionThresholdForm.controls.dateError.value !== ''" class="row m-t-5">
+                    <div class="alert alert-danger m-l-20">
+                        <span>{{consumptionThresholdForm.controls.dateError.value}}</span>
                     </div>
                 </div>
             </div>

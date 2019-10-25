@@ -33,7 +33,9 @@
       <tr [pSelectableRow]="rowData">
         <td class="td-role text-center">{{ri + 1}}</td>
         <td *ngFor="let col of columns" class="text-center">
-          <div class="td-role">{{rowData[col.field]}}</div>
+          <div *ngIf="!rowData.isDefault" class="td-role">{{rowData[col.field]}}</div>
+          <div *ngIf="rowData.isDefault && col.field === 'year'" class="td-role">Default</div>
+          <div *ngIf="rowData.isDefault && col.field !== 'year'" class="td-role">{{rowData[col.field]}}</div>
         </td>
         <td class="text-center">
           <span class="font-17" style="color: #3e3e3e;" (click)="onEdit(rowData.annualConfigurationId)"><i
