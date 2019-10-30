@@ -5,7 +5,7 @@ import { ConsumptionThreshold } from './consumption-threshold';
 import { ConsumptionConfig } from './consumption-config.model';
 import { API_URL } from 'src/app/shared/constant/API_URLs';
 import { CommonService } from 'src/app/shared/service/common/common.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MessageService } from 'primeng/primeng';
 import { CommonMessage } from 'src/app/shared/constant/Common-Message';

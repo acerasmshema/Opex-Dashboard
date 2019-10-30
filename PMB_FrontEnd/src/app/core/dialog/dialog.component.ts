@@ -525,7 +525,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   onKpiChange(value: string) {
-    this.dialogService.getKpiProcessLines(value, this.consumptionThresholdForm);
+    this.dialogService.getConsumptionProcessLines(value, this.consumptionThresholdForm);
     const kpiList: any = this.consumptionThresholdForm.controls.kpiList;
     const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +value).value;
     this.consumptionThresholdForm.controls.kpiId.setValue(kpi.kpiId);

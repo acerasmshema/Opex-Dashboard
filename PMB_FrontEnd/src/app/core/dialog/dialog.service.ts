@@ -26,7 +26,8 @@ export class DialogService {
     findAnnotation = API_URL.apiURLs.FIND_ANNOTATION_URL;
     userURL = API_URL.user_api_URLs.CREATE_USER;
     allProcessLines = API_URL.apiURLs.ALL_PROCESS_LINES_URL;
-    kpiUrl = API_URL.apiURLs.CONSUMPTION_GRID_API_URL_2;
+    kpiProcessLines = API_URL.apiURLs.PROCESS_LINES_BY_KPI_ID_URL;
+    kpiTypeUrl = API_URL.apiURLs.KPI_TYPE_URL;
 
     constructor(private apiCallService: ApiCallService,
         private commonService: CommonService,
@@ -250,7 +251,8 @@ export class DialogService {
         this.commonService.getAllBuType(consumptionThresholdForm);
         this.getKpiCategoryList(consumptionThresholdForm);
         if (consumptionThreshold.kpiCategory !== undefined) {
-            this.getKpiDetails(consumptionThreshold.kpiCategory.kpiCategoryId, consumptionThresholdForm, "" + consumptionThreshold.kpiId);
+            this.getKpiDetails(consumptionThreshold.kpiCategory.kpiCategoryId, consumptionThresholdForm);
+            this.getConsumptionProcessLines('' + consumptionThreshold.kpiId, consumptionThresholdForm);
         }
 
         return consumptionThresholdForm;
@@ -409,6 +411,31 @@ export class DialogService {
             );
     }
 
+    getConsumptionProcessLines(kpi: string, form: FormGroup) {
+        const requestData = {
+            kpiId: kpi,
+            millId: this.statusService.common.selectedMill.millId
+        }
+        this.apiCallService.callGetAPIwithData(this.kpiProcessLines, requestData).
+            subscribe(
+                (processLines: any) => {
+                    const processLineList: any = form.controls.processLineList;
+                    let processLineControl = processLineList.controls;
+
+                    while (processLineControl.length !== 0) {
+                        processLineList.removeAt(0)
+                    }
+                    processLines.forEach(processLine => {
+                        processLineControl.push(new FormControl(processLine));
+                    });
+                },
+                (error: any) => {
+                    this.commonService.handleError(error);
+                }
+            );
+    }
+
+
     getKpiCategoryList(form: FormGroup) {
         const kpiCategoryList: any = form.controls.kpiCategoryList;
         let kpiCategoryControl = kpiCategoryList.controls;
@@ -417,46 +444,28 @@ export class DialogService {
         kpiCategoryControl.push(new FormControl({ kpiCategoryId: 4, kpiCategoryName: "Wood" }));
     }
 
-    getKpiDetails(kpiCategoryId: string, consumptionThresholdForm: FormGroup, kpiId?: string) {
+    getKpiDetails(kpiCategoryId: string, consumptionThresholdForm: FormGroup) {
         const requestData = {
             kpiCategoryId: "" + kpiCategoryId,
-            millId: this.statusService.common.selectedMill.millId
         };
-        this.apiCallService.callGetAPIwithData(this.kpiUrl, requestData).
-            subscribe(
-                (consumptionsTable: ConsumptionTable[]) => {
+        this.apiCallService.callGetAPIwithData(this.kpiTypeUrl, requestData)
+            .subscribe(
+                (kpiTypes: any) => {
                     const kpiList: any = consumptionThresholdForm.controls.kpiList;
                     let kpiListControl = kpiList.controls;
 
                     while (kpiListControl.length !== 0) {
                         kpiList.removeAt(0)
                     }
-
-                    consumptionsTable.forEach(table => {
-                        kpiListControl.push(new FormControl(table));
+                    kpiTypes.forEach(kpiType => {
+                        kpiType.kpiList.forEach(kpi => {
+                            kpiListControl.push(new FormControl(kpi));
+                        });
                     });
-                    if (kpiId !== undefined)
-                        this.getKpiProcessLines(kpiId, consumptionThresholdForm);
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
-                }
-            );
-    }
-
-    getKpiProcessLines(kpiId: string, form: FormGroup) {
-        const kpiList: any = form.controls.kpiList;
-        const kpi = kpiList.controls.find((kpi) => kpi.value.kpiId === +kpiId).value;
-        const processLineList: any = form.controls.processLineList;
-        let processLineControl = processLineList.controls;
-
-        while (processLineControl.length !== 0) {
-            processLineList.removeAt(0)
-        }
-
-        kpi.series.forEach(processLine =>
-            processLineControl.push(new FormControl(processLine))
-        )
+                });
     }
 
     changeGaugeThreshold(thresholdValue: number, form: FormGroup) {

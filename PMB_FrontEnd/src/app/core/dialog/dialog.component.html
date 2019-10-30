@@ -973,7 +973,7 @@
                                 *ngFor="let processLine of consumptionThresholdForm.controls.processLineList.controls"
                                 [selected]="(consumptionThresholdForm.controls.processLine.value !== null && +processLine.value.processLineId === consumptionThresholdForm.controls.processLine.value.processLineId)"
                                 class="edit-input" [value]="processLine.value.processLineId">
-                                {{processLine.value.name}}
+                                {{processLine.value.processLineCode}}
                             </option>
                         </select>
                     </div>
