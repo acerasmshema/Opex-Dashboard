@@ -59,6 +59,7 @@ public class KPICategoryConverter {
 				processLinesResponse = new ProcessLinesResponse();
 				processLinesResponse.setProcessLineId(entity.getProcessLineId());
 				processLinesResponse.setProcessLineName(entity.getProcessLineCode());
+				processLinesResponse.setProcessLineCode(entity.getProcessLineCode());
 				processLines.add(processLinesResponse);
 			}
 		} else {
