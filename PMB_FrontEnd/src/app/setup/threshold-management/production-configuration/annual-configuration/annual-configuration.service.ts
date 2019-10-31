@@ -22,6 +22,8 @@ export class AnnualConfigService {
         private apiCallService: ApiCallService) { }
 
     getAnnualTargets(annualTargets: AnnualTarget[]) {
+        this.statusService.spinnerSubject.next(true);
+        
         let requestData = {
             millId: this.statusService.common.selectedMill.millId
         };
@@ -36,9 +38,10 @@ export class AnnualConfigService {
                         else {
                             annualConfig.buTypeSortName = annualConfig.buType.buTypeName + ' (DEFAULT)';
                         }
-
                         annualTargets.push(annualConfig);
                     });
+                    
+                    this.statusService.spinnerSubject.next(false); 
                 },
                 (error: any) => {
                     this.commonService.handleError(error);

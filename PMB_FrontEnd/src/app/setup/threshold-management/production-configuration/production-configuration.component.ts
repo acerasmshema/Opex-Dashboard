@@ -14,6 +14,7 @@ export class ProductionConfigurationComponent implements OnInit {
   ngOnInit() {
     document.getElementById("select_mill").style.display = "block";
 
+    this.statusService.selectedProductionTab = "PRODUCTION";
     let sidebarRequest = new SidebarRequest();
     sidebarRequest.showSidebar = false;
     sidebarRequest.type = "profile";

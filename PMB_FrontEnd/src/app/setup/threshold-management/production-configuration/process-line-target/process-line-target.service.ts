@@ -23,6 +23,7 @@ export class ProcessLineTargetService {
         private apiCallService: ApiCallService) { }
 
     getProcessLineThresholds(processLineThresholds: ProcessLineThreshold[]) {
+        this.statusService.spinnerSubject.next(true);
         let requestData = {
             millId: this.statusService.common.selectedMill.millId,
             kpiId: "1"
@@ -40,6 +41,7 @@ export class ProcessLineTargetService {
                         processLineThreshold.processLineSortName = processLineThreshold.processLine.processLineCode;
                         processLineThresholds.push(processLineThreshold);
                     });
+                    this.statusService.spinnerSubject.next(false); 
                 },
                 (error: any) => {
                     this.commonService.handleError(error);

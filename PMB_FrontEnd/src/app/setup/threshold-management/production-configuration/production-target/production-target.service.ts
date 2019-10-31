@@ -23,10 +23,11 @@ export class ProductionTargetService {
         private datePipe: DatePipe) { }
 
     getProductionThresholds(productionThresholds: ProductionThreshold[]) {
+        this.statusService.spinnerSubject.next(true);
+        
         let requestData = {
             millId: this.statusService.common.selectedMill.millId
         };
-
         this.apiCallService.callGetAPIwithData(this.productionTargetUrl, requestData)
             .subscribe(
                 (productionThresholdList: ProductionThreshold[]) => {
@@ -38,6 +39,7 @@ export class ProductionTargetService {
 
                         productionThresholds.push(productionThreshold);
                     });
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     this.commonService.handleError(error);

@@ -150,6 +150,10 @@ export class DialogService {
             });
         this.commonService.getAllBuType(processLineThresholdForm);
         this.getProcessLines(processLineThresholdForm);
+
+        if (processLineThreshold.operation === "Edit")
+            this.changeGaugeThreshold(processLineThreshold.threshold, processLineThresholdForm);
+
         return processLineThresholdForm;
     }
 

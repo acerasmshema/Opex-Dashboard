@@ -25,6 +25,8 @@ export class ConsumptionConfigurationService {
         private apiCallService: ApiCallService) { }
 
     getConsumptionThresholds(consumptionThresholds: ConsumptionThreshold[], byTypeId: string, kpiId: string) {
+        this.statusService.spinnerSubject.next(true);
+
         let requestData = {
             millId: this.statusService.common.selectedMill.millId,
             kpiId: kpiId,
@@ -42,6 +44,7 @@ export class ConsumptionConfigurationService {
 
                         consumptionThresholds.push(consumptionThreshold);
                     });
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
@@ -59,6 +62,7 @@ export class ConsumptionConfigurationService {
     }
 
     getKpiDetails(kpiCategoryId: string, consumptionConfig: ConsumptionConfig) {
+        this.statusService.spinnerSubject.next(true);
         const requestData = {
             "kpiCategoryId": kpiCategoryId
         };
@@ -71,6 +75,7 @@ export class ConsumptionConfigurationService {
                             consumptionConfig.kpis.push(kpi);
                         });
                     });
+                    this.statusService.spinnerSubject.next(false);
                 },
                 (error: any) => {
                     this.commonService.handleError(error);
