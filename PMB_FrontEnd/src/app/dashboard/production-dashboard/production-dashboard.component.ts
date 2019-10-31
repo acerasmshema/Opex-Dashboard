@@ -153,7 +153,9 @@ export class ProductionDashboardComponent implements OnInit, OnDestroy {
     this.projectedTargetSubscription = this.productionService.getProjectedTarget(requestData).
       subscribe((responseData: any) => {
         this.annualChart.targetDays = responseData['targetDays'];
+        if(responseData['projectedTarget']!=null){
         this.annualChart.targetValue = responseData['projectedTarget'].toLocaleString('en-us');
+        }
         this.annualChart.targetEndDate = responseData['endDate'];
 
         if (isAnnualTargetRequired) {

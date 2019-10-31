@@ -259,6 +259,7 @@ private KpiType applyCurrentthreshold(KpiType kpi, Map<String, BigDecimal> proce
     } else {
       throw new RecordNotFoundException("Record not found for Kpi Category Id : " + kpiCategoryId);
     }
+    
     List<Object[]> responseEntity = kpiCategoryDashboardRepository
         .getYesterdayAllProcessLinesData2(KpiDashboardCategoryUtility.getYesterdayDate(), kpiCategoryId, millId);
 
@@ -274,9 +275,6 @@ private KpiType applyCurrentthreshold(KpiType kpi, Map<String, BigDecimal> proce
     }
 
     if (DashboardConstant.KRC.equals(millId.toString())) {
-      // Kimman: Due to STUPID and inflexiblity of the system design
-      //         JUST SOME HARDCODED handling, to support wood comsuption requirement
-      //         TO BE RESTRUCTURED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     	if (kpiCategoryId != 4) {
       List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
       for(KpiType kpi:kpiType) {
@@ -293,18 +291,22 @@ private KpiType applyCurrentthreshold(KpiType kpi, Map<String, BigDecimal> proce
       }
 
     } else if (DashboardConstant.RZ.equals(millId.toString())) {
-      // Kimman: Due to STUPID and inflexiblity of the system design
-      //         JUST SOME HARDCODED handling, to support wood comsuption requirement
-      //         TO BE RESTRUCTURED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
-      kpiTypeForComsumption.add(kpiType.get(0));
-      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption, responseEntity);
-
-      List<KpiType> kpiTypeForComsumption2 = new ArrayList<KpiType>();
-      kpiTypeForComsumption2.add(kpiType.get(1));
-      kpiTypeForComsumption2.add(kpiType.get(2));
-      kpiTypeForComsumption2.add(kpiType.get(3));
-      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption2, responseEntity2);
+    	
+    	if (kpiCategoryId != 4) {
+    	      List<KpiType> kpiTypeForComsumption = new ArrayList<KpiType>();
+    	      for(KpiType kpi:kpiType) {
+    	      kpiTypeForComsumption.add(kpi);
+    	      }
+    	      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption, responseEntity);
+    	    	}
+    	      if (kpiCategoryId == 4) {
+    	      List<KpiType> kpiTypeForComsumption2 = new ArrayList<KpiType>();
+    	      for(KpiType kpi:kpiType) {
+    	          kpiTypeForComsumption2.add(kpi);
+    	          }
+    	      KpiDashboardCategoryUtilityRZ.fetchConsumptionGridResponse(resultList, kpiTypeForComsumption2, responseEntity2);
+    	      }
+    	  
     }
     return resultList;
   }

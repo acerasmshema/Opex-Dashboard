@@ -589,7 +589,7 @@ export class DialogComponent implements OnInit, OnDestroy {
     else if (type === "consumption") {
       const processLineList: any = this.consumptionThresholdForm.controls.processLineList;
       const processLine = processLineList.controls.find((processLine) => processLine.value.processLineId ===
-        value).value;
+        +value).value;
       this.consumptionThresholdForm.controls.processLine.setValue(processLine);
     }
   }

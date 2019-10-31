@@ -74,6 +74,7 @@ public class KpiDashboardCategoryUtilityRZ {
 	public static void fetchConsumptionGridResponse(List<KpiCategoryResponse> resultList, List<KpiType> kpiType,
 			List<Object[]> responseEntity) {
 		logger.info("Fetch consumption grid response RZ");
+		try{
 		int i = 0;
 		if (responseEntity.isEmpty()) {
 			for (; i < kpiType.size();) {
@@ -95,6 +96,8 @@ public class KpiDashboardCategoryUtilityRZ {
 				i++;
 				resultList.add(val);
 			}
+		}}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -291,7 +294,6 @@ public class KpiDashboardCategoryUtilityRZ {
 				|| Objects.isNull(threshold)) {
 			color = DashboardConstant.BLACK;
 		} else {
-			
 			Double colorValue = Double.parseDouble(threshold);
 			Double val = Double.parseDouble(value);
 			if (val > colorValue) {
