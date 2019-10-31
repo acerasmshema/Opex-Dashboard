@@ -17,6 +17,7 @@
 package com.rgei.kpi.dashboard.response.model;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class ProcessLine {
 	
@@ -37,6 +38,8 @@ private Integer processLineId;
 	private String colorRange;
 	
 	private BigDecimal dailyLineTarget;
+	
+	private Map<String, BigDecimal> thresholdMap;
 
 	public Integer getProcessLineId() {
 		return processLineId;
@@ -108,5 +111,13 @@ private Integer processLineId;
 
 	public void setDailyLineTarget(BigDecimal dailyLineTarget) {
 		this.dailyLineTarget = dailyLineTarget;
+	}
+
+	public Map<String, BigDecimal> getThresholdMap() {
+		return thresholdMap;
+	}
+
+	public void setThresholdMap(Map<String, BigDecimal> thresholdMap) {
+		this.thresholdMap = thresholdMap;
 	}
 }

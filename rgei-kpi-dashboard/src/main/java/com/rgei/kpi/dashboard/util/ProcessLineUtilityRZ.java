@@ -211,15 +211,15 @@ public class ProcessLineUtilityRZ {
 		
 		dailyKpiPulpEntities.forEach(item -> {
 			processLine1.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(0).getDailyLineTarget().doubleValue())));
+					(processLine.get(0).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine2.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(1).getDailyLineTarget().doubleValue())));
+					(processLine.get(1).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine3.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(2).getDailyLineTarget().doubleValue())));
+					(processLine.get(2).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine4.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(3).getDailyLineTarget().doubleValue())));
+					(processLine.get(3).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine5.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT), 
-					(processLine.get(4).getDailyLineTarget().doubleValue())));
+					(processLine.get(4).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 		});
 	}
 
