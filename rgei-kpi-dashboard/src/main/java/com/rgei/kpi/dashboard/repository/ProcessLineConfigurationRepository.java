@@ -30,5 +30,9 @@ public interface ProcessLineConfigurationRepository extends JpaRepository<Proces
 	@Query(value = "from ProcessLineConfigurationEntity pl where pl.startDate<=:yDayDate and pl.endDate>=:yDayDate"
 			+ " and pl.millId=:millId and pl.kpiId=:kpiId")
 	List<ProcessLineConfigurationEntity> fetchConfigurationDataForProcessLine(@Param("millId") Integer millId,@Param("kpiId") Integer kpiId,@Param("yDayDate") Date yDayDate);
+	
+	@Query(value = "from ProcessLineConfigurationEntity pl where (((pl.startDate <= :endDate) and (pl.endDate >= :startDate)) or ((pl.startDate <= :startDate) and (pl.endDate >= :startDate)))"
+			+ " and pl.millId=:millId and pl.kpiId=:kpiId")
+	List<ProcessLineConfigurationEntity> fetchConfigurationDataForProcessLineForDateRange(@Param("millId") Integer millId,@Param("kpiId") Integer kpiId,@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 
 }

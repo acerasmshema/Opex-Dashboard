@@ -18,6 +18,8 @@ package com.rgei.kpi.dashboard.util;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -244,28 +246,28 @@ public class ProcessLineUtility {
 
 			processLine1
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(0).getDailyLineTarget().doubleValue())));
+							(processLine.get(0).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine2
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(1).getDailyLineTarget().doubleValue())));
+							(processLine.get(1).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine3
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(2).getDailyLineTarget().doubleValue())));
+							(processLine.get(2).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine4
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(3).getDailyLineTarget().doubleValue())));
+							(processLine.get(3).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine5
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(4).getDailyLineTarget().doubleValue())));
+							(processLine.get(4).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine6
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(5).getDailyLineTarget().doubleValue())));
+							(processLine.get(5).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine7
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(6).getDailyLineTarget().doubleValue())));
+							(processLine.get(6).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 			processLine8
 					.add(new SeriesObject(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT),
-							(processLine.get(7).getDailyLineTarget().doubleValue())));
+							(processLine.get(7).getThresholdMap().get(Utility.dateToStringConvertor(item.getDatetime(), DashboardConstant.FORMAT)).doubleValue())));
 		});
 	}
 
@@ -367,4 +369,75 @@ public class ProcessLineUtility {
 		}
 		return processLineConfigurationMap;
 	}
+	
+	public static Map<Integer,Map<String,BigDecimal>> convertToApplicableConfgurationForTargetLine(
+			List<ProcessLineConfigurationEntity> processLineConfigurationEntityList, Date startDate, Date endDate) {
+		List<Integer> ProcessLineList=new ArrayList<Integer>();
+		Map<Integer,Map<String,BigDecimal>> processLineConfigurationMap=new HashMap<Integer,Map<String,BigDecimal>>();
+		
+		processLineConfigurationEntityList.forEach(item->ProcessLineList.add(item.getProcessLineId()));
+		
+		for(ProcessLineConfigurationEntity processLineConfigurationEntity:processLineConfigurationEntityList) {
+			if(processLineConfigurationEntity.getIsDefault() ) {
+				Map<String,BigDecimal> configurationValueMap= new HashMap<String,BigDecimal>();
+				List<String> applicableDates=null;
+				try {
+					applicableDates = generatesAllDatesBetweenTwoDates(startDate,endDate);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				applicableDates.forEach(thresholdDate->
+				configurationValueMap.put(thresholdDate, new BigDecimal(processLineConfigurationEntity.getThreshold()))
+				);
+				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLineId(), configurationValueMap);
+			}
+		}
+		for(ProcessLineConfigurationEntity processLineConfigurationEntity:processLineConfigurationEntityList) {
+			if(!processLineConfigurationEntity.getIsDefault() ) {
+				Map<String,BigDecimal> configurationValueMap= processLineConfigurationMap.get(processLineConfigurationEntity.getProcessLineId());
+				List<String> applicableDates=null;
+				try {
+					applicableDates = generatesAllDatesBetweenTwoDates(processLineConfigurationEntity.getStartDate(),processLineConfigurationEntity.getEndDate());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				applicableDates.forEach(thresholdDate->
+				configurationValueMap.put(thresholdDate, new BigDecimal(processLineConfigurationEntity.getThreshold()))
+				);
+				processLineConfigurationMap.put(processLineConfigurationEntity.getProcessLineId(), configurationValueMap);
+			}
+		}
+		return processLineConfigurationMap;
+}
+	
+	public static List<String> generatesAllDatesBetweenTwoDates(Date startDate,Date endDate) throws ParseException {
+		List<String> dates = new ArrayList<String>();
+		long interval = 24*1000 * 60 * 60; 
+		long endTime =endDate.getTime() ; 
+		long curTime = startDate.getTime();
+		while (curTime <= endTime) {
+		    dates.add(new SimpleDateFormat("yyyy-MM-dd").format(new Date(curTime)));
+		    curTime += interval;
+		}
+		return dates;
+	}
+	
+	public static List<ProcessLine> convertToProcessLineDTOForTargetLine(List<ProcessLineEntity> entities, Map<Integer, Map<String, BigDecimal>> processLineConfigurationMap) {
+		List<ProcessLine> processLine = new ArrayList<>();
+		Date date=new Date();
+		sortProcessLines(entities);
+		for (ProcessLineEntity entity : entities) {
+			ProcessLine processLineObject = new ProcessLine();
+			processLineObject.setProcessLineId(entity.getProcessLineId());
+			processLineObject.setProcessLineCode(entity.getProcessLineCode());
+			processLineObject.setProcessLineName(entity.getProcessLineName());
+			processLineObject.setMillId(entity.getMill().getMillId());
+			processLineObject.setRangeValue(entity.getRangeValue());
+			processLineObject.setColorRange(entity.getColorRange());
+			processLineObject.setThresholdMap(processLineConfigurationMap.get(entity.getProcessLineId()));
+			processLine.add(processLineObject);
+		}
+		return processLine;
+	}
+	
 }

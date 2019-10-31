@@ -229,9 +229,10 @@ public class ProcessLinePulpKpiServiceImpl implements ProcessLinePulpKpiService{
 		mill.setMillId(processLineRequest.getMillId());
 		Optional<List<ProcessLineEntity>> processLineEntity = Optional.ofNullable(processLineRepository.findAllByMillOrderByProcessLineIdAsc(mill));
 		if (processLineEntity.isPresent()) {
-		List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLine(processLineRequest.getMillId(),processLineRequest.getKpiId(), yesterdayDate);
-			Map<Integer, List<BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfguration(processLineConfigurationEntityList);
-			processLine = ProcessLineUtility.convertToProcessLineDTO(processLineEntity.get(), processLineConfigurationMap);
+		List<ProcessLineConfigurationEntity> processLineConfigurationEntityList=processLineConfigurationRepository.fetchConfigurationDataForProcessLineForDateRange(processLineRequest.getMillId(),processLineRequest.getKpiId(), Utility.stringToDateConvertor(processLineRequest.getStartDate(),DashboardConstant.FORMAT),
+				Utility.stringToDateConvertor(processLineRequest.getEndDate(),DashboardConstant.FORMAT));
+			Map<Integer, Map<String,BigDecimal>> processLineConfigurationMap=ProcessLineUtility.convertToApplicableConfgurationForTargetLine(processLineConfigurationEntityList,Utility.stringToDateConvertor(processLineRequest.getStartDate(),DashboardConstant.FORMAT),Utility.stringToDateConvertor(processLineRequest.getEndDate(),DashboardConstant.FORMAT));
+			processLine = ProcessLineUtility.convertToProcessLineDTOForTargetLine(processLineEntity.get(), processLineConfigurationMap);
 		}
 		List<DailyKpiPulpEntity> dailyKpiPulpEntities;
 		try {
