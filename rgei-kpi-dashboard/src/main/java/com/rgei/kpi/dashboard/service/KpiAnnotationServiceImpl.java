@@ -107,7 +107,7 @@ public class KpiAnnotationServiceImpl implements KpiAnnotationService {
 	}
 
 	private String getUserDetails(String loginId) {
-		return rgeUserEntityRepository.findByLoginId(loginId).getFirstName();
+		return rgeUserEntityRepository.findByUserId(Long.parseLong(loginId)).getFirstName();
 	}
 
 	@Override

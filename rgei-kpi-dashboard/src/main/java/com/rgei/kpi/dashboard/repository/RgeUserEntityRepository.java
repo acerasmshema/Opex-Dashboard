@@ -30,6 +30,8 @@ public interface RgeUserEntityRepository extends JpaRepository<RgeUserEntity, Lo
 	
 	public RgeUserEntity findByLoginId(@Param("loginId") String loginId);
 	
+	public RgeUserEntity findByUserId(@Param("userId") String userId);
+	
 	public RgeUserEntity findByEmail(@Param("email") String email);
 	
 	public RgeUserEntity findByFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName")String lastName);

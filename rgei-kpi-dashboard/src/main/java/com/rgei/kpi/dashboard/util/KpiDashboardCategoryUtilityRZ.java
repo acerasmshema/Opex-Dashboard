@@ -291,10 +291,8 @@ public class KpiDashboardCategoryUtilityRZ {
 				|| Objects.isNull(threshold)) {
 			color = DashboardConstant.BLACK;
 		} else {
-			String[] target = threshold.split(",");
-			String[] targetColor = target[0].split(":");
-			String colorThreshold = targetColor[1];
-			Double colorValue = Double.parseDouble(colorThreshold);
+			
+			Double colorValue = Double.parseDouble(threshold);
 			Double val = Double.parseDouble(value);
 			if (val > colorValue) {
 				color = DashboardConstant.RED;
@@ -305,6 +303,8 @@ public class KpiDashboardCategoryUtilityRZ {
 
 		return color;
 	}
+	
+
 
 	public static List<KpiCategorySeriesResponse> getDefaultSeriesObject(ProcessLine kpiProcessLine,
 			KpiCategorySeriesResponse val, List<KpiCategorySeriesResponse> series, KpiType type) {
