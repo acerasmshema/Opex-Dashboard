@@ -8,7 +8,7 @@ import { SidebarRequest } from 'src/app/core/sidebar/sidebar-request';
   styleUrls: ['./production-configuration.component.scss']
 })
 export class ProductionConfigurationComponent implements OnInit {
-
+  index: number = 0;
   constructor(private statusService: StatusService) { }
 
   ngOnInit() {
