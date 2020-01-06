@@ -1,0 +1,190 @@
+2019-11-08 08:35:28 - Production tag cannot be found
+2019-11-08 08:35:28 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-08 08:35:28 - Defoamer tag cannot be found
+2019-11-08 08:35:28 - H2O2 tag cannot be found
+2019-11-08 08:35:28 - NaOH(Total) tag cannot be found
+2019-11-09 08:35:21 - Production tag cannot be found
+2019-11-09 08:35:21 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-09 08:35:21 - Defoamer tag cannot be found
+2019-11-09 08:35:21 - H2O2 tag cannot be found
+2019-11-09 08:35:21 - NaOH(Total) tag cannot be found
+2019-11-10 08:35:30 - Production tag cannot be found
+2019-11-10 08:35:30 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-10 08:35:30 - Defoamer tag cannot be found
+2019-11-10 08:35:30 - H2O2 tag cannot be found
+2019-11-10 08:35:30 - NaOH(Total) tag cannot be found
+2019-11-11 08:35:27 - Production tag cannot be found
+2019-11-11 08:35:27 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 08:35:27 - Defoamer tag cannot be found
+2019-11-11 08:35:27 - H2O2 tag cannot be found
+2019-11-11 08:35:27 - NaOH(Total) tag cannot be found
+2019-11-11 11:43:42 - Production tag cannot be found
+2019-11-11 11:43:42 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 11:43:42 - Defoamer tag cannot be found
+2019-11-11 11:43:42 - H2O2 tag cannot be found
+2019-11-11 11:43:42 - NaOH(Total) tag cannot be found
+2019-11-11 11:45:30 - Production tag cannot be found
+2019-11-11 11:45:30 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 11:45:30 - Defoamer tag cannot be found
+2019-11-11 11:45:30 - H2O2 tag cannot be found
+2019-11-11 11:45:30 - NaOH(Total) tag cannot be found
+2019-11-11 11:45:56 - Production tag cannot be found
+2019-11-11 11:45:56 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 11:45:57 - Defoamer tag cannot be found
+2019-11-11 11:45:57 - H2O2 tag cannot be found
+2019-11-11 11:45:57 - NaOH(Total) tag cannot be found
+2019-11-11 14:23:44 - Production tag cannot be found
+2019-11-11 14:23:44 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 14:23:44 - Defoamer tag cannot be found
+2019-11-11 14:23:44 - H2O2 tag cannot be found
+2019-11-11 14:23:44 - NaOH(Total) tag cannot be found
+2019-11-11 14:24:14 - Production tag cannot be found
+2019-11-11 14:24:14 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-11 14:24:14 - Defoamer tag cannot be found
+2019-11-11 14:24:14 - H2O2 tag cannot be found
+2019-11-11 14:24:14 - NaOH(Total) tag cannot be found
+2019-11-12 08:35:31 - Production tag cannot be found
+2019-11-12 08:35:31 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 08:35:31 - Defoamer tag cannot be found
+2019-11-12 08:35:31 - H2O2 tag cannot be found
+2019-11-12 08:35:31 - NaOH(Total) tag cannot be found
+2019-11-12 10:42:17 - Production tag cannot be found
+2019-11-12 10:42:17 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 10:42:18 - Defoamer tag cannot be found
+2019-11-12 10:42:18 - H2O2 tag cannot be found
+2019-11-12 10:42:18 - NaOH(Total) tag cannot be found
+2019-11-12 10:50:53 - Production tag cannot be found
+2019-11-12 10:50:53 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 10:50:53 - Defoamer tag cannot be found
+2019-11-12 10:50:53 - H2O2 tag cannot be found
+2019-11-12 10:50:53 - NaOH(Total) tag cannot be found
+2019-11-12 11:13:27 - Production tag cannot be found
+2019-11-12 11:13:27 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 11:13:27 - Defoamer tag cannot be found
+2019-11-12 11:13:27 - H2O2 tag cannot be found
+2019-11-12 11:13:27 - NaOH(Total) tag cannot be found
+2019-11-12 11:20:41 - Production tag cannot be found
+2019-11-12 11:20:41 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 11:20:41 - Defoamer tag cannot be found
+2019-11-12 11:20:41 - H2O2 tag cannot be found
+2019-11-12 11:20:41 - NaOH(Total) tag cannot be found
+2019-11-12 11:25:14 - Production tag cannot be found
+2019-11-12 11:25:14 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 11:25:14 - Defoamer tag cannot be found
+2019-11-12 11:25:14 - H2O2 tag cannot be found
+2019-11-12 11:25:14 - NaOH(Total) tag cannot be found
+2019-11-12 11:29:47 - Production tag cannot be found
+2019-11-12 11:29:47 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 11:29:47 - Defoamer tag cannot be found
+2019-11-12 11:29:47 - H2O2 tag cannot be found
+2019-11-12 11:29:47 - NaOH(Total) tag cannot be found
+2019-11-12 11:32:36 - Production tag cannot be found
+2019-11-12 11:32:36 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-12 11:32:36 - Defoamer tag cannot be found
+2019-11-12 11:32:36 - H2O2 tag cannot be found
+2019-11-12 11:32:36 - NaOH(Total) tag cannot be found
+2019-11-12 11:38:18 - Production tag cannot be found
+2019-11-12 11:47:22 - Production tag cannot be found
+2019-11-13 10:35:20 - Production tag cannot be found
+2019-11-13 10:35:20 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-13 10:35:20 - Defoamer tag cannot be found
+2019-11-13 10:35:20 - H2O2 tag cannot be found
+2019-11-13 10:35:20 - NaOH(Total) tag cannot be found
+2019-11-13 11:34:57 - Production tag cannot be found
+2019-11-13 11:40:19 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-13 11:40:42 - Defoamer tag cannot be found
+2019-11-13 11:40:58 - H2O2 tag cannot be found
+2019-11-13 11:41:30 - NaOH(Total) tag cannot be found
+2019-11-13 11:54:27 - Production tag cannot be found
+2019-11-13 11:54:27 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-13 11:54:27 - Defoamer tag cannot be found
+2019-11-13 11:54:27 - H2O2 tag cannot be found
+2019-11-13 11:54:27 - NaOH(Total) tag cannot be found
+2019-11-13 14:31:13 - Production tag cannot be found
+2019-11-13 14:33:32 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-14 16:38:41 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-14 16:38:50 - Defoamer tag cannot be found
+2019-11-14 16:38:59 - H2O2 tag cannot be found
+2019-11-14 16:39:12 - NaOH(Total) tag cannot be found
+2019-11-14 17:54:48 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-14 17:54:48 - Defoamer tag cannot be found
+2019-11-14 17:54:48 - H2O2 tag cannot be found
+2019-11-14 17:54:48 - NaOH(Total) tag cannot be found
+2019-11-14 18:08:12 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-14 18:18:37 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-14 18:22:11 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-16 11:57:57 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-16 12:05:24 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 11:03:07 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 11:06:30 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 11:07:44 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 12:00:43 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 12:48:02 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-17 12:59:20 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-18 08:35:31 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-19 10:08:09 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-20 08:35:24 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-21 08:35:25 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-22 08:35:29 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-22 12:21:57 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-22 12:29:41 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-22 13:03:58 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-23 08:35:22 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-24 08:35:26 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-25 08:35:34 - ClO2 Total Active Cl2 tag cannot be found
+2019-11-28 11:28:09 - Woodchip Consumption - Consumption tag cannot be found
+2019-11-29 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-11-30 08:35:25 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-01 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-02 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-03 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-04 08:35:23 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-05 08:35:23 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-06 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-07 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-08 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-09 08:35:23 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-10 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-11 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-12 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-13 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-13 15:17:31 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-14 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-15 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-16 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-17 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-18 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-19 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-20 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-21 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-22 08:35:20 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-23 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-23 18:06:23 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-23 18:14:51 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-23 18:23:56 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-24 08:35:58 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-25 08:35:34 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-26 08:35:35 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-27 08:35:44 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-27 10:18:32 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-28 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-29 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-30 08:35:22 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-31 08:35:21 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-31 13:29:30 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-31 13:49:28 - Woodchip Consumption - Consumption tag cannot be found
+2019-12-31 17:42:10 - Woodchip Consumption - Consumption tag RPL.111XC0106:afc cannot be found
+2019-12-31 17:45:15 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2019-12-31 18:27:19 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2019-12-31 18:31:12 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-01 08:35:20 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 08:35:22 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 11:06:11 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 11:08:28 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 11:17:33 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 11:55:11 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 11:59:37 - Woodchip Consumption - Consumption tag RPL.111XC0211:afc cannot be found
+2020-01-02 14:31:47 - NaOH(Total) tag cannot be found
+2020-01-02 14:32:18 - NaOH(Total) tag cannot be found
+2020-01-05 12:56:06 - NaOH(Total) tag cannot be found
+2020-01-06 14:22:53 - NaOH(Total) tag cannot be found

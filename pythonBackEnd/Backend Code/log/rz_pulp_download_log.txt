@@ -1,0 +1,12 @@
+2019-12-23 18:09:21 - Database insertion error received from db_connection module
+2019-12-23 18:09:21 - rz_pulp_pi_download.py execution error
+2019-12-23 18:24:12 - Database insertion error received from db_connection module
+2019-12-23 18:24:12 - rz_pulp_pi_download.py execution error
+2019-12-24 09:35:38 - Database insertion error received from db_connection module
+2019-12-24 09:35:38 - rz_pulp_pi_download.py execution error
+2019-12-25 09:35:26 - Database insertion error received from db_connection module
+2019-12-25 09:35:26 - rz_pulp_pi_download.py execution error
+2019-12-26 09:35:36 - Database insertion error received from db_connection module
+2019-12-26 09:35:36 - rz_pulp_pi_download.py execution error
+2019-12-27 09:35:31 - Database insertion error received from db_connection module
+2019-12-27 09:35:31 - rz_pulp_pi_download.py execution error

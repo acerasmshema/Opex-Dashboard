@@ -1,0 +1,9 @@
+2019-09-03 15:31:18 - krc_power_pi_download.py execution error
+2019-09-03 15:40:20 - krc_power_pi_download.py execution error
+2019-10-19 12:33:55 - PI download error received from pi_sdk_connect module
+2019-10-19 12:33:55 - krc_power_pi_download.py execution error
+2019-10-19 12:49:54 - PI download error received from pi_sdk_connect module
+2019-10-19 12:49:54 - krc_power_pi_download.py execution error
+2019-11-22 08:45:09 - PI download error received from pi_sdk_connect module
+2019-11-22 08:45:09 - krc_power_pi_download.py execution error
+2019-12-23 08:46:29 - krc_power_pi_download.py execution error
